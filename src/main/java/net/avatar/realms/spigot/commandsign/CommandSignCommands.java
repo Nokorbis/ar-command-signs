@@ -7,6 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import net.avatar.realms.spigot.commandsign.model.CommandBlock;
+import net.avatar.realms.spigot.commandsign.model.EditingConfiguration;
 
 public class CommandSignCommands implements CommandExecutor{
 	
@@ -65,8 +66,10 @@ public class CommandSignCommands implements CommandExecutor{
 		}
 		
 		CommandBlock cmdBlock = new CommandBlock();
-		
-		plugin.getCreatingConfigurations().put(player, cmdBlock);
+		EditingConfiguration ecf = new EditingConfiguration(player, cmdBlock);
+		ecf.setCreating(true);
+		ecf.display();
+		plugin.getCreatingConfigurations().put(player, ecf);
 		
 		return true;
 	}
@@ -81,6 +84,7 @@ public class CommandSignCommands implements CommandExecutor{
 		}
 		
 		plugin.getEditingConfigurations().put(player, null);
+		player.sendMessage(ChatColor.GOLD + "Click on the block you want to edit");
 		
 		return true;
 	}

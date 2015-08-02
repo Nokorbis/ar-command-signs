@@ -69,7 +69,7 @@ public class CommandBlock {
 		}
 	}
 	
-	public List<String> getNeededPermission() {
+	public List<String> getNeededPermissions() {
 		return neededPermissions;
 	}
 	
@@ -177,6 +177,22 @@ public class CommandBlock {
 		}
 		
 		return newBlock;
+	}
+	
+	public boolean validate() {
+		if (block == null) {
+			return false;
+		}
+		
+		if (!CommandSign.VALID_MATERIALS.contains(block.getType())) {
+			return false;
+		}
+		
+		if (permissions == null || commands == null || neededPermissions == null) {
+			return false;
+		}
+		
+		return true;
 	}
 	
 	

@@ -12,6 +12,7 @@ import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import net.avatar.realms.spigot.commandsign.model.CommandBlock;
+import net.avatar.realms.spigot.commandsign.model.EditingConfiguration;
 
 public class CommandSign extends JavaPlugin{
 	
@@ -19,8 +20,8 @@ public class CommandSign extends JavaPlugin{
 	
 	private Map<Player, PermissionAttachment> 	playerPerms;
 	private Map<Block, CommandBlock> 			commandBlocks;
-	private Map<Player, CommandBlock> 			creatingConfigurations;
-	private Map<Player, CommandBlock> 			editingConfigurations;
+	private Map<Player, EditingConfiguration> 	creatingConfigurations;
+	private Map<Player, EditingConfiguration> 	editingConfigurations;
 	private Map<Player, CommandBlock>			copyingConfigurations;
 	private Map<Player, Block> 					deletingBlocks;
 	
@@ -58,8 +59,8 @@ public class CommandSign extends JavaPlugin{
 		
 		playerPerms = new HashMap<Player, PermissionAttachment>();
 		commandBlocks = new HashMap<Block , CommandBlock>();
-		creatingConfigurations = new HashMap<Player, CommandBlock>();
-		editingConfigurations = new HashMap<Player, CommandBlock>();
+		creatingConfigurations = new HashMap<Player, EditingConfiguration>();
+		editingConfigurations = new HashMap<Player, EditingConfiguration>();
 		copyingConfigurations = new HashMap<Player, CommandBlock>();
 		deletingBlocks = new HashMap<Player, Block>();
 		
@@ -92,11 +93,11 @@ public class CommandSign extends JavaPlugin{
 		return commandBlocks;
 	}
 	
-	public Map<Player, CommandBlock> getCreatingConfigurations() {
+	public Map<Player, EditingConfiguration> getCreatingConfigurations() {
 		return creatingConfigurations;
 	}
 	
-	public Map<Player, CommandBlock> getEditingConfigurations() {
+	public Map<Player, EditingConfiguration> getEditingConfigurations() {
 		return editingConfigurations;
 	}
 	
