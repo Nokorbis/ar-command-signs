@@ -167,7 +167,6 @@ public class CommandBlock {
 			}
 		}
 		
-		System.out.println("execute");
 		return true;
 	}
 	
