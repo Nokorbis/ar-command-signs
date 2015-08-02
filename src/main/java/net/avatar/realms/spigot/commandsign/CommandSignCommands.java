@@ -16,7 +16,6 @@ public class CommandSignCommands implements CommandExecutor{
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		
-		sender.sendMessage("Sender : " + sender + "| CMD : " + cmd.toString() + " |label : " + label);
 		if (!(sender instanceof Player)) {
 			return false;
 		}

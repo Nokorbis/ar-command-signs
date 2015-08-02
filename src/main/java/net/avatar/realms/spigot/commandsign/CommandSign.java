@@ -27,6 +27,7 @@ public class CommandSign extends JavaPlugin{
 		waitingConfigurations = new HashMap<Player, CommandBlock>();
 		
 		this.getCommand("commandsign").setExecutor(new CommandSignCommands(this));
+		this.getServer().getPluginManager().registerEvents(new CommandSignListener(this), this);
 	}
 	
 	@Override
