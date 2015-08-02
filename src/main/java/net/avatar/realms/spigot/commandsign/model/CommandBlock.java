@@ -160,6 +160,24 @@ public class CommandBlock {
 		
 		return cmd;
 	}
+
+	public CommandBlock copy() {
+		CommandBlock newBlock = new CommandBlock();
+		
+		for (String perm : this.permissions) {
+			newBlock.addPermission(perm);
+		}
+		
+		for (String perm : this.neededPermissions) {
+			newBlock.addNeededPermission(perm);
+		}
+		
+		for (String cmd : this.commands) {
+			newBlock.addCommand(cmd);
+		}
+		
+		return newBlock;
+	}
 	
 	
 }

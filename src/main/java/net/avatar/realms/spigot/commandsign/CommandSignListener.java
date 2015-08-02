@@ -9,6 +9,8 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
+import net.avatar.realms.spigot.commandsign.model.CommandBlock;
+
 
 public class CommandSignListener implements Listener{
 
@@ -31,7 +33,6 @@ public class CommandSignListener implements Listener{
 		}
 		
 		Block block = event.getClickedBlock();
-		
 		Player player = event.getPlayer();
 		
 		/* Do we have to delete this command block ? */
@@ -49,9 +50,45 @@ public class CommandSignListener implements Listener{
 			
 		}
 		
-		/* Is it a block that we can execute ? */
+		/* Do we have to copy the command block configuration ? */
+		else if (plugin.getCopyingConfigurations().containsKey(player)) {
+			copyCommandBlock(player, block);
+		}
+		
+		/* Is that a block that we can execute ? */
 		else if (plugin.getCommandBlocks().containsKey(block)) {
 			plugin.getCommandBlocks().get(block).execute(player);
+		}
+	}
+
+	private void copyCommandBlock(Player player, Block block) {
+		if (!CommandSign.VALID_MATERIALS.contains(block.getType())) {
+			player.sendMessage(ChatColor.RED + "Not a valid block. Aborting copying.");
+			plugin.getCopyingConfigurations().remove(player);
+			return;
+		}
+		
+		CommandBlock copyingBlock = plugin.getCopyingConfigurations().get(player);
+		if (copyingBlock == null) {
+			if (plugin.getCommandBlocks().containsKey(block)) {
+				copyingBlock = plugin.getCommandBlocks().get(block);
+				plugin.getCopyingConfigurations().put(player, copyingBlock.copy());
+				player.sendMessage(ChatColor.GOLD + "Block copied. Click on another block to paste the configuration.");
+			}
+			else {
+				player.sendMessage(ChatColor.RED + "This is not a command block. Aborting copying.");
+				plugin.getCopyingConfigurations().remove(player);
+			}
+		}
+		else if (plugin.getCommandBlocks().containsKey(block)) {
+			player.sendMessage(ChatColor.RED + "This block is already a command block. Aborting copying.");
+			plugin.getCopyingConfigurations().remove(player);
+		}
+		else {
+			copyingBlock.setBlock(block);
+			plugin.getCommandBlocks().put(block, copyingBlock);
+			plugin.getCopyingConfigurations().remove(player);
+			player.sendMessage(ChatColor.GREEN + "Block properly copied.");
 		}
 	}
 

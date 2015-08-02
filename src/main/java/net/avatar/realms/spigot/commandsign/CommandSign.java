@@ -21,6 +21,7 @@ public class CommandSign extends JavaPlugin{
 	private Map<Block, CommandBlock> 			commandBlocks;
 	private Map<Player, CommandBlock> 			creatingConfigurations;
 	private Map<Player, CommandBlock> 			editingConfigurations;
+	private Map<Player, CommandBlock>			copyingConfigurations;
 	private Map<Player, Block> 					deletingBlocks;
 	
 	public static final List<Material> VALID_MATERIALS = new LinkedList<Material>() {
@@ -59,6 +60,7 @@ public class CommandSign extends JavaPlugin{
 		commandBlocks = new HashMap<Block , CommandBlock>();
 		creatingConfigurations = new HashMap<Player, CommandBlock>();
 		editingConfigurations = new HashMap<Player, CommandBlock>();
+		copyingConfigurations = new HashMap<Player, CommandBlock>();
 		deletingBlocks = new HashMap<Player, Block>();
 		
 		this.getCommand("commandsign").setExecutor(new CommandSignCommands(this));
@@ -98,9 +100,11 @@ public class CommandSign extends JavaPlugin{
 		return editingConfigurations;
 	}
 	
+	public Map<Player, CommandBlock> getCopyingConfigurations() {
+		return copyingConfigurations;
+	}
+	
 	public Map<Player, Block> getDeletingBlocks() {
 		return deletingBlocks;
 	}
-	
-	
 }

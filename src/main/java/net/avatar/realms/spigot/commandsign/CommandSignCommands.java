@@ -40,6 +40,9 @@ public class CommandSignCommands implements CommandExecutor{
 		else if (subCmd.equalsIgnoreCase("Delete") || subCmd.equalsIgnoreCase("Del")) {
 			return delete ((Player) sender);
 		}
+		else if (subCmd.equalsIgnoreCase("Copy") || subCmd.equalsIgnoreCase("Cp")) {
+			return copy ((Player) sender);
+		}
 		else {
 			sender.sendMessage(ChatColor.RED + "Invalid Subcommand. Must be : create, edit or delete");
 			return false;
@@ -97,6 +100,21 @@ public class CommandSignCommands implements CommandExecutor{
 		return true;
 	}
 	
+	private boolean copy (Player player) {
+		if (!player.hasPermission("commandsign.admin.*") && !player.hasPermission("commandsign.admin.copy")) {
+			player.sendMessage(ChatColor.RED + "You do NOT have the permission to use that command.");
+		}
+		
+		if (!isPlayerAvailable(player)) {
+			return false;
+		}
+		
+		plugin.getCopyingConfigurations().put(player, null);
+		player.sendMessage(ChatColor.GOLD + "Click on the command block you want to copy.");
+		
+		return true;
+	}
+	
 	/**
 	 * Checks if the player is already doing some creation/edition/deletion about a configuration.
 	 * @param player
@@ -116,6 +134,11 @@ public class CommandSignCommands implements CommandExecutor{
 		
 		if (plugin.getDeletingBlocks().containsKey(player)) {
 			player.sendMessage(ChatColor.RED + "You are already deleting a block");
+			return false;
+		}
+		
+		if (plugin.getCopyingConfigurations().containsKey(player)) {
+			player.sendMessage(ChatColor.RED + "You are already copying a block");
 			return false;
 		}
 		return true;
