@@ -18,6 +18,7 @@ public class EditingConfiguration {
 	public EditingConfiguration(Player player) {
 		state = EditionState.MainMenu;
 		setCreating(false);
+		this.player = player;
 	}
 	
 	public EditingConfiguration(Player player, CommandBlock cmd) {
@@ -97,6 +98,9 @@ public class EditingConfiguration {
 			case CommandsEdit:
 				printCommandsEdit();
 				break;
+			case Done:
+				player.sendMessage(ChatColor.GREEN + "Command block created !");
+				break;
 		}
 	}
 	
@@ -117,6 +121,7 @@ public class EditingConfiguration {
 						if (isCreating) {
 							CommandSign.getPlugin().getCommandBlocks().put(commandBlock.getBlock(), commandBlock);
 							CommandSign.getPlugin().getCreatingConfigurations().remove(player);
+							state = EditionState.Done;
 						}
 						else {
 							CommandSign.getPlugin().getEditingConfigurations().remove(player);
@@ -177,58 +182,67 @@ public class EditingConfiguration {
 		switch (state) {
 			case PermissionsAdd:
 				commandBlock.addPermission(str);
+				state = EditionState.Permissions;
 				break;
 			case PermissionsEdit:
 				try {
+					state = EditionState.Permissions;
 					args = str.split(" ", 1);
 					index = Integer.parseInt(args[0]);
-					commandBlock.editPermission(index, args[1]);
+					commandBlock.editPermission(index - 1, args[1]);
 				} catch (Exception e) {
 				}
 				break;
 			case PermissionsRemove:
 				try {
+					state = EditionState.Permissions;
 					args = str.split(" ", 1);
 					index = Integer.parseInt(args[0]);
-					commandBlock.removePermission(index);
+					commandBlock.removePermission(index - 1);
 				} catch (Exception e) {
 				}
 				break;
 			case CommandsAdd:
 				commandBlock.addCommand(str);
+				state = EditionState.Commands;
 				break;
 			case CommandsEdit:
 				try {
+					state = EditionState.Commands;
 					args = str.split(" ", 1);
 					index = Integer.parseInt(args[0]);
-					commandBlock.editCommand(index, args[1]);
+					commandBlock.editCommand(index -1, args[1]);
 				} catch (Exception e) {
 				}
 				break;
 			case CommandsRemove:
 				try {
+					state = EditionState.Commands;
 					args = str.split(" ", 1);
 					index = Integer.parseInt(args[0]);
-					commandBlock.removeCommand(index);
+					commandBlock.removeCommand(index -1);
 				} catch (Exception e) {
 				}
 				break;
 			case NeededPermissionsAdd:
 				commandBlock.addNeededPermission(str);
+				state = EditionState.NeededPermissions;
 				break;
 			case NeededPermissionsEdit:
 				try {
+					state = EditionState.NeededPermissions;
 					args = str.split(" ", 1);
 					index = Integer.parseInt(args[0]);
-					commandBlock.editNeededPermission(index, args[1]);
+					commandBlock.editNeededPermission(index -1, args[1]);
 				} catch (Exception e) {
 				}
 				break;
 			case NeededPermissionsRemove:
 				try {
+					state = EditionState.NeededPermissions;
 					args = str.split(" ", 1);
 					index = Integer.parseInt(args[0]);
-					commandBlock.removeNeededPermission(index);
+					commandBlock.removeNeededPermission(index -1);
 				} catch (Exception e) {
 				}
 				break;
@@ -255,9 +269,9 @@ public class EditingConfiguration {
 			}
 			player.sendMessage(str);
 		}                  
-		player.sendMessage("2. Needed permissions");
-		player.sendMessage("3. Temporary permissions");
-		player.sendMessage("4. Commands");
+		player.sendMessage(c + "2. Needed permissions");
+		player.sendMessage(c + "3. Temporary permissions");
+		player.sendMessage(c + "4. Commands");
 		player.sendMessage(ChatColor.GREEN + "5. Done");
 	}
 	

@@ -49,6 +49,9 @@ public class CommandBlock {
 	}
 	
 	public boolean removeCommand (int index) {
+		if (index < 0) {
+			return false;
+		}
 		if (commands.size() <= index) {
 			return false;
 		}
@@ -57,6 +60,9 @@ public class CommandBlock {
 	}
 	
 	public void editCommand (int index, String newCmd) {
+		if (index < 0) {
+			return;
+		}
 		removeCommand(index);
 		commands.add(index, newCmd);
 	}
@@ -74,6 +80,9 @@ public class CommandBlock {
 	}
 	
 	public boolean removeNeededPermission(int index) {
+		if (index < 0) {
+			return false;
+		}
 		if (neededPermissions.size() <= index) {
 			return false;
 		}
@@ -82,6 +91,9 @@ public class CommandBlock {
 	}
 	
 	public void editNeededPermission(int index, String newPerm) {
+		if (index < 0) {
+			return;
+		}
 		removeNeededPermission(index);
 		neededPermissions.add(index, newPerm);
 	}
@@ -99,6 +111,9 @@ public class CommandBlock {
 	}
 	
 	public boolean removePermission(int index) {
+		if (index < 0){
+			return false;
+		}
 		if (permissions.size() <= index) {
 			return false;
 		}
@@ -108,6 +123,9 @@ public class CommandBlock {
 	}
 	
 	public void editPermission(int index, String newPerm) {
+		if (index < 0) {
+			return;
+		}
 		removePermission(index);
 		permissions.add(index, newPerm);
 	}
@@ -149,6 +167,7 @@ public class CommandBlock {
 			}
 		}
 		
+		System.out.println("execute");
 		return true;
 	}
 	

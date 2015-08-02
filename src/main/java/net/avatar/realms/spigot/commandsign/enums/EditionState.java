@@ -13,5 +13,6 @@ public enum EditionState {
 	CommandsRemove,
 	NeededPermissionsAdd,
 	NeededPermissionsEdit,
-	NeededPermissionsRemove;
+	NeededPermissionsRemove,
+	Done;
 }

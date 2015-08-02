@@ -10,6 +10,7 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import net.avatar.realms.spigot.commandsign.model.CommandBlock;
+import net.avatar.realms.spigot.commandsign.model.EditingConfiguration;
 
 
 public class CommandSignListener implements Listener{
@@ -22,13 +23,27 @@ public class CommandSignListener implements Listener{
 	
 	@EventHandler
 	public void onChatEvent (AsyncPlayerChatEvent event) {
+		Player player = event.getPlayer();
 		
+		if (!(plugin.getCreatingConfigurations().containsKey(player) || plugin.getEditingConfigurations().containsKey(player))) {
+			return;
+		}
+		
+		EditingConfiguration conf = plugin.getCreatingConfigurations().get(player);
+		if (conf == null) {
+			conf = plugin.getEditingConfigurations().get(player);
+		}
+		
+		String str = event.getMessage();
+		conf.input(str);
+		conf.display();
+		event.setCancelled(true);
 	}
 	
 	@EventHandler
 	public void onInteractEvent (PlayerInteractEvent event) {
 		
-		if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+		if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
 			return;
 		}
 		
@@ -42,12 +57,30 @@ public class CommandSignListener implements Listener{
 		
 		/* Do we have to edit the command block configuration ? */
 		else if (plugin.getEditingConfigurations().containsKey(player)) {
+			if (!CommandSign.VALID_MATERIALS.contains(block.getType())) {
+				return;
+			}
 			
+			EditingConfiguration conf = plugin.getEditingConfigurations().get(player);
+			CommandBlock commandBlock = conf.getCommandBlock();
+			
+			// We want to select the block to edit.
+			if (commandBlock == null) {
+				// The block we hit is a valid block
+				if (plugin.getCommandBlocks().containsKey(block)) {
+					CommandBlock editingBlock = plugin.getCommandBlocks().get(block);
+					conf.setCommandBlock(editingBlock);
+				}
+			}
+			// We've already selected the block we want to edit
+			else {
+				// Nothing to do, I think
+			}
 		}
 		
 		/* Do we have to create the command block configuration ? */
 		else if (plugin.getCreatingConfigurations().containsKey(player)) {
-			
+			createCommandBlock(player, block);
 		}
 		
 		/* Do we have to copy the command block configuration ? */
@@ -58,6 +91,29 @@ public class CommandSignListener implements Listener{
 		/* Is that a block that we can execute ? */
 		else if (plugin.getCommandBlocks().containsKey(block)) {
 			plugin.getCommandBlocks().get(block).execute(player);
+		}
+	}
+
+	private void createCommandBlock(Player player, Block block) {
+		if (!CommandSign.VALID_MATERIALS.contains(block.getType())) {
+			return;
+		}
+		
+		EditingConfiguration conf = plugin.getCreatingConfigurations().get(player);
+		CommandBlock commandBlock = conf.getCommandBlock();
+		Block creatingBlock = commandBlock.getBlock();
+		
+		if (creatingBlock == null) {
+			if (plugin.getCommandBlocks().containsKey(block)) {
+				player.sendMessage(ChatColor.RED + "This block is already a command block.");
+			}
+			else {
+				commandBlock.setBlock(block);
+				player.sendMessage(ChatColor.GREEN + "Block set to command block configuration");
+			}
+		}
+		else {
+			player.sendMessage(ChatColor.RED + "This configuration already has a block.");
 		}
 	}
 

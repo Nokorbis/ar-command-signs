@@ -21,7 +21,7 @@ public class CommandSignCommands implements CommandExecutor{
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		
 		if (!(sender instanceof Player)) {
-			sender.sendMessage(ChatColor.RED + "You must be a played to execute this command.");
+			sender.sendMessage(ChatColor.RED + "You must be a player to execute this command.");
 			return false;
 		}
 		
@@ -83,7 +83,8 @@ public class CommandSignCommands implements CommandExecutor{
 			return false;
 		}
 		
-		plugin.getEditingConfigurations().put(player, null);
+		EditingConfiguration conf = new EditingConfiguration(player);
+		plugin.getEditingConfigurations().put(player, conf);
 		player.sendMessage(ChatColor.GOLD + "Click on the block you want to edit");
 		
 		return true;
