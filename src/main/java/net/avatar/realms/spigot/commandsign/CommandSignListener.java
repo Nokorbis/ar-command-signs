@@ -70,6 +70,7 @@ public class CommandSignListener implements Listener{
 				if (plugin.getCommandBlocks().containsKey(block)) {
 					CommandBlock editingBlock = plugin.getCommandBlocks().get(block);
 					conf.setCommandBlock(editingBlock);
+					conf.display();
 				}
 			}
 			// We've already selected the block we want to edit

@@ -38,7 +38,8 @@ public class CommandSignCommands implements CommandExecutor{
 		else if (subCmd.equalsIgnoreCase("Edit")) {
 			return edit((Player) sender);
 		}
-		else if (subCmd.equalsIgnoreCase("Delete") || subCmd.equalsIgnoreCase("Del")) {
+		else if (subCmd.equalsIgnoreCase("Delete") || subCmd.equalsIgnoreCase("Del")
+				|| subCmd.equalsIgnoreCase("Remove") || subCmd.equalsIgnoreCase("Rem")) {
 			return delete ((Player) sender);
 		}
 		else if (subCmd.equalsIgnoreCase("Copy") || subCmd.equalsIgnoreCase("Cp")) {

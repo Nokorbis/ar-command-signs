@@ -125,6 +125,7 @@ public class EditingConfiguration {
 						}
 						else {
 							CommandSign.getPlugin().getEditingConfigurations().remove(player);
+							state = EditionState.Done;
 						}
 					}
 				}
