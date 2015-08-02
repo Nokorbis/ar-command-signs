@@ -56,7 +56,7 @@ public class CommandSignListener implements Listener{
 	}
 
 	private void deleteCommandBlock(Player player, Block block) {
-		if (!plugin.VALID_MATERIALS.contains(block.getType())) {
+		if (!CommandSign.VALID_MATERIALS.contains(block.getType())) {
 			player.sendMessage(ChatColor.RED + "Not a valid block. Aborting deletion.");
 			plugin.getDeletingBlocks().remove(player);
 			return;
