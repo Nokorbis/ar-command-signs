@@ -4,7 +4,7 @@ version: 0.0.1
 commands:
     commandsign:
         description: Command Signs commands.
-        aliases: [cs, cmds, cmdsign]
+        aliases: [arcs, cmdsign]
         usage: |
              /<command> create
              /<command> edit
