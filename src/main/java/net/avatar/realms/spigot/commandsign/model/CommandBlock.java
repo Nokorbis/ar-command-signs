@@ -17,8 +17,7 @@ public class CommandBlock {
 	private List<String> commands;
 	private List<String> permissions;
 	
-	public CommandBlock (Block block) {
-		this.setBlock(block);
+	public CommandBlock () {
 		
 		// We use ArrayList because we want to remove/edit them by the index.
 		this.commands = new ArrayList<String>();

@@ -1,11 +1,12 @@
 package net.avatar.realms.spigot.commandsign;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import net.md_5.bungee.api.ChatColor;
+import net.avatar.realms.spigot.commandsign.model.CommandBlock;
 
 public class CommandSignCommands implements CommandExecutor{
 	
@@ -45,16 +46,78 @@ public class CommandSignCommands implements CommandExecutor{
 		}
 	}
 	
+	/* 
+	 * These commands are only initiating command block creation/edition/deletion.
+	 * The real configuration is made in the listener.
+	 */
 	
 	private boolean create (Player player) {
+		if (!player.hasPermission("commandsign.admin.*") && !player.hasPermission("commandsign.admin.create")) {
+			player.sendMessage(ChatColor.RED + "You do NOT have the permission to use that command.");
+			return false;
+		}
+		
+		if (!isPlayerAvailable(player)) {
+			return false;
+		}
+		
+		CommandBlock cmdBlock = new CommandBlock();
+		
+		plugin.getCreatingConfigurations().put(player, cmdBlock);
+		
 		return true;
 	}
 	
 	private boolean edit (Player player) {
+		if (!player.hasPermission("commandsign.admin.*") && !player.hasPermission("commandsign.admin.edit")) {
+			player.sendMessage(ChatColor.RED + "You do NOT have the permission to use that command.");
+		}
+		
+		if (!isPlayerAvailable(player)) {
+			return false;
+		}
+		
+		plugin.getEditingConfigurations().put(player, null);
+		
 		return true;
 	}
 	
 	private boolean delete (Player player) {
+		if (!player.hasPermission("commandsign.admin.*") && !player.hasPermission("commandsign.admin.delete")) {
+			player.sendMessage(ChatColor.RED + "You do NOT have the permission to use that command.");
+		}
+		
+		if (!isPlayerAvailable(player)) {
+			return false;
+		}
+		
+		plugin.getDeletingBlocks().put(player, null);
+		player.sendMessage(ChatColor.GOLD + "Click on the command block you want to delete.");
+		
+		return true;
+	}
+	
+	/**
+	 * Checks if the player is already doing some creation/edition/deletion about a configuration.
+	 * @param player
+	 * @return <code>true</code> if the player isn't doing anything
+	 * <code>false</code> if the player is already doing something
+	 */
+	private boolean isPlayerAvailable(Player player) {
+		if (plugin.getCreatingConfigurations().containsKey(player)) {
+			player.sendMessage(ChatColor.RED + "You are already creating a configuration");
+			return false;
+		}
+		
+		if (plugin.getEditingConfigurations().containsKey(player)) {
+			player.sendMessage(ChatColor.RED + "You are already editing a configuration");
+			return false;
+		}
+		
+		if (plugin.getDeletingBlocks().containsKey(player)) {
+			player.sendMessage(ChatColor.RED + "You are already deleting a block");
+			return false;
+		}
 		return true;
 	}
 
