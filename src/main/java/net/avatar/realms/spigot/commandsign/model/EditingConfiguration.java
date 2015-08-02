@@ -280,7 +280,7 @@ public class EditingConfiguration {
 		player.sendMessage(c + "Needed permissions : ");
 		int cpt = 1;
 		for (String perm : commandBlock.getNeededPermissions()) {
-			player.sendMessage(ChatColor.GRAY + "---" + cpt++ + perm);
+			player.sendMessage(ChatColor.GRAY + "---" + cpt++ + ". " + perm);
 		}
 		player.sendMessage(c + "1. Refresh");
 		player.sendMessage(c + "2. Add");
@@ -293,7 +293,7 @@ public class EditingConfiguration {
 		player.sendMessage(c + "Needed permissions : ");
 		int cpt = 1;
 		for (String perm : commandBlock.getNeededPermissions()) {
-			player.sendMessage(ChatColor.GRAY + "---" + cpt++ + perm);
+			player.sendMessage(ChatColor.GRAY + "---" + cpt++ + ". " + perm);
 		}
 		player.sendMessage(c + "Enter the index of the permission you want to remove : ");
 	}
@@ -302,7 +302,7 @@ public class EditingConfiguration {
 		player.sendMessage(c + "Needed permissions : ");
 		int cpt = 1;
 		for (String perm : commandBlock.getNeededPermissions()) {
-			player.sendMessage(ChatColor.GRAY + "---" + cpt++ + perm);
+			player.sendMessage(ChatColor.GRAY + "---" + cpt++ + ". " + perm);
 		}
 		player.sendMessage(c + "Enter the index of the permission you want to edit followed by the new permission string : ");
 	}
@@ -311,7 +311,7 @@ public class EditingConfiguration {
 		player.sendMessage(c + "Temporary permissions : ");
 		int cpt = 1;
 		for (String perm : commandBlock.getPermissions()) {
-			player.sendMessage(ChatColor.GRAY + "---" + cpt++ + perm);
+			player.sendMessage(ChatColor.GRAY + "---" + cpt++ + ". " + perm);
 		}
 		player.sendMessage(c + "1. Refresh");
 		player.sendMessage(c + "2. Add");
@@ -324,7 +324,7 @@ public class EditingConfiguration {
 		player.sendMessage(c + "Needed permissions : ");
 		int cpt = 1;
 		for (String perm : commandBlock.getPermissions()) {
-			player.sendMessage(ChatColor.GRAY + "---" + cpt++ + perm);
+			player.sendMessage(ChatColor.GRAY + "---" + cpt++ + ". " + perm);
 		}
 		player.sendMessage(c + "Enter the index of the permission you want to remove : ");
 	}
@@ -333,7 +333,7 @@ public class EditingConfiguration {
 		player.sendMessage(c + "Needed permissions : ");
 		int cpt = 1;
 		for (String perm : commandBlock.getPermissions()) {
-			player.sendMessage(ChatColor.GRAY + "---" + cpt++ + perm);
+			player.sendMessage(ChatColor.GRAY + "---" + cpt++ + ". " + perm);
 		}
 		player.sendMessage(c + "Enter the index of the permission you want to edit followed by the new permission string : ");
 	}
@@ -342,7 +342,7 @@ public class EditingConfiguration {
 		player.sendMessage(c + "Commands : ");
 		int cpt = 1;
 		for (String cmd : commandBlock.getCommands()) {
-			player.sendMessage(ChatColor.GRAY + "---" + cpt++ + cmd);
+			player.sendMessage(ChatColor.GRAY + "---" + cpt++ + ". " + cmd);
 		}
 		player.sendMessage(c + "1. Refresh");
 		player.sendMessage(c + "2. Add");
@@ -355,7 +355,7 @@ public class EditingConfiguration {
 		player.sendMessage(c + "Commands : ");
 		int cpt = 1;
 		for (String cmd : commandBlock.getCommands()) {
-			player.sendMessage(ChatColor.GRAY + "---" + cpt++ + cmd);
+			player.sendMessage(ChatColor.GRAY + "---" + cpt++ + ". " + cmd);
 		}
 		player.sendMessage(c + "Enter the index of the command you want to remove : ");
 	}
@@ -364,7 +364,7 @@ public class EditingConfiguration {
 		player.sendMessage(c + "Commands : ");
 		int cpt = 1;
 		for (String cmd : commandBlock.getCommands()) {
-			player.sendMessage(ChatColor.GRAY + "---" + cpt++ + cmd);
+			player.sendMessage(ChatColor.GRAY + "---" + cpt++ + ". " + cmd);
 		}
 		player.sendMessage(c + "Enter the index of the command you want to edit followed by the new command string : ");
 	}
