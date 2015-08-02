@@ -188,7 +188,7 @@ public class EditingConfiguration {
 			case PermissionsEdit:
 				try {
 					state = EditionState.Permissions;
-					args = str.split(" ", 1);
+					args = str.split(" ", 2);
 					index = Integer.parseInt(args[0]);
 					commandBlock.editPermission(index - 1, args[1]);
 				} catch (Exception e) {
@@ -197,7 +197,7 @@ public class EditingConfiguration {
 			case PermissionsRemove:
 				try {
 					state = EditionState.Permissions;
-					args = str.split(" ", 1);
+					args = str.split(" ", 2);
 					index = Integer.parseInt(args[0]);
 					commandBlock.removePermission(index - 1);
 				} catch (Exception e) {
@@ -210,16 +210,18 @@ public class EditingConfiguration {
 			case CommandsEdit:
 				try {
 					state = EditionState.Commands;
-					args = str.split(" ", 1);
+					args = str.split(" ", 2);
 					index = Integer.parseInt(args[0]);
 					commandBlock.editCommand(index -1, args[1]);
 				} catch (Exception e) {
+					e.printStackTrace();
+					System.out.println(str);
 				}
 				break;
 			case CommandsRemove:
 				try {
 					state = EditionState.Commands;
-					args = str.split(" ", 1);
+					args = str.split(" ", 2);
 					index = Integer.parseInt(args[0]);
 					commandBlock.removeCommand(index -1);
 				} catch (Exception e) {
@@ -232,7 +234,7 @@ public class EditingConfiguration {
 			case NeededPermissionsEdit:
 				try {
 					state = EditionState.NeededPermissions;
-					args = str.split(" ", 1);
+					args = str.split(" ", 2);
 					index = Integer.parseInt(args[0]);
 					commandBlock.editNeededPermission(index -1, args[1]);
 				} catch (Exception e) {
@@ -241,7 +243,7 @@ public class EditingConfiguration {
 			case NeededPermissionsRemove:
 				try {
 					state = EditionState.NeededPermissions;
-					args = str.split(" ", 1);
+					args = str.split(" ", 2);
 					index = Integer.parseInt(args[0]);
 					commandBlock.removeNeededPermission(index -1);
 				} catch (Exception e) {
