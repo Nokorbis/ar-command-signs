@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -16,6 +17,7 @@ import net.avatar.realms.spigot.commandsign.data.IBlockSaver;
 import net.avatar.realms.spigot.commandsign.data.JsonBlockSaver;
 import net.avatar.realms.spigot.commandsign.model.CommandBlock;
 import net.avatar.realms.spigot.commandsign.model.EditingConfiguration;
+import net.avatar.realms.spigot.commandsign.tasks.SaverTask;
 
 public class CommandSign extends JavaPlugin{
 	
@@ -29,6 +31,7 @@ public class CommandSign extends JavaPlugin{
 	private Map<Player, Block> 					deletingBlocks;
 	
 	private IBlockSaver							blockSaver;
+	private SaverTask 							saver;
 	
 	public static final List<Material> VALID_MATERIALS = new LinkedList<Material>() {
 
@@ -75,10 +78,15 @@ public class CommandSign extends JavaPlugin{
 		try {
 			this.blockSaver = new JsonBlockSaver(this.getDataFolder());
 			loadData();
+			saver = new SaverTask(this);
+			long delay = 20 * 60 * 10; //Server ticks
+			long period = 20 * 60 * 5; // Server ticks
+			Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, saver, delay, period);
 		} catch (Exception e) {
 			getLogger().severe("Was not able to create the save file for command sign plugin");
 			e.printStackTrace();
 		}
+		getLogger().info("CommandSigns properly enabled !");
 	}
 	
 	@Override
@@ -127,8 +135,15 @@ public class CommandSign extends JavaPlugin{
 	
 	private void loadData() {
 		Collection<CommandBlock> data = blockSaver.load();
+		if (data == null) {
+			return;
+		}
 		for (CommandBlock block : data) {
 			commandBlocks.put(block.getBlock(), block);
 		}
+	}
+	
+	public void saveData() {
+		blockSaver.save(commandBlocks.values());
 	}
 }
