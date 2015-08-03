@@ -33,7 +33,7 @@ public class JsonBlockSaver implements IBlockSaver{
 			folder.mkdirs();
 		}
 		
-		saveFile = new File(saveFile, FILENAME);
+		saveFile = new File(folder, FILENAME);
 		if (!saveFile.exists()) {
 			saveFile.createNewFile();
 		}

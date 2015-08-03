@@ -93,7 +93,7 @@ public class CommandSign extends JavaPlugin{
 	public void onDisable() {
 		plugin = null;
 		if (blockSaver != null) {
-			blockSaver.save(commandBlocks.values());
+			saveData();
 		}
 	}
 	
