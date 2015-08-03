@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
@@ -19,6 +20,19 @@ public class CommandSignListener implements Listener{
 	
 	public CommandSignListener (CommandSign plugin) {
 		this.plugin = plugin;
+	}
+	
+	@EventHandler
+	public void onBlockBreakEvent (BlockBreakEvent event) {
+		Block block =  event.getBlock();
+		// This is a command block, so this should not be delete
+		if (plugin.getCommandBlocks().containsKey(block)) {
+			Player player = event.getPlayer();
+			if (player != null) {
+				player.sendMessage(ChatColor.RED + "This block is a command block. You must remove the commands before deleting it.");
+			}
+			event.setCancelled(true);
+		}
 	}
 	
 	@EventHandler
