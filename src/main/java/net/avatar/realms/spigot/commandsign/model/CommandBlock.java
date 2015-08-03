@@ -3,6 +3,7 @@ package net.avatar.realms.spigot.commandsign.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachment;
@@ -212,6 +213,33 @@ public class CommandBlock {
 		}
 		
 		return true;
+	}
+	
+	public void info (Player player, ChatColor c) {
+		player.sendMessage(c + "Block : " + blockSummary());
+		player.sendMessage(c + "Needed permissions :");
+		int cpt = 1;
+		for (String perm : neededPermissions) {
+			player.sendMessage(ChatColor.GRAY + "---"+ cpt++ + ". " + perm);
+		}
+		player.sendMessage(c + "Permissions :");
+		cpt = 1;
+		for (String perm : permissions) {
+			player.sendMessage(ChatColor.GRAY + "---"+ cpt++ + ". " + perm);
+		}
+		player.sendMessage(c + "Commands :");
+		cpt = 1;
+		for (String cmd : commands) {
+			player.sendMessage(ChatColor.GRAY + "---"+ cpt++ + ". " + cmd);
+		}
+	}
+	
+	private String blockSummary () {
+		if (block == null) {
+			return "";
+		}
+		String str = block.getType() + " #" + block.getX() + ":" + block.getZ()+"(" +block.getY()+")";
+		return str;
 	}
 	
 	

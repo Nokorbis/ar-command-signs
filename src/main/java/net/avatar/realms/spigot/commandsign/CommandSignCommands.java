@@ -45,6 +45,9 @@ public class CommandSignCommands implements CommandExecutor{
 		else if (subCmd.equalsIgnoreCase("Copy") || subCmd.equalsIgnoreCase("Cp")) {
 			return copy ((Player) sender);
 		}
+		else if (subCmd.equalsIgnoreCase("Info")) {
+			return info ((Player) sender);
+		}
 		else {
 			sender.sendMessage(ChatColor.RED + "Invalid Subcommand. Must be : create, edit or delete");
 			return false;
@@ -56,7 +59,7 @@ public class CommandSignCommands implements CommandExecutor{
 	 * The real configuration is made in the listener.
 	 */
 	
-	private boolean create (Player player) {
+	private boolean info(Player player) {
 		if (!player.hasPermission("commandsign.admin.*") && !player.hasPermission("commandsign.admin.create")) {
 			player.sendMessage(ChatColor.RED + "You do NOT have the permission to use that command.");
 			return false;
@@ -65,6 +68,11 @@ public class CommandSignCommands implements CommandExecutor{
 		if (!isPlayerAvailable(player)) {
 			return false;
 		}
+		return false;
+	}
+
+	private boolean create (Player player) {
+		
 		
 		CommandBlock cmdBlock = new CommandBlock();
 		EditingConfiguration ecf = new EditingConfiguration(player, cmdBlock);

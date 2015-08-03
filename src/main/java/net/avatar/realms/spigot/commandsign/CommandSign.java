@@ -29,6 +29,7 @@ public class CommandSign extends JavaPlugin{
 	private Map<Player, EditingConfiguration> 	editingConfigurations;
 	private Map<Player, CommandBlock>			copyingConfigurations;
 	private Map<Player, Block> 					deletingBlocks;
+	public List<Player> 						infoPlayers;
 	
 	private IBlockSaver							blockSaver;
 	private SaverTask 							saver;
@@ -71,6 +72,7 @@ public class CommandSign extends JavaPlugin{
 		editingConfigurations = new HashMap<Player, EditingConfiguration>();
 		copyingConfigurations = new HashMap<Player, CommandBlock>();
 		deletingBlocks = new HashMap<Player, Block>();
+		infoPlayers = new LinkedList<Player>();
 		
 		this.getCommand("commandsign").setExecutor(new CommandSignCommands(this));
 		this.getServer().getPluginManager().registerEvents(new CommandSignListener(this), this);
@@ -131,6 +133,10 @@ public class CommandSign extends JavaPlugin{
 	
 	public Map<Player, Block> getDeletingBlocks() {
 		return deletingBlocks;
+	}
+	
+	public List<Player> getInfoPlayers() {
+		return infoPlayers;
 	}
 	
 	private void loadData() {

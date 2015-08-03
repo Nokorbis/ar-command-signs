@@ -89,9 +89,30 @@ public class CommandSignListener implements Listener{
 			copyCommandBlock(player, block);
 		}
 		
+		else if (plugin.getInfoPlayers().contains(player)) {
+			info (player, block);
+		}
+		
 		/* Is that a block that we can execute ? */
 		else if (plugin.getCommandBlocks().containsKey(block)) {
 			plugin.getCommandBlocks().get(block).execute(player);
+		}
+	}
+
+	private void info(Player player, Block block) {
+		if (!CommandSign.VALID_MATERIALS.contains(block.getType())) {
+			player.sendMessage(ChatColor.RED + "Invalid block. Aborting info command");
+			plugin.getInfoPlayers().remove(player);
+			return;
+		}
+		
+		if (plugin.getCommandBlocks().containsKey(block)) {
+			plugin.getCommandBlocks().get(block).info(player, ChatColor.DARK_GREEN);
+			plugin.getInfoPlayers().remove(player);
+		}
+		else {
+			player.sendMessage(ChatColor.RED + "Invalid block. Aborting info command");
+			plugin.getInfoPlayers().remove(player);
 		}
 	}
 
