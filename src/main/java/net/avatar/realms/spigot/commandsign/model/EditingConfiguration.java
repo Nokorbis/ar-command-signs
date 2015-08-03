@@ -21,6 +21,10 @@ public class EditingConfiguration {
 		this.player = player;
 	}
 	
+	public boolean isAddingCommand() {
+		return state == EditionState.CommandsAdd;
+	}
+	
 	public EditingConfiguration(Player player, CommandBlock cmd) {
 		this(player);
 		this.setCommandBlock(cmd);

@@ -4,10 +4,12 @@ import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import net.avatar.realms.spigot.commandsign.model.CommandBlock;
@@ -20,6 +22,23 @@ public class CommandSignListener implements Listener{
 	
 	public CommandSignListener (CommandSign plugin) {
 		this.plugin = plugin;
+	}
+	
+	@EventHandler(priority=EventPriority.HIGHEST)
+	public void onPlayerCommand (PlayerCommandPreprocessEvent event) {
+		Player player = event.getPlayer();
+		if (plugin.getCreatingConfigurations().containsKey(player) || plugin.getEditingConfigurations().containsKey(player)) {
+			EditingConfiguration conf = plugin.getCreatingConfigurations().get(player);
+			if (conf == null) {
+				conf = plugin.getEditingConfigurations().get(player);
+			}
+			if (conf.isAddingCommand()) {
+				String msg = event.getMessage();
+				conf.input(msg);
+				conf.display();
+				event.setCancelled(true);
+			}
+		}
 	}
 	
 	@EventHandler
