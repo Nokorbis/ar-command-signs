@@ -6,6 +6,7 @@ commands:
         description: Command Signs commands.
         aliases: [arcs, cmdsign]
         usage: |
+             /<command> info
              /<command> create
              /<command> edit
              /<command> delete

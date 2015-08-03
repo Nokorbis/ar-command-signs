@@ -49,7 +49,7 @@ public class CommandSignCommands implements CommandExecutor{
 			return info ((Player) sender);
 		}
 		else {
-			sender.sendMessage(ChatColor.RED + "Invalid Subcommand. Must be : create, edit or delete");
+			sender.sendMessage(ChatColor.RED + "Invalid Subcommand. Must be : info, create, edit or delete");
 			return false;
 		}
 	}
@@ -60,7 +60,7 @@ public class CommandSignCommands implements CommandExecutor{
 	 */
 	
 	private boolean info(Player player) {
-		if (!player.hasPermission("commandsign.admin.*") && !player.hasPermission("commandsign.admin.create")) {
+		if (!player.hasPermission("commandsign.admin.*") && !player.hasPermission("commandsign.admin.info")) {
 			player.sendMessage(ChatColor.RED + "You do NOT have the permission to use that command.");
 			return false;
 		}
@@ -68,7 +68,9 @@ public class CommandSignCommands implements CommandExecutor{
 		if (!isPlayerAvailable(player)) {
 			return false;
 		}
-		return false;
+		
+		plugin.getInfoPlayers().add(player);
+		return true;
 	}
 
 	private boolean create (Player player) {
@@ -148,6 +150,11 @@ public class CommandSignCommands implements CommandExecutor{
 		
 		if (plugin.getDeletingBlocks().containsKey(player)) {
 			player.sendMessage(ChatColor.RED + "You are already deleting a block");
+			return false;
+		}
+		
+		if (plugin.getCopyingConfigurations().containsKey(player)) {
+			player.sendMessage(ChatColor.RED + "You are already copying a block");
 			return false;
 		}
 		
