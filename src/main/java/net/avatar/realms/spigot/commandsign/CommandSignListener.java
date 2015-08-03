@@ -43,15 +43,14 @@ public class CommandSignListener implements Listener{
 	@EventHandler
 	public void onInteractEvent (PlayerInteractEvent event) {
 		
-		if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
-			return;
-		}
-		
 		Block block = event.getClickedBlock();
 		Player player = event.getPlayer();
 		
 		/* Do we have to delete this command block ? */
 		if (plugin.getDeletingBlocks().containsKey(player)) {
+			if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+				return;
+			}
 			deleteCommandBlock(player, block);
 		}
 		
@@ -81,15 +80,24 @@ public class CommandSignListener implements Listener{
 		
 		/* Do we have to create the command block configuration ? */
 		else if (plugin.getCreatingConfigurations().containsKey(player)) {
+			if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+				return;
+			}
 			createCommandBlock(player, block);
 		}
 		
 		/* Do we have to copy the command block configuration ? */
 		else if (plugin.getCopyingConfigurations().containsKey(player)) {
+			if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+				return;
+			}
 			copyCommandBlock(player, block);
 		}
 		
 		else if (plugin.getInfoPlayers().contains(player)) {
+			if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+				return;
+			}
 			info (player, block);
 		}
 		
