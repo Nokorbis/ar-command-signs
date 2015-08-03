@@ -70,6 +70,7 @@ public class CommandSignCommands implements CommandExecutor{
 		}
 		
 		plugin.getInfoPlayers().add(player);
+		player.sendMessage(ChatColor.GOLD + "Click on command block whose you want information");
 		return true;
 	}
 

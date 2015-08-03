@@ -146,6 +146,7 @@ public class CommandBlock {
 		
 		for (String needed : neededPermissions) {
 			if (!player.hasPermission(needed)) {
+				player.sendMessage(ChatColor.DARK_RED + "You do not have the needed permission : " + needed);
 				return false;
 			}
 		}
