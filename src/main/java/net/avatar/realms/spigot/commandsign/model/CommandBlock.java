@@ -158,7 +158,8 @@ public class CommandBlock {
 		
 		for (String command : commands) {
 			String cmd = formatCommand(command, player);
-			CommandSign.getPlugin().getServer().dispatchCommand(player, cmd);
+			player.chat(cmd);
+			//CommandSign.getPlugin().getServer().dispatchCommand(player, cmd);
 		}
 		
 		for (String perm : permissions) {
