@@ -160,6 +160,7 @@ public class CommandBlock {
 		
 		for (String command : commands) {
 			String cmd = formatCommand(command, player);
+			System.out.println(cmd);
 			player.chat(cmd);
 			//CommandSign.getPlugin().getServer().dispatchCommand(player, cmd);
 		}
@@ -176,8 +177,8 @@ public class CommandBlock {
 	private String formatCommand (String command, Player player) {
 		String cmd = new String(command);
 		
-		cmd.replace("%player%", player.getName());
-		cmd.replace("%PLAYER%", player.getName());
+		cmd = cmd.replaceAll("%player%", player.getName());
+		cmd = cmd.replaceAll("%PLAYER%", player.getName());
 		
 		return cmd;
 	}
