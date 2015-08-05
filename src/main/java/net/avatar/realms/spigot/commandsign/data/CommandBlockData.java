@@ -2,6 +2,7 @@ package net.avatar.realms.spigot.commandsign.data;
 
 import java.util.List;
 
+import net.avatar.realms.spigot.commandsign.CommandSign;
 import net.avatar.realms.spigot.commandsign.model.CommandBlock;
 
 public class CommandBlockData {
@@ -63,6 +64,11 @@ public class CommandBlockData {
 		CommandBlock cmd = new CommandBlock();
 		
 		cmd.setBlock(BlockData.transform(data.getBlock()));
+		
+		if (cmd.getBlock() == null) {
+			CommandSign.getPlugin().getLogger().warning("Block is null, command block cannot exist... deleting command block");
+			return null;
+		}
 		
 		for (String str : data.getCommands()) {
 			cmd.addCommand(str);

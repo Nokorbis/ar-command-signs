@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 
 import net.avatar.realms.spigot.commandsign.CommandSign;
@@ -78,8 +79,12 @@ public class BlockData {
 	
 	public static Block transform (BlockData data) {
 		Block block = null;
-		
-		Location loc = new Location(Bukkit.getWorld(UUID.fromString(data.getWorldUuid())), data.getX(), data.getY(), data.getZ());
+		World world = Bukkit.getServer().getWorld(UUID.fromString(data.getWorldUuid()));
+		if (world == null) {
+			CommandSign.getPlugin().getLogger().severe("World with UUID : " + data.getWorldUuid() + " cannot be found");
+			return null;
+		}
+		Location loc = new Location(world, data.getX(), data.getY(), data.getZ());
 		block = loc.getBlock();
 		
 		if (!block.getType().equals(data.getType())) {

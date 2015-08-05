@@ -1,6 +1,6 @@
 name: CommandSign
 main: net.avatar.realms.spigot.commandsign.CommandSign
-version: 1.0.2
+version: 1.0.4
 commands:
     commandsign:
         description: Command Signs commands.

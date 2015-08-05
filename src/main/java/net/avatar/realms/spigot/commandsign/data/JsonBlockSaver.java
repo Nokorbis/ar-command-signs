@@ -94,7 +94,10 @@ public class JsonBlockSaver implements IBlockSaver{
 				return null;
 			}
 			for (CommandBlockData da : data) {
-				blocks.add(CommandBlockData.transform(da));
+				CommandBlock b = CommandBlockData.transform(da);
+				if (b != null) {
+					blocks.add(b);
+				}
 			}
 			
 			return blocks;
