@@ -1,0 +1,1 @@
+Command Sign plugin for spigot.
