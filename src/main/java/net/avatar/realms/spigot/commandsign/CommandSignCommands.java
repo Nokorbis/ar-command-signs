@@ -32,7 +32,8 @@ public class CommandSignCommands implements CommandExecutor{
 		
 		String subCmd = args[0];
 		
-		if (subCmd.equalsIgnoreCase("Create") || subCmd.equalsIgnoreCase("Cr")) {
+		if (subCmd.equalsIgnoreCase("Create") || subCmd.equalsIgnoreCase("Cr") 
+				|| subCmd.equalsIgnoreCase("Mk")) {
 			return create((Player) sender);
 		}
 		else if (subCmd.equalsIgnoreCase("Edit")) {
