@@ -103,7 +103,13 @@ public class EditingConfiguration {
 				printCommandsEdit();
 				break;
 			case Done:
-				player.sendMessage(ChatColor.GREEN + "Command block created !");
+				if (isCreating) {
+					player.sendMessage(ChatColor.GREEN + "Command block created !");
+				}
+				else {
+					player.sendMessage(ChatColor.GREEN + "Command block edited !");
+				}
+				
 				break;
 		}
 	}

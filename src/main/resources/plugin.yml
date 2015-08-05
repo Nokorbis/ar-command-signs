@@ -1,6 +1,6 @@
 name: CommandSign
 main: net.avatar.realms.spigot.commandsign.CommandSign
-version: 0.0.1
+version: 1.0.2
 commands:
     commandsign:
         description: Command Signs commands.
@@ -8,5 +8,6 @@ commands:
         usage: |
              /<command> info
              /<command> create
+             /<command> copy
              /<command> edit
              /<command> delete
