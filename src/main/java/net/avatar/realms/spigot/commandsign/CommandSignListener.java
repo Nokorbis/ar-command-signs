@@ -1,6 +1,7 @@
 package net.avatar.realms.spigot.commandsign;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -45,7 +46,7 @@ public class CommandSignListener implements Listener{
 	public void onBlockBreakEvent (BlockBreakEvent event) {
 		Block block =  event.getBlock();
 		// This is a command block, so this should not be delete
-		if (plugin.getCommandBlocks().containsKey(block)) {
+		if (plugin.getCommandBlocks().containsKey(block.getLocation())) {
 			Player player = event.getPlayer();
 			if (player != null) {
 				player.sendMessage(ChatColor.RED + "This block is a command block. You must remove the commands before deleting it.");
@@ -79,6 +80,13 @@ public class CommandSignListener implements Listener{
 		Block block = event.getClickedBlock();
 		Player player = event.getPlayer();
 		
+		if (block == null) {
+			return;
+		}
+		if (block.getLocation() == null) {
+			return;
+		}
+		
 		/* Do we have to delete this command block ? */
 		if (plugin.getDeletingBlocks().containsKey(player)) {
 			if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
@@ -99,8 +107,8 @@ public class CommandSignListener implements Listener{
 			// We want to select the block to edit.
 			if (commandBlock == null) {
 				// The block we hit is a valid block
-				if (plugin.getCommandBlocks().containsKey(block)) {
-					CommandBlock editingBlock = plugin.getCommandBlocks().get(block);
+				if (plugin.getCommandBlocks().containsKey(block.getLocation())) {
+					CommandBlock editingBlock = plugin.getCommandBlocks().get(block.getLocation());
 					conf.setCommandBlock(editingBlock);
 					conf.display();
 				}
@@ -135,8 +143,11 @@ public class CommandSignListener implements Listener{
 		}
 		
 		/* Is that a block that we can execute ? */
-		else if (plugin.getCommandBlocks().containsKey(block)) {
-			plugin.getCommandBlocks().get(block).execute(player);
+		else if (plugin.getCommandBlocks().containsKey(block.getLocation())) {
+			CommandBlock cmd = plugin.getCommandBlocks().get(block.getLocation());
+			if (cmd != null) {
+				cmd.execute(player);
+			}
 		}
 	}
 
@@ -147,8 +158,8 @@ public class CommandSignListener implements Listener{
 			return;
 		}
 		
-		if (plugin.getCommandBlocks().containsKey(block)) {
-			plugin.getCommandBlocks().get(block).info(player, ChatColor.DARK_GREEN);
+		if (plugin.getCommandBlocks().containsKey(block.getLocation())) {
+			plugin.getCommandBlocks().get(block.getLocation()).info(player, ChatColor.DARK_GREEN);
 			plugin.getInfoPlayers().remove(player);
 		}
 		else {
@@ -164,14 +175,14 @@ public class CommandSignListener implements Listener{
 		
 		EditingConfiguration conf = plugin.getCreatingConfigurations().get(player);
 		CommandBlock commandBlock = conf.getCommandBlock();
-		Block creatingBlock = commandBlock.getBlock();
+		Location creatingBlock = commandBlock.getLocation();
 		
 		if (creatingBlock == null) {
-			if (plugin.getCommandBlocks().containsKey(block)) {
+			if (plugin.getCommandBlocks().containsKey(block.getLocation())) {
 				player.sendMessage(ChatColor.RED + "This block is already a command block.");
 			}
 			else {
-				commandBlock.setBlock(block);
+				commandBlock.setLocation(block.getLocation());
 				player.sendMessage(ChatColor.GREEN + "Block set to command block configuration");
 			}
 		}
@@ -189,8 +200,8 @@ public class CommandSignListener implements Listener{
 		
 		CommandBlock copyingBlock = plugin.getCopyingConfigurations().get(player);
 		if (copyingBlock == null) {
-			if (plugin.getCommandBlocks().containsKey(block)) {
-				copyingBlock = plugin.getCommandBlocks().get(block);
+			if (plugin.getCommandBlocks().containsKey(block.getLocation())) {
+				copyingBlock = plugin.getCommandBlocks().get(block.getLocation());
 				plugin.getCopyingConfigurations().put(player, copyingBlock.copy());
 				player.sendMessage(ChatColor.GOLD + "Block copied. Click on another block to paste the configuration.");
 			}
@@ -199,13 +210,13 @@ public class CommandSignListener implements Listener{
 				plugin.getCopyingConfigurations().remove(player);
 			}
 		}
-		else if (plugin.getCommandBlocks().containsKey(block)) {
+		else if (plugin.getCommandBlocks().containsKey(block.getLocation())) {
 			player.sendMessage(ChatColor.RED + "This block is already a command block. Aborting copying.");
 			plugin.getCopyingConfigurations().remove(player);
 		}
 		else {
-			copyingBlock.setBlock(block);
-			plugin.getCommandBlocks().put(block, copyingBlock);
+			copyingBlock.setLocation(block.getLocation());
+			plugin.getCommandBlocks().put(block.getLocation(), copyingBlock);
 			plugin.getCopyingConfigurations().remove(player);
 			player.sendMessage(ChatColor.GREEN + "Block properly copied.");
 		}
@@ -217,11 +228,11 @@ public class CommandSignListener implements Listener{
 			plugin.getDeletingBlocks().remove(player);
 			return;
 		}
-		Block deletingBlock = plugin.getDeletingBlocks().get(player);
+		Location deletingBlock = plugin.getDeletingBlocks().get(player);
 		if (deletingBlock == null) {
 			/* Is it a command block ?*/
-			if (plugin.getCommandBlocks().containsKey(block)) {
-				plugin.getDeletingBlocks().put(player, block);
+			if (plugin.getCommandBlocks().containsKey(block.getLocation())) {
+				plugin.getDeletingBlocks().put(player, block.getLocation());
 				player.sendMessage(ChatColor.GOLD + "Block selected. Click on it again to accept deletion.");
 			}
 			else {
@@ -230,8 +241,8 @@ public class CommandSignListener implements Listener{
 			}
 			
 		}
-		else if (block.equals(deletingBlock)){
-			plugin.getCommandBlocks().remove(block);
+		else if (block.getLocation().equals(deletingBlock)){
+			plugin.getCommandBlocks().remove(block.getLocation());
 			plugin.getDeletingBlocks().remove(player);
 			player.sendMessage(ChatColor.GREEN + "Command block properly deleted");
 		}

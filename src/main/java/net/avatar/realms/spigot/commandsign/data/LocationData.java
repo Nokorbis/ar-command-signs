@@ -4,13 +4,12 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 
 import net.avatar.realms.spigot.commandsign.CommandSign;
 
-public class BlockData {
+public class LocationData {
 	
 	private String worldUuid;
 	
@@ -18,9 +17,7 @@ public class BlockData {
 	private int y;
 	private int z;
 	
-	private Material type;
-	
-	public BlockData() {
+	public LocationData() {
 		
 	}
 
@@ -47,14 +44,6 @@ public class BlockData {
 	public void setZ(int z) {
 		this.z = z;
 	}
-
-	public Material getType() {
-		return type;
-	}
-
-	public void setType(Material type) {
-		this.type = type;
-	}
 	
 	public String getWorldUuid() {
 		return worldUuid;
@@ -64,20 +53,19 @@ public class BlockData {
 		this.worldUuid = worlduuid;
 	}
 	
-	public static BlockData transform (Block block) {
-		BlockData data = new BlockData();
+	public static LocationData transform (Location location) {
+		LocationData data = new LocationData();
 		
-		data.setWorldUuid(block.getWorld().getUID().toString());
+		data.setWorldUuid(location.getWorld().getUID().toString());
 		
-		data.setX(block.getX());
-		data.setY(block.getY());
-		data.setZ(block.getZ());
+		data.setX(location.getBlockX());
+		data.setY(location.getBlockY());
+		data.setZ(location.getBlockZ());
 		
-		data.setType(block.getType());
 		return data;
 	}
 	
-	public static Block transform (BlockData data) {
+	public static Location transform (LocationData data) {
 		Block block = null;
 		World world = Bukkit.getServer().getWorld(UUID.fromString(data.getWorldUuid()));
 		if (world == null) {
@@ -87,11 +75,11 @@ public class BlockData {
 		Location loc = new Location(world, data.getX(), data.getY(), data.getZ());
 		block = loc.getBlock();
 		
-		if (!block.getType().equals(data.getType())) {
+		if (!CommandSign.VALID_MATERIALS.contains(block.getType())) {
 			CommandSign.getPlugin().getLogger().warning("A Command sign has been loaded at " + block.getX() + ":"+ block.getY()+":" + block.getZ()+" with a wrong type.");
 		}
 		
-		return block;
+		return loc;
 	}
 
 }

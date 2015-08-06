@@ -1,7 +1,7 @@
 package net.avatar.realms.spigot.commandsign.model;
 
 import org.bukkit.ChatColor;
-import org.bukkit.block.Block;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import net.avatar.realms.spigot.commandsign.CommandSign;
@@ -129,7 +129,7 @@ public class EditingConfiguration {
 				else if (index == 5) {
 					if (commandBlock.validate()) {
 						if (isCreating) {
-							CommandSign.getPlugin().getCommandBlocks().put(commandBlock.getBlock(), commandBlock);
+							CommandSign.getPlugin().getCommandBlocks().put(commandBlock.getLocation(), commandBlock);
 							CommandSign.getPlugin().getCreatingConfigurations().remove(player);
 							state = EditionState.Done;
 						}
@@ -270,13 +270,13 @@ public class EditingConfiguration {
 	}
 	
 	private void printMainMenu() {
-		Block block = commandBlock.getBlock();
+		Location loc = commandBlock.getLocation();
 		player.sendMessage(c + "1. Refresh");
-		if (block == null) {
+		if (loc == null) {
 			player.sendMessage(c + "   Blocks : None");
 		}
 		else {
-			String str = c + "   Blocks : " + block.getType() + "#" + block.getX() + ":" + block.getZ() + "("+block.getY()+")";
+			String str = c + "   Blocks : " + loc.getBlock().getType() + "#" + loc.getX() + ":" + loc.getZ() + "("+loc.getY()+")";
 			if (isCreating) {
 				str += " [Set on click]";
 			}

@@ -7,7 +7,7 @@ import net.avatar.realms.spigot.commandsign.model.CommandBlock;
 
 public class CommandBlockData {
 
-	private BlockData block;
+	private LocationData location;
 	
 	private List<String> commands;
 	private List<String> permissions;
@@ -17,12 +17,12 @@ public class CommandBlockData {
 		
 	}
 
-	public BlockData getBlock() {
-		return block;
+	public LocationData getLocation() {
+		return location;
 	}
 
-	public void setBlock(BlockData block) {
-		this.block = block;
+	public void setLocation(LocationData block) {
+		this.location = block;
 	}
 
 	public List<String> getCommands() {
@@ -52,7 +52,7 @@ public class CommandBlockData {
 	public static CommandBlockData transform (CommandBlock cmd) {
 		CommandBlockData data = new CommandBlockData();
 		
-		data.setBlock(BlockData.transform(cmd.getBlock()));
+		data.setLocation(LocationData.transform(cmd.getLocation()));
 		data.setCommands(cmd.getCommands());
 		data.setPermissions(cmd.getPermissions());
 		data.setNeededPermissions(cmd.getNeededPermissions());
@@ -63,9 +63,9 @@ public class CommandBlockData {
 	public static CommandBlock transform (CommandBlockData data) {
 		CommandBlock cmd = new CommandBlock();
 		
-		cmd.setBlock(BlockData.transform(data.getBlock()));
+		cmd.setLocation(LocationData.transform(data.getLocation()));
 		
-		if (cmd.getBlock() == null) {
+		if (cmd.getLocation() == null) {
 			CommandSign.getPlugin().getLogger().warning("Block is null, command block cannot exist... deleting command block");
 			return null;
 		}

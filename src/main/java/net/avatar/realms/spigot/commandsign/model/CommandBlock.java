@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.ChatColor;
-import org.bukkit.block.Block;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachment;
 
@@ -12,7 +12,7 @@ import net.avatar.realms.spigot.commandsign.CommandSign;
 
 public class CommandBlock {
 
-	private Block block;
+	private Location location;
 	
 	private List<String> neededPermissions;
 	private List<String> commands;
@@ -29,12 +29,12 @@ public class CommandBlock {
 			/* Getters and setters */
 
 	/* Block */
-	public Block getBlock() {
-		return block;
+	public Location getLocation() {
+		return location;
 	}
 
-	public void setBlock(Block block) {
-		this.block = block;
+	public void setLocation(Location loc) {
+		this.location = loc;
 	}
 	
 	/* Commands */
@@ -202,11 +202,11 @@ public class CommandBlock {
 	}
 	
 	public boolean validate() {
-		if (block == null) {
+		if (location == null) {
 			return false;
 		}
 		
-		if (!CommandSign.VALID_MATERIALS.contains(block.getType())) {
+		if (!CommandSign.VALID_MATERIALS.contains(location.getBlock().getType())) {
 			return false;
 		}
 		
@@ -237,10 +237,10 @@ public class CommandBlock {
 	}
 	
 	private String blockSummary () {
-		if (block == null) {
+		if (location == null) {
 			return "";
 		}
-		String str = block.getType() + " #" + block.getX() + ":" + block.getZ()+"(" +block.getY()+")";
+		String str = location.getBlock().getType() + " #" + location.getX() + ":" + location.getZ()+"(" +location.getY()+")";
 		return str;
 	}
 	

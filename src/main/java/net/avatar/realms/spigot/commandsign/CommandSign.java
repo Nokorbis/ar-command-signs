@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -24,11 +24,11 @@ public class CommandSign extends JavaPlugin{
 	private static CommandSign plugin;
 	
 	private Map<Player, PermissionAttachment> 	playerPerms;
-	private Map<Block, CommandBlock> 			commandBlocks;
+	private Map<Location, CommandBlock> 			commandBlocks;
 	private Map<Player, EditingConfiguration> 	creatingConfigurations;
 	private Map<Player, EditingConfiguration> 	editingConfigurations;
 	private Map<Player, CommandBlock>			copyingConfigurations;
-	private Map<Player, Block> 					deletingBlocks;
+	private Map<Player, Location> 					deletingBlocks;
 	public List<Player> 						infoPlayers;
 	
 	private IBlockSaver							blockSaver;
@@ -67,11 +67,11 @@ public class CommandSign extends JavaPlugin{
 		plugin = this;
 		
 		playerPerms = new HashMap<Player, PermissionAttachment>();
-		commandBlocks = new HashMap<Block , CommandBlock>();
+		commandBlocks = new HashMap<Location , CommandBlock>();
 		creatingConfigurations = new HashMap<Player, EditingConfiguration>();
 		editingConfigurations = new HashMap<Player, EditingConfiguration>();
 		copyingConfigurations = new HashMap<Player, CommandBlock>();
-		deletingBlocks = new HashMap<Player, Block>();
+		deletingBlocks = new HashMap<Player, Location>();
 		infoPlayers = new LinkedList<Player>();
 		
 		this.getCommand("commandsign").setExecutor(new CommandSignCommands(this));
@@ -115,7 +115,7 @@ public class CommandSign extends JavaPlugin{
 		return perms;
 	}
 	
-	public Map<Block, CommandBlock> getCommandBlocks() {
+	public Map<Location, CommandBlock> getCommandBlocks() {
 		return commandBlocks;
 	}
 	
@@ -131,7 +131,7 @@ public class CommandSign extends JavaPlugin{
 		return copyingConfigurations;
 	}
 	
-	public Map<Player, Block> getDeletingBlocks() {
+	public Map<Player, Location> getDeletingBlocks() {
 		return deletingBlocks;
 	}
 	
@@ -145,7 +145,7 @@ public class CommandSign extends JavaPlugin{
 			return;
 		}
 		for (CommandBlock block : data) {
-			commandBlocks.put(block.getBlock(), block);
+			commandBlocks.put(block.getLocation(), block);
 		}
 	}
 	
