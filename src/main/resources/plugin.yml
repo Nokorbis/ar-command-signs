@@ -1,6 +1,7 @@
 name: CommandSign
 main: net.avatar.realms.spigot.commandsign.CommandSign
-version: 1.0.4
+version: 1.0.11
+softdepend: [Multiverse-Core]
 commands:
     commandsign:
         description: Command Signs commands.

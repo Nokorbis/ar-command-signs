@@ -24,11 +24,11 @@ public class CommandSign extends JavaPlugin{
 	private static CommandSign plugin;
 	
 	private Map<Player, PermissionAttachment> 	playerPerms;
-	private Map<Location, CommandBlock> 			commandBlocks;
+	private Map<Location, CommandBlock> 		commandBlocks;
 	private Map<Player, EditingConfiguration> 	creatingConfigurations;
 	private Map<Player, EditingConfiguration> 	editingConfigurations;
 	private Map<Player, CommandBlock>			copyingConfigurations;
-	private Map<Player, Location> 					deletingBlocks;
+	private Map<Player, Location> 				deletingBlocks;
 	public List<Player> 						infoPlayers;
 	
 	private IBlockSaver							blockSaver;
