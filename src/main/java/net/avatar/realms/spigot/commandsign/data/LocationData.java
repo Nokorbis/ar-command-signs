@@ -8,21 +8,22 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 
 import net.avatar.realms.spigot.commandsign.CommandSign;
+import net.avatar.realms.spigot.commandsign.CommandSignUtils;
 
 public class LocationData {
-	
+
 	private String worldUuid;
-	
+
 	private int x;
 	private int y;
 	private int z;
-	
+
 	public LocationData() {
-		
+
 	}
 
 	public int getX() {
-		return x;
+		return this.x;
 	}
 
 	public void setX(int x) {
@@ -30,7 +31,7 @@ public class LocationData {
 	}
 
 	public int getY() {
-		return y;
+		return this.y;
 	}
 
 	public void setY(int y) {
@@ -38,33 +39,33 @@ public class LocationData {
 	}
 
 	public int getZ() {
-		return z;
+		return this.z;
 	}
 
 	public void setZ(int z) {
 		this.z = z;
 	}
-	
+
 	public String getWorldUuid() {
-		return worldUuid;
+		return this.worldUuid;
 	}
 
 	public void setWorldUuid(String worlduuid) {
 		this.worldUuid = worlduuid;
 	}
-	
+
 	public static LocationData transform (Location location) {
 		LocationData data = new LocationData();
-		
+
 		data.setWorldUuid(location.getWorld().getUID().toString());
-		
+
 		data.setX(location.getBlockX());
 		data.setY(location.getBlockY());
 		data.setZ(location.getBlockZ());
-		
+
 		return data;
 	}
-	
+
 	public static Location transform (LocationData data) {
 		Block block = null;
 		World world = Bukkit.getServer().getWorld(UUID.fromString(data.getWorldUuid()));
@@ -74,11 +75,11 @@ public class LocationData {
 		}
 		Location loc = new Location(world, data.getX(), data.getY(), data.getZ());
 		block = loc.getBlock();
-		
-		if (!CommandSign.VALID_MATERIALS.contains(block.getType())) {
+
+		if (!CommandSignUtils.isValidBlock(block)) {
 			CommandSign.getPlugin().getLogger().warning("A Command sign has been loaded at " + block.getX() + ":"+ block.getY()+":" + block.getZ()+" with a wrong type.");
 		}
-		
+
 		return loc;
 	}
 

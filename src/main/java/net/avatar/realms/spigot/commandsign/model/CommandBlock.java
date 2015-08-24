@@ -9,130 +9,131 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachment;
 
 import net.avatar.realms.spigot.commandsign.CommandSign;
+import net.avatar.realms.spigot.commandsign.CommandSignUtils;
 
 public class CommandBlock {
 
 	private Location location;
-	
+
 	private List<String> neededPermissions;
 	private List<String> commands;
 	private List<String> permissions;
-	
+
 	public CommandBlock () {
-		
+
 		// We use ArrayList because we want to remove/edit them by the index.
 		this.commands = new ArrayList<String>();
 		this.permissions = new ArrayList<String>();
 		this.neededPermissions = new ArrayList<String>();
 	}
-	
-			/* Getters and setters */
+
+	/* Getters and setters */
 
 	/* Block */
 	public Location getLocation() {
-		return location;
+		return this.location;
 	}
 
 	public void setLocation(Location loc) {
 		this.location = loc;
 	}
-	
+
 	/* Commands */
 	public void addCommand (String command) {
 		command = command.intern();
-		if (!commands.contains(command)) {
-			commands.add(command);
+		if (!this.commands.contains(command)) {
+			this.commands.add(command);
 		}
 	}
-	
+
 	public List<String> getCommands() {
-		return commands;
+		return this.commands;
 	}
-	
+
 	public boolean removeCommand (int index) {
 		if (index < 0) {
 			return false;
 		}
-		if (commands.size() <= index) {
+		if (this.commands.size() <= index) {
 			return false;
 		}
-		commands.remove(index);
+		this.commands.remove(index);
 		return true;
 	}
-	
+
 	public void editCommand (int index, String newCmd) {
 		if (index < 0) {
 			return;
 		}
 		removeCommand(index);
-		commands.add(index, newCmd);
+		this.commands.add(index, newCmd);
 	}
-	
+
 	/* Needed permissions */
 	public void addNeededPermission (String permission) {
 		permission = permission.intern();
-		if (!neededPermissions.contains(permission)) {
-			neededPermissions.add(permission);
+		if (!this.neededPermissions.contains(permission)) {
+			this.neededPermissions.add(permission);
 		}
 	}
-	
+
 	public List<String> getNeededPermissions() {
-		return neededPermissions;
+		return this.neededPermissions;
 	}
-	
+
 	public boolean removeNeededPermission(int index) {
 		if (index < 0) {
 			return false;
 		}
-		if (neededPermissions.size() <= index) {
+		if (this.neededPermissions.size() <= index) {
 			return false;
 		}
-		neededPermissions.remove(index);
+		this.neededPermissions.remove(index);
 		return true;
 	}
-	
+
 	public void editNeededPermission(int index, String newPerm) {
 		if (index < 0) {
 			return;
 		}
 		removeNeededPermission(index);
-		neededPermissions.add(index, newPerm);
+		this.neededPermissions.add(index, newPerm);
 	}
-	
+
 	/* Permissions */
 	public void addPermission (String permission) {
 		permission = permission.intern();
-		if (!permissions.contains(permission)) {
-			permissions.add(permission);
+		if (!this.permissions.contains(permission)) {
+			this.permissions.add(permission);
 		}
 	}
-	
+
 	public List<String> getPermissions() {
-		return permissions;
+		return this.permissions;
 	}
-	
+
 	public boolean removePermission(int index) {
 		if (index < 0){
 			return false;
 		}
-		if (permissions.size() <= index) {
+		if (this.permissions.size() <= index) {
 			return false;
 		}
-		
-		permissions.remove(index);
+
+		this.permissions.remove(index);
 		return true;
 	}
-	
+
 	public void editPermission(int index, String newPerm) {
 		if (index < 0) {
 			return;
 		}
 		removePermission(index);
-		permissions.add(index, newPerm);
+		this.permissions.add(index, newPerm);
 	}
-	
-			/* Business */
-	
+
+	/* Business */
+
 	/**
 	 * Execute the command block as the player
 	 * @param player The player that executes the command block
@@ -143,106 +144,106 @@ public class CommandBlock {
 		if (player == null) {
 			return false;
 		}
-		
-		for (String needed : neededPermissions) {
+
+		for (String needed : this.neededPermissions) {
 			if (!player.hasPermission(needed)) {
 				player.sendMessage(ChatColor.DARK_RED + "You do not have the needed permission : " + needed);
 				return false;
 			}
 		}
-		
+
 		PermissionAttachment perms = CommandSign.getPlugin().getPlayerPermissions(player);
-		for (String perm : permissions) {
+		for (String perm : this.permissions) {
 			if (!player.hasPermission(perm)) {
 				perms.setPermission(perm, true);
 			}
 		}
-		
-		for (String command : commands) {
+
+		for (String command : this.commands) {
 			String cmd = formatCommand(command, player);
 			System.out.println(cmd);
 			player.chat(cmd);
 			//CommandSign.getPlugin().getServer().dispatchCommand(player, cmd);
 		}
-		
-		for (String perm : permissions) {
+
+		for (String perm : this.permissions) {
 			if (perms.getPermissions().containsKey(perm)) {
 				perms.unsetPermission(perm);
 			}
 		}
-		
+
 		return true;
 	}
-	
+
 	private String formatCommand (String command, Player player) {
 		String cmd = new String(command);
-		
+
 		cmd = cmd.replaceAll("%player%", player.getName());
 		cmd = cmd.replaceAll("%PLAYER%", player.getName());
-		
+
 		return cmd;
 	}
 
 	public CommandBlock copy() {
 		CommandBlock newBlock = new CommandBlock();
-		
+
 		for (String perm : this.permissions) {
 			newBlock.addPermission(perm);
 		}
-		
+
 		for (String perm : this.neededPermissions) {
 			newBlock.addNeededPermission(perm);
 		}
-		
+
 		for (String cmd : this.commands) {
 			newBlock.addCommand(cmd);
 		}
-		
+
 		return newBlock;
 	}
-	
+
 	public boolean validate() {
-		if (location == null) {
+		if (this.location == null) {
 			return false;
 		}
-		
-		if (!CommandSign.VALID_MATERIALS.contains(location.getBlock().getType())) {
+
+		if (!CommandSignUtils.isValidBlock(this.location.getBlock())) {
 			return false;
 		}
-		
-		if (permissions == null || commands == null || neededPermissions == null) {
+
+		if ((this.permissions == null) || (this.commands == null) || (this.neededPermissions == null)) {
 			return false;
 		}
-		
+
 		return true;
 	}
-	
+
 	public void info (Player player, ChatColor c) {
 		player.sendMessage(c + "Block : " + blockSummary());
 		player.sendMessage(c + "Needed permissions :");
 		int cpt = 1;
-		for (String perm : neededPermissions) {
+		for (String perm : this.neededPermissions) {
 			player.sendMessage(ChatColor.GRAY + "---"+ cpt++ + ". " + perm);
 		}
 		player.sendMessage(c + "Permissions :");
 		cpt = 1;
-		for (String perm : permissions) {
+		for (String perm : this.permissions) {
 			player.sendMessage(ChatColor.GRAY + "---"+ cpt++ + ". " + perm);
 		}
 		player.sendMessage(c + "Commands :");
 		cpt = 1;
-		for (String cmd : commands) {
+		for (String cmd : this.commands) {
 			player.sendMessage(ChatColor.GRAY + "---"+ cpt++ + ". " + cmd);
 		}
 	}
-	
+
 	private String blockSummary () {
-		if (location == null) {
+		if (this.location == null) {
 			return "";
 		}
-		String str = location.getBlock().getType() + " #" + location.getX() + ":" + location.getZ()+"(" +location.getY()+")";
+		String str = this.location.getBlock().getType() + " #" + this.location.getX() + ":" + this.location.getZ()+"(" +this.location.getY()+")";
 		return str;
 	}
-	
-	
+
+
 }
