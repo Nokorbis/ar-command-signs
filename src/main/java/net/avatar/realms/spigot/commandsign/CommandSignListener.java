@@ -74,7 +74,7 @@ public class CommandSignListener implements Listener{
 		event.setCancelled(true);
 	}
 
-	@EventHandler
+	@EventHandler(ignoreCancelled=true)
 	public void onInteractEvent (PlayerInteractEvent event) {
 
 		Block block = event.getClickedBlock();
