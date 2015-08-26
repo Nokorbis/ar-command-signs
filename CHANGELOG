@@ -1,6 +1,7 @@
 Command Sign v1.1.2
     Add timer in the command block information
     Correct a minor bug
+    Works on Craftbukkit and Spigot 1.8.7+
 
 Command Sign v1.1.1
 
