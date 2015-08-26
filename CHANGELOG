@@ -1,0 +1,39 @@
+Command Sign v1.1.2
+    Add timer in the command block information
+    Correct a minor bug
+
+Command Sign v1.1.1
+
+    Big security fixes. Everyone should update
+    Works on Craftbukkit and Spigot 1.8.7+
+
+Command Sign v1.1.0
+
+    Add version subcommand
+    Add timer (check the user guide)
+    Works on Craftbukkit and Spigot 1.8.7+
+
+Command Sign v1.0.15
+
+    Does not execute commands when the interaction has been cancelled by other plugin (such as Factions and WorldGuard)
+    Cannot executes plates commands on click anymore
+    Works on Craftbukkit and Spigot 1.8.7+
+
+Command Sign v1.0.11
+
+    Multiverse now load before Command Sign so that other world's command blocks can load too.
+    Works on Craftbukkit and Spigot 1.8.7+
+
+Command sign v1.0.4
+
+    Add mk alias for the create sub-command
+    Fix a null pointer exception on world when loading save file
+    Works on Craftbukkit and Spigot 1.8.7+
+
+Command sign v1.0.2
+
+First version of the plugin.
+
+    Works on Craftbukkit and Spigot 1.8.7+
+
+Note that 1.8.7+ means that the plugin has never been tested before that version. It may work since Craftbukkit and Spigot 1.8.1+
