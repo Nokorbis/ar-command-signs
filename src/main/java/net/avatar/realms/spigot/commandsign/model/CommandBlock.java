@@ -19,12 +19,19 @@ public class CommandBlock {
 	private List<String> commands;
 	private List<String> permissions;
 
+	private Integer timer; // Value in second
+	private Boolean resetOnMove;
+	private Boolean cancelledOnMove;
+
 	public CommandBlock () {
 
 		// We use ArrayList because we want to remove/edit them by the index.
 		this.commands = new ArrayList<String>();
 		this.permissions = new ArrayList<String>();
 		this.neededPermissions = new ArrayList<String>();
+		this.setTimer(0);
+		this.resetOnMove = false;
+		this.cancelledOnMove = false;
 	}
 
 	/* Getters and setters */
@@ -130,6 +137,36 @@ public class CommandBlock {
 		}
 		removePermission(index);
 		this.permissions.add(index, newPerm);
+	}
+
+	/* Timers */
+
+	public Integer getTimer () {
+		return this.timer;
+	}
+
+	public void setTimer (Integer timer) {
+		this.timer = timer;
+	}
+
+	public Boolean isCancelledOnMove() {
+		return this.cancelledOnMove;
+	}
+
+	public void setCancelledOnMove(Boolean cancel) {
+		this.cancelledOnMove = cancel;
+	}
+
+	public Boolean isResetOnMove() {
+		return this.resetOnMove;
+	}
+
+	public void setResetOnMove(Boolean reset) {
+		this.resetOnMove = reset;
+	}
+
+	public boolean hasTimer() {
+		return this.timer >= 1;
 	}
 
 	/* Business */
@@ -244,6 +281,5 @@ public class CommandBlock {
 		String str = this.location.getBlock().getType() + " #" + this.location.getX() + ":" + this.location.getZ()+"(" +this.location.getY()+")";
 		return str;
 	}
-
 
 }
