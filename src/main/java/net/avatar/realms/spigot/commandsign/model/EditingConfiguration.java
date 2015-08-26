@@ -14,26 +14,26 @@ public class EditingConfiguration {
 	private boolean isCreating;
 	private Player player;
 	private ChatColor c = ChatColor.AQUA;
-	
+
 	public EditingConfiguration(Player player) {
-		state = EditionState.MainMenu;
+		this.state = EditionState.MainMenu;
 		setCreating(false);
 		this.player = player;
 	}
-	
+
 	public boolean isAddingCommand() {
-		return state == EditionState.CommandsAdd;
+		return this.state == EditionState.CommandsAdd;
 	}
-	
+
 	public EditingConfiguration(Player player, CommandBlock cmd) {
 		this(player);
 		this.setCommandBlock(cmd);
 	}
-	
+
 	/* Getters and Setter */
 
 	public CommandBlock getCommandBlock() {
-		return commandBlock;
+		return this.commandBlock;
 	}
 
 	public void setCommandBlock(CommandBlock commandBlock) {
@@ -41,28 +41,28 @@ public class EditingConfiguration {
 	}
 
 	public boolean isCreating() {
-		return isCreating;
+		return this.isCreating;
 	}
 
 	public void setCreating(boolean isCreating) {
 		this.isCreating = isCreating;
 	}
-	
+
 	public Player getPlayer() {
-		return player;
+		return this.player;
 	}
 
 	public void setPlayer(Player player) {
 		this.player = player;
 	}
-	
+
 	/* Business */
-	
+
 	/**
 	 * Display the menu that the player (admin) sees when he is editing a command block configuration
 	 */
 	public void display() {
-		switch (state) {
+		switch (this.state) {
 			case MainMenu : 
 				printMainMenu();
 				break;
@@ -76,7 +76,7 @@ public class EditingConfiguration {
 				printCommands();
 				break;
 			case NeededPermissionsAdd:
-				player.sendMessage(c + "Enter the needed permission string : ");
+				this.player.sendMessage(this.c + "Enter the needed permission string : ");
 				break;
 			case NeededPermissionsRemove:
 				printNeededPermissionsRemove();
@@ -85,7 +85,7 @@ public class EditingConfiguration {
 				printNeededPermissionsEdit();
 				break;
 			case PermissionsAdd:
-				player.sendMessage(c + "Enter the temporary permission string : ");
+				this.player.sendMessage(this.c + "Enter the temporary permission string : ");
 				break;
 			case PermissionsRemove:
 				printPermissionsRemove();
@@ -94,7 +94,7 @@ public class EditingConfiguration {
 				printPermissionsEdit();
 				break;
 			case CommandsAdd:
-				player.sendMessage(c + "Enter the command string : ");
+				this.player.sendMessage(this.c + "Enter the command string : ");
 				break;
 			case CommandsRemove:
 				printCommandsRemove();
@@ -102,127 +102,180 @@ public class EditingConfiguration {
 			case CommandsEdit:
 				printCommandsEdit();
 				break;
+			case Timer:
+				printTimerMenu();
+				break;
+			case TimeSet:
+				printTimeSet();
+				break;
+			case TimerCancelled:
+				printTimerCancelled();
+				break;
+			case TimerReset:
+				printTimerReset();
+				break;
 			case Done:
-				if (isCreating) {
-					player.sendMessage(ChatColor.GREEN + "Command block created !");
+				if (this.isCreating) {
+					this.player.sendMessage(ChatColor.GREEN + "Command block created !");
 				}
 				else {
-					player.sendMessage(ChatColor.GREEN + "Command block edited !");
+					this.player.sendMessage(ChatColor.GREEN + "Command block edited !");
 				}
-				
+
 				break;
 		}
 	}
-	
+
+
+	private void printTimerReset () {
+		this.player.sendMessage(this.c + "Should the timer be reset when the player moves ? (Yes/No)");
+
+	}
+
+	private void printTimerCancelled () {
+		this.player.sendMessage(this.c + "Should the timer be cancelled when the player moves ? (Yes/No)");
+
+	}
+
+	private void printTimeSet () {
+		this.player.sendMessage(this.c + "Enter the amount of time (in seconds) that the player must wait before the execution of the command");
+
+	}
+
+	private void printTimerMenu () {
+		this.player.sendMessage(this.c + "1. Refresh");
+		this.player.sendMessage(this.c + "2. Time (" + this.commandBlock.getTimer()+")");
+		this.player.sendMessage(this.c + "3. Cancel on move (" + ((this.getCommandBlock().isCancelledOnMove())? "Yes" : "No") +")");
+		this.player.sendMessage(this.c + "4. Reset on move (" + ((this.getCommandBlock().isResetOnMove())? "Yes" : "No") +")");
+		this.player.sendMessage(ChatColor.GREEN + "5. Done");
+
+	}
+
 	public void input(int index) {
-		switch (state) {
+		switch (this.state) {
 			case MainMenu:
 				if (index == 2) {
-					state = EditionState.NeededPermissions;
+					this.state = EditionState.NeededPermissions;
 				}
 				else if (index == 3) {
-					state = EditionState.Permissions;
+					this.state = EditionState.Permissions;
 				}
 				else if (index == 4) {
-					state = EditionState.Commands;
+					this.state = EditionState.Commands;
 				}
 				else if (index == 5) {
-					if (commandBlock.validate()) {
-						if (isCreating) {
-							CommandSign.getPlugin().getCommandBlocks().put(commandBlock.getLocation(), commandBlock);
-							CommandSign.getPlugin().getCreatingConfigurations().remove(player);
-							state = EditionState.Done;
+					this.state = EditionState.Timer;
+				}
+				else if (index == 9) {
+					if (this.commandBlock.validate()) {
+						if (this.isCreating) {
+							CommandSign.getPlugin().getCommandBlocks().put(this.commandBlock.getLocation(), this.commandBlock);
+							CommandSign.getPlugin().getCreatingConfigurations().remove(this.player);
+							this.state = EditionState.Done;
 						}
 						else {
-							CommandSign.getPlugin().getEditingConfigurations().remove(player);
-							state = EditionState.Done;
+							CommandSign.getPlugin().getEditingConfigurations().remove(this.player);
+							this.state = EditionState.Done;
 						}
 					}
 				}
 				break;
 			case Permissions:
 				if (index == 2) {
-					state = EditionState.PermissionsAdd;
+					this.state = EditionState.PermissionsAdd;
 				}
 				else if (index == 3) {
-					state = EditionState.PermissionsEdit;
+					this.state = EditionState.PermissionsEdit;
 				}
 				else if (index == 4) {
-					state = EditionState.PermissionsRemove;
+					this.state = EditionState.PermissionsRemove;
 				}
 				else if (index == 5) {
-					state = EditionState.MainMenu;
+					this.state = EditionState.MainMenu;
 				}
 				break;
 			case Commands:
 				if (index == 2) {
-					state = EditionState.CommandsAdd;
+					this.state = EditionState.CommandsAdd;
 				}
 				else if (index == 3) {
-					state = EditionState.CommandsEdit;
+					this.state = EditionState.CommandsEdit;
 				}
 				else if (index == 4) {
-					state = EditionState.CommandsRemove;
+					this.state = EditionState.CommandsRemove;
 				}
 				else if (index == 5) {
-					state = EditionState.MainMenu;
+					this.state = EditionState.MainMenu;
 				}
 				break;
 			case NeededPermissions:
 				if (index == 2) {
-					state = EditionState.NeededPermissionsAdd;
+					this.state = EditionState.NeededPermissionsAdd;
 				}
 				else if (index == 3) {
-					state = EditionState.NeededPermissionsEdit;
+					this.state = EditionState.NeededPermissionsEdit;
 				}
 				else if (index == 4) {
-					state = EditionState.NeededPermissionsRemove;
+					this.state = EditionState.NeededPermissionsRemove;
 				}
 				else if (index == 5) {
-					state = EditionState.MainMenu;
+					this.state = EditionState.MainMenu;
 				}
 				break;
+			case Timer:
+				if (index == 2) {
+					this.state = EditionState.TimeSet;
+				}
+				else if (index == 3) {
+					this.state = EditionState.TimerCancelled;
+				}
+				else if (index == 4) {
+					this.state = EditionState.TimerReset;
+				}
+				else if (index == 5) {
+					this.state = EditionState.MainMenu;
+				}
 			default :// Don't know what to do. lol.
-					
+
 		}
 	}
-	
+
 	public void input (String str) {
 		String[] args;
 		int index = 0;
-		switch (state) {
+		switch (this.state) {
 			case PermissionsAdd:
-				commandBlock.addPermission(str);
-				state = EditionState.Permissions;
+				this.commandBlock.addPermission(str);
+				this.state = EditionState.Permissions;
 				break;
 			case PermissionsEdit:
 				try {
-					state = EditionState.Permissions;
+					this.state = EditionState.Permissions;
 					args = str.split(" ", 2);
 					index = Integer.parseInt(args[0]);
-					commandBlock.editPermission(index - 1, args[1]);
+					this.commandBlock.editPermission(index - 1, args[1]);
 				} catch (Exception e) {
 				}
 				break;
 			case PermissionsRemove:
 				try {
-					state = EditionState.Permissions;
+					this.state = EditionState.Permissions;
 					args = str.split(" ", 2);
 					index = Integer.parseInt(args[0]);
-					commandBlock.removePermission(index - 1);
+					this.commandBlock.removePermission(index - 1);
 				} catch (Exception e) {
 				}
 				break;
 			case CommandsAdd:
-				commandBlock.addCommand(str);
-				state = EditionState.Commands;
+				this.commandBlock.addCommand(str);
+				this.state = EditionState.Commands;
 				break;
 			case CommandsEdit:
 				try {
-					state = EditionState.Commands;
+					this.state = EditionState.Commands;
 					args = str.split(" ", 2);
 					index = Integer.parseInt(args[0]);
-					commandBlock.editCommand(index -1, args[1]);
+					this.commandBlock.editCommand(index -1, args[1]);
 				} catch (Exception e) {
 					e.printStackTrace();
 					System.out.println(str);
@@ -230,34 +283,67 @@ public class EditingConfiguration {
 				break;
 			case CommandsRemove:
 				try {
-					state = EditionState.Commands;
+					this.state = EditionState.Commands;
 					args = str.split(" ", 2);
 					index = Integer.parseInt(args[0]);
-					commandBlock.removeCommand(index -1);
+					this.commandBlock.removeCommand(index -1);
 				} catch (Exception e) {
 				}
 				break;
 			case NeededPermissionsAdd:
-				commandBlock.addNeededPermission(str);
-				state = EditionState.NeededPermissions;
+				this.commandBlock.addNeededPermission(str);
+				this.state = EditionState.NeededPermissions;
 				break;
 			case NeededPermissionsEdit:
 				try {
-					state = EditionState.NeededPermissions;
+					this.state = EditionState.NeededPermissions;
 					args = str.split(" ", 2);
 					index = Integer.parseInt(args[0]);
-					commandBlock.editNeededPermission(index -1, args[1]);
+					this.commandBlock.editNeededPermission(index -1, args[1]);
 				} catch (Exception e) {
 				}
 				break;
 			case NeededPermissionsRemove:
 				try {
-					state = EditionState.NeededPermissions;
+					this.state = EditionState.NeededPermissions;
 					args = str.split(" ", 2);
 					index = Integer.parseInt(args[0]);
-					commandBlock.removeNeededPermission(index -1);
+					this.commandBlock.removeNeededPermission(index -1);
 				} catch (Exception e) {
 				}
+				break;
+			case TimeSet:
+				try {
+					this.state = EditionState.Timer;
+					args = str.split(" ", 2);
+					index = Integer.parseInt(args[0]);
+					this.commandBlock.setTimer(index);
+				} catch (Exception e) {
+				}
+				break;
+			case TimerCancelled: 
+				args = str.split(" ");
+				if (args[0].equalsIgnoreCase("Yes") || args[0].equalsIgnoreCase("Y") || args[0].equalsIgnoreCase("True")) {
+					this.commandBlock.setCancelledOnMove(true);
+				}
+				else {
+					if (!args[0].equals("CANCEL")) {
+						this.commandBlock.setCancelledOnMove(false);
+					}
+				}
+				this.state = EditionState.Timer;
+				break;
+			case TimerReset:
+				args = str.split(" ");
+				if (args[0].equalsIgnoreCase("Yes") || args[0].equalsIgnoreCase("Y") || args[0].equalsIgnoreCase("True")) {
+					this.commandBlock.setResetOnMove(true);
+				}
+				else {
+					if (!args[0].equals("CANCEL")) {
+						this.commandBlock.setResetOnMove(false);
+					}
+				}
+				this.state = EditionState.Timer;
 				break;
 			default :
 				try {
@@ -268,117 +354,118 @@ public class EditingConfiguration {
 				}
 		}
 	}
-	
+
 	private void printMainMenu() {
-		Location loc = commandBlock.getLocation();
-		player.sendMessage(c + "1. Refresh");
+		Location loc = this.commandBlock.getLocation();
+		this.player.sendMessage(this.c + "1. Refresh");
 		if (loc == null) {
-			player.sendMessage(c + "   Blocks : None");
+			this.player.sendMessage(this.c + "   Blocks : None");
 		}
 		else {
-			String str = c + "   Blocks : " + loc.getBlock().getType() + "#" + loc.getX() + ":" + loc.getZ() + "("+loc.getY()+")";
-			if (isCreating) {
+			String str = this.c + "   Blocks : " + loc.getBlock().getType() + "#" + loc.getX() + ":" + loc.getZ() + "("+loc.getY()+")";
+			if (this.isCreating) {
 				str += " [Set on click]";
 			}
-			player.sendMessage(str);
+			this.player.sendMessage(str);
 		}                  
-		player.sendMessage(c + "2. Needed permissions");
-		player.sendMessage(c + "3. Temporary permissions");
-		player.sendMessage(c + "4. Commands");
-		player.sendMessage(ChatColor.GREEN + "5. Done");
+		this.player.sendMessage(this.c + "2. Needed permissions");
+		this.player.sendMessage(this.c + "3. Temporary permissions");
+		this.player.sendMessage(this.c + "4. Commands");
+		this.player.sendMessage(this.c + "5. Timer");
+		this.player.sendMessage(ChatColor.GREEN + "9. Done");
 	}
-	
+
 	private void printNeededPermissions() {
-		player.sendMessage(c + "Needed permissions : ");
+		this.player.sendMessage(this.c + "Needed permissions : ");
 		int cpt = 1;
-		for (String perm : commandBlock.getNeededPermissions()) {
-			player.sendMessage(ChatColor.GRAY + "---" + cpt++ + ". " + perm);
+		for (String perm : this.commandBlock.getNeededPermissions()) {
+			this.player.sendMessage(ChatColor.GRAY + "---" + cpt++ + ". " + perm);
 		}
-		player.sendMessage(c + "1. Refresh");
-		player.sendMessage(c + "2. Add");
-		player.sendMessage(c + "3. Edit");
-		player.sendMessage(c + "4. Remove");
-		player.sendMessage(ChatColor.GREEN + "5. Done");
+		this.player.sendMessage(this.c + "1. Refresh");
+		this.player.sendMessage(this.c + "2. Add");
+		this.player.sendMessage(this.c + "3. Edit");
+		this.player.sendMessage(this.c + "4. Remove");
+		this.player.sendMessage(ChatColor.GREEN + "5. Done");
 	}
-	
+
 	private void printNeededPermissionsRemove() {
-		player.sendMessage(c + "Needed permissions : ");
+		this.player.sendMessage(this.c + "Needed permissions : ");
 		int cpt = 1;
-		for (String perm : commandBlock.getNeededPermissions()) {
-			player.sendMessage(ChatColor.GRAY + "---" + cpt++ + ". " + perm);
+		for (String perm : this.commandBlock.getNeededPermissions()) {
+			this.player.sendMessage(ChatColor.GRAY + "---" + cpt++ + ". " + perm);
 		}
-		player.sendMessage(c + "Enter the index of the permission you want to remove : ");
+		this.player.sendMessage(this.c + "Enter the index of the permission you want to remove : ");
 	}
-	
+
 	private void printNeededPermissionsEdit() {
-		player.sendMessage(c + "Needed permissions : ");
+		this.player.sendMessage(this.c + "Needed permissions : ");
 		int cpt = 1;
-		for (String perm : commandBlock.getNeededPermissions()) {
-			player.sendMessage(ChatColor.GRAY + "---" + cpt++ + ". " + perm);
+		for (String perm : this.commandBlock.getNeededPermissions()) {
+			this.player.sendMessage(ChatColor.GRAY + "---" + cpt++ + ". " + perm);
 		}
-		player.sendMessage(c + "Enter the index of the permission you want to edit followed by the new permission string : ");
+		this.player.sendMessage(this.c + "Enter the index of the permission you want to edit followed by the new permission string : ");
 	}
-	
+
 	private void printPermissions() {
-		player.sendMessage(c + "Temporary permissions : ");
+		this.player.sendMessage(this.c + "Temporary permissions : ");
 		int cpt = 1;
-		for (String perm : commandBlock.getPermissions()) {
-			player.sendMessage(ChatColor.GRAY + "---" + cpt++ + ". " + perm);
+		for (String perm : this.commandBlock.getPermissions()) {
+			this.player.sendMessage(ChatColor.GRAY + "---" + cpt++ + ". " + perm);
 		}
-		player.sendMessage(c + "1. Refresh");
-		player.sendMessage(c + "2. Add");
-		player.sendMessage(c + "3. Edit");
-		player.sendMessage(c + "4. Remove");
-		player.sendMessage(ChatColor.GREEN + "5. Done");
+		this.player.sendMessage(this.c + "1. Refresh");
+		this.player.sendMessage(this.c + "2. Add");
+		this.player.sendMessage(this.c + "3. Edit");
+		this.player.sendMessage(this.c + "4. Remove");
+		this.player.sendMessage(ChatColor.GREEN + "5. Done");
 	}
-	
+
 	private void printPermissionsRemove() {
-		player.sendMessage(c + "Needed permissions : ");
+		this.player.sendMessage(this.c + "Needed permissions : ");
 		int cpt = 1;
-		for (String perm : commandBlock.getPermissions()) {
-			player.sendMessage(ChatColor.GRAY + "---" + cpt++ + ". " + perm);
+		for (String perm : this.commandBlock.getPermissions()) {
+			this.player.sendMessage(ChatColor.GRAY + "---" + cpt++ + ". " + perm);
 		}
-		player.sendMessage(c + "Enter the index of the permission you want to remove : ");
+		this.player.sendMessage(this.c + "Enter the index of the permission you want to remove : ");
 	}
-	
+
 	private void printPermissionsEdit() {
-		player.sendMessage(c + "Needed permissions : ");
+		this.player.sendMessage(this.c + "Needed permissions : ");
 		int cpt = 1;
-		for (String perm : commandBlock.getPermissions()) {
-			player.sendMessage(ChatColor.GRAY + "---" + cpt++ + ". " + perm);
+		for (String perm : this.commandBlock.getPermissions()) {
+			this.player.sendMessage(ChatColor.GRAY + "---" + cpt++ + ". " + perm);
 		}
-		player.sendMessage(c + "Enter the index of the permission you want to edit followed by the new permission string : ");
+		this.player.sendMessage(this.c + "Enter the index of the permission you want to edit followed by the new permission string : ");
 	}
-	
+
 	private void printCommands() {
-		player.sendMessage(c + "Commands : ");
+		this.player.sendMessage(this.c + "Commands : ");
 		int cpt = 1;
-		for (String cmd : commandBlock.getCommands()) {
-			player.sendMessage(ChatColor.GRAY + "---" + cpt++ + ". " + cmd);
+		for (String cmd : this.commandBlock.getCommands()) {
+			this.player.sendMessage(ChatColor.GRAY + "---" + cpt++ + ". " + cmd);
 		}
-		player.sendMessage(c + "1. Refresh");
-		player.sendMessage(c + "2. Add");
-		player.sendMessage(c + "3. Edit");
-		player.sendMessage(c + "4. Remove");
-		player.sendMessage(ChatColor.GREEN + "5. Done");
+		this.player.sendMessage(this.c + "1. Refresh");
+		this.player.sendMessage(this.c + "2. Add");
+		this.player.sendMessage(this.c + "3. Edit");
+		this.player.sendMessage(this.c + "4. Remove");
+		this.player.sendMessage(ChatColor.GREEN + "5. Done");
 	}
-	
+
 	private void printCommandsRemove() {
-		player.sendMessage(c + "Commands : ");
+		this.player.sendMessage(this.c + "Commands : ");
 		int cpt = 1;
-		for (String cmd : commandBlock.getCommands()) {
-			player.sendMessage(ChatColor.GRAY + "---" + cpt++ + ". " + cmd);
+		for (String cmd : this.commandBlock.getCommands()) {
+			this.player.sendMessage(ChatColor.GRAY + "---" + cpt++ + ". " + cmd);
 		}
-		player.sendMessage(c + "Enter the index of the command you want to remove : ");
+		this.player.sendMessage(this.c + "Enter the index of the command you want to remove : ");
 	}
-	
+
 	private void printCommandsEdit() {
-		player.sendMessage(c + "Commands : ");
+		this.player.sendMessage(this.c + "Commands : ");
 		int cpt = 1;
-		for (String cmd : commandBlock.getCommands()) {
-			player.sendMessage(ChatColor.GRAY + "---" + cpt++ + ". " + cmd);
+		for (String cmd : this.commandBlock.getCommands()) {
+			this.player.sendMessage(ChatColor.GRAY + "---" + cpt++ + ". " + cmd);
 		}
-		player.sendMessage(c + "Enter the index of the command you want to edit followed by the new command string : ");
+		this.player.sendMessage(this.c + "Enter the index of the command you want to edit followed by the new command string : ");
 	}
-	
+
 }

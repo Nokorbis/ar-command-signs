@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -16,6 +17,7 @@ import net.avatar.realms.spigot.commandsign.data.IBlockSaver;
 import net.avatar.realms.spigot.commandsign.data.JsonBlockSaver;
 import net.avatar.realms.spigot.commandsign.model.CommandBlock;
 import net.avatar.realms.spigot.commandsign.model.EditingConfiguration;
+import net.avatar.realms.spigot.commandsign.tasks.ExecuteTask;
 import net.avatar.realms.spigot.commandsign.tasks.SaverTask;
 
 public class CommandSign extends JavaPlugin{
@@ -28,6 +30,7 @@ public class CommandSign extends JavaPlugin{
 	private Map<Player, EditingConfiguration> 	editingConfigurations;
 	private Map<Player, CommandBlock>			copyingConfigurations;
 	private Map<Player, Location> 				deletingBlocks;
+	private Map<UUID, ExecuteTask>				executingTasks;
 	public List<Player> 						infoPlayers;
 
 	private IBlockSaver							blockSaver;
@@ -43,6 +46,7 @@ public class CommandSign extends JavaPlugin{
 		this.editingConfigurations = new HashMap<Player, EditingConfiguration>();
 		this.copyingConfigurations = new HashMap<Player, CommandBlock>();
 		this.deletingBlocks = new HashMap<Player, Location>();
+		this.executingTasks = new HashMap<UUID, ExecuteTask>();
 		this.infoPlayers = new LinkedList<Player>();
 
 		this.getCommand("commandsign").setExecutor(new CommandSignCommands(this));
@@ -100,6 +104,10 @@ public class CommandSign extends JavaPlugin{
 
 	public Map<Player, CommandBlock> getCopyingConfigurations() {
 		return this.copyingConfigurations;
+	}
+
+	public Map<UUID, ExecuteTask> getExecutingTasks() {
+		return this.executingTasks;
 	}
 
 	public Map<Player, Location> getDeletingBlocks() {

@@ -14,5 +14,9 @@ public enum EditionState {
 	NeededPermissionsAdd,
 	NeededPermissionsEdit,
 	NeededPermissionsRemove,
+	Timer,
+	TimeSet,
+	TimerCancelled,
+	TimerReset,
 	Done;
 }

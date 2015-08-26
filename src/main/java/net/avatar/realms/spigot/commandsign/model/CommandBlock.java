@@ -146,6 +146,9 @@ public class CommandBlock {
 	}
 
 	public void setTimer (Integer timer) {
+		if ((timer == null) || (timer < 0)) {
+			timer = 0;
+		}
 		this.timer = timer;
 	}
 
@@ -154,6 +157,9 @@ public class CommandBlock {
 	}
 
 	public void setCancelledOnMove(Boolean cancel) {
+		if (cancel == null) {
+			cancel = false;
+		}
 		this.cancelledOnMove = cancel;
 	}
 
@@ -162,6 +168,9 @@ public class CommandBlock {
 	}
 
 	public void setResetOnMove(Boolean reset) {
+		if (reset == null) {
+			reset = false;
+		}
 		this.resetOnMove = reset;
 	}
 

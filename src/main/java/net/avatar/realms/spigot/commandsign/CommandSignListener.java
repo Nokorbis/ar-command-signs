@@ -12,9 +12,13 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.scheduler.BukkitScheduler;
+import org.bukkit.scheduler.BukkitTask;
 
 import net.avatar.realms.spigot.commandsign.model.CommandBlock;
 import net.avatar.realms.spigot.commandsign.model.EditingConfiguration;
+import net.avatar.realms.spigot.commandsign.tasks.ExecuteTask;
 
 
 public class CommandSignListener implements Listener{
@@ -150,7 +154,51 @@ public class CommandSignListener implements Listener{
 			}
 
 			if (cmd != null) {
-				cmd.execute(player);
+				if (!cmd.hasTimer() || player.hasPermission("commandsign.timer.bypass")) {
+					cmd.execute(player);
+				}
+				else {
+					ExecuteTask exe = new ExecuteTask(player, cmd);
+					exe.setLocation(player.getLocation().getBlock().getLocation());
+					CommandSign.getPlugin().getExecutingTasks().put(player.getUniqueId(), exe);
+					BukkitTask task = CommandSign.getPlugin().getServer().getScheduler().runTaskLater(CommandSign.getPlugin(), exe, cmd.getTimer() * 20);
+					exe.setTaskId(task.getTaskId());
+					player.sendMessage("Command sign execution delayed by a timer. Please wait " + cmd.getTimer() + " seconds.");
+				}
+			}
+		}
+	}
+
+	@EventHandler(ignoreCancelled=true)
+	public void onPlayerMove (PlayerMoveEvent event) {
+		Player player = event.getPlayer();
+		if ((player == null) || !player.isOnline() || player.isDead()) {
+			// Yes, there is no reason to be here
+			return;
+		}
+
+		if (CommandSign.getPlugin().getExecutingTasks().containsKey(player.getUniqueId())) {
+			ExecuteTask exe = CommandSign.getPlugin().getExecutingTasks().get(player.getUniqueId());
+
+			if (player.getLocation().getBlock().getLocation().equals(exe.getLocation())) {
+				return;
+			}
+
+			if (exe.getCommandBlock().isCancelledOnMove()) {
+				CommandSign.getPlugin().getServer().getScheduler().cancelTask(exe.getTaskId());
+				CommandSign.getPlugin().getExecutingTasks().remove(player.getUniqueId());
+				exe.getPlayer().sendMessage(ChatColor.RED + "Command sign execution cancelled.");
+				return;
+			}
+			if (exe.getCommandBlock().isResetOnMove()) {
+				BukkitScheduler sch = CommandSign.getPlugin().getServer().getScheduler();
+				sch.cancelTask(exe.getTaskId());
+				CommandSign.getPlugin().getExecutingTasks().remove(player.getUniqueId());
+				BukkitTask task = sch.runTaskLater(CommandSign.getPlugin(), exe, exe.getCommandBlock().getTimer() * 20);
+				exe.setTaskId(task.getTaskId());
+				exe.setLocation(player.getLocation().getBlock().getLocation());
+				CommandSign.getPlugin().getExecutingTasks().put(player.getUniqueId(), exe);
+				exe.getPlayer().sendMessage(ChatColor.RED + "Command sign execution timer reset");
 			}
 		}
 	}
