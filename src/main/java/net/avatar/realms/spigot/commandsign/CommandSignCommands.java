@@ -174,8 +174,8 @@ public class CommandSignCommands implements CommandExecutor{
 			return false;
 		}
 
-		if (this.plugin.getCopyingConfigurations().containsKey(player)) {
-			player.sendMessage(ChatColor.RED + "You are already copying a block");
+		if (this.plugin.getInfoPlayers().contains(player)) {
+			player.sendMessage(ChatColor.RED + "You are already seeking a block information");
 			return false;
 		}
 		return true;

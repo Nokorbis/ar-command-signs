@@ -281,6 +281,16 @@ public class CommandBlock {
 		for (String cmd : this.commands) {
 			player.sendMessage(ChatColor.GRAY + "---"+ cpt++ + ". " + cmd);
 		}
+		if ((this.timer != null) && (this.timer > 0)) {
+			player.sendMessage(c + "Timer :");
+			player.sendMessage(ChatColor.GRAY + "" + this.timer + " seconds");
+			if (this.cancelledOnMove) {
+				player.sendMessage(ChatColor.GRAY + "---" + "Cancelled on move");
+			}
+			if (this.resetOnMove) {
+				player.sendMessage(ChatColor.GRAY + "---" + "Reset on move");
+			}
+		}
 	}
 
 	private String blockSummary () {
