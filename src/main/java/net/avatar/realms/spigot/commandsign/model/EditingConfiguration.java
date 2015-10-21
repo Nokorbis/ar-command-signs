@@ -147,7 +147,7 @@ public class EditingConfiguration {
 		this.player.sendMessage(this.c + "2. Time (" + this.commandBlock.getTimer()+")");
 		this.player.sendMessage(this.c + "3. Cancel on move (" + ((this.getCommandBlock().isCancelledOnMove())? "Yes" : "No") +")");
 		this.player.sendMessage(this.c + "4. Reset on move (" + ((this.getCommandBlock().isResetOnMove())? "Yes" : "No") +")");
-		this.player.sendMessage(ChatColor.GREEN + "5. Done");
+		this.player.sendMessage(ChatColor.GREEN + "9. Done");
 
 	}
 
@@ -190,7 +190,7 @@ public class EditingConfiguration {
 				else if (index == 4) {
 					this.state = EditionState.PermissionsRemove;
 				}
-				else if (index == 5) {
+				else if (index == 9) {
 					this.state = EditionState.MainMenu;
 				}
 				break;
@@ -204,7 +204,7 @@ public class EditingConfiguration {
 				else if (index == 4) {
 					this.state = EditionState.CommandsRemove;
 				}
-				else if (index == 5) {
+				else if (index == 9) {
 					this.state = EditionState.MainMenu;
 				}
 				break;
@@ -218,7 +218,7 @@ public class EditingConfiguration {
 				else if (index == 4) {
 					this.state = EditionState.NeededPermissionsRemove;
 				}
-				else if (index == 5) {
+				else if (index == 9) {
 					this.state = EditionState.MainMenu;
 				}
 				break;
@@ -232,7 +232,7 @@ public class EditingConfiguration {
 				else if (index == 4) {
 					this.state = EditionState.TimerReset;
 				}
-				else if (index == 5) {
+				else if (index == 9) {
 					this.state = EditionState.MainMenu;
 				}
 			default :// Don't know what to do. lol.
@@ -385,7 +385,7 @@ public class EditingConfiguration {
 		this.player.sendMessage(this.c + "2. Add");
 		this.player.sendMessage(this.c + "3. Edit");
 		this.player.sendMessage(this.c + "4. Remove");
-		this.player.sendMessage(ChatColor.GREEN + "5. Done");
+		this.player.sendMessage(ChatColor.GREEN + "9. Done");
 	}
 
 	private void printNeededPermissionsRemove() {
@@ -416,7 +416,7 @@ public class EditingConfiguration {
 		this.player.sendMessage(this.c + "2. Add");
 		this.player.sendMessage(this.c + "3. Edit");
 		this.player.sendMessage(this.c + "4. Remove");
-		this.player.sendMessage(ChatColor.GREEN + "5. Done");
+		this.player.sendMessage(ChatColor.GREEN + "9. Done");
 	}
 
 	private void printPermissionsRemove() {
@@ -447,7 +447,7 @@ public class EditingConfiguration {
 		this.player.sendMessage(this.c + "2. Add");
 		this.player.sendMessage(this.c + "3. Edit");
 		this.player.sendMessage(this.c + "4. Remove");
-		this.player.sendMessage(ChatColor.GREEN + "5. Done");
+		this.player.sendMessage(ChatColor.GREEN + "9. Done");
 	}
 
 	private void printCommandsRemove() {
