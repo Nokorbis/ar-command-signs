@@ -59,7 +59,7 @@ public class CommandSignListener implements Listener{
 		}
 	}
 
-	@EventHandler
+	@EventHandler(priority=EventPriority.HIGH)
 	public void onChatEvent (AsyncPlayerChatEvent event) {
 		Player player = event.getPlayer();
 
