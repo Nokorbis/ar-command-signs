@@ -294,6 +294,9 @@ public class CommandBlock {
 
 	public void info (Player player, ChatColor c) {
 		player.sendMessage(c + "Block : " + blockSummary());
+		if (CommandSign.getPlugin().getEconomy() != null) {
+			player.sendMessage(c + "Costs : " + CommandSign.getPlugin().getEconomy().format(this.economyPrice));
+		}
 		player.sendMessage(c + "Needed permissions :");
 		int cpt = 1;
 		for (String perm : this.neededPermissions) {
