@@ -60,18 +60,6 @@ public class CommandSign extends JavaPlugin{
 		}
 	}
 
-	private void initializeEconomy() {
-		if (this.getServer().getPluginManager().getPlugin("Vault") != null) {
-			RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
-			if (rsp != null) {
-				this.economy = rsp.getProvider();
-				if (this.economy != null) {
-					getLogger().info("Vault economy detected for command signs ! ");
-				}
-			}
-		}
-	}
-
 	@Override
 	public void onDisable() {
 		plugin = null;
@@ -89,6 +77,18 @@ public class CommandSign extends JavaPlugin{
 		this.deletingBlocks = new HashMap<Player, Location>();
 		this.executingTasks = new HashMap<UUID, ExecuteTask>();
 		this.infoPlayers = new LinkedList<Player>();
+	}
+
+	private void initializeEconomy() {
+		if (this.getServer().getPluginManager().getPlugin("Vault") != null) {
+			RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
+			if (rsp != null) {
+				this.economy = rsp.getProvider();
+				if (this.economy != null) {
+					getLogger().info("Vault economy detected for command signs ! ");
+				}
+			}
+		}
 	}
 
 	private void initializeSaver() throws Exception {
@@ -142,6 +142,10 @@ public class CommandSign extends JavaPlugin{
 
 	public List<Player> getInfoPlayers() {
 		return this.infoPlayers;
+	}
+
+	public Economy getEconomy() {
+		return this.economy;
 	}
 
 	private void loadData() {

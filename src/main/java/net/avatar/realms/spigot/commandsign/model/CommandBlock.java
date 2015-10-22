@@ -19,12 +19,13 @@ public class CommandBlock {
 	private List<String> commands;
 	private List<String> permissions;
 
+	private Double economyPrice;
+
 	private Integer timer; // Value in second
 	private Boolean resetOnMove;
 	private Boolean cancelledOnMove;
 
 	public CommandBlock () {
-
 		// We use ArrayList because we want to remove/edit them by the index.
 		this.commands = new ArrayList<String>();
 		this.permissions = new ArrayList<String>();
@@ -176,6 +177,16 @@ public class CommandBlock {
 
 	public boolean hasTimer() {
 		return this.timer >= 1;
+	}
+
+	/* Economy price */
+
+	public Double getEconomyPrice() {
+		return this.economyPrice;
+	}
+
+	public void setEconomyPrice(Double price) {
+		this.economyPrice = price;
 	}
 
 	/* Business */

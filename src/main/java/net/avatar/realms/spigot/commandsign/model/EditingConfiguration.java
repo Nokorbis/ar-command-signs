@@ -178,6 +178,9 @@ public class EditingConfiguration {
 							this.state = EditionState.Done;
 						}
 					}
+					else {
+						this.player.sendMessage(ChatColor.RED + "The command block is not valid.");
+					}
 				}
 				break;
 			case Permissions:

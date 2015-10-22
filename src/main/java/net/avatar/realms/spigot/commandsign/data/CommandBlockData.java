@@ -12,6 +12,7 @@ public class CommandBlockData {
 	private List<String> commands;
 	private List<String> permissions;
 	private List<String> neededPermissions;
+	private Double economyPrice;
 	private Integer time;
 	private Boolean cancelOnMove;
 	private Boolean resetOnMove;
@@ -83,6 +84,7 @@ public class CommandBlockData {
 		data.setCommands(cmd.getCommands());
 		data.setPermissions(cmd.getPermissions());
 		data.setNeededPermissions(cmd.getNeededPermissions());
+		data.setEconomyPrice(cmd.getEconomyPrice());
 		data.setTime(cmd.getTimer());
 		data.setCancelOnMove(cmd.isCancelledOnMove());
 		data.setResetOnMove(cmd.isResetOnMove());
@@ -112,10 +114,20 @@ public class CommandBlockData {
 			cmd.addNeededPermission(str);
 		}
 
+		cmd.setEconomyPrice(data.getEconomyPrice());
+
 		cmd.setTimer(data.getTime());
 		cmd.setCancelledOnMove(data.getCancelOnMove());
 		cmd.setResetOnMove(data.getResetOnMove());
 
 		return cmd;
+	}
+
+	public Double getEconomyPrice() {
+		return this.economyPrice;
+	}
+
+	public void setEconomyPrice(Double economyPrice) {
+		this.economyPrice = economyPrice;
 	}
 }
