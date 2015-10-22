@@ -11,6 +11,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachment;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import net.avatar.realms.spigot.commandsign.data.IBlockSaver;
@@ -19,6 +20,7 @@ import net.avatar.realms.spigot.commandsign.model.CommandBlock;
 import net.avatar.realms.spigot.commandsign.model.EditingConfiguration;
 import net.avatar.realms.spigot.commandsign.tasks.ExecuteTask;
 import net.avatar.realms.spigot.commandsign.tasks.SaverTask;
+import net.milkbowl.vault.economy.Economy;
 
 public class CommandSign extends JavaPlugin{
 
@@ -36,34 +38,38 @@ public class CommandSign extends JavaPlugin{
 	private IBlockSaver							blockSaver;
 	private SaverTask 							saver;
 
+	private Economy								economy;
+
 	@Override
 	public void onEnable() {
 		plugin = this;
 
-		this.playerPerms = new HashMap<Player, PermissionAttachment>();
-		this.commandBlocks = new HashMap<Location , CommandBlock>();
-		this.creatingConfigurations = new HashMap<Player, EditingConfiguration>();
-		this.editingConfigurations = new HashMap<Player, EditingConfiguration>();
-		this.copyingConfigurations = new HashMap<Player, CommandBlock>();
-		this.deletingBlocks = new HashMap<Player, Location>();
-		this.executingTasks = new HashMap<UUID, ExecuteTask>();
-		this.infoPlayers = new LinkedList<Player>();
+		initializeDataStructures();
 
 		this.getCommand("commandsign").setExecutor(new CommandSignCommands(this));
 		this.getServer().getPluginManager().registerEvents(new CommandSignListener(this), this);
 
+		initializeEconomy();
 		try {
-			this.blockSaver = new JsonBlockSaver(this.getDataFolder());
-			loadData();
-			this.saver = new SaverTask(this);
-			long delay = 20 * 60 * 10; //Server ticks
-			long period = 20 * 60 * 5; // Server ticks
-			Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this.saver, delay, period);
-		} catch (Exception e) {
+			initializeSaver();
+			getLogger().info("CommandSigns properly enabled !");
+		}
+		catch (Exception e) {
 			getLogger().severe("Was not able to create the save file for command sign plugin");
 			e.printStackTrace();
 		}
-		getLogger().info("CommandSigns properly enabled !");
+	}
+
+	private void initializeEconomy() {
+		if (this.getServer().getPluginManager().getPlugin("Vault") != null) {
+			RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
+			if (rsp != null) {
+				this.economy = rsp.getProvider();
+				if (this.economy != null) {
+					getLogger().info("Vault economy detected for command signs ! ");
+				}
+			}
+		}
 	}
 
 	@Override
@@ -72,6 +78,26 @@ public class CommandSign extends JavaPlugin{
 		if (this.blockSaver != null) {
 			saveData();
 		}
+	}
+
+	private void initializeDataStructures() {
+		this.playerPerms = new HashMap<Player, PermissionAttachment>();
+		this.commandBlocks = new HashMap<Location , CommandBlock>();
+		this.creatingConfigurations = new HashMap<Player, EditingConfiguration>();
+		this.editingConfigurations = new HashMap<Player, EditingConfiguration>();
+		this.copyingConfigurations = new HashMap<Player, CommandBlock>();
+		this.deletingBlocks = new HashMap<Player, Location>();
+		this.executingTasks = new HashMap<UUID, ExecuteTask>();
+		this.infoPlayers = new LinkedList<Player>();
+	}
+
+	private void initializeSaver() throws Exception {
+		this.blockSaver = new JsonBlockSaver(this.getDataFolder());
+		loadData();
+		this.saver = new SaverTask(this);
+		long delay = 20 * 60 * 10; //Server ticks
+		long period = 20 * 60 * 5; // Server ticks
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this.saver, delay, period);
 	}
 
 	public static CommandSign getPlugin() {
