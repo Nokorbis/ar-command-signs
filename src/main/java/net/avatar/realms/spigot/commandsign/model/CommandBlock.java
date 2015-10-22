@@ -10,6 +10,7 @@ import org.bukkit.permissions.PermissionAttachment;
 
 import net.avatar.realms.spigot.commandsign.CommandSign;
 import net.avatar.realms.spigot.commandsign.CommandSignUtils;
+import net.milkbowl.vault.economy.Economy;
 
 public class CommandBlock {
 
@@ -33,6 +34,7 @@ public class CommandBlock {
 		this.setTimer(0);
 		this.resetOnMove = false;
 		this.cancelledOnMove = false;
+		this.setEconomyPrice(0.0);
 	}
 
 	/* Getters and setters */
@@ -186,6 +188,9 @@ public class CommandBlock {
 	}
 
 	public void setEconomyPrice(Double price) {
+		if (price == null || price < 0) {
+			price = 0.0;
+		}
 		this.economyPrice = price;
 	}
 
@@ -205,6 +210,18 @@ public class CommandBlock {
 		for (String needed : this.neededPermissions) {
 			if (!player.hasPermission(needed)) {
 				player.sendMessage(ChatColor.DARK_RED + "You do not have the needed permission : " + needed);
+				return false;
+			}
+		}
+
+		if (CommandSign.getPlugin().getEconomy() != null && this.economyPrice > 0) {
+			Economy eco = CommandSign.getPlugin().getEconomy();
+			if (eco.has(player, this.economyPrice)) {
+				eco.withdrawPlayer(player, this.economyPrice);
+				player.sendMessage("You paied " + eco.format(this.economyPrice) + " to use this command");
+			}
+			else {
+				player.sendMessage(ChatColor.DARK_RED + "You do not have enough money to use this command block.");
 				return false;
 			}
 		}

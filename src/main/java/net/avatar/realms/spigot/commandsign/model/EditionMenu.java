@@ -5,6 +5,10 @@ import java.util.Map;
 
 import org.bukkit.entity.Player;
 
+/**
+ * Not used yet.
+ *
+ */
 public class EditionMenu {
 
 	private String name;

@@ -7,6 +7,11 @@ import org.bukkit.entity.Player;
 import net.avatar.realms.spigot.commandsign.CommandSign;
 import net.avatar.realms.spigot.commandsign.enums.EditionState;
 
+@Deprecated
+/**
+ * Should make EditionMenu asap
+ *
+ */
 public class EditingConfiguration {
 
 	private CommandBlock commandBlock;
@@ -114,6 +119,12 @@ public class EditingConfiguration {
 			case TimerReset:
 				printTimerReset();
 				break;
+			case Costs:
+				printCosts();
+				break;
+			case Economy:
+				this.player.sendMessage(this.c + "Enter the new economy needed for this command block (currently : " + this.commandBlock.getEconomyPrice() + ") :");
+				break;
 			case Done:
 				if (this.isCreating) {
 					this.player.sendMessage(ChatColor.GREEN + "Command block created !");
@@ -124,6 +135,13 @@ public class EditingConfiguration {
 
 				break;
 		}
+	}
+
+	private void printCosts() {
+		//Let's take the risky guess that if we're here, it means vault is loaded
+		this.player.sendMessage(this.c + "1. Refresh");
+		this.player.sendMessage(this.c + "2. Economy (" + CommandSign.getPlugin().getEconomy().format(this.commandBlock.getEconomyPrice()) + ")");
+		this.player.sendMessage(ChatColor.GREEN + "9. Done");
 	}
 
 
@@ -142,29 +160,41 @@ public class EditingConfiguration {
 
 	}
 
-	private void printTimerMenu () {
-		this.player.sendMessage(this.c + "1. Refresh");
-		this.player.sendMessage(this.c + "2. Time (" + this.commandBlock.getTimer()+")");
-		this.player.sendMessage(this.c + "3. Cancel on move (" + ((this.getCommandBlock().isCancelledOnMove())? "Yes" : "No") +")");
-		this.player.sendMessage(this.c + "4. Reset on move (" + ((this.getCommandBlock().isResetOnMove())? "Yes" : "No") +")");
-		this.player.sendMessage(ChatColor.GREEN + "9. Done");
-
-	}
-
 	public void input(int index) {
+		boolean economy = CommandSign.getPlugin().getEconomy() != null;
 		switch (this.state) {
 			case MainMenu:
 				if (index == 2) {
 					this.state = EditionState.NeededPermissions;
 				}
 				else if (index == 3) {
-					this.state = EditionState.Permissions;
+					if (economy) {
+						this.state = EditionState.Costs;
+					}
+					else {
+						this.state = EditionState.Permissions;
+					}
 				}
 				else if (index == 4) {
-					this.state = EditionState.Commands;
+					if (economy) {
+						this.state = EditionState.Permissions;
+					}
+					else {
+						this.state = EditionState.Commands;
+					}
 				}
 				else if (index == 5) {
-					this.state = EditionState.Timer;
+					if (economy) {
+						this.state = EditionState.Commands;
+					}
+					else {
+						this.state = EditionState.Timer;
+					}
+				}
+				else if (index == 6) {
+					if (economy) {
+						this.state = EditionState.Timer;
+					}
 				}
 				else if (index == 9) {
 					if (this.commandBlock.validate()) {
@@ -234,6 +264,13 @@ public class EditingConfiguration {
 				}
 				else if (index == 4) {
 					this.state = EditionState.TimerReset;
+				}
+				else if (index == 9) {
+					this.state = EditionState.MainMenu;
+				}
+			case Costs:
+				if (index == 2) {
+					this.state = EditionState.Economy;
 				}
 				else if (index == 9) {
 					this.state = EditionState.MainMenu;
@@ -348,6 +385,17 @@ public class EditingConfiguration {
 				}
 				this.state = EditionState.Timer;
 				break;
+			case Economy:
+				try {
+					args = str.split(" ");
+					Double value = Double.parseDouble(args[0]);
+					this.commandBlock.setEconomyPrice(value);
+				}
+				catch (Exception e) {
+				}
+
+				this.state = EditionState.Costs;
+				break;
 			default :
 				try {
 					args = str.split(" ");
@@ -365,16 +413,24 @@ public class EditingConfiguration {
 			this.player.sendMessage(this.c + "   Blocks : None");
 		}
 		else {
-			String str = this.c + "   Blocks : " + loc.getBlock().getType() + "#" + loc.getX() + ":" + loc.getZ() + "("+loc.getY()+")";
+			String str = this.c + "   Block : " + loc.getBlock().getType() + "#" + loc.getX() + ":" + loc.getZ() + "("+loc.getY()+")";
 			if (this.isCreating) {
 				str += " [Set on click]";
 			}
 			this.player.sendMessage(str);
 		}                  
 		this.player.sendMessage(this.c + "2. Needed permissions");
-		this.player.sendMessage(this.c + "3. Temporary permissions");
-		this.player.sendMessage(this.c + "4. Commands");
-		this.player.sendMessage(this.c + "5. Timer");
+		if (CommandSign.getPlugin().getEconomy() != null) {
+			this.player.sendMessage(this.c + "3. Costs");
+			this.player.sendMessage(this.c + "4. Temporary permissions");
+			this.player.sendMessage(this.c + "5. Commands");
+			this.player.sendMessage(this.c + "6. Timer");
+		}
+		else {
+			this.player.sendMessage(this.c + "3. Temporary permissions");
+			this.player.sendMessage(this.c + "4. Commands");
+			this.player.sendMessage(this.c + "5. Timer");
+		}
 		this.player.sendMessage(ChatColor.GREEN + "9. Done");
 	}
 
@@ -419,6 +475,14 @@ public class EditingConfiguration {
 		this.player.sendMessage(this.c + "2. Add");
 		this.player.sendMessage(this.c + "3. Edit");
 		this.player.sendMessage(this.c + "4. Remove");
+		this.player.sendMessage(ChatColor.GREEN + "9. Done");
+	}
+
+	private void printTimerMenu () {
+		this.player.sendMessage(this.c + "1. Refresh");
+		this.player.sendMessage(this.c + "2. Time (" + this.commandBlock.getTimer()+")");
+		this.player.sendMessage(this.c + "3. Cancel on move (" + ((this.getCommandBlock().isCancelledOnMove())? "Yes" : "No") +")");
+		this.player.sendMessage(this.c + "4. Reset on move (" + ((this.getCommandBlock().isResetOnMove())? "Yes" : "No") +")");
 		this.player.sendMessage(ChatColor.GREEN + "9. Done");
 	}
 

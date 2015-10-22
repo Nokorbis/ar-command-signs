@@ -18,5 +18,7 @@ public enum EditionState {
 	TimeSet,
 	TimerCancelled,
 	TimerReset,
+	Costs,
+	Economy,
 	Done;
 }
