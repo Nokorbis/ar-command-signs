@@ -268,6 +268,7 @@ public class EditingConfiguration {
 				else if (index == 9) {
 					this.state = EditionState.MainMenu;
 				}
+				break;
 			case Costs:
 				if (index == 2) {
 					this.state = EditionState.Economy;
@@ -275,6 +276,7 @@ public class EditingConfiguration {
 				else if (index == 9) {
 					this.state = EditionState.MainMenu;
 				}
+				break;
 			default :// Don't know what to do. lol.
 
 		}
