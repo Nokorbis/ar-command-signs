@@ -3,13 +3,12 @@ package net.avatar.realms.spigot.commandsign.model;
 import org.bukkit.entity.Player;
 
 import net.avatar.realms.spigot.commandsign.menu.IEditionMenu;
-import net.avatar.realms.spigot.commandsign.menu.MainMenu;
 
-public class EditingConf {
+public class EditingConf<T> {
 	
 	private Player editor;
-	private CommandBlock commandBlock;
-	private IEditionMenu currentMenu;
+	private T editingData;
+	private IEditionMenu<T> currentMenu;
 	private boolean creating;
 	
 	/**
@@ -20,10 +19,9 @@ public class EditingConf {
 	 * @param creating
 	 *        Is the player creating a new command block or editing an existing one ?
 	 */
-	public EditingConf(Player player, CommandBlock commandBlock, boolean creating) {
+	public EditingConf(Player player, T commandBlock, boolean creating) {
 		this.editor = player;
-		this.commandBlock = commandBlock;
-		this.currentMenu = new MainMenu();
+		this.editingData = commandBlock;
 	}
 	
 	public void display() {
@@ -43,11 +41,11 @@ public class EditingConf {
 		return this.editor;
 	}
 
-	public CommandBlock getCommandBlock() {
-		return this.commandBlock;
+	public T getEditingData() {
+		return this.editingData;
 	}
 	
-	public void setCurrentMenu(IEditionMenu newMenu) {
+	public void setCurrentMenu(IEditionMenu<T> newMenu) {
 		this.currentMenu = newMenu;
 	}
 

@@ -6,6 +6,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import net.avatar.realms.spigot.commandsign.CommandSign;
+import net.avatar.realms.spigot.commandsign.model.CommandBlock;
 import net.avatar.realms.spigot.commandsign.model.EditingConf;
 import net.md_5.bungee.api.ChatColor;
 
@@ -30,13 +31,13 @@ public class MainMenu extends EditionMenu {
 	}
 
 	@Override
-	public void display(EditingConf config) {
+	public void display(EditingConf<CommandBlock> config) {
 		Player editor = config.getEditor();
 		editor.sendMessage(c + "1. Refresh");
 		StringBuilder block = new StringBuilder();
 		block.append(c);
 		block.append("   Block: ");
-		if (config.getCommandBlock().getLocation() == null) {
+		if (config.getEditingData().getLocation() == null) {
 			block.append("None");
 			if (config.isCreating()) {
 				block.append(" [Set on click]");
@@ -44,7 +45,7 @@ public class MainMenu extends EditionMenu {
 		}
 		else {
 			// Block: BlockType#X:Z(Y)
-			Location loc = config.getCommandBlock().getLocation();
+			Location loc = config.getEditingData().getLocation();
 			block.append(loc.getBlock().getType());
 			block.append("#");
 			block.append(loc.getX());
@@ -85,5 +86,4 @@ public class MainMenu extends EditionMenu {
 			config.getEditor().sendMessage(ChatColor.DARK_RED + "You must enter a number to go through the menu.");
 		}
 	}
-
 }
