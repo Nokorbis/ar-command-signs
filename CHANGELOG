@@ -1,3 +1,7 @@
+CommandSign v1.2.2
+    Menus are handled a new way (easier maintenance)
+    Menus are organized the same way as the process.
+
 Command Sign v1.2.1
     Timer should not redirect to cost anymore
 
