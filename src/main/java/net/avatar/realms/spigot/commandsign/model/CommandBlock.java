@@ -195,23 +195,46 @@ public class CommandBlock {
 	}
 
 	/* Business */
-
 	/**
-	 * Execute the command block as the player
-	 * @param player The player that executes the command block
-	 * @return <code>true</code> if the player had the needed permissions to execute the command block
-	 * <code>false</code> if the player did not have the needed permissions to execute the command block
+	 * Check if the player has all needed requirements to use the command block
+	 *
+	 * @param player
+	 *        The player whose we need to check requirements
+	 * @throws CommandSignsException
+	 *         If the player do not have requirements
 	 */
-	public boolean execute (Player player) {
+	public void checkRequirements(Player player) throws CommandSignsException {
 		if (player == null) {
-			return false;
+			throw new CommandSignsException("Invalid player.");
 		}
 
 		for (String needed : this.neededPermissions) {
 			if (!player.hasPermission(needed)) {
-				player.sendMessage(ChatColor.DARK_RED + "You do not have the needed permission : " + needed);
-				return false;
+				throw new CommandSignsException("You do not have the needed permission : " + needed);
 			}
+		}
+		
+		if ((CommandSign.getPlugin().getEconomy() != null) && (this.economyPrice > 0)) {
+			Economy eco = CommandSign.getPlugin().getEconomy();
+			if (!eco.has(player, this.economyPrice)) {
+				throw new CommandSignsException(
+						"You do not have enough money to use this command block. (" + eco.format(this.economyPrice) + ")");
+			}
+		}
+	}
+
+	/**
+	 * Execute the command block as the player
+	 *
+	 * @param player
+	 *        The player that executes the command block
+	 * @return <code>true</code> if the player had the needed permissions to execute the command
+	 *         block
+	 *         <code>false</code> if a strange error occured
+	 */
+	public boolean execute (Player player) {
+		if (player == null) {
+			return false;
 		}
 
 		if ((CommandSign.getPlugin().getEconomy() != null) && (this.economyPrice > 0)) {
@@ -225,7 +248,7 @@ public class CommandBlock {
 				return false;
 			}
 		}
-
+		
 		PermissionAttachment perms = CommandSign.getPlugin().getPlayerPermissions(player);
 		for (String perm : this.permissions) {
 			if (!player.hasPermission(perm)) {

@@ -18,6 +18,7 @@ import org.bukkit.scheduler.BukkitTask;
 
 import net.avatar.realms.spigot.commandsign.menu.CommandsAddMenu;
 import net.avatar.realms.spigot.commandsign.model.CommandBlock;
+import net.avatar.realms.spigot.commandsign.model.CommandSignsException;
 import net.avatar.realms.spigot.commandsign.model.EditingConfiguration;
 import net.avatar.realms.spigot.commandsign.tasks.ExecuteTask;
 
@@ -159,17 +160,29 @@ public class CommandSignListener implements Listener{
 			}
 
 			if (cmd != null) {
-				if (!cmd.hasTimer() || player.hasPermission("commandsign.timer.bypass")) {
-					cmd.execute(player);
+				try {
+					cmd.checkRequirements(player);
+					if (!cmd.hasTimer() || player.hasPermission("commandsign.timer.bypass")) {
+						cmd.execute(player);
+					}
+					else {
+						ExecuteTask exe = new ExecuteTask(player, cmd);
+						exe.setLocation(player.getLocation().getBlock().getLocation());
+						CommandSign.getPlugin().getExecutingTasks().put(player.getUniqueId(), exe);
+						BukkitTask task = CommandSign.getPlugin().getServer().getScheduler().runTaskLater(CommandSign.getPlugin(),
+								exe, cmd.getTimer() * 20);
+						exe.setTaskId(task.getTaskId());
+						player.sendMessage(
+								"Command sign execution delayed by a timer. Please wait " + cmd.getTimer() + " seconds.");
+					}
 				}
-				else {
-					ExecuteTask exe = new ExecuteTask(player, cmd);
-					exe.setLocation(player.getLocation().getBlock().getLocation());
-					CommandSign.getPlugin().getExecutingTasks().put(player.getUniqueId(), exe);
-					BukkitTask task = CommandSign.getPlugin().getServer().getScheduler().runTaskLater(CommandSign.getPlugin(), exe, cmd.getTimer() * 20);
-					exe.setTaskId(task.getTaskId());
-					player.sendMessage("Command sign execution delayed by a timer. Please wait " + cmd.getTimer() + " seconds.");
+				catch (CommandSignsException ex) {
+					player.sendMessage(ChatColor.DARK_RED + ex.getMessage());
 				}
+				catch (Exception ex) {
+					player.sendMessage(ChatColor.DARK_RED + "An error occured while checking requirements.");
+				}
+
 			}
 		}
 	}
