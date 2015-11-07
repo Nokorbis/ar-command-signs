@@ -117,6 +117,10 @@ public class CommandSignListener implements Listener{
 					conf.setEditingData(editingBlock);
 					conf.display();
 				}
+				else {
+					player.sendMessage(ChatColor.DARK_RED + "The selected block is not valid, aborting...");
+					this.plugin.getEditingConfigurations().remove(player);
+				}
 			}
 			// We've already selected the block we want to edit
 			else {

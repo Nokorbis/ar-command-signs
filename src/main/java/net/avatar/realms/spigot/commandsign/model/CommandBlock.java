@@ -188,7 +188,7 @@ public class CommandBlock {
 	}
 
 	public void setEconomyPrice(Double price) {
-		if (price == null || price < 0) {
+		if ((price == null) || (price < 0)) {
 			price = 0.0;
 		}
 		this.economyPrice = price;
@@ -214,7 +214,7 @@ public class CommandBlock {
 			}
 		}
 
-		if (CommandSign.getPlugin().getEconomy() != null && this.economyPrice > 0) {
+		if ((CommandSign.getPlugin().getEconomy() != null) && (this.economyPrice > 0)) {
 			Economy eco = CommandSign.getPlugin().getEconomy();
 			if (eco.has(player, this.economyPrice)) {
 				eco.withdrawPlayer(player, this.economyPrice);
@@ -235,7 +235,6 @@ public class CommandBlock {
 
 		for (String command : this.commands) {
 			String cmd = formatCommand(command, player);
-			System.out.println(cmd);
 			player.chat(cmd);
 			//CommandSign.getPlugin().getServer().dispatchCommand(player, cmd);
 		}

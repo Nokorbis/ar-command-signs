@@ -1,5 +1,6 @@
 package net.avatar.realms.spigot.commandsign.model;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import net.avatar.realms.spigot.commandsign.menu.IEditionMenu;
@@ -28,11 +29,24 @@ public class EditingConfiguration<T> {
 	public EditingConfiguration(Player player, boolean creating) {
 		this.editor = player;
 		this.creating = creating;
+		this.editingData = null;
 	}
 
 	public void display() {
+		if (this.editingData == null) {
+			this.editor.sendMessage(ChatColor.DARK_RED + "You haven't select any command block yet.");
+			return;
+		}
 		if (this.currentMenu != null) {
 			this.currentMenu.display(this);
+		}
+		else {
+			if (this.creating) {
+				this.editor.sendMessage(ChatColor.GREEN + "Command block created !");
+			}
+			else {
+				this.editor.sendMessage(ChatColor.GREEN + "Command block edited !");
+			}
 		}
 	}
 	

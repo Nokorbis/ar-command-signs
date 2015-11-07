@@ -92,6 +92,7 @@ public class CommandSignCommands implements CommandExecutor{
 		CommandBlock cmdBlock = new CommandBlock();
 		
 		EditingConfiguration<CommandBlock> ecf = new EditingConfiguration<CommandBlock>(player, cmdBlock, true);
+		ecf.setCurrentMenu(CommandSign.getPlugin().getMainMenu());
 		ecf.display();
 		this.plugin.getCreatingConfigurations().put(player, ecf);
 
@@ -109,6 +110,7 @@ public class CommandSignCommands implements CommandExecutor{
 		}
 
 		EditingConfiguration<CommandBlock> conf = new EditingConfiguration<CommandBlock>(player, false);
+		conf.setCurrentMenu(CommandSign.getPlugin().getMainMenu());
 		this.plugin.getEditingConfigurations().put(player, conf);
 		player.sendMessage(ChatColor.GOLD + "Click on the block you want to edit");
 

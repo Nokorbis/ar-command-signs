@@ -11,11 +11,11 @@ import net.avatar.realms.spigot.commandsign.model.EditingConfiguration;
 import net.md_5.bungee.api.ChatColor;
 
 public class MainMenu extends EditionMenu {
-
+	
 	public MainMenu() {
 		super(null, "Main Menu");
 		this.subMenus.put(2, new NeededPermissionsMenu(this));
-		
+
 		//If Vault is on the server, you can use the cost system
 		if (CommandSign.getPlugin().getEconomy() != null) {
 			this.subMenus.put(3, new CostsMenu(this));
@@ -29,7 +29,7 @@ public class MainMenu extends EditionMenu {
 			this.subMenus.put(5, new CommandsMenu(this));
 		}
 	}
-
+	
 	@Override
 	public void display(EditingConfiguration<CommandBlock> config) {
 		Player editor = config.getEditor();
@@ -61,7 +61,7 @@ public class MainMenu extends EditionMenu {
 		}
 		editor.sendMessage(ChatColor.GREEN + "9. Done");
 	}
-	
+
 	@Override
 	public void input(EditingConfiguration<CommandBlock> config, String message) {
 		try {
@@ -72,7 +72,20 @@ public class MainMenu extends EditionMenu {
 			}
 			int index = Integer.parseInt(args[0]);
 			if (index == 9) {
-				//TODO : Remove the edition configuration, everything is done
+				if (config.getEditingData().validate()) {
+					config.setCurrentMenu(null);
+					if (config.isCreating()) {
+						CommandSign.getPlugin().getCommandBlocks().put(config.getEditingData().getLocation(),
+								config.getEditingData());
+						CommandSign.getPlugin().getCreatingConfigurations().remove(config.getEditor());
+					}
+					else {
+						CommandSign.getPlugin().getEditingConfigurations().remove(config.getEditor());
+					}
+				}
+				else {
+					config.getEditor().sendMessage(ChatColor.RED + "The command block is not valid.");
+				}
 			}
 			else if (this.subMenus.containsKey(index)) {
 				IEditionMenu<CommandBlock> newMenu = this.subMenus.get(index);
