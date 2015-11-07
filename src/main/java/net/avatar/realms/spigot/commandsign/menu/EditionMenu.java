@@ -49,4 +49,16 @@ public abstract class EditionMenu implements IEditionMenu<CommandBlock> {
 	public final EditionMenu getParent() {
 		return this.parent;
 	}
+	
+	/**
+	 * Get the name that must be shown in the menu formatted with the command block data
+	 *
+	 * @param cmd
+	 *        The command block data
+	 * @return
+	 * 		A String containing the format name to show
+	 */
+	public String formatName(CommandBlock cmd) {
+		return this.name;
+	}
 }

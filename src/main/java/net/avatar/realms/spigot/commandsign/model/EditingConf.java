@@ -33,7 +33,9 @@ public class EditingConf<T> {
 	public void input(String message) {
 		if ((message != null) && (this.currentMenu != null)) {
 			message = message.trim();
-			this.currentMenu.input(this, message);
+			if (!message.equals("")) {
+				this.currentMenu.input(this, message);
+			}
 		}
 	}
 
