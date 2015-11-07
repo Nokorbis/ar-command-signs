@@ -10,11 +10,11 @@ import net.avatar.realms.spigot.commandsign.model.EditingConf;
 import net.md_5.bungee.api.ChatColor;
 
 public class MainMenu extends EditionMenu {
-	
+
 	public MainMenu() {
 		super(null, "Main Menu");
 		this.subMenus.put(2, new NeededPermissionsMenu(this));
-
+		
 		//If Vault is on the server, you can use the cost system
 		if (CommandSign.getPlugin().getEconomy() != null) {
 			this.subMenus.put(3, new CostsMenu(this));
@@ -28,7 +28,7 @@ public class MainMenu extends EditionMenu {
 			this.subMenus.put(5, new CommandsMenu(this));
 		}
 	}
-	
+
 	@Override
 	public void display(EditingConf config) {
 		Player editor = config.getEditor();
@@ -55,12 +55,12 @@ public class MainMenu extends EditionMenu {
 			block.append(")");
 		}
 		editor.sendMessage(block.toString());
-		for (Entry<Integer, IEditionMenu> menu : this.subMenus.entrySet()) {
+		for (Entry<Integer, EditionMenu> menu : this.subMenus.entrySet()) {
 			editor.sendMessage(c + "" + menu.getKey() + ". " + menu.getValue().getName());
 		}
 		editor.sendMessage(ChatColor.GREEN + "9. Done");
 	}
-
+	
 	@Override
 	public void input(EditingConf config, String message) {
 		try {
@@ -85,5 +85,5 @@ public class MainMenu extends EditionMenu {
 			config.getEditor().sendMessage(ChatColor.DARK_RED + "You must enter a number to go through the menu.");
 		}
 	}
-	
+
 }

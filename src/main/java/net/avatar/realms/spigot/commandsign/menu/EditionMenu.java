@@ -10,29 +10,28 @@ import org.bukkit.ChatColor;
  *
  */
 public abstract class EditionMenu implements IEditionMenu {
-
+	
 	/**
 	 * Default color for chat message that are sent to the players
 	 */
 	protected static final ChatColor c = ChatColor.AQUA;
-	
+
 	private String name;
-	
+
 	private EditionMenu parent;
-	
-	protected Map<Integer, IEditionMenu> subMenus;
-	
+
+	protected Map<Integer, EditionMenu> subMenus;
+
 	public EditionMenu(EditionMenu parent, String name) {
 		this.parent = parent;
 		this.name = name;
-		this.subMenus = new TreeMap<Integer, IEditionMenu>(); // Use treemap to make sure the display is done properly
+		this.subMenus = new TreeMap<Integer, EditionMenu>(); // Use treemap to make sure the display is done properly
 	}
-	
-	@Override
+
 	public final String getName() {
 		return this.name;
 	}
-	
+
 	public final EditionMenu getParent() {
 		return this.parent;
 	}
