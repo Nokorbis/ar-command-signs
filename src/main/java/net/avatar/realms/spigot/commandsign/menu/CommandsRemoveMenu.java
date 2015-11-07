@@ -5,20 +5,20 @@ import org.bukkit.ChatColor;
 import net.avatar.realms.spigot.commandsign.model.CommandBlock;
 import net.avatar.realms.spigot.commandsign.model.EditingConf;
 
-public class NeededPermissionsEditMenu extends EditionMenu {
+public class CommandsRemoveMenu extends EditionMenu {
 	
-	public NeededPermissionsEditMenu(EditionMenu parent) {
-		super(parent, "Edit");
+	public CommandsRemoveMenu(EditionMenu parent) {
+		super(parent, "Remove");
 	}
 
 	@Override
 	public void display(EditingConf<CommandBlock> config) {
-		config.getEditor().sendMessage(c + "Needed permissions : ");
+		config.getEditor().sendMessage(c + "Commands : ");
 		int cpt = 1;
-		for (String perm : config.getEditingData().getNeededPermissions()) {
+		for (String perm : config.getEditingData().getPermissions()) {
 			config.getEditor().sendMessage(ChatColor.GRAY + "---" + cpt++ + ". " + perm);
 		}
-		config.getEditor().sendMessage(c + "Enter the index of the permission you want to edit followed by the new permission string : ");
+		config.getEditor().sendMessage(c + "Enter the index of the command you want to remove : ");
 	}
 	
 	@Override
@@ -27,9 +27,10 @@ public class NeededPermissionsEditMenu extends EditionMenu {
 			config.setCurrentMenu(getParent());
 			String[] args = message.split(" ", 2);
 			int index = Integer.parseInt(args[0]);
-			config.getEditingData().editNeededPermission(index - 1, args[1]);
+			config.getEditingData().removeCommand(index - 1);
 		}
 		catch (Exception e) {
 		}
 	}
+	
 }
