@@ -63,7 +63,7 @@ public class MainMenu extends EditionMenu {
 	}
 	
 	@Override
-	public void input(EditingConf config, String message) {
+	public void input(EditingConf<CommandBlock> config, String message) {
 		try {
 			String[] args = message.split(" ");
 			if (args.length == 0) {
@@ -75,7 +75,7 @@ public class MainMenu extends EditionMenu {
 				//TODO : Remove the edition configuration, everything is done
 			}
 			else if (this.subMenus.containsKey(index)) {
-				IEditionMenu newMenu = this.subMenus.get(index);
+				IEditionMenu<CommandBlock> newMenu = this.subMenus.get(index);
 				config.setCurrentMenu(newMenu);
 			}
 			else {

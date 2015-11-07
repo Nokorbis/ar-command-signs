@@ -9,28 +9,27 @@ import net.avatar.realms.spigot.commandsign.model.CommandBlock;
 import net.avatar.realms.spigot.commandsign.model.EditingConf;
 
 public class NeededPermissionsMenu extends EditionMenu {
-
+	
 	public NeededPermissionsMenu(EditionMenu parent) {
 		super(parent, "Needed permissions");
-
+		
 		this.subMenus.put(2, new NeededPermissionsAddMenu(this));
 		this.subMenus.put(3, new NeededPermissionsEditMenu(this));
 		this.subMenus.put(4, new NeededPermissionsRemoveMenu(this));
 	}
-	
+
 	@Override
 	public void display(EditingConf<CommandBlock> config) {
 		Player editor = config.getEditor();
 		if (editor != null) {
 			CommandBlock cmd = config.getEditingData();
 			if (cmd != null) {
-				
-				editor.sendMessage(c + getName() + ": ");
 				//List current needed permissions
+				editor.sendMessage(c + getName() + ": ");
 				for (int i = 0; i < cmd.getNeededPermissions().size(); i++) {
 					editor.sendMessage(ChatColor.GRAY + " ---" + (i + 1) + ") " + cmd.getNeededPermissions().get(i));
 				}
-
+				
 				//List submenus
 				editor.sendMessage(c + "1. Refresh");
 				for (Entry<Integer, EditionMenu> menu : this.subMenus.entrySet()) {
@@ -40,11 +39,30 @@ public class NeededPermissionsMenu extends EditionMenu {
 			}
 		}
 	}
-
+	
 	@Override
 	public void input(EditingConf<CommandBlock> config, String message) {
-		// TODO Auto-generated method stub
-
+		try {
+			String[] args = message.split(" ");
+			if (args.length == 0) {
+				//No parameters, let's do nothing so that he receives the display message again
+				return;
+			}
+			int index = Integer.parseInt(args[0]);
+			if (index == 9) {
+				config.setCurrentMenu(getParent());
+			}
+			else if (this.subMenus.containsKey(index)) {
+				IEditionMenu<CommandBlock> newMenu = this.subMenus.get(index);
+				config.setCurrentMenu(newMenu);
+			}
+			else {
+				// let's do nothing so that he receives the display message again
+			}
+		}
+		catch (NumberFormatException ex) {
+			config.getEditor().sendMessage(ChatColor.DARK_RED + "You must enter a number to go through the menu.");
+		}
 	}
-
+	
 }
