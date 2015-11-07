@@ -1,7 +1,7 @@
 package net.avatar.realms.spigot.commandsign.menu;
 
 import net.avatar.realms.spigot.commandsign.model.CommandBlock;
-import net.avatar.realms.spigot.commandsign.model.EditingConf;
+import net.avatar.realms.spigot.commandsign.model.EditingConfiguration;
 
 public class TemporaryPermissionsAddMenu extends EditionMenu {
 	
@@ -10,14 +10,14 @@ public class TemporaryPermissionsAddMenu extends EditionMenu {
 	}
 
 	@Override
-	public void display(EditingConf<CommandBlock> config) {
+	public void display(EditingConfiguration<CommandBlock> config) {
 		if (config.getEditor() != null) {
 			config.getEditor().sendMessage(c + "Enter the needed permission string : ");
 		}
 	}
 	
 	@Override
-	public void input(EditingConf<CommandBlock> config, String message) {
+	public void input(EditingConfiguration<CommandBlock> config, String message) {
 		if (config.getEditingData() != null) {
 			config.getEditingData().addPermission(message);
 		}

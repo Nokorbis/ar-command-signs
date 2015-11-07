@@ -3,7 +3,7 @@ package net.avatar.realms.spigot.commandsign.menu;
 import org.bukkit.ChatColor;
 
 import net.avatar.realms.spigot.commandsign.model.CommandBlock;
-import net.avatar.realms.spigot.commandsign.model.EditingConf;
+import net.avatar.realms.spigot.commandsign.model.EditingConfiguration;
 
 public class CommandsEditMenu extends EditionMenu {
 	
@@ -12,7 +12,7 @@ public class CommandsEditMenu extends EditionMenu {
 	}
 
 	@Override
-	public void display(EditingConf<CommandBlock> config) {
+	public void display(EditingConfiguration<CommandBlock> config) {
 		config.getEditor().sendMessage(c + "Commands : ");
 		int cpt = 1;
 		for (String perm : config.getEditingData().getNeededPermissions()) {
@@ -23,7 +23,7 @@ public class CommandsEditMenu extends EditionMenu {
 	}
 	
 	@Override
-	public void input(EditingConf<CommandBlock> config, String message) {
+	public void input(EditingConfiguration<CommandBlock> config, String message) {
 		try {
 			config.setCurrentMenu(getParent());
 			String[] args = message.split(" ", 2);

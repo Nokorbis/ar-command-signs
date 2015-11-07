@@ -32,7 +32,7 @@ public class CommandSignCommands implements CommandExecutor{
 
 		String subCmd = args[0];
 
-		if (subCmd.equalsIgnoreCase("Create") || subCmd.equalsIgnoreCase("Cr") 
+		if (subCmd.equalsIgnoreCase("Create") || subCmd.equalsIgnoreCase("Cr")
 				|| subCmd.equalsIgnoreCase("Mk") || subCmd.equalsIgnoreCase("Make")) {
 			return create((Player) sender);
 		}
@@ -59,7 +59,7 @@ public class CommandSignCommands implements CommandExecutor{
 		}
 	}
 
-	/* 
+	/*
 	 * These commands are only initiating command block creation/edition/deletion.
 	 * The real configuration is made in the listener.
 	 */
@@ -90,8 +90,8 @@ public class CommandSignCommands implements CommandExecutor{
 		}
 
 		CommandBlock cmdBlock = new CommandBlock();
-		EditingConfiguration ecf = new EditingConfiguration(player, cmdBlock);
-		ecf.setCreating(true);
+		
+		EditingConfiguration<CommandBlock> ecf = new EditingConfiguration<CommandBlock>(player, cmdBlock, true);
 		ecf.display();
 		this.plugin.getCreatingConfigurations().put(player, ecf);
 
@@ -108,7 +108,7 @@ public class CommandSignCommands implements CommandExecutor{
 			return false;
 		}
 
-		EditingConfiguration conf = new EditingConfiguration(player);
+		EditingConfiguration<CommandBlock> conf = new EditingConfiguration<CommandBlock>(player, false);
 		this.plugin.getEditingConfigurations().put(player, conf);
 		player.sendMessage(ChatColor.GOLD + "Click on the block you want to edit");
 

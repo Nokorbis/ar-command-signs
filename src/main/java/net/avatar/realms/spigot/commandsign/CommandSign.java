@@ -25,34 +25,34 @@ import net.avatar.realms.spigot.commandsign.tasks.SaverTask;
 import net.milkbowl.vault.economy.Economy;
 
 public class CommandSign extends JavaPlugin{
-	
+
 	private static CommandSign plugin;
-	
+
 	private Map<Player, PermissionAttachment> 	playerPerms;
 	private Map<Location, CommandBlock> 		commandBlocks;
-	private Map<Player, EditingConfiguration> 	creatingConfigurations;
-	private Map<Player, EditingConfiguration> 	editingConfigurations;
+	private Map<Player, EditingConfiguration<CommandBlock>> creatingConfigurations;
+	private Map<Player, EditingConfiguration<CommandBlock>> editingConfigurations;
 	private Map<Player, CommandBlock>			copyingConfigurations;
 	private Map<Player, Location> 				deletingBlocks;
 	private Map<UUID, ExecuteTask>				executingTasks;
 	public List<Player> 						infoPlayers;
-	
+
 	private IBlockSaver							blockSaver;
 	private SaverTask 							saver;
-	
-	private Economy								economy;
 
-	private final IEditionMenu<CommandBlock> mainMenu = new MainMenu();
+	private Economy								economy;
 	
+	private final IEditionMenu<CommandBlock> mainMenu = new MainMenu();
+
 	@Override
 	public void onEnable() {
 		plugin = this;
-		
+
 		initializeDataStructures();
-		
+
 		this.getCommand("commandsign").setExecutor(new CommandSignCommands(this));
 		this.getServer().getPluginManager().registerEvents(new CommandSignListener(this), this);
-		
+
 		initializeEconomy();
 		try {
 			initializeSaver();
@@ -63,7 +63,7 @@ public class CommandSign extends JavaPlugin{
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Override
 	public void onDisable() {
 		plugin = null;
@@ -71,18 +71,18 @@ public class CommandSign extends JavaPlugin{
 			saveData();
 		}
 	}
-	
+
 	private void initializeDataStructures() {
 		this.playerPerms = new HashMap<Player, PermissionAttachment>();
 		this.commandBlocks = new HashMap<Location , CommandBlock>();
-		this.creatingConfigurations = new HashMap<Player, EditingConfiguration>();
-		this.editingConfigurations = new HashMap<Player, EditingConfiguration>();
+		this.creatingConfigurations = new HashMap<Player, EditingConfiguration<CommandBlock>>();
+		this.editingConfigurations = new HashMap<Player, EditingConfiguration<CommandBlock>>();
 		this.copyingConfigurations = new HashMap<Player, CommandBlock>();
 		this.deletingBlocks = new HashMap<Player, Location>();
 		this.executingTasks = new HashMap<UUID, ExecuteTask>();
 		this.infoPlayers = new LinkedList<Player>();
 	}
-	
+
 	private void initializeEconomy() {
 		if (this.getServer().getPluginManager().getPlugin("Vault") != null) {
 			RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
@@ -94,7 +94,7 @@ public class CommandSign extends JavaPlugin{
 			}
 		}
 	}
-	
+
 	private void initializeSaver() throws Exception {
 		this.blockSaver = new JsonBlockSaver(this.getDataFolder());
 		loadData();
@@ -103,55 +103,55 @@ public class CommandSign extends JavaPlugin{
 		long period = 20 * 60 * 5; // Server ticks
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this.saver, delay, period);
 	}
-	
+
 	public static CommandSign getPlugin() {
 		return plugin;
 	}
-	
+
 	public PermissionAttachment getPlayerPermissions(Player player) {
-		
+
 		if (this.playerPerms.containsKey(player)) {
 			return this.playerPerms.get(player);
 		}
-		
+
 		PermissionAttachment perms = player.addAttachment(this);
 		this.playerPerms.put(player, perms);
-		
+
 		return perms;
 	}
-	
+
 	public Map<Location, CommandBlock> getCommandBlocks() {
 		return this.commandBlocks;
 	}
-	
-	public Map<Player, EditingConfiguration> getCreatingConfigurations() {
+
+	public Map<Player, EditingConfiguration<CommandBlock>> getCreatingConfigurations() {
 		return this.creatingConfigurations;
 	}
-	
-	public Map<Player, EditingConfiguration> getEditingConfigurations() {
+
+	public Map<Player, EditingConfiguration<CommandBlock>> getEditingConfigurations() {
 		return this.editingConfigurations;
 	}
-	
+
 	public Map<Player, CommandBlock> getCopyingConfigurations() {
 		return this.copyingConfigurations;
 	}
-	
+
 	public Map<UUID, ExecuteTask> getExecutingTasks() {
 		return this.executingTasks;
 	}
-	
+
 	public Map<Player, Location> getDeletingBlocks() {
 		return this.deletingBlocks;
 	}
-	
+
 	public List<Player> getInfoPlayers() {
 		return this.infoPlayers;
 	}
-	
+
 	public Economy getEconomy() {
 		return this.economy;
 	}
-	
+
 	private void loadData() {
 		Collection<CommandBlock> data = this.blockSaver.load();
 		if (data == null) {
@@ -161,13 +161,13 @@ public class CommandSign extends JavaPlugin{
 			this.commandBlocks.put(block.getLocation(), block);
 		}
 	}
-	
+
 	public void saveData() {
 		this.blockSaver.save(this.commandBlocks.values());
 	}
-
-	public IEditionMenu<CommandBlock> getMainMenu() {
-		return mainMenu;
-	}
 	
+	public IEditionMenu<CommandBlock> getMainMenu() {
+		return this.mainMenu;
+	}
+
 }

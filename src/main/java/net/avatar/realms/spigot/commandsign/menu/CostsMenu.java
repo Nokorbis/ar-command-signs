@@ -5,7 +5,7 @@ import org.bukkit.entity.Player;
 
 import net.avatar.realms.spigot.commandsign.CommandSign;
 import net.avatar.realms.spigot.commandsign.model.CommandBlock;
-import net.avatar.realms.spigot.commandsign.model.EditingConf;
+import net.avatar.realms.spigot.commandsign.model.EditingConfiguration;
 
 public class CostsMenu extends EditionMenu {
 
@@ -15,7 +15,7 @@ public class CostsMenu extends EditionMenu {
 	}
 
 	@Override
-	public void display(EditingConf<CommandBlock> config) {
+	public void display(EditingConfiguration<CommandBlock> config) {
 		Player editor = config.getEditor();
 		if (editor != null) {
 			CommandBlock cmd = config.getEditingData();
@@ -29,7 +29,7 @@ public class CostsMenu extends EditionMenu {
 	}
 
 	@Override
-	public void input(EditingConf<CommandBlock> config, String message) {
+	public void input(EditingConfiguration<CommandBlock> config, String message) {
 		try {
 			String[] args = message.split(" ");
 			if (args.length == 0) {

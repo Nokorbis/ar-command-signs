@@ -1,7 +1,7 @@
 package net.avatar.realms.spigot.commandsign.menu;
 
 import net.avatar.realms.spigot.commandsign.model.CommandBlock;
-import net.avatar.realms.spigot.commandsign.model.EditingConf;
+import net.avatar.realms.spigot.commandsign.model.EditingConfiguration;
 
 public class TimerResetMenu extends EditionMenu {
 	
@@ -10,12 +10,12 @@ public class TimerResetMenu extends EditionMenu {
 	}
 
 	@Override
-	public void display(EditingConf<CommandBlock> config) {
+	public void display(EditingConfiguration<CommandBlock> config) {
 		config.getEditor().sendMessage(c + "Should the timer be reset when the player moves ? (Yes/No)");
 	}
 	
 	@Override
-	public void input(EditingConf<CommandBlock> config, String message) {
+	public void input(EditingConfiguration<CommandBlock> config, String message) {
 		String[] args = message.split(" ");
 		if (args[0].equalsIgnoreCase("Yes") || args[0].equalsIgnoreCase("Y") || args[0].equalsIgnoreCase("True")) {
 			config.getEditingData().setResetOnMove(true);

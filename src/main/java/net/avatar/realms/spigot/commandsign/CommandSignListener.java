@@ -16,6 +16,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 
+import net.avatar.realms.spigot.commandsign.menu.CommandsAddMenu;
 import net.avatar.realms.spigot.commandsign.model.CommandBlock;
 import net.avatar.realms.spigot.commandsign.model.EditingConfiguration;
 import net.avatar.realms.spigot.commandsign.tasks.ExecuteTask;
@@ -33,11 +34,11 @@ public class CommandSignListener implements Listener{
 	public void onPlayerCommand (PlayerCommandPreprocessEvent event) {
 		Player player = event.getPlayer();
 		if (this.plugin.getCreatingConfigurations().containsKey(player) || this.plugin.getEditingConfigurations().containsKey(player)) {
-			EditingConfiguration conf = this.plugin.getCreatingConfigurations().get(player);
+			EditingConfiguration<CommandBlock> conf = this.plugin.getCreatingConfigurations().get(player);
 			if (conf == null) {
 				conf = this.plugin.getEditingConfigurations().get(player);
 			}
-			if (conf.isAddingCommand()) {
+			if (conf.getCurrentMenu() instanceof CommandsAddMenu) {
 				String msg = event.getMessage();
 				conf.input(msg);
 				conf.display();
@@ -67,7 +68,7 @@ public class CommandSignListener implements Listener{
 			return;
 		}
 
-		EditingConfiguration conf = this.plugin.getCreatingConfigurations().get(player);
+		EditingConfiguration<CommandBlock> conf = this.plugin.getCreatingConfigurations().get(player);
 		if (conf == null) {
 			conf = this.plugin.getEditingConfigurations().get(player);
 		}
@@ -105,15 +106,15 @@ public class CommandSignListener implements Listener{
 				return;
 			}
 
-			EditingConfiguration conf = this.plugin.getEditingConfigurations().get(player);
-			CommandBlock commandBlock = conf.getCommandBlock();
+			EditingConfiguration<CommandBlock> conf = this.plugin.getEditingConfigurations().get(player);
+			CommandBlock commandBlock = conf.getEditingData();
 
 			// We want to select the block to edit.
 			if (commandBlock == null) {
 				// The block we hit is a valid block
 				if (this.plugin.getCommandBlocks().containsKey(block.getLocation())) {
 					CommandBlock editingBlock = this.plugin.getCommandBlocks().get(block.getLocation());
-					conf.setCommandBlock(editingBlock);
+					conf.setEditingData(editingBlock);
 					conf.display();
 				}
 			}
@@ -225,8 +226,8 @@ public class CommandSignListener implements Listener{
 			return;
 		}
 
-		EditingConfiguration conf = this.plugin.getCreatingConfigurations().get(player);
-		CommandBlock commandBlock = conf.getCommandBlock();
+		EditingConfiguration<CommandBlock> conf = this.plugin.getCreatingConfigurations().get(player);
+		CommandBlock commandBlock = conf.getEditingData();
 		Location creatingBlock = commandBlock.getLocation();
 
 		if (creatingBlock == null) {

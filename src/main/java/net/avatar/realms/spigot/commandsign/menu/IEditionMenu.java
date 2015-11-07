@@ -1,11 +1,11 @@
 package net.avatar.realms.spigot.commandsign.menu;
 
-import net.avatar.realms.spigot.commandsign.model.EditingConf;
+import net.avatar.realms.spigot.commandsign.model.EditingConfiguration;
 
 public interface IEditionMenu<T> {
 	
-	public void display(EditingConf<T> config);
+	public void display(EditingConfiguration<T> config);
 	
-	public void input(EditingConf<T> config, String message);
+	public void input(EditingConfiguration<T> config, String message);
 
 }

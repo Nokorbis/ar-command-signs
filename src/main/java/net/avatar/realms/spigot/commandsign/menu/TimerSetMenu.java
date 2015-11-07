@@ -1,7 +1,7 @@
 package net.avatar.realms.spigot.commandsign.menu;
 
 import net.avatar.realms.spigot.commandsign.model.CommandBlock;
-import net.avatar.realms.spigot.commandsign.model.EditingConf;
+import net.avatar.realms.spigot.commandsign.model.EditingConfiguration;
 
 public class TimerSetMenu extends EditionMenu {
 	
@@ -10,13 +10,13 @@ public class TimerSetMenu extends EditionMenu {
 	}
 
 	@Override
-	public void display(EditingConf<CommandBlock> config) {
+	public void display(EditingConfiguration<CommandBlock> config) {
 		config.getEditor().sendMessage(
 				c + "Enter the amount of time (in seconds) that the player must wait before the execution of the command");
 	}
 	
 	@Override
-	public void input(EditingConf<CommandBlock> config, String message) {
+	public void input(EditingConfiguration<CommandBlock> config, String message) {
 		try {
 			config.setCurrentMenu(getParent());
 			String[] args = message.split(" ", 2);
