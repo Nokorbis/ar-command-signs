@@ -2,6 +2,7 @@ CommandSign v1.2.2
     Menus are handled a new way (easier maintenance)
     Menus are organized the same way as the process.
     Add "commandsign.costs.bypass"  to bypass costs of signs
+    Actions that a player is doing are cancelled if the player disconnect
 
 Command Sign v1.2.1
     Timer should not redirect to cost anymore
