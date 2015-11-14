@@ -1,5 +1,7 @@
 package net.avatar.realms.spigot.commandsign.model;
 
+import java.text.DecimalFormat;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -11,12 +13,18 @@ import net.milkbowl.vault.economy.Economy;
 
 public class CommandBlockExecutor {
 
+	private static DecimalFormat df;
+
 	private Player player;
 	private CommandBlock cmdBlock;
 
 	public CommandBlockExecutor (Player player, CommandBlock cmdBlock) {
 		this.player = player;
 		this.cmdBlock = cmdBlock;
+		if (df == null) {
+			df = new DecimalFormat();
+			df.setMaximumFractionDigits(2);
+		}
 	}
 
 	public Player getPlayer() {
@@ -40,10 +48,10 @@ public class CommandBlockExecutor {
 
 		if (this.cmdBlock.getTimeBetweenUsage() > 0){
 			long now = System.currentTimeMillis();
-			long toWait = this.cmdBlock.getLastTimeUsed() + this.cmdBlock.getTimeBetweenUsage() - now;
+			long toWait = this.cmdBlock.getLastTimeUsed() + (this.cmdBlock.getTimeBetweenUsage()*1000) - now;
 			if (toWait > 0) {
 				if (!this.player.hasPermission("commandsign.timer.bypass")) {
-					throw new CommandSignsException("This command block has been used " + (this.cmdBlock.getTimeBetweenUsage() - toWait) + " seconds ago. You must wait " + toWait + " more seconds.");
+					throw new CommandSignsException("This command block has been used " + df.format(this.cmdBlock.getTimeBetweenUsage() - (toWait/1000.0)) + " seconds ago. You must wait " + df.format(toWait/1000.0) + " more seconds.");
 				}
 			}
 		}
@@ -56,7 +64,7 @@ public class CommandBlockExecutor {
 			}
 		}
 
-		if (this.cmdBlock.getTimer() == 0) {
+		if (!this.player.hasPermission("commandsign.timer.bypass")) {
 			this.cmdBlock.refreshLastTime();
 		}
 	}
@@ -78,10 +86,6 @@ public class CommandBlockExecutor {
 					return false;
 				}
 			}
-		}
-
-		if (this.cmdBlock.getTimer() != 0) {
-			this.cmdBlock.refreshLastTime();
 		}
 
 		PermissionAttachment perms = CommandSign.getPlugin().getPlayerPermissions(this.player);

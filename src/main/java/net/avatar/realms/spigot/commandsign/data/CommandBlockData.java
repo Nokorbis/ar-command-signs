@@ -123,8 +123,13 @@ public class CommandBlockData {
 		cmd.setTimer(data.getTime());
 		cmd.setCancelledOnMove(data.getCancelOnMove());
 		cmd.setResetOnMove(data.getResetOnMove());
-		cmd.setTimeBetweenCommands(data.getTimeBetweenCommands());
-		cmd.setTimeBetweenUsage(data.getTimeBetweenUsage());
+		if (data.getTimeBetweenCommands() != null) {
+			cmd.setTimeBetweenCommands(data.getTimeBetweenCommands());
+		}
+
+		if (data.getTimeBetweenUsage() != null) {
+			cmd.setTimeBetweenUsage(data.getTimeBetweenUsage());
+		}
 
 		return cmd;
 	}
