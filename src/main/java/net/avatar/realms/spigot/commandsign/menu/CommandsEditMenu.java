@@ -6,7 +6,7 @@ import net.avatar.realms.spigot.commandsign.model.CommandBlock;
 import net.avatar.realms.spigot.commandsign.model.EditingConfiguration;
 
 public class CommandsEditMenu extends EditionMenu {
-	
+
 	public CommandsEditMenu(EditionMenu parent) {
 		super(parent, "Edit");
 	}
@@ -15,13 +15,13 @@ public class CommandsEditMenu extends EditionMenu {
 	public void display(EditingConfiguration<CommandBlock> config) {
 		config.getEditor().sendMessage(c + "Commands : ");
 		int cpt = 1;
-		for (String perm : config.getEditingData().getNeededPermissions()) {
-			config.getEditor().sendMessage(ChatColor.GRAY + "---" + cpt++ + ". " + perm);
+		for (String cmd : config.getEditingData().getCommands()) {
+			config.getEditor().sendMessage(ChatColor.GRAY + "---" + cpt++ + ". " + cmd);
 		}
 		config.getEditor()
-				.sendMessage(c + "Enter the index of the command you want to edit followed by the new command string : ");
+		.sendMessage(c + "Enter the index of the command you want to edit followed by the new command string : ");
 	}
-	
+
 	@Override
 	public void input(EditingConfiguration<CommandBlock> config, String message) {
 		try {
@@ -33,5 +33,5 @@ public class CommandsEditMenu extends EditionMenu {
 		catch (Exception e) {
 		}
 	}
-	
+
 }
