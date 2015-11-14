@@ -1,3 +1,7 @@
+CommandSign v1.2.4
+    Can execute command as op or as server
+    Edit command properly show commands (instead of needed permissions)
+
 CommandSign v1.2.2
     Menus are handled a new way (easier maintenance)
     Menus are organized the same way as the process.

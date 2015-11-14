@@ -89,11 +89,7 @@ public class CommandBlockExecutor {
 	private void handleCommand(String command) {
 		String cmd = formatCommand(command, this.player);
 		char special = cmd.charAt(0);
-		if (special == Settings.messageChar) {
-			cmd = cmd.substring(1);
-			this.player.sendMessage(cmd);
-		}
-		else if (special == Settings.opChar){
+		if (special == Settings.opChar){
 			cmd = cmd.substring(1);
 			cmd = "/" + cmd;
 			if (!this.player.isOp()) {
