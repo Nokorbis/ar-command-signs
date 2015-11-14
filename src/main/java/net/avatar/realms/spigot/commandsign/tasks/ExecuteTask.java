@@ -5,31 +5,30 @@ import org.bukkit.entity.Player;
 
 import net.avatar.realms.spigot.commandsign.CommandSign;
 import net.avatar.realms.spigot.commandsign.model.CommandBlock;
+import net.avatar.realms.spigot.commandsign.model.CommandBlockExecutor;
 
 public class ExecuteTask implements Runnable{
 
-	private Player player;
-	private CommandBlock cmdBlock;
+	private CommandBlockExecutor executor;
 	private int taskId;
 	private Location location;
 
-	public ExecuteTask(Player player, CommandBlock cmd) {
-		this.player = player;
-		this.cmdBlock = cmd;
+	public ExecuteTask(CommandBlockExecutor cmd) {
+		this.executor = cmd;
 	}
 
 	@Override
 	public void run () {
-		if ((this.player == null) || !this.player.isOnline() || this.player.isDead()) {
-			CommandSign.getPlugin().getExecutingTasks().remove(this.player.getUniqueId());
+		if ((this.executor.getPlayer() == null) || !this.executor.getPlayer().isOnline() || this.executor.getPlayer().isDead()) {
+			CommandSign.getPlugin().getExecutingTasks().remove(this.executor.getPlayer().getUniqueId());
 			return;
 		}
-		this.cmdBlock.execute(this.player);
-		CommandSign.getPlugin().getExecutingTasks().remove(this.player.getUniqueId());
+		this.executor.execute();
+		CommandSign.getPlugin().getExecutingTasks().remove(this.executor.getPlayer().getUniqueId());
 	}
 
 	public CommandBlock getCommandBlock() {
-		return this.cmdBlock;
+		return this.executor.getCommandBlock();
 	}
 
 	public int getTaskId () {
@@ -49,6 +48,6 @@ public class ExecuteTask implements Runnable{
 	}
 
 	public Player getPlayer() {
-		return this.player;
+		return this.executor.getPlayer();
 	}
 }

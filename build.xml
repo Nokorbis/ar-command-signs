@@ -8,7 +8,7 @@
         <property name="libdir" value="libs/" />
         <property name="jarname" value="Spigot-CommandSigns" />
         <property name="config" value="config/" />
-        <property name="dist" value="C:\Users\Yves\Games\Minecraft" />
+        <property name="dist" value="D:\Server\Minecraft" />
     </target>
     <target name="clean" depends="init">
         <deltree dir="${outputDir}" />

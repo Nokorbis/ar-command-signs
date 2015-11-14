@@ -8,7 +8,7 @@ public class CommandsAddMenu extends EditionMenu {
 	public CommandsAddMenu(EditionMenu parent) {
 		super(parent, "Add");
 	}
-	
+
 	@Override
 	public void display(EditingConfiguration<CommandBlock> config) {
 		if (config.getEditor() != null) {
