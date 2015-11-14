@@ -17,19 +17,19 @@ public abstract class EditionMenu implements IEditionMenu<CommandBlock> {
 	 * Default color for chat message that are sent to the players
 	 */
 	protected static final ChatColor c = ChatColor.AQUA;
-	
+
 	private String name;
-	
+
 	private EditionMenu parent;
-	
+
 	protected Map<Integer, EditionMenu> subMenus;
-	
+
 	public EditionMenu(EditionMenu parent, String name) {
 		this.parent = parent;
-		this.name = name;
+		this.name = name.trim();
 		this.subMenus = new TreeMap<Integer, EditionMenu>(); // Use treemap to make sure the display is done properly
 	}
-	
+
 	/**
 	 * Get the name of this menu
 	 *
@@ -39,7 +39,7 @@ public abstract class EditionMenu implements IEditionMenu<CommandBlock> {
 	public final String getName() {
 		return this.name;
 	}
-	
+
 	/**
 	 * Get the parent menu of this menu
 	 *
@@ -49,7 +49,7 @@ public abstract class EditionMenu implements IEditionMenu<CommandBlock> {
 	public final EditionMenu getParent() {
 		return this.parent;
 	}
-	
+
 	/**
 	 * Get the name that must be shown in the menu formatted with the command block data
 	 *

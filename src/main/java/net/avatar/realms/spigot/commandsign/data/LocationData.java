@@ -8,7 +8,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 
 import net.avatar.realms.spigot.commandsign.CommandSign;
-import net.avatar.realms.spigot.commandsign.CommandSignUtils;
+import net.avatar.realms.spigot.commandsign.utils.CommandSignUtils;
 
 public class LocationData {
 

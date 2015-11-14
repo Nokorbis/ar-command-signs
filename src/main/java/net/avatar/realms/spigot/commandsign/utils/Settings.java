@@ -1,4 +1,4 @@
-package net.avatar.realms.spigot.commandsign;
+package net.avatar.realms.spigot.commandsign.utils;
 
 public abstract class Settings {
 

@@ -12,11 +12,13 @@ public class TimerMenu extends EditionMenu {
 
 	public TimerMenu(EditionMenu parent) {
 		super(parent, "Timer");
-		this.subMenus.put(2, new TimerSetMenu(this));
+		this.subMenus.put(2, new TimerExecutionSetMenu(this));
 		this.subMenus.put(3, new TimerCancelMenu(this));
 		this.subMenus.put(4, new TimerResetMenu(this));
+		this.subMenus.put(5, new TimerUsageSetMenu(this));
+		this.subMenus.put(6, new TimerCommandsSetMenu(this));
 	}
-	
+
 	@Override
 	public void display(EditingConfiguration<CommandBlock> config) {
 		Player editor = config.getEditor();

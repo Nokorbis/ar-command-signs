@@ -23,6 +23,7 @@ import net.avatar.realms.spigot.commandsign.model.CommandBlockExecutor;
 import net.avatar.realms.spigot.commandsign.model.CommandSignsException;
 import net.avatar.realms.spigot.commandsign.model.EditingConfiguration;
 import net.avatar.realms.spigot.commandsign.tasks.ExecuteTask;
+import net.avatar.realms.spigot.commandsign.utils.CommandSignUtils;
 
 
 public class CommandSignListener implements Listener{
@@ -173,37 +174,41 @@ public class CommandSignListener implements Listener{
 
 		/* Is that a block that we can execute ? */
 		else if (this.plugin.getCommandBlocks().containsKey(block.getLocation())) {
-			CommandBlock cmd = this.plugin.getCommandBlocks().get(block.getLocation());
 			if (CommandSignUtils.isPlate(block) && (!event.getAction().equals(Action.PHYSICAL))){
 				return;
 			}
+			executeCommandBlock(player, block);
+		}
+	}
 
-			if (cmd != null) {
-				try {
-					CommandBlockExecutor executor = new CommandBlockExecutor(player, cmd);
-					executor.checkRequirements();
-					if (!cmd.hasTimer() || player.hasPermission("commandsign.timer.bypass")) {
-						executor.execute();
-					}
-					else {
-						ExecuteTask exe = new ExecuteTask(executor);
-						exe.setLocation(player.getLocation().getBlock().getLocation());
-						CommandSign.getPlugin().getExecutingTasks().put(player.getUniqueId(), exe);
-						BukkitTask task = CommandSign.getPlugin().getServer().getScheduler().runTaskLater(CommandSign.getPlugin(),
-								exe, cmd.getTimer() * 20);
-						exe.setTaskId(task.getTaskId());
-						player.sendMessage(
-								"Command sign execution delayed by a timer. Please wait " + cmd.getTimer() + " seconds.");
-					}
-				}
-				catch (CommandSignsException ex) {
-					player.sendMessage(ChatColor.DARK_RED + ex.getMessage());
-				}
-				catch (Exception ex) {
-					player.sendMessage(ChatColor.DARK_RED + "An error occured while checking requirements.");
-				}
+	private void executeCommandBlock(Player player, Block block) {
+		CommandBlock cmd = this.plugin.getCommandBlocks().get(block.getLocation());
 
+		if (cmd != null) {
+			try {
+				CommandBlockExecutor executor = new CommandBlockExecutor(player, cmd);
+				executor.checkRequirements();
+				if (!cmd.hasTimer() || player.hasPermission("commandsign.timer.bypass")) {
+					executor.execute();
+				}
+				else {
+					ExecuteTask exe = new ExecuteTask(executor);
+					exe.setLocation(player.getLocation().getBlock().getLocation());
+					CommandSign.getPlugin().getExecutingTasks().put(player.getUniqueId(), exe);
+					BukkitTask task = CommandSign.getPlugin().getServer().getScheduler().runTaskLater(CommandSign.getPlugin(),
+							exe, cmd.getTimer() * 20);
+					exe.setTaskId(task.getTaskId());
+					player.sendMessage(
+							"Command sign execution delayed by a timer. Please wait " + cmd.getTimer() + " seconds.");
+				}
 			}
+			catch (CommandSignsException ex) {
+				player.sendMessage(ChatColor.DARK_RED + ex.getMessage());
+			}
+			catch (Exception ex) {
+				player.sendMessage(ChatColor.DARK_RED + "An error occured while checking requirements.");
+			}
+
 		}
 	}
 

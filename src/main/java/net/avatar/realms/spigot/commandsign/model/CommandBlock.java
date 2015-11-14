@@ -8,7 +8,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import net.avatar.realms.spigot.commandsign.CommandSign;
-import net.avatar.realms.spigot.commandsign.CommandSignUtils;
+import net.avatar.realms.spigot.commandsign.utils.CommandSignUtils;
 
 public class CommandBlock {
 
@@ -20,9 +20,14 @@ public class CommandBlock {
 
 	private Double economyPrice;
 
-	private Integer timer; // Value in second
+	private Integer timeBeforeExecution; // Value in second
 	private Boolean resetOnMove;
 	private Boolean cancelledOnMove;
+
+	private int timeBetweenUsage;
+	private int timeBetweenCommands;
+
+	private long lastTimeUsed;
 
 	public CommandBlock () {
 		// We use ArrayList because we want to remove/edit them by the index.
@@ -33,6 +38,10 @@ public class CommandBlock {
 		this.resetOnMove = false;
 		this.cancelledOnMove = false;
 		this.setEconomyPrice(0.0);
+
+		this.setTimeBetweenUsage(0);
+		this.lastTimeUsed = 0;
+		this.setTimeBetweenCommands(0);
 	}
 
 	/* Getters and setters */
@@ -143,14 +152,14 @@ public class CommandBlock {
 	/* Timers */
 
 	public Integer getTimer () {
-		return this.timer;
+		return this.timeBeforeExecution;
 	}
 
 	public void setTimer (Integer timer) {
 		if ((timer == null) || (timer < 0)) {
 			timer = 0;
 		}
-		this.timer = timer;
+		this.timeBeforeExecution = timer;
 	}
 
 	public Boolean isCancelledOnMove() {
@@ -176,7 +185,7 @@ public class CommandBlock {
 	}
 
 	public boolean hasTimer() {
-		return this.timer >= 1;
+		return this.timeBeforeExecution >= 1;
 	}
 
 	/* Economy price */
@@ -248,9 +257,9 @@ public class CommandBlock {
 		for (String cmd : this.commands) {
 			player.sendMessage(ChatColor.GRAY + "---"+ cpt++ + ". " + cmd);
 		}
-		if ((this.timer != null) && (this.timer > 0)) {
+		if ((this.timeBeforeExecution != null) && (this.timeBeforeExecution > 0)) {
 			player.sendMessage(c + "Timer :");
-			player.sendMessage(ChatColor.GRAY + "" + this.timer + " seconds");
+			player.sendMessage(ChatColor.GRAY + "" + this.timeBeforeExecution + " seconds");
 			if (this.cancelledOnMove) {
 				player.sendMessage(ChatColor.GRAY + "---" + "Cancelled on move");
 			}
@@ -266,6 +275,33 @@ public class CommandBlock {
 		}
 		String str = this.location.getBlock().getType() + " #" + this.location.getX() + ":" + this.location.getZ()+"(" +this.location.getY()+")";
 		return str;
+	}
+
+	public int getTimeBetweenUsage() {
+		return this.timeBetweenUsage;
+	}
+
+	public void setTimeBetweenUsage(int timeBetweenUsage) {
+		if (timeBetweenUsage < 0) {
+			timeBetweenUsage = 0;
+		}
+		this.timeBetweenUsage = timeBetweenUsage;
+	}
+
+	public int getTimeBetweenCommands() {
+		return this.timeBetweenCommands;
+	}
+
+	public void setTimeBetweenCommands(int timeBetweenCommands) {
+		this.timeBetweenCommands = (timeBetweenCommands < 0)? 0 : timeBetweenCommands;
+	}
+
+	public long getLastTimeUsed() {
+		return this.lastTimeUsed;
+	}
+
+	public void refreshLastTime() {
+		this.lastTimeUsed = System.currentTimeMillis();
 	}
 
 }

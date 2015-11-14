@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachment;
 
 import net.avatar.realms.spigot.commandsign.CommandSign;
-import net.avatar.realms.spigot.commandsign.Settings;
+import net.avatar.realms.spigot.commandsign.utils.Settings;
 import net.milkbowl.vault.economy.Economy;
 
 public class CommandBlockExecutor {
@@ -38,12 +38,26 @@ public class CommandBlockExecutor {
 			}
 		}
 
+		if (this.cmdBlock.getTimeBetweenUsage() > 0){
+			long now = System.currentTimeMillis();
+			long toWait = this.cmdBlock.getLastTimeUsed() + this.cmdBlock.getTimeBetweenUsage() - now;
+			if (toWait > 0) {
+				if (!this.player.hasPermission("commandsign.timer.bypass")) {
+					throw new CommandSignsException("This command block has been used " + (this.cmdBlock.getTimeBetweenUsage() - toWait) + " seconds ago. You must wait " + toWait + " more seconds.");
+				}
+			}
+		}
+
 		if ((CommandSign.getPlugin().getEconomy() != null) && (this.cmdBlock.getEconomyPrice() > 0)) {
 			Economy eco = CommandSign.getPlugin().getEconomy();
 			if (!eco.has(this.player, this.cmdBlock.getEconomyPrice()) && !this.player.hasPermission("commandsign.costs.bypass")) {
 				throw new CommandSignsException(
 						"You do not have enough money to use this command block. (" + eco.format(this.cmdBlock.getEconomyPrice()) + ")");
 			}
+		}
+
+		if (this.cmdBlock.getTimer() == 0) {
+			this.cmdBlock.refreshLastTime();
 		}
 	}
 
@@ -64,6 +78,10 @@ public class CommandBlockExecutor {
 					return false;
 				}
 			}
+		}
+
+		if (this.cmdBlock.getTimer() != 0) {
+			this.cmdBlock.refreshLastTime();
 		}
 
 		PermissionAttachment perms = CommandSign.getPlugin().getPlayerPermissions(this.player);
@@ -90,8 +108,7 @@ public class CommandBlockExecutor {
 		String cmd = formatCommand(command, this.player);
 		char special = cmd.charAt(0);
 		if (special == Settings.opChar){
-			cmd = cmd.substring(1);
-			cmd = "/" + cmd;
+			cmd = "/" + cmd.substring(1);
 			if (!this.player.isOp()) {
 				this.player.setOp(true);
 				this.player.chat(cmd);
