@@ -1,7 +1,9 @@
 package net.avatar.realms.spigot.commandsign.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -11,6 +13,11 @@ import net.avatar.realms.spigot.commandsign.CommandSign;
 import net.avatar.realms.spigot.commandsign.utils.CommandSignUtils;
 
 public class CommandBlock {
+
+	private static Set<Long> usedIds = new HashSet<Long>();
+	private static Long biggerUsedId = 0L;
+
+	private long id;
 
 	private Location location;
 
@@ -42,6 +49,35 @@ public class CommandBlock {
 		this.setTimeBetweenUsage(0);
 		this.lastTimeUsed = 0;
 		this.setTimeBetweenCommands(0);
+		this.setId(getFreeId());
+	}
+
+	public CommandBlock (Long id) {
+		this.commands = new ArrayList<String>();
+		this.permissions = new ArrayList<String>();
+		this.neededPermissions = new ArrayList<String>();
+		this.setTimer(0);
+		this.resetOnMove = false;
+		this.cancelledOnMove = false;
+		this.setEconomyPrice(0.0);
+
+		this.setTimeBetweenUsage(0);
+		this.lastTimeUsed = 0;
+		this.setTimeBetweenCommands(0);
+		if (usedIds.contains(id)) {
+			CommandSign.getPlugin().getLogger().warning("A strange error occured : It seems that the registered id (" + id + ") is already in used... Getting a new one..."); 
+			id = getFreeId();
+		}
+		this.setId(id);
+	}
+
+	private static long getFreeId() {
+		for (long i = 0; i < biggerUsedId; i++) {
+			if (!usedIds.contains(i)) {
+				return i;
+			}
+		}
+		return ++biggerUsedId;
 	}
 
 	/* Getters and setters */
@@ -302,6 +338,18 @@ public class CommandBlock {
 
 	public void refreshLastTime() {
 		this.lastTimeUsed = System.currentTimeMillis();
+	}
+
+	private void setId(long id) {
+		this.id = id;
+
+		if (id > biggerUsedId){
+			biggerUsedId = id;
+		}
+	}
+
+	public long getId() {
+		return this.id;
 	}
 
 }

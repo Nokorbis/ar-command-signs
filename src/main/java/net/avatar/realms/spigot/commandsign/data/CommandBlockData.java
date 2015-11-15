@@ -9,6 +9,7 @@ public class CommandBlockData {
 
 	private LocationData location;
 
+	private Long id;
 	private List<String> commands;
 	private List<String> permissions;
 	private List<String> neededPermissions;
@@ -79,9 +80,18 @@ public class CommandBlockData {
 		this.resetOnMove = resetOnMove;
 	}
 
+	public Long getId() {
+		return this.id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	public static CommandBlockData transform (CommandBlock cmd) {
 		CommandBlockData data = new CommandBlockData();
 
+		data.setId(cmd.getId());
 		data.setLocation(LocationData.transform(cmd.getLocation()));
 		data.setCommands(cmd.getCommands());
 		data.setPermissions(cmd.getPermissions());
@@ -97,7 +107,13 @@ public class CommandBlockData {
 	}
 
 	public static CommandBlock transform (CommandBlockData data) {
-		CommandBlock cmd = new CommandBlock();
+		CommandBlock cmd = null;
+		if (data.getId() == null) {
+			cmd = new CommandBlock();
+		}
+		else {
+			cmd = new CommandBlock(data.getId());
+		}
 
 		cmd.setLocation(LocationData.transform(data.getLocation()));
 
