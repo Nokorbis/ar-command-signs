@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import net.avatar.realms.spigot.commandsign.model.CommandBlock;
 import net.avatar.realms.spigot.commandsign.model.CommandSignsException;
 import net.avatar.realms.spigot.commandsign.model.EditingConfiguration;
+import net.avatar.realms.spigot.commandsign.utils.CommandSignUtils;
 import net.avatar.realms.spigot.commandsign.utils.Messages;
 
 public class CommandSignCommands implements CommandExecutor{
@@ -53,6 +54,9 @@ public class CommandSignCommands implements CommandExecutor{
 			}
 			else if (subCmd.equals("PURGE")) {
 				return purge((Player) sender);
+			}
+			else if (subCmd.equals("NEAR") || subCmd.equals("AROUND")) {
+				return near((Player) sender, args);
 			}
 			else if (subCmd.equals("VERSION") || subCmd.equals("V")) {
 				sender.sendMessage(ChatColor.AQUA + "CommandSign version : " + CommandSign.getPlugin().getDescription().getVersion());
@@ -169,6 +173,35 @@ public class CommandSignCommands implements CommandExecutor{
 		}
 
 		sender.sendMessage(ChatColor.GREEN + "Purged " + toRemove.size() + " invalid command blocks.");
+		return true;
+	}
+
+	private boolean near(Player sender, String[] args) throws CommandSignsException {
+		if (!sender.hasPermission("commandsign.admin.*") && !sender.hasPermission("commandsign.admin.near")) {
+			throw new CommandSignsException(Messages.NO_PERMISSION);
+		}
+
+		if (args.length < 2) {
+			throw new CommandSignsException(Messages.COMMAND_NEEDS_RADIUS);
+		}
+
+		try {
+			int radius = Integer.parseInt(args[1]);
+			LinkedList<CommandBlock> cmds = new LinkedList<CommandBlock>();
+			for (Location loc : CommandSignUtils.getLocationsAroundPoint(sender.getLocation(), radius)) {
+				if (this.plugin.getCommandBlocks().containsKey(loc))  {
+					cmds.add(this.plugin.getCommandBlocks().get(loc));
+				}
+			}
+			for (CommandBlock cmd : cmds) {
+				sender.sendMessage("Block [" + cmd.getId() +"] at " + cmd.blockSummary());
+			}
+		}
+		catch (NumberFormatException ex) {
+			throw new CommandSignsException(Messages.NUMBER_ARGUMENT);
+		}
+
+
 		return true;
 	}
 

@@ -1,5 +1,9 @@
 package net.avatar.realms.spigot.commandsign.utils;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 
@@ -55,5 +59,25 @@ public class CommandSignUtils {
 
 	public static boolean isValidBlock (Block block) {
 		return isPlate(block) || isButton(block) || isSign(block);
+	}
+
+	public static List<Location> getLocationsAroundPoint(Location location, int radius) {
+		List<Location> locations = new LinkedList<Location>();
+
+		int xorg = location.getBlockX();
+		int yorg = location.getBlockY();
+		int zorg = location.getBlockZ();
+
+		for (int x = xorg - radius; x <= (xorg + radius); x++) {
+			for (int y = yorg - radius; y <= (yorg + radius); y++) {
+				for (int z = zorg - radius; z <= (zorg + radius); z++) {
+					Block block = location.getWorld().getBlockAt(x, y, z);
+					if (block.getLocation().distance(location) <= radius) {
+						locations.add(block.getLocation());
+					}
+				}
+			}
+		}
+		return locations;
 	}
 }

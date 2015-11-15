@@ -71,7 +71,6 @@ public class CommandSignListener implements Listener{
 		if (!(this.plugin.getCreatingConfigurations().containsKey(player) || this.plugin.getEditingConfigurations().containsKey(player))) {
 			return;
 		}
-
 		EditingConfiguration<CommandBlock> conf = this.plugin.getCreatingConfigurations().get(player);
 		if (conf == null) {
 			conf = this.plugin.getEditingConfigurations().get(player);

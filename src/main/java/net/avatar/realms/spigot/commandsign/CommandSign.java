@@ -175,4 +175,13 @@ public class CommandSign extends JavaPlugin{
 		return this.mainMenu;
 	}
 
+	public CommandBlock getCommandBlockById(long id) {
+		for (CommandBlock cmd : this.commandBlocks.values()) {
+			if (cmd.getId() == id) {
+				return cmd;
+			}
+		}
+		return null;
+	}
+
 }
