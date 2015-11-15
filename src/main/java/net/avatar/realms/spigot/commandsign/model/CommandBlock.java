@@ -312,7 +312,7 @@ public class CommandBlock {
 		}
 	}
 
-	private String blockSummary () {
+	public String blockSummary () {
 		if (this.location == null) {
 			return "";
 		}
