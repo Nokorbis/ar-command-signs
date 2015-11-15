@@ -274,6 +274,7 @@ public class CommandBlock {
 	}
 
 	public void info (Player player, ChatColor c) {
+		player.sendMessage(c + "Id : " + this.id);
 		player.sendMessage(c + "Block : " + blockSummary());
 		if (CommandSign.getPlugin().getEconomy() != null) {
 			player.sendMessage(c + "Costs : " + CommandSign.getPlugin().getEconomy().format(this.economyPrice));
@@ -294,7 +295,7 @@ public class CommandBlock {
 			player.sendMessage(ChatColor.GRAY + "---"+ cpt++ + ". " + cmd);
 		}
 		if ((this.timeBeforeExecution != null) && (this.timeBeforeExecution > 0)) {
-			player.sendMessage(c + "Timer :");
+			player.sendMessage(c + "Time before execution :");
 			player.sendMessage(ChatColor.GRAY + "" + this.timeBeforeExecution + " seconds");
 			if (this.cancelledOnMove) {
 				player.sendMessage(ChatColor.GRAY + "---" + "Cancelled on move");
@@ -302,6 +303,12 @@ public class CommandBlock {
 			if (this.resetOnMove) {
 				player.sendMessage(ChatColor.GRAY + "---" + "Reset on move");
 			}
+		}
+		if (this.timeBetweenUsage > 0) {
+			player.sendMessage(c + "Time between usages : " + this.timeBetweenUsage);
+		}
+		if (this.timeBetweenCommands > 0) {
+			player.sendMessage(c + "Time between commands : " + this.timeBetweenCommands);
 		}
 	}
 
