@@ -25,7 +25,7 @@ public class EditingConfiguration<T> {
 		this.editingData = editingData;
 		this.creating = creating;
 	}
-	
+
 	public EditingConfiguration(Player player, boolean creating) {
 		this.editor = player;
 		this.creating = creating;
@@ -49,7 +49,7 @@ public class EditingConfiguration<T> {
 			}
 		}
 	}
-	
+
 	public void input(String message) {
 		if ((message != null) && (this.currentMenu != null)) {
 			message = message.trim();
@@ -66,7 +66,7 @@ public class EditingConfiguration<T> {
 	public Player getEditor() {
 		return this.editor;
 	}
-	
+
 	public T getEditingData() {
 		return this.editingData;
 	}
@@ -74,7 +74,7 @@ public class EditingConfiguration<T> {
 	public void setCurrentMenu(IEditionMenu<T> newMenu) {
 		this.currentMenu = newMenu;
 	}
-	
+
 	public boolean isCreating() {
 		return this.creating;
 	}

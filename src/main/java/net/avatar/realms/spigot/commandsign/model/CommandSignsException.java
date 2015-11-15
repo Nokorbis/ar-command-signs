@@ -1,6 +1,6 @@
 package net.avatar.realms.spigot.commandsign.model;
 
-public class CommandSignsException extends RuntimeException {
+public class CommandSignsException extends Exception {
 
 	/**
 	 *

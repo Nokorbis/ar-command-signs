@@ -35,7 +35,7 @@ public class CommandBlockExecutor {
 		return this.cmdBlock;
 	}
 
-	public void checkRequirements() {
+	public void checkRequirements() throws CommandSignsException {
 		if (this.player == null) {
 			throw new CommandSignsException("Invalid player.");
 		}

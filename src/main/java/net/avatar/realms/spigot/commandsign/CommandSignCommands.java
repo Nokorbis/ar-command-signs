@@ -1,13 +1,18 @@
 package net.avatar.realms.spigot.commandsign;
 
+import java.util.LinkedList;
+
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import net.avatar.realms.spigot.commandsign.model.CommandBlock;
+import net.avatar.realms.spigot.commandsign.model.CommandSignsException;
 import net.avatar.realms.spigot.commandsign.model.EditingConfiguration;
+import net.avatar.realms.spigot.commandsign.utils.Messages;
 
 public class CommandSignCommands implements CommandExecutor{
 
@@ -20,42 +25,47 @@ public class CommandSignCommands implements CommandExecutor{
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 
-		if (!(sender instanceof Player)) {
-			sender.sendMessage(ChatColor.RED + "You must be a player to execute this command.");
-			return false;
-		}
+		try {
+			if (!(sender instanceof Player)) {
+				throw new CommandSignsException(Messages.PLAYER_COMMAND);
+			}
 
-		if (args.length < 1 ) {
-			sender.sendMessage(ChatColor.RED + "You need an argument to use this command.");
-			return false;
+			if (args.length < 1 ) {
+				throw new CommandSignsException(Messages.COMMAND_NEEDS_ARGUMENTS);
+			}
+			String subCmd = args[0].toUpperCase();
+			if (subCmd.equals("CREATE") || subCmd.equals("CR")
+					|| subCmd.equals("MK") || subCmd.equals("MAKE")) {
+				return create((Player) sender);
+			}
+			else if (subCmd.equals("EDIT")) {
+				return edit((Player) sender);
+			}
+			else if (subCmd.equals("DELETE") || subCmd.equals("DEL")
+					|| subCmd.equals("REMOVE") || subCmd.equals("REM")) {
+				return delete ((Player) sender);
+			}
+			else if (subCmd.equals("COPY") || subCmd.equals("CP")) {
+				return copy ((Player) sender);
+			}
+			else if (subCmd.equals("INFO")) {
+				return info ((Player) sender);
+			}
+			else if (subCmd.equals("PURGE")) {
+				return purge((Player) sender);
+			}
+			else if (subCmd.equals("VERSION") || subCmd.equals("V")) {
+				sender.sendMessage(ChatColor.AQUA + "CommandSign version : " + CommandSign.getPlugin().getDescription().getVersion());
+				return true;
+			}
+			else {
+				sender.sendMessage(ChatColor.RED + "Invalid Subcommand. Must be : version, info, copy, create, edit, delete or purge");
+				return false;
+			}
 		}
-
-		String subCmd = args[0];
-
-		if (subCmd.equalsIgnoreCase("Create") || subCmd.equalsIgnoreCase("Cr")
-				|| subCmd.equalsIgnoreCase("Mk") || subCmd.equalsIgnoreCase("Make")) {
-			return create((Player) sender);
-		}
-		else if (subCmd.equalsIgnoreCase("Edit")) {
-			return edit((Player) sender);
-		}
-		else if (subCmd.equalsIgnoreCase("Delete") || subCmd.equalsIgnoreCase("Del")
-				|| subCmd.equalsIgnoreCase("Remove") || subCmd.equalsIgnoreCase("Rem")) {
-			return delete ((Player) sender);
-		}
-		else if (subCmd.equalsIgnoreCase("Copy") || subCmd.equalsIgnoreCase("Cp")) {
-			return copy ((Player) sender);
-		}
-		else if (subCmd.equalsIgnoreCase("Info")) {
-			return info ((Player) sender);
-		}
-		else if (subCmd.equalsIgnoreCase("Version") || subCmd.equalsIgnoreCase("V")) {
-			sender.sendMessage(ChatColor.AQUA + "CommandSign version : " + CommandSign.getPlugin().getDescription().getVersion());
+		catch (CommandSignsException ex) {
+			sender.sendMessage(ChatColor.DARK_RED + ex.getMessage());
 			return true;
-		}
-		else {
-			sender.sendMessage(ChatColor.RED + "Invalid Subcommand. Must be : version, info, copy, create, edit or delete");
-			return false;
 		}
 	}
 
@@ -64,10 +74,9 @@ public class CommandSignCommands implements CommandExecutor{
 	 * The real configuration is made in the listener.
 	 */
 
-	private boolean info(Player player) {
+	private boolean info(Player player) throws CommandSignsException {
 		if (!player.hasPermission("commandsign.admin.*") && !player.hasPermission("commandsign.admin.info")) {
-			player.sendMessage(ChatColor.RED + "You do NOT have the permission to use that command.");
-			return true;
+			throw new CommandSignsException(Messages.NO_PERMISSION);
 		}
 
 		if (!isPlayerAvailable(player)) {
@@ -79,73 +88,87 @@ public class CommandSignCommands implements CommandExecutor{
 		return true;
 	}
 
-	private boolean create (Player player) {
+	private boolean create (Player player) throws CommandSignsException {
 		if (!player.hasPermission("commandsign.admin.*") && !player.hasPermission("commandsign.admin.create")) {
-			player.sendMessage(ChatColor.RED + "You do NOT have the permission to use that command.");
+			throw new CommandSignsException(Messages.NO_PERMISSION);
+		}
+
+		if (isPlayerAvailable(player)) {
+			CommandBlock cmdBlock = new CommandBlock();
+
+			EditingConfiguration<CommandBlock> ecf = new EditingConfiguration<CommandBlock>(player, cmdBlock, true);
+			ecf.setCurrentMenu(CommandSign.getPlugin().getMainMenu());
+			ecf.display();
+			this.plugin.getCreatingConfigurations().put(player, ecf);
+
 			return true;
 		}
-
-		if (!isPlayerAvailable(player)) {
-			return false;
-		}
-
-		CommandBlock cmdBlock = new CommandBlock();
-		
-		EditingConfiguration<CommandBlock> ecf = new EditingConfiguration<CommandBlock>(player, cmdBlock, true);
-		ecf.setCurrentMenu(CommandSign.getPlugin().getMainMenu());
-		ecf.display();
-		this.plugin.getCreatingConfigurations().put(player, ecf);
-
-		return true;
+		return false;
 	}
 
-	private boolean edit (Player player) {
+	private boolean edit (Player player) throws CommandSignsException {
 		if (!player.hasPermission("commandsign.admin.*") && !player.hasPermission("commandsign.admin.edit")) {
-			player.sendMessage(ChatColor.RED + "You do NOT have the permission to use that command.");
+			throw new CommandSignsException(Messages.NO_PERMISSION);
+		}
+
+		if (isPlayerAvailable(player)) {
+			EditingConfiguration<CommandBlock> conf = new EditingConfiguration<CommandBlock>(player, false);
+			conf.setCurrentMenu(CommandSign.getPlugin().getMainMenu());
+			this.plugin.getEditingConfigurations().put(player, conf);
+			player.sendMessage(ChatColor.GOLD + "Click on the block you want to edit");
+
 			return true;
 		}
 
-		if (!isPlayerAvailable(player)) {
-			return false;
-		}
-
-		EditingConfiguration<CommandBlock> conf = new EditingConfiguration<CommandBlock>(player, false);
-		conf.setCurrentMenu(CommandSign.getPlugin().getMainMenu());
-		this.plugin.getEditingConfigurations().put(player, conf);
-		player.sendMessage(ChatColor.GOLD + "Click on the block you want to edit");
-
-		return true;
+		return false;
 	}
 
-	private boolean delete (Player player) {
+	private boolean delete (Player player) throws CommandSignsException {
 		if (!player.hasPermission("commandsign.admin.*") && !player.hasPermission("commandsign.admin.delete")) {
-			player.sendMessage(ChatColor.RED + "You do NOT have the permission to use that command.");
+			throw new CommandSignsException(Messages.NO_PERMISSION);
+		}
+
+		if (isPlayerAvailable(player)) {
+			this.plugin.getDeletingBlocks().put(player, null);
+			player.sendMessage(ChatColor.GOLD + "Click on the command block you want to delete.");
 			return true;
 		}
 
-		if (!isPlayerAvailable(player)) {
-			return false;
-		}
-
-		this.plugin.getDeletingBlocks().put(player, null);
-		player.sendMessage(ChatColor.GOLD + "Click on the command block you want to delete.");
-
-		return true;
+		return false;
 	}
 
-	private boolean copy (Player player) {
+	private boolean copy (Player player) throws CommandSignsException {
 		if (!player.hasPermission("commandsign.admin.*") && !player.hasPermission("commandsign.admin.copy")) {
-			player.sendMessage(ChatColor.RED + "You do NOT have the permission to use that command.");
+			throw new CommandSignsException(Messages.NO_PERMISSION);
+		}
+
+		if (isPlayerAvailable(player)) {
+			this.plugin.getCopyingConfigurations().put(player, null);
+			player.sendMessage(ChatColor.GOLD + "Click on the command block you want to copy.");
+
 			return true;
 		}
 
-		if (!isPlayerAvailable(player)) {
-			return false;
+		return false;
+	}
+
+	private boolean purge(Player sender) throws CommandSignsException {
+		if (!sender.hasPermission("commandsign.admin.*")) {
+			throw new CommandSignsException(Messages.NO_PERMISSION);
 		}
 
-		this.plugin.getCopyingConfigurations().put(player, null);
-		player.sendMessage(ChatColor.GOLD + "Click on the command block you want to copy.");
+		LinkedList<Location> toRemove = new LinkedList<Location>();
+		for (CommandBlock cmd : this.plugin.getCommandBlocks().values()) {
+			if (!cmd.validate()) {
+				toRemove.add(cmd.getLocation());
+			}
+		}
 
+		for (Location loc : toRemove) {
+			this.plugin.getCommandBlocks().remove(loc);
+		}
+
+		sender.sendMessage(ChatColor.GREEN + "Purged " + toRemove.size() + " invalid command blocks.");
 		return true;
 	}
 
@@ -154,31 +177,27 @@ public class CommandSignCommands implements CommandExecutor{
 	 * @param player
 	 * @return <code>true</code> if the player isn't doing anything
 	 * <code>false</code> if the player is already doing something
+	 * @throws CommandSignsException 
 	 */
-	private boolean isPlayerAvailable(Player player) {
+	private boolean isPlayerAvailable(Player player) throws CommandSignsException {
 		if (this.plugin.getCreatingConfigurations().containsKey(player)) {
-			player.sendMessage(ChatColor.RED + "You are already creating a configuration");
-			return false;
+			throw new CommandSignsException(Messages.ALREADY_CREATING_CONFIGURATION);
 		}
 
 		if (this.plugin.getEditingConfigurations().containsKey(player)) {
-			player.sendMessage(ChatColor.RED + "You are already editing a configuration");
-			return false;
+			throw new CommandSignsException(Messages.ALREADY_EDITING_CONFIGURATION);
 		}
 
 		if (this.plugin.getDeletingBlocks().containsKey(player)) {
-			player.sendMessage(ChatColor.RED + "You are already deleting a block");
-			return false;
+			throw new CommandSignsException(Messages.ALREADY_DELETING_CONFIGURATION);
 		}
 
 		if (this.plugin.getCopyingConfigurations().containsKey(player)) {
-			player.sendMessage(ChatColor.RED + "You are already copying a block");
-			return false;
+			throw new CommandSignsException(Messages.ALREADY_COPYING_CONFIGURATION);
 		}
 
 		if (this.plugin.getInfoPlayers().contains(player)) {
-			player.sendMessage(ChatColor.RED + "You are already seeking a block information");
-			return false;
+			throw new CommandSignsException(Messages.ALREADY_INFO_CONFIGURATION);
 		}
 		return true;
 	}
