@@ -94,9 +94,7 @@ public class CommandBlock {
 	/* Commands */
 	public void addCommand (String command) {
 		command = command.intern();
-		if (!this.commands.contains(command)) {
-			this.commands.add(command);
-		}
+		this.commands.add(command);
 	}
 
 	public List<String> getCommands() {
@@ -125,9 +123,7 @@ public class CommandBlock {
 	/* Needed permissions */
 	public void addNeededPermission (String permission) {
 		permission = permission.intern();
-		if (!this.neededPermissions.contains(permission)) {
-			this.neededPermissions.add(permission);
-		}
+		this.neededPermissions.add(permission);
 	}
 
 	public List<String> getNeededPermissions() {
@@ -156,9 +152,7 @@ public class CommandBlock {
 	/* Permissions */
 	public void addPermission (String permission) {
 		permission = permission.intern();
-		if (!this.permissions.contains(permission)) {
-			this.permissions.add(permission);
-		}
+		this.permissions.add(permission);
 	}
 
 	public List<String> getPermissions() {
