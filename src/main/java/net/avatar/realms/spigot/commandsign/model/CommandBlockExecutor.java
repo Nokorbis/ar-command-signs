@@ -17,9 +17,9 @@ import net.milkbowl.vault.economy.Economy;
 
 public class CommandBlockExecutor {
 
-	private static final Pattern ALL_PATTERN = Pattern.compile(".*%[Aa][Ll][Ll]%.*");
-	private static final Pattern RADIUS_PATTERN = Pattern.compile(".*%[Rr][Aa][Dd][Ii][Uu][Ss]=(\\d+)%.*");
-	private static final Pattern PLAYER_PATTERN = Pattern.compile(".*%[Pp][Ll][Aa][Yy][Ee][Rr]%.*");
+	private static final Pattern ALL_PATTERN = Pattern.compile("%[Aa][Ll][Ll]%");
+	private static final Pattern RADIUS_PATTERN = Pattern.compile("%[Rr][Aa][Dd][Ii][Uu][Ss]=(\\d+)%");
+	private static final Pattern PLAYER_PATTERN = Pattern.compile("%[Pp][Ll][Aa][Yy][Ee][Rr]%");
 
 	private static DecimalFormat df;
 
@@ -145,25 +145,25 @@ public class CommandBlockExecutor {
 		String cmd = new String(command);
 
 		Matcher m = PLAYER_PATTERN.matcher(cmd);
-		if (m.matches()) {
-			m.replaceAll(player.getName());
+		if (m.find()) {
+			cmd = m.replaceAll(player.getName());
 		}
 		m = ALL_PATTERN.matcher(cmd);
-		if (m.matches()) {
+		if (m.find()) {
 			for (Player p : Bukkit.getOnlinePlayers()) {
 				cmds.add(m.replaceAll(p.getName()));
 			}
 		}
 		else {
 			m = RADIUS_PATTERN.matcher(cmd);
-			if (m.matches()) {
+			if (m.find()) {
 				try {
 					String str = m.group(1);
 					int radius = Integer.parseInt(str);
 					if (radius > 0) {
 						for (Player p : Bukkit.getOnlinePlayers()) {
 							if (p.getLocation().distance(player.getLocation()) <= radius) {
-								m.replaceAll(p.getName());
+								cmds.add(m.replaceAll(p.getName()));
 							}
 						}
 					}
