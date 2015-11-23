@@ -1,6 +1,10 @@
 package net.avatar.realms.spigot.commandsign.model;
 
 import java.text.DecimalFormat;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -12,6 +16,10 @@ import net.avatar.realms.spigot.commandsign.utils.Settings;
 import net.milkbowl.vault.economy.Economy;
 
 public class CommandBlockExecutor {
+
+	private static final Pattern ALL_PATTERN = Pattern.compile(".*%[Aa][Ll][Ll]%.*");
+	private static final Pattern RADIUS_PATTERN = Pattern.compile(".*%[Rr][Aa][Dd][Ii][Uu][Ss]=(\\d+)%.*");
+	private static final Pattern PLAYER_PATTERN = Pattern.compile(".*%[Pp][Ll][Aa][Yy][Ee][Rr]%.*");
 
 	private static DecimalFormat df;
 
@@ -109,34 +117,65 @@ public class CommandBlockExecutor {
 	}
 
 	private void handleCommand(String command) {
-		String cmd = formatCommand(command, this.player);
-		char special = cmd.charAt(0);
-		if (special == Settings.opChar){
-			cmd = "/" + cmd.substring(1);
-			if (!this.player.isOp()) {
-				this.player.setOp(true);
-				this.player.chat(cmd);
-				this.player.setOp(false);
+		for (String cmd : formatCommand(command, this.player)) {
+			char special = cmd.charAt(0);
+			if (special == Settings.opChar){
+				cmd = "/" + cmd.substring(1);
+				if (!this.player.isOp()) {
+					this.player.setOp(true);
+					this.player.chat(cmd);
+					this.player.setOp(false);
+				}
+				else {
+					this.player.chat(cmd);
+				}
+			}
+			else if (special == Settings.serverChar) {
+				cmd = cmd.substring(1);
+				Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), cmd);
 			}
 			else {
 				this.player.chat(cmd);
 			}
 		}
-		else if (special == Settings.serverChar) {
-			cmd = cmd.substring(1);
-			Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), cmd);
-		}
-		else {
-			this.player.chat(cmd);
-		}
 	}
 
-	private String formatCommand (String command, Player player) {
+	private List<String> formatCommand (String command, Player player) {
+		List<String> cmds = new LinkedList<String>();
 		String cmd = new String(command);
 
-		cmd = cmd.replaceAll("%player%", player.getName());
-		cmd = cmd.replaceAll("%PLAYER%", player.getName());
+		Matcher m = PLAYER_PATTERN.matcher(cmd);
+		if (m.matches()) {
+			m.replaceAll(player.getName());
+		}
+		m = ALL_PATTERN.matcher(cmd);
+		if (m.matches()) {
+			for (Player p : Bukkit.getOnlinePlayers()) {
+				cmds.add(m.replaceAll(p.getName()));
+			}
+		}
+		else {
+			m = RADIUS_PATTERN.matcher(cmd);
+			if (m.matches()) {
+				try {
+					String str = m.group(1);
+					int radius = Integer.parseInt(str);
+					if (radius > 0) {
+						for (Player p : Bukkit.getOnlinePlayers()) {
+							if (p.getLocation().distance(player.getLocation()) <= radius) {
+								m.replaceAll(p.getName());
+							}
+						}
+					}
+				}
+				catch (Exception ex) {
+				}
+			}
+			else {
+				cmds.add(cmd);
+			}
+		}
 
-		return cmd;
+		return cmds;
 	}
 }
