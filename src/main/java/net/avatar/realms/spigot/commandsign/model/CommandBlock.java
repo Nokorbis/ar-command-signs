@@ -72,7 +72,7 @@ public class CommandBlock {
 	}
 
 	private static long getFreeId() {
-		for (long i = 0; i < biggerUsedId; i++) {
+		for (long i = 0; i <= biggerUsedId; i++) {
 			if (!usedIds.contains(i)) {
 				return i;
 			}
@@ -343,6 +343,7 @@ public class CommandBlock {
 
 	private void setId(long id) {
 		this.id = id;
+		usedIds.add(id);
 
 		if (id > biggerUsedId){
 			biggerUsedId = id;
