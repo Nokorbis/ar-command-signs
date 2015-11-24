@@ -164,7 +164,7 @@ public class CommandBlockExecutor {
 					int radius = Integer.parseInt(str);
 					if (radius > 0) {
 						for (Player p : Bukkit.getOnlinePlayers()) {
-							if (p.getLocation().distance(player.getLocation()) <= radius) {
+							if (p.getWorld().equals(player.getWorld()) && p.getLocation().distance(player.getLocation()) <= radius) {
 								cmds.add(m.replaceAll(p.getName()));
 							}
 						}
