@@ -1,7 +1,7 @@
 package net.avatar.realms.spigot.commandsign.menu;
 
+import net.avatar.realms.spigot.commandsign.controller.EditingConfiguration;
 import net.avatar.realms.spigot.commandsign.model.CommandBlock;
-import net.avatar.realms.spigot.commandsign.model.EditingConfiguration;
 
 public class TimerCancelMenu extends EditionMenu {
 

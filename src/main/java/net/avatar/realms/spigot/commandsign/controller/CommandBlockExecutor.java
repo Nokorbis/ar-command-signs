@@ -1,4 +1,4 @@
-package net.avatar.realms.spigot.commandsign.model;
+package net.avatar.realms.spigot.commandsign.controller;
 
 import java.text.DecimalFormat;
 import java.util.LinkedList;
@@ -12,6 +12,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachment;
 
 import net.avatar.realms.spigot.commandsign.CommandSign;
+import net.avatar.realms.spigot.commandsign.model.CommandBlock;
+import net.avatar.realms.spigot.commandsign.model.CommandSignsException;
 import net.avatar.realms.spigot.commandsign.utils.Settings;
 import net.milkbowl.vault.economy.Economy;
 

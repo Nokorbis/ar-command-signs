@@ -6,8 +6,8 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import net.avatar.realms.spigot.commandsign.CommandSign;
+import net.avatar.realms.spigot.commandsign.controller.EditingConfiguration;
 import net.avatar.realms.spigot.commandsign.model.CommandBlock;
-import net.avatar.realms.spigot.commandsign.model.EditingConfiguration;
 import net.md_5.bungee.api.ChatColor;
 
 public class MainMenu extends EditionMenu {

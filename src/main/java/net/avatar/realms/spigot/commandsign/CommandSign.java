@@ -14,12 +14,12 @@ import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import net.avatar.realms.spigot.commandsign.controller.EditingConfiguration;
 import net.avatar.realms.spigot.commandsign.data.IBlockSaver;
 import net.avatar.realms.spigot.commandsign.data.JsonBlockSaver;
 import net.avatar.realms.spigot.commandsign.menu.IEditionMenu;
 import net.avatar.realms.spigot.commandsign.menu.MainMenu;
 import net.avatar.realms.spigot.commandsign.model.CommandBlock;
-import net.avatar.realms.spigot.commandsign.model.EditingConfiguration;
 import net.avatar.realms.spigot.commandsign.tasks.ExecuteTask;
 import net.avatar.realms.spigot.commandsign.tasks.SaverTask;
 import net.milkbowl.vault.economy.Economy;

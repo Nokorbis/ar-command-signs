@@ -17,11 +17,11 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 
+import net.avatar.realms.spigot.commandsign.controller.CommandBlockExecutor;
+import net.avatar.realms.spigot.commandsign.controller.EditingConfiguration;
 import net.avatar.realms.spigot.commandsign.menu.CommandsAddMenu;
 import net.avatar.realms.spigot.commandsign.model.CommandBlock;
-import net.avatar.realms.spigot.commandsign.model.CommandBlockExecutor;
 import net.avatar.realms.spigot.commandsign.model.CommandSignsException;
-import net.avatar.realms.spigot.commandsign.model.EditingConfiguration;
 import net.avatar.realms.spigot.commandsign.tasks.ExecuteTask;
 import net.avatar.realms.spigot.commandsign.utils.CommandSignUtils;
 

@@ -4,8 +4,8 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import net.avatar.realms.spigot.commandsign.CommandSign;
+import net.avatar.realms.spigot.commandsign.controller.CommandBlockExecutor;
 import net.avatar.realms.spigot.commandsign.model.CommandBlock;
-import net.avatar.realms.spigot.commandsign.model.CommandBlockExecutor;
 
 public class ExecuteTask implements Runnable{
 
