@@ -349,6 +349,7 @@ public class CommandBlock {
 
 	public void info (Player player, ChatColor c) {
 		player.sendMessage(c + "Id : " + this.id);
+		player.sendMessage(c + "Name : " + this.name);
 		player.sendMessage(c + "Block : " + blockSummary());
 		if (CommandSign.getPlugin().getEconomy() != null) {
 			player.sendMessage(c + "Costs : " + CommandSign.getPlugin().getEconomy().format(this.economyPrice));
