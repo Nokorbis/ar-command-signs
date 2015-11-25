@@ -21,4 +21,8 @@ public class Messages {
 	public static String COMMAND_NEEDS_RADIUS = "You have to specify the radius to use this command.";
 
 	public static String NUMBER_ARGUMENT = "The argument must be a number.";
+
+	public static String INVALID_COMMAND_ID = "No command block was found with for this ID.";
+
+
 }

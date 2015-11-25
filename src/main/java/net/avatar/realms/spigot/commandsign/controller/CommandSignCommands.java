@@ -50,7 +50,7 @@ public class CommandSignCommands implements CommandExecutor{
 				return copy ((Player) sender);
 			}
 			else if (subCmd.equals("INFO")) {
-				return info ((Player) sender);
+				return info ((Player) sender, args);
 			}
 			else if (subCmd.equals("PURGE")) {
 				return purge((Player) sender);
@@ -78,17 +78,32 @@ public class CommandSignCommands implements CommandExecutor{
 	 * The real configuration is made in the listener.
 	 */
 
-	private boolean info(Player player) throws CommandSignsException {
+	private boolean info(Player player, String[] args) throws CommandSignsException {
 		if (!player.hasPermission("commandsign.admin.*") && !player.hasPermission("commandsign.admin.info")) {
 			throw new CommandSignsException(Messages.NO_PERMISSION);
 		}
+		if (args.length < 2) {
+			if (!isPlayerAvailable(player)) {
+				return false;
+			}
 
-		if (!isPlayerAvailable(player)) {
-			return false;
+			this.plugin.getInfoPlayers().add(player);
+			player.sendMessage(ChatColor.GOLD + "Click on command block whose you want information");
+		}
+		else {
+			try {
+				long id = Long.parseLong(args[1]);
+				CommandBlock cmd = this.plugin.getCommandBlockById(id);
+				if (cmd == null) {
+					throw new CommandSignsException(Messages.INVALID_COMMAND_ID);
+				}
+				cmd.info(player, ChatColor.DARK_GREEN);
+			}
+			catch (NumberFormatException ex) {
+				throw new CommandSignsException(Messages.NUMBER_ARGUMENT);
+			}
 		}
 
-		this.plugin.getInfoPlayers().add(player);
-		player.sendMessage(ChatColor.GOLD + "Click on command block whose you want information");
 		return true;
 	}
 
