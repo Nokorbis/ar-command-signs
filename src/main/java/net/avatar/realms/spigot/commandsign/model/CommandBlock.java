@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 
 import net.avatar.realms.spigot.commandsign.CommandSign;
 import net.avatar.realms.spigot.commandsign.utils.CommandSignUtils;
+import net.avatar.realms.spigot.commandsign.utils.Messages;
 
 public class CommandBlock {
 
@@ -349,7 +350,7 @@ public class CommandBlock {
 
 	public void info (Player player, ChatColor c) {
 		player.sendMessage(c + "Id : " + this.id);
-		player.sendMessage(c + "Name : " + this.name);
+		player.sendMessage(c + "Name : " + ((this.name == null)? Messages.NO_NAME : this.name));
 		player.sendMessage(c + "Block : " + blockSummary());
 		if (CommandSign.getPlugin().getEconomy() != null) {
 			player.sendMessage(c + "Costs : " + CommandSign.getPlugin().getEconomy().format(this.economyPrice));

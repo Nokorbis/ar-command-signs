@@ -1,6 +1,9 @@
 package net.avatar.realms.spigot.commandsign.controller;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
+import java.util.List;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -60,7 +63,7 @@ public class CommandSignCommands implements CommandExecutor{
 			else if (subCmd.equals("NEAR") || subCmd.equals("AROUND")) {
 				return near((Player) sender, args);
 			}
-			else if (subCmd.equals("LIST")) {
+			else if (subCmd.equals("LIST") || subCmd.equals("L")) {
 				return list((Player) sender, args);
 			}
 			else if (subCmd.equals("VERSION") || subCmd.equals("V")) {
@@ -89,7 +92,7 @@ public class CommandSignCommands implements CommandExecutor{
 		}
 
 		int index = 1;
-		if (args.length > 2) {
+		if (args.length >= 2) {
 			try {
 				index = Integer.parseInt(args[1]);
 			}
@@ -97,9 +100,17 @@ public class CommandSignCommands implements CommandExecutor{
 			}
 		}
 		sender.sendMessage(ChatColor.AQUA + "Command signs list : " + index);
+
 		int max = index * LIST_SIZE;
-		for (index = max - LIST_SIZE ; index < max; index++) {
-			CommandBlock cmd = this.plugin.getCommandBlockById(index);
+		List<CommandBlock> cmds = this.plugin.getCommandBlocksByIdRange(max - LIST_SIZE, max -1);
+		Collections.sort(cmds, new Comparator<CommandBlock>() {
+			@Override
+			public int compare(CommandBlock o1, CommandBlock o2) {
+				return (int) (o1.getId() - o2.getId());
+			}
+		});
+
+		for (CommandBlock cmd : cmds) {
 			StringBuilder builder = new StringBuilder();
 			builder.append(ChatColor.AQUA);
 			builder.append(cmd.blockSummary());
@@ -110,6 +121,7 @@ public class CommandSignCommands implements CommandExecutor{
 			else {
 				builder.append(Messages.NO_NAME);
 			}
+			builder.append(" --- ");
 			builder.append(cmd.getId());
 			sender.sendMessage(builder.toString());
 		}

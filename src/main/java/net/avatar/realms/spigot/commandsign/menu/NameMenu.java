@@ -39,7 +39,12 @@ public class NameMenu extends EditionMenu {
 		StringBuilder builder = new StringBuilder();
 		builder.append(getName());
 		builder.append(" : ");
-		builder.append(cmd.getName());
+		if (cmd.getName() != null) {
+			builder.append(cmd.getName());
+		}
+		else {
+			builder.append(Messages.NO_NAME);
+		}
 		return builder.toString();
 	}
 }
