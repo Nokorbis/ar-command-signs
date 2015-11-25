@@ -19,7 +19,7 @@ public class CommandBlockData {
 	private Boolean cancelOnMove;
 	private Boolean resetOnMove;
 	private Integer timeBetweenUsage;
-	private Integer timeBetweenCommands;
+	private Integer timeBetweenPlayerUsage;
 
 	public CommandBlockData() {
 
@@ -101,7 +101,7 @@ public class CommandBlockData {
 		data.setTime(cmd.getTimer());
 		data.setCancelOnMove(cmd.isCancelledOnMove());
 		data.setResetOnMove(cmd.isResetOnMove());
-		data.setTimeBetweenCommands(cmd.getTimeBetweenCommands());
+		data.setTimeBetweenPlayerUsage(cmd.getTimeBetweenPlayerUsage());
 		data.setTimeBetweenUsage(cmd.getTimeBetweenUsage());
 		data.setName(cmd.getName());
 
@@ -142,8 +142,8 @@ public class CommandBlockData {
 		cmd.setCancelledOnMove(data.getCancelOnMove());
 		cmd.setResetOnMove(data.getResetOnMove());
 
-		if (data.getTimeBetweenCommands() != null) {
-			cmd.setTimeBetweenCommands(data.getTimeBetweenCommands());
+		if (data.getTimeBetweenPlayerUsage() != null) {
+			cmd.setTimeBetweenPlayerUsage(data.getTimeBetweenPlayerUsage());
 		}
 
 		if (data.getTimeBetweenUsage() != null) {
@@ -171,12 +171,12 @@ public class CommandBlockData {
 		this.timeBetweenUsage = timeBetweenUsage;
 	}
 
-	public Integer getTimeBetweenCommands() {
-		return this.timeBetweenCommands;
+	public Integer getTimeBetweenPlayerUsage() {
+		return this.timeBetweenPlayerUsage;
 	}
 
-	public void setTimeBetweenCommands(Integer timeBetweenCommands) {
-		this.timeBetweenCommands = timeBetweenCommands;
+	public void setTimeBetweenPlayerUsage(Integer timeBetweenCommands) {
+		this.timeBetweenPlayerUsage = timeBetweenCommands;
 	}
 
 	public String getName() {

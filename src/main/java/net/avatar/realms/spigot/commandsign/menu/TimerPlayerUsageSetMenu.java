@@ -3,16 +3,16 @@ package net.avatar.realms.spigot.commandsign.menu;
 import net.avatar.realms.spigot.commandsign.controller.EditingConfiguration;
 import net.avatar.realms.spigot.commandsign.model.CommandBlock;
 
-public class TimerCommandsSetMenu extends EditionMenu {
+public class TimerPlayerUsageSetMenu extends EditionMenu {
 
-	public TimerCommandsSetMenu(EditionMenu parent) {
-		super(parent, "Time between commands");
+	public TimerPlayerUsageSetMenu(EditionMenu parent) {
+		super(parent, "Time between usage per player");
 	}
 
 	@Override
 	public void display(EditingConfiguration<CommandBlock> config) {
 		config.getEditor().sendMessage(
-				c + "Enter the amount of time (in seconds) that the player must wait between each command:");
+				c + "Enter the amount of time (in seconds) that the player must wait between each usage:");
 
 	}
 
@@ -22,7 +22,7 @@ public class TimerCommandsSetMenu extends EditionMenu {
 			config.setCurrentMenu(getParent());
 			String[] args = message.split(" ", 2);
 			int index = Integer.parseInt(args[0]);
-			config.getEditingData().setTimeBetweenUsage(index);
+			config.getEditingData().setTimeBetweenPlayerUsage(index);
 		}
 		catch (Exception e) {
 		}
@@ -34,7 +34,7 @@ public class TimerCommandsSetMenu extends EditionMenu {
 		StringBuilder build = new StringBuilder();
 		build.append(getName());
 		build.append(" (");
-		build.append(cmd.getTimeBetweenCommands());
+		build.append(cmd.getTimeBetweenPlayerUsage());
 		build.append(")");
 		return build.toString();
 	}

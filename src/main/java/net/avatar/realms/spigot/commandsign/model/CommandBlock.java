@@ -1,9 +1,14 @@
 package net.avatar.realms.spigot.commandsign.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
+import java.util.UUID;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -34,9 +39,10 @@ public class CommandBlock {
 	private Boolean cancelledOnMove;
 
 	private int timeBetweenUsage;
-	private int timeBetweenCommands;
+	private int timeBetweenPlayerUsage;
 
 	private long lastTimeUsed;
+	private Map<UUID, Long> usages;
 
 	public CommandBlock () {
 		// We use ArrayList because we want to remove/edit them by the index.
@@ -49,9 +55,11 @@ public class CommandBlock {
 		this.setEconomyPrice(0.0);
 
 		this.setTimeBetweenUsage(0);
+		this.timeBetweenPlayerUsage = 0;
 		this.lastTimeUsed = 0;
-		this.setTimeBetweenCommands(0);
 		this.setId(getFreeId());
+
+		this.usages = new HashMap<UUID, Long>();
 	}
 
 	public CommandBlock (Long id) {
@@ -65,7 +73,6 @@ public class CommandBlock {
 
 		this.setTimeBetweenUsage(0);
 		this.lastTimeUsed = 0;
-		this.setTimeBetweenCommands(0);
 		if (usedIds.contains(id)) {
 			CommandSign.getPlugin().getLogger().warning("A strange error occured : It seems that the registered id (" + id + ") is already in used... Getting a new one..."); 
 			id = getFreeId();
@@ -122,14 +129,17 @@ public class CommandBlock {
 		this.timeBetweenUsage = timeBetweenUsage;
 	}
 
-	/* Time between commands */
+	/* Time between player usage */
 
-	public int getTimeBetweenCommands() {
-		return this.timeBetweenCommands;
+	public int getTimeBetweenPlayerUsage() {
+		return this.timeBetweenPlayerUsage;
 	}
 
-	public void setTimeBetweenCommands(int timeBetweenCommands) {
-		this.timeBetweenCommands = (timeBetweenCommands < 0)? 0 : timeBetweenCommands;
+	public void setTimeBetweenPlayerUsage(int timeBetweenPlayerUsage) {
+		if (timeBetweenPlayerUsage < 0) {
+			timeBetweenPlayerUsage = 0;
+		}
+		this.timeBetweenPlayerUsage = timeBetweenPlayerUsage;
 	}
 
 	/* Last time used */
@@ -291,6 +301,31 @@ public class CommandBlock {
 		this.economyPrice = price;
 	}
 
+	/* Player usages */
+	public boolean hasPlayerRecentlyUsed(Player player) {
+		if (this.timeBetweenPlayerUsage == 0) {
+			return false;
+		}
+		long now = System.currentTimeMillis();
+		LinkedList<UUID> toRemove = new LinkedList<UUID>();
+		for (Entry<UUID, Long> entry : this.usages.entrySet()) {
+			if (entry.getValue() + this.timeBetweenPlayerUsage < now) {
+				toRemove.add(entry.getKey());
+			}
+		}
+		for (UUID id : toRemove) {
+			this.usages.remove(id);
+		}
+
+		return this.usages.containsKey(player.getUniqueId());
+	}
+
+	public void addUsage(Player player) {
+		if (this.timeBetweenPlayerUsage != 0) {
+			this.usages.put(player.getUniqueId(), System.currentTimeMillis());
+		}
+	}
+
 	/* Business */
 
 	public CommandBlock copy() {
@@ -383,8 +418,8 @@ public class CommandBlock {
 		if (this.timeBetweenUsage > 0) {
 			player.sendMessage(c + "Time between usages : " + this.timeBetweenUsage);
 		}
-		if (this.timeBetweenCommands > 0) {
-			player.sendMessage(c + "Time between commands : " + this.timeBetweenCommands);
+		if (this.timeBetweenPlayerUsage > 0) {
+			player.sendMessage(c + "Time between commands : " + this.timeBetweenPlayerUsage);
 		}
 	}
 

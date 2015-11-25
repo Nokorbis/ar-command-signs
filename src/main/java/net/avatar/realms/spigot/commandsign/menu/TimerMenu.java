@@ -16,7 +16,7 @@ public class TimerMenu extends EditionMenu {
 		this.subMenus.put(3, new TimerCancelMenu(this));
 		this.subMenus.put(4, new TimerResetMenu(this));
 		this.subMenus.put(5, new TimerUsageSetMenu(this));
-		this.subMenus.put(6, new TimerCommandsSetMenu(this));
+		this.subMenus.put(6, new TimerPlayerUsageSetMenu(this));
 	}
 
 	@Override

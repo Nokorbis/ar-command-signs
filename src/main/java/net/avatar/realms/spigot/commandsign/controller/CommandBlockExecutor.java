@@ -66,6 +66,12 @@ public class CommandBlockExecutor {
 			}
 		}
 
+		if (this.cmdBlock.getTimeBetweenPlayerUsage() > 0) {
+			if (this.cmdBlock.hasPlayerRecentlyUsed(this.player)) {
+				throw new CommandSignsException("You already have used this command block recently. Please wait a moment.");
+			}
+		}
+
 		if ((CommandSign.getPlugin().getEconomy() != null) && (this.cmdBlock.getEconomyPrice() > 0)) {
 			Economy eco = CommandSign.getPlugin().getEconomy();
 			if (!eco.has(this.player, this.cmdBlock.getEconomyPrice()) && !this.player.hasPermission("commandsign.costs.bypass")) {
@@ -96,6 +102,10 @@ public class CommandBlockExecutor {
 					return false;
 				}
 			}
+		}
+
+		if (this.cmdBlock.getTimeBetweenPlayerUsage() > 0) {
+			this.cmdBlock.addUsage(this.player);
 		}
 
 		PermissionAttachment perms = CommandSign.getPlugin().getPlayerPermissions(this.player);
