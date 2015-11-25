@@ -40,7 +40,7 @@ public class CommandSignCommands implements CommandExecutor{
 				return create((Player) sender);
 			}
 			else if (subCmd.equals("EDIT")) {
-				return edit((Player) sender);
+				return edit((Player) sender, args);
 			}
 			else if (subCmd.equals("DELETE") || subCmd.equals("DEL")
 					|| subCmd.equals("REMOVE") || subCmd.equals("REM")) {
@@ -125,17 +125,33 @@ public class CommandSignCommands implements CommandExecutor{
 		return false;
 	}
 
-	private boolean edit (Player player) throws CommandSignsException {
+	private boolean edit (Player player, String[] args) throws CommandSignsException {
 		if (!player.hasPermission("commandsign.admin.*") && !player.hasPermission("commandsign.admin.edit")) {
 			throw new CommandSignsException(Messages.NO_PERMISSION);
 		}
 
 		if (isPlayerAvailable(player)) {
-			EditingConfiguration<CommandBlock> conf = new EditingConfiguration<CommandBlock>(player, false);
+			EditingConfiguration<CommandBlock> conf = null;
+			if (args.length < 2) {
+				conf = new EditingConfiguration<CommandBlock>(player, false);
+				player.sendMessage(ChatColor.GOLD + "Click on the block you want to edit");
+			}
+			else {
+				try {
+					long id = Long.parseLong(args[1]);
+					CommandBlock cmd = this.plugin.getCommandBlockById(id);
+					if (cmd == null) {
+						throw new CommandSignsException(Messages.INVALID_COMMAND_ID);
+					}
+					conf = new EditingConfiguration<CommandBlock>(player, cmd, false);
+				}
+				catch (NumberFormatException ex) {
+					throw new CommandSignsException(Messages.NUMBER_ARGUMENT);
+				}
+			}
+
 			conf.setCurrentMenu(CommandSign.getPlugin().getMainMenu());
 			this.plugin.getEditingConfigurations().put(player, conf);
-			player.sendMessage(ChatColor.GOLD + "Click on the block you want to edit");
-
 			return true;
 		}
 
