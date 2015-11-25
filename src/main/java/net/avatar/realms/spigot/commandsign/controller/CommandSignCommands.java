@@ -47,7 +47,7 @@ public class CommandSignCommands implements CommandExecutor{
 				return delete ((Player) sender);
 			}
 			else if (subCmd.equals("COPY") || subCmd.equals("CP")) {
-				return copy ((Player) sender);
+				return copy ((Player) sender, args);
 			}
 			else if (subCmd.equals("INFO")) {
 				return info ((Player) sender, args);
@@ -151,6 +151,9 @@ public class CommandSignCommands implements CommandExecutor{
 			}
 
 			conf.setCurrentMenu(CommandSign.getPlugin().getMainMenu());
+			if (conf.getEditingData() != null) {
+				conf.display();
+			}
 			this.plugin.getEditingConfigurations().put(player, conf);
 			return true;
 		}
@@ -172,15 +175,30 @@ public class CommandSignCommands implements CommandExecutor{
 		return false;
 	}
 
-	private boolean copy (Player player) throws CommandSignsException {
+	private boolean copy (Player player, String[] args) throws CommandSignsException {
 		if (!player.hasPermission("commandsign.admin.*") && !player.hasPermission("commandsign.admin.copy")) {
 			throw new CommandSignsException(Messages.NO_PERMISSION);
 		}
 
 		if (isPlayerAvailable(player)) {
-			this.plugin.getCopyingConfigurations().put(player, null);
-			player.sendMessage(ChatColor.GOLD + "Click on the command block you want to copy.");
-
+			if (args.length < 2) {
+				this.plugin.getCopyingConfigurations().put(player, null);
+				player.sendMessage(ChatColor.GOLD + "Click on the command block you want to copy.");
+			}
+			else {
+				try {
+					long id = Long.parseLong(args[1]);
+					CommandBlock cmd = this.plugin.getCommandBlockById(id);
+					if (cmd == null) {
+						throw new CommandSignsException(Messages.INVALID_COMMAND_ID);
+					}
+					this.plugin.getCopyingConfigurations().put(player, cmd.copy());
+					player.sendMessage(ChatColor.GOLD + "Block copied. Click on another block to paste the configuration.");
+				}
+				catch (NumberFormatException ex) {
+					throw new CommandSignsException(Messages.NUMBER_ARGUMENT);
+				}
+			}
 			return true;
 		}
 
