@@ -248,6 +248,27 @@ public class CommandBlock {
 			newBlock.addCommand(cmd);
 		}
 
+		if (this.economyPrice != null && this.economyPrice > 0) {
+			newBlock.setEconomyPrice(this.economyPrice);
+		}
+
+		if (this.hasTimer()) {
+			newBlock.setTimer(this.timeBeforeExecution);
+		}
+
+		if (this.cancelledOnMove != null && this.cancelledOnMove) {
+			newBlock.setCancelledOnMove(true);
+		}
+
+		if (this.resetOnMove != null && this.resetOnMove) {
+			newBlock.setResetOnMove(true);
+		}
+
+		if (this.timeBetweenUsage > 0) {
+			newBlock.setTimeBetweenUsage(this.timeBetweenUsage);
+		}
+
+
 		return newBlock;
 	}
 
