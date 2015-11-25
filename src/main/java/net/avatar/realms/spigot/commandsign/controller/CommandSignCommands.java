@@ -17,6 +17,8 @@ import net.avatar.realms.spigot.commandsign.utils.Messages;
 
 public class CommandSignCommands implements CommandExecutor{
 
+	private static final int LIST_SIZE = 10;
+
 	private CommandSign plugin;
 
 	public CommandSignCommands (CommandSign plugin) {
@@ -59,7 +61,7 @@ public class CommandSignCommands implements CommandExecutor{
 				return near((Player) sender, args);
 			}
 			else if (subCmd.equals("LIST")) {
-				return list((Player) sender);
+				return list((Player) sender, args);
 			}
 			else if (subCmd.equals("VERSION") || subCmd.equals("V")) {
 				sender.sendMessage(ChatColor.AQUA + "CommandSign version : " + CommandSign.getPlugin().getDescription().getVersion());
@@ -81,12 +83,37 @@ public class CommandSignCommands implements CommandExecutor{
 	 * The real configuration is made in the listener.
 	 */
 
-	private boolean list(Player sender) throws CommandSignsException {
+	private boolean list(Player sender, String[] args) throws CommandSignsException {
 		if (!sender.hasPermission("commandsign.admin.*") && !sender.hasPermission("commandsign.admin.list")) {
 			throw new CommandSignsException(Messages.NO_PERMISSION);
 		}
-		// TODO Auto-generated method stub
-		return false;
+
+		int index = 1;
+		if (args.length > 2) {
+			try {
+				index = Integer.parseInt(args[1]);
+			}
+			catch (NumberFormatException ex) {
+			}
+		}
+		sender.sendMessage(ChatColor.AQUA + "Command signs list : " + index);
+		int max = index * LIST_SIZE;
+		for (index = max - LIST_SIZE ; index < max; index++) {
+			CommandBlock cmd = this.plugin.getCommandBlockById(index);
+			StringBuilder builder = new StringBuilder();
+			builder.append(ChatColor.AQUA);
+			builder.append(cmd.blockSummary());
+			builder.append(" --- ");
+			if (cmd.getName() != null) {
+				builder.append(cmd.getName());
+			}
+			else {
+				builder.append(Messages.NO_NAME);
+			}
+			builder.append(cmd.getId());
+			sender.sendMessage(builder.toString());
+		}
+		return true;
 	}
 
 	private boolean info(Player player, String[] args) throws CommandSignsException {
