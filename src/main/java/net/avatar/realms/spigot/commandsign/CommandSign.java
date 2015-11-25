@@ -14,6 +14,8 @@ import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import net.avatar.realms.spigot.commandsign.controller.CommandSignCommands;
+import net.avatar.realms.spigot.commandsign.controller.CommandSignListener;
 import net.avatar.realms.spigot.commandsign.controller.EditingConfiguration;
 import net.avatar.realms.spigot.commandsign.data.IBlockSaver;
 import net.avatar.realms.spigot.commandsign.data.JsonBlockSaver;

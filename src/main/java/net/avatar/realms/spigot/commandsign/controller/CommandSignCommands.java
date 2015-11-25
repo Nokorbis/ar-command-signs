@@ -1,4 +1,4 @@
-package net.avatar.realms.spigot.commandsign;
+package net.avatar.realms.spigot.commandsign.controller;
 
 import java.util.LinkedList;
 
@@ -9,7 +9,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import net.avatar.realms.spigot.commandsign.controller.EditingConfiguration;
+import net.avatar.realms.spigot.commandsign.CommandSign;
 import net.avatar.realms.spigot.commandsign.model.CommandBlock;
 import net.avatar.realms.spigot.commandsign.model.CommandSignsException;
 import net.avatar.realms.spigot.commandsign.utils.CommandSignUtils;
