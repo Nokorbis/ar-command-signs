@@ -58,6 +58,9 @@ public class CommandSignCommands implements CommandExecutor{
 			else if (subCmd.equals("NEAR") || subCmd.equals("AROUND")) {
 				return near((Player) sender, args);
 			}
+			else if (subCmd.equals("LIST")) {
+				return list((Player) sender);
+			}
 			else if (subCmd.equals("VERSION") || subCmd.equals("V")) {
 				sender.sendMessage(ChatColor.AQUA + "CommandSign version : " + CommandSign.getPlugin().getDescription().getVersion());
 				return true;
@@ -77,6 +80,14 @@ public class CommandSignCommands implements CommandExecutor{
 	 * These commands are only initiating command block creation/edition/deletion.
 	 * The real configuration is made in the listener.
 	 */
+
+	private boolean list(Player sender) throws CommandSignsException {
+		if (!sender.hasPermission("commandsign.admin.*") && !sender.hasPermission("commandsign.admin.list")) {
+			throw new CommandSignsException(Messages.NO_PERMISSION);
+		}
+		// TODO Auto-generated method stub
+		return false;
+	}
 
 	private boolean info(Player player, String[] args) throws CommandSignsException {
 		if (!player.hasPermission("commandsign.admin.*") && !player.hasPermission("commandsign.admin.info")) {

@@ -1,6 +1,8 @@
 name: CommandSign
 main: net.avatar.realms.spigot.commandsign.CommandSign
+author: Nokorbis
 version: 1.2.7
+website: https://www.spigotmc.org/resources/command-signs.10512/
 softdepend: [Multiverse-Core, Vault]
 commands:
     commandsign:
