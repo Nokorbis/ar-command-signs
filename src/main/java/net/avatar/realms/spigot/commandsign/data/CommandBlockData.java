@@ -10,6 +10,7 @@ public class CommandBlockData {
 	private LocationData location;
 
 	private Long id;
+	private String name;
 	private List<String> commands;
 	private List<String> permissions;
 	private List<String> neededPermissions;
@@ -102,6 +103,7 @@ public class CommandBlockData {
 		data.setResetOnMove(cmd.isResetOnMove());
 		data.setTimeBetweenCommands(cmd.getTimeBetweenCommands());
 		data.setTimeBetweenUsage(cmd.getTimeBetweenUsage());
+		data.setName(cmd.getName());
 
 		return data;
 	}
@@ -139,6 +141,7 @@ public class CommandBlockData {
 		cmd.setTimer(data.getTime());
 		cmd.setCancelledOnMove(data.getCancelOnMove());
 		cmd.setResetOnMove(data.getResetOnMove());
+
 		if (data.getTimeBetweenCommands() != null) {
 			cmd.setTimeBetweenCommands(data.getTimeBetweenCommands());
 		}
@@ -146,6 +149,8 @@ public class CommandBlockData {
 		if (data.getTimeBetweenUsage() != null) {
 			cmd.setTimeBetweenUsage(data.getTimeBetweenUsage());
 		}
+
+		cmd.setName(data.getName());
 
 		return cmd;
 	}
@@ -172,5 +177,13 @@ public class CommandBlockData {
 
 	public void setTimeBetweenCommands(Integer timeBetweenCommands) {
 		this.timeBetweenCommands = timeBetweenCommands;
+	}
+
+	public String getName() {
+		return this.name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 }

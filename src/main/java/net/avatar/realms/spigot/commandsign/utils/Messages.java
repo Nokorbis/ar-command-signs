@@ -24,5 +24,7 @@ public class Messages {
 
 	public static String INVALID_COMMAND_ID = "No command block was found with for this ID.";
 
+	public static String NO_NAME = "No Name";
+
 
 }

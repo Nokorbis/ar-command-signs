@@ -18,6 +18,7 @@ public class CommandBlock {
 	private static Long biggerUsedId = 0L;
 
 	private long id;
+	private String name;
 
 	private Location location;
 
@@ -81,6 +82,64 @@ public class CommandBlock {
 	}
 
 	/* Getters and setters */
+
+	/* Id */
+
+	private void setId(long id) {
+		this.id = id;
+		usedIds.add(id);
+
+		if (id > biggerUsedId){
+			biggerUsedId = id;
+		}
+	}
+
+	public long getId() {
+		return this.id;
+	}
+
+	/* Name */
+
+	public String getName() {
+		return this.name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	/* Time between usage */
+
+	public int getTimeBetweenUsage() {
+		return this.timeBetweenUsage;
+	}
+
+	public void setTimeBetweenUsage(int timeBetweenUsage) {
+		if (timeBetweenUsage < 0) {
+			timeBetweenUsage = 0;
+		}
+		this.timeBetweenUsage = timeBetweenUsage;
+	}
+
+	/* Time between commands */
+
+	public int getTimeBetweenCommands() {
+		return this.timeBetweenCommands;
+	}
+
+	public void setTimeBetweenCommands(int timeBetweenCommands) {
+		this.timeBetweenCommands = (timeBetweenCommands < 0)? 0 : timeBetweenCommands;
+	}
+
+	/* Last time used */
+
+	public long getLastTimeUsed() {
+		return this.lastTimeUsed;
+	}
+
+	public void refreshLastTime() {
+		this.lastTimeUsed = System.currentTimeMillis();
+	}
 
 	/* Block */
 	public Location getLocation() {
@@ -334,45 +393,4 @@ public class CommandBlock {
 		String str = this.location.getBlock().getType() + " #" + this.location.getX() + ":" + this.location.getZ()+"(" +this.location.getY()+")";
 		return str;
 	}
-
-	public int getTimeBetweenUsage() {
-		return this.timeBetweenUsage;
-	}
-
-	public void setTimeBetweenUsage(int timeBetweenUsage) {
-		if (timeBetweenUsage < 0) {
-			timeBetweenUsage = 0;
-		}
-		this.timeBetweenUsage = timeBetweenUsage;
-	}
-
-	public int getTimeBetweenCommands() {
-		return this.timeBetweenCommands;
-	}
-
-	public void setTimeBetweenCommands(int timeBetweenCommands) {
-		this.timeBetweenCommands = (timeBetweenCommands < 0)? 0 : timeBetweenCommands;
-	}
-
-	public long getLastTimeUsed() {
-		return this.lastTimeUsed;
-	}
-
-	public void refreshLastTime() {
-		this.lastTimeUsed = System.currentTimeMillis();
-	}
-
-	private void setId(long id) {
-		this.id = id;
-		usedIds.add(id);
-
-		if (id > biggerUsedId){
-			biggerUsedId = id;
-		}
-	}
-
-	public long getId() {
-		return this.id;
-	}
-
 }

@@ -11,25 +11,26 @@ import net.avatar.realms.spigot.commandsign.model.CommandBlock;
 import net.md_5.bungee.api.ChatColor;
 
 public class MainMenu extends EditionMenu {
-	
+
 	public MainMenu() {
 		super(null, "Main Menu");
-		this.subMenus.put(2, new NeededPermissionsMenu(this));
+		this.subMenus.put(2, new NameMenu(this));
+		this.subMenus.put(3, new NeededPermissionsMenu(this));
 
 		//If Vault is on the server, you can use the cost system
 		if (CommandSign.getPlugin().getEconomy() != null) {
-			this.subMenus.put(3, new CostsMenu(this));
+			this.subMenus.put(4, new CostsMenu(this));
+			this.subMenus.put(5, new TimerMenu(this));
+			this.subMenus.put(6, new TemporaryPermissionsMenu(this));
+			this.subMenus.put(7, new CommandsMenu(this));
+		}
+		else {
 			this.subMenus.put(4, new TimerMenu(this));
 			this.subMenus.put(5, new TemporaryPermissionsMenu(this));
 			this.subMenus.put(6, new CommandsMenu(this));
 		}
-		else {
-			this.subMenus.put(3, new TimerMenu(this));
-			this.subMenus.put(4, new TemporaryPermissionsMenu(this));
-			this.subMenus.put(5, new CommandsMenu(this));
-		}
 	}
-	
+
 	@Override
 	public void display(EditingConfiguration<CommandBlock> config) {
 		Player editor = config.getEditor();
@@ -57,7 +58,7 @@ public class MainMenu extends EditionMenu {
 		}
 		editor.sendMessage(block.toString());
 		for (Entry<Integer, EditionMenu> menu : this.subMenus.entrySet()) {
-			editor.sendMessage(c + "" + menu.getKey() + ". " + menu.getValue().getName());
+			editor.sendMessage(c + "" + menu.getKey() + ". " + menu.getValue().formatName(config.getEditingData()));
 		}
 		editor.sendMessage(ChatColor.GREEN + "9. Done");
 	}
