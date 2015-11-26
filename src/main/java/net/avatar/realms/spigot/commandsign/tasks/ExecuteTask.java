@@ -3,8 +3,8 @@ package net.avatar.realms.spigot.commandsign.tasks;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import net.avatar.realms.spigot.commandsign.CommandSign;
 import net.avatar.realms.spigot.commandsign.controller.CommandBlockExecutor;
+import net.avatar.realms.spigot.commandsign.data.Container;
 import net.avatar.realms.spigot.commandsign.model.CommandBlock;
 
 public class ExecuteTask implements Runnable{
@@ -20,11 +20,11 @@ public class ExecuteTask implements Runnable{
 	@Override
 	public void run () {
 		if ((this.executor.getPlayer() == null) || !this.executor.getPlayer().isOnline() || this.executor.getPlayer().isDead()) {
-			CommandSign.getPlugin().getExecutingTasks().remove(this.executor.getPlayer().getUniqueId());
+			Container.getContainer().getExecutingTasks().remove(this.executor.getPlayer().getUniqueId());
 			return;
 		}
 		this.executor.execute();
-		CommandSign.getPlugin().getExecutingTasks().remove(this.executor.getPlayer().getUniqueId());
+		Container.getContainer().getExecutingTasks().remove(this.executor.getPlayer().getUniqueId());
 	}
 
 	public CommandBlock getCommandBlock() {

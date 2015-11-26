@@ -13,6 +13,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import net.avatar.realms.spigot.commandsign.CommandSign;
+import net.avatar.realms.spigot.commandsign.data.Container;
 import net.avatar.realms.spigot.commandsign.model.CommandBlock;
 import net.avatar.realms.spigot.commandsign.model.CommandSignsException;
 import net.avatar.realms.spigot.commandsign.utils.CommandSignUtils;
@@ -22,10 +23,7 @@ public class CommandSignCommands implements CommandExecutor{
 
 	private static final int LIST_SIZE = 10;
 
-	private CommandSign plugin;
-
-	public CommandSignCommands (CommandSign plugin) {
-		this.plugin = plugin;
+	public CommandSignCommands () {
 	}
 
 	@Override
@@ -102,7 +100,7 @@ public class CommandSignCommands implements CommandExecutor{
 		sender.sendMessage(ChatColor.AQUA + "Command signs list : " + index);
 
 		int max = index * LIST_SIZE;
-		List<CommandBlock> cmds = this.plugin.getCommandBlocksByIdRange(max - LIST_SIZE, max -1);
+		List<CommandBlock> cmds = Container.getContainer().getCommandBlocksByIdRange(max - LIST_SIZE, max -1);
 		Collections.sort(cmds, new Comparator<CommandBlock>() {
 			@Override
 			public int compare(CommandBlock o1, CommandBlock o2) {
@@ -137,13 +135,13 @@ public class CommandSignCommands implements CommandExecutor{
 				return false;
 			}
 
-			this.plugin.getInfoPlayers().add(player);
+			Container.getContainer().getInfoPlayers().add(player);
 			player.sendMessage(ChatColor.GOLD + "Click on command block whose you want information");
 		}
 		else {
 			try {
 				long id = Long.parseLong(args[1]);
-				CommandBlock cmd = this.plugin.getCommandBlockById(id);
+				CommandBlock cmd = Container.getContainer().getCommandBlockById(id);
 				if (cmd == null) {
 					throw new CommandSignsException(Messages.INVALID_COMMAND_ID);
 				}
@@ -166,9 +164,9 @@ public class CommandSignCommands implements CommandExecutor{
 			CommandBlock cmdBlock = new CommandBlock();
 
 			EditingConfiguration<CommandBlock> ecf = new EditingConfiguration<CommandBlock>(player, cmdBlock, true);
-			ecf.setCurrentMenu(CommandSign.getPlugin().getMainMenu());
+			ecf.setCurrentMenu(Container.getContainer().getMainMenu());
 			ecf.display();
-			this.plugin.getCreatingConfigurations().put(player, ecf);
+			Container.getContainer().getCreatingConfigurations().put(player, ecf);
 
 			return true;
 		}
@@ -189,7 +187,7 @@ public class CommandSignCommands implements CommandExecutor{
 			else {
 				try {
 					long id = Long.parseLong(args[1]);
-					CommandBlock cmd = this.plugin.getCommandBlockById(id);
+					CommandBlock cmd = Container.getContainer().getCommandBlockById(id);
 					if (cmd == null) {
 						throw new CommandSignsException(Messages.INVALID_COMMAND_ID);
 					}
@@ -200,11 +198,11 @@ public class CommandSignCommands implements CommandExecutor{
 				}
 			}
 
-			conf.setCurrentMenu(CommandSign.getPlugin().getMainMenu());
+			conf.setCurrentMenu(Container.getContainer().getMainMenu());
 			if (conf.getEditingData() != null) {
 				conf.display();
 			}
-			this.plugin.getEditingConfigurations().put(player, conf);
+			Container.getContainer().getEditingConfigurations().put(player, conf);
 			return true;
 		}
 
@@ -217,7 +215,7 @@ public class CommandSignCommands implements CommandExecutor{
 		}
 
 		if (isPlayerAvailable(player)) {
-			this.plugin.getDeletingBlocks().put(player, null);
+			Container.getContainer().getDeletingBlocks().put(player, null);
 			player.sendMessage(ChatColor.GOLD + "Click on the command block you want to delete.");
 			return true;
 		}
@@ -232,17 +230,17 @@ public class CommandSignCommands implements CommandExecutor{
 
 		if (isPlayerAvailable(player)) {
 			if (args.length < 2) {
-				this.plugin.getCopyingConfigurations().put(player, null);
+				Container.getContainer().getCopyingConfigurations().put(player, null);
 				player.sendMessage(ChatColor.GOLD + "Click on the command block you want to copy.");
 			}
 			else {
 				try {
 					long id = Long.parseLong(args[1]);
-					CommandBlock cmd = this.plugin.getCommandBlockById(id);
+					CommandBlock cmd = Container.getContainer().getCommandBlockById(id);
 					if (cmd == null) {
 						throw new CommandSignsException(Messages.INVALID_COMMAND_ID);
 					}
-					this.plugin.getCopyingConfigurations().put(player, cmd.copy());
+					Container.getContainer().getCopyingConfigurations().put(player, cmd.copy());
 					player.sendMessage(ChatColor.GOLD + "Block copied. Click on another block to paste the configuration.");
 				}
 				catch (NumberFormatException ex) {
@@ -261,14 +259,14 @@ public class CommandSignCommands implements CommandExecutor{
 		}
 
 		LinkedList<Location> toRemove = new LinkedList<Location>();
-		for (CommandBlock cmd : this.plugin.getCommandBlocks().values()) {
+		for (CommandBlock cmd : Container.getContainer().getCommandBlocks().values()) {
 			if (!cmd.validate()) {
 				toRemove.add(cmd.getLocation());
 			}
 		}
 
 		for (Location loc : toRemove) {
-			this.plugin.getCommandBlocks().remove(loc);
+			Container.getContainer().getCommandBlocks().remove(loc);
 		}
 
 		sender.sendMessage(ChatColor.GREEN + "Purged " + toRemove.size() + " invalid command blocks.");
@@ -288,8 +286,8 @@ public class CommandSignCommands implements CommandExecutor{
 			int radius = Integer.parseInt(args[1]);
 			LinkedList<CommandBlock> cmds = new LinkedList<CommandBlock>();
 			for (Location loc : CommandSignUtils.getLocationsAroundPoint(sender.getLocation(), radius)) {
-				if (this.plugin.getCommandBlocks().containsKey(loc))  {
-					cmds.add(this.plugin.getCommandBlocks().get(loc));
+				if (Container.getContainer().getCommandBlocks().containsKey(loc))  {
+					cmds.add(Container.getContainer().getCommandBlocks().get(loc));
 				}
 			}
 			for (CommandBlock cmd : cmds) {
@@ -312,23 +310,23 @@ public class CommandSignCommands implements CommandExecutor{
 	 * @throws CommandSignsException 
 	 */
 	private boolean isPlayerAvailable(Player player) throws CommandSignsException {
-		if (this.plugin.getCreatingConfigurations().containsKey(player)) {
+		if (Container.getContainer().getCreatingConfigurations().containsKey(player)) {
 			throw new CommandSignsException(Messages.ALREADY_CREATING_CONFIGURATION);
 		}
 
-		if (this.plugin.getEditingConfigurations().containsKey(player)) {
+		if (Container.getContainer().getEditingConfigurations().containsKey(player)) {
 			throw new CommandSignsException(Messages.ALREADY_EDITING_CONFIGURATION);
 		}
 
-		if (this.plugin.getDeletingBlocks().containsKey(player)) {
+		if (Container.getContainer().getDeletingBlocks().containsKey(player)) {
 			throw new CommandSignsException(Messages.ALREADY_DELETING_CONFIGURATION);
 		}
 
-		if (this.plugin.getCopyingConfigurations().containsKey(player)) {
+		if (Container.getContainer().getCopyingConfigurations().containsKey(player)) {
 			throw new CommandSignsException(Messages.ALREADY_COPYING_CONFIGURATION);
 		}
 
-		if (this.plugin.getInfoPlayers().contains(player)) {
+		if (Container.getContainer().getInfoPlayers().contains(player)) {
 			throw new CommandSignsException(Messages.ALREADY_INFO_CONFIGURATION);
 		}
 		return true;

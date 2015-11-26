@@ -5,10 +5,8 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.block.Block;
 
 import net.avatar.realms.spigot.commandsign.CommandSign;
-import net.avatar.realms.spigot.commandsign.utils.CommandSignUtils;
 
 public class LocationData {
 
@@ -67,18 +65,12 @@ public class LocationData {
 	}
 
 	public static Location transform (LocationData data) {
-		Block block = null;
 		World world = Bukkit.getServer().getWorld(UUID.fromString(data.getWorldUuid()));
 		if (world == null) {
 			CommandSign.getPlugin().getLogger().severe("World with UUID : " + data.getWorldUuid() + " cannot be found");
 			return null;
 		}
 		Location loc = new Location(world, data.getX(), data.getY(), data.getZ());
-		block = loc.getBlock();
-
-		if (!CommandSignUtils.isValidBlock(block)) {
-			CommandSign.getPlugin().getLogger().warning("A Command sign has been loaded at " + block.getX() + ":"+ block.getY()+":" + block.getZ()+" with a wrong type.");
-		}
 
 		return loc;
 	}

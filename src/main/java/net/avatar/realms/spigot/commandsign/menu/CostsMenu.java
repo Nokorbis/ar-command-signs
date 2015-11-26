@@ -3,8 +3,8 @@ package net.avatar.realms.spigot.commandsign.menu;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import net.avatar.realms.spigot.commandsign.CommandSign;
 import net.avatar.realms.spigot.commandsign.controller.EditingConfiguration;
+import net.avatar.realms.spigot.commandsign.data.Container;
 import net.avatar.realms.spigot.commandsign.model.CommandBlock;
 
 public class CostsMenu extends EditionMenu {
@@ -22,7 +22,7 @@ public class CostsMenu extends EditionMenu {
 			if (cmd != null) {
 				editor.sendMessage(c + "1. Refresh");
 				editor.sendMessage(c + "2. Economy ("
-						+ CommandSign.getPlugin().getEconomy().format(config.getEditingData().getEconomyPrice()) + ")");
+						+ Container.getContainer().getEconomy().format(config.getEditingData().getEconomyPrice()) + ")");
 				editor.sendMessage(ChatColor.GREEN + "9. Done");
 			}
 		}

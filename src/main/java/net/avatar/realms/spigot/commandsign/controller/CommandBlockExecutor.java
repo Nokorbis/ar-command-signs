@@ -11,7 +11,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachment;
 
-import net.avatar.realms.spigot.commandsign.CommandSign;
+import net.avatar.realms.spigot.commandsign.data.Container;
 import net.avatar.realms.spigot.commandsign.model.CommandBlock;
 import net.avatar.realms.spigot.commandsign.model.CommandSignsException;
 import net.avatar.realms.spigot.commandsign.utils.Settings;
@@ -72,8 +72,8 @@ public class CommandBlockExecutor {
 			}
 		}
 
-		if ((CommandSign.getPlugin().getEconomy() != null) && (this.cmdBlock.getEconomyPrice() > 0)) {
-			Economy eco = CommandSign.getPlugin().getEconomy();
+		if ((Container.getContainer().getEconomy() != null) && (this.cmdBlock.getEconomyPrice() > 0)) {
+			Economy eco = Container.getContainer().getEconomy();
 			if (!eco.has(this.player, this.cmdBlock.getEconomyPrice()) && !this.player.hasPermission("commandsign.costs.bypass")) {
 				throw new CommandSignsException(
 						"You do not have enough money to use this command block. (" + eco.format(this.cmdBlock.getEconomyPrice()) + ")");
@@ -90,9 +90,9 @@ public class CommandBlockExecutor {
 			return false;
 		}
 
-		if ((CommandSign.getPlugin().getEconomy() != null) && (this.cmdBlock.getEconomyPrice() > 0)) {
+		if ((Container.getContainer().getEconomy() != null) && (this.cmdBlock.getEconomyPrice() > 0)) {
 			if (!this.player.hasPermission("commandsign.costs.bypass")) {
-				Economy eco = CommandSign.getPlugin().getEconomy();
+				Economy eco = Container.getContainer().getEconomy();
 				if (eco.has(this.player, this.cmdBlock.getEconomyPrice())) {
 					eco.withdrawPlayer(this.player, this.cmdBlock.getEconomyPrice());
 					this.player.sendMessage("You paied " + eco.format(this.cmdBlock.getEconomyPrice()) + " to use this command");
@@ -108,7 +108,7 @@ public class CommandBlockExecutor {
 			this.cmdBlock.addUsage(this.player);
 		}
 
-		PermissionAttachment perms = CommandSign.getPlugin().getPlayerPermissions(this.player);
+		PermissionAttachment perms = Container.getContainer().getPlayerPermissions(this.player);
 		for (String perm : this.cmdBlock.getPermissions()) {
 			if (!this.player.hasPermission(perm)) {
 				perms.setPermission(perm, true);

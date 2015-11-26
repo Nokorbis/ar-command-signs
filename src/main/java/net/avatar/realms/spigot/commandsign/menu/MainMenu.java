@@ -5,8 +5,8 @@ import java.util.Map.Entry;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import net.avatar.realms.spigot.commandsign.CommandSign;
 import net.avatar.realms.spigot.commandsign.controller.EditingConfiguration;
+import net.avatar.realms.spigot.commandsign.data.Container;
 import net.avatar.realms.spigot.commandsign.model.CommandBlock;
 import net.md_5.bungee.api.ChatColor;
 
@@ -18,7 +18,7 @@ public class MainMenu extends EditionMenu {
 		this.subMenus.put(3, new NeededPermissionsMenu(this));
 
 		//If Vault is on the server, you can use the cost system
-		if (CommandSign.getPlugin().getEconomy() != null) {
+		if (Container.getContainer().getEconomy() != null) {
 			this.subMenus.put(4, new CostsMenu(this));
 			this.subMenus.put(5, new TimerMenu(this));
 			this.subMenus.put(6, new TemporaryPermissionsMenu(this));
@@ -76,12 +76,12 @@ public class MainMenu extends EditionMenu {
 				if (config.getEditingData().validate()) {
 					config.setCurrentMenu(null);
 					if (config.isCreating()) {
-						CommandSign.getPlugin().getCommandBlocks().put(config.getEditingData().getLocation(),
+						Container.getContainer().getCommandBlocks().put(config.getEditingData().getLocation(),
 								config.getEditingData());
-						CommandSign.getPlugin().getCreatingConfigurations().remove(config.getEditor());
+						Container.getContainer().getCreatingConfigurations().remove(config.getEditor());
 					}
 					else {
-						CommandSign.getPlugin().getEditingConfigurations().remove(config.getEditor());
+						Container.getContainer().getEditingConfigurations().remove(config.getEditor());
 					}
 				}
 				else {
