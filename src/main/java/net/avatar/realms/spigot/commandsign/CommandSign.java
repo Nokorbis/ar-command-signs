@@ -5,6 +5,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import net.avatar.realms.spigot.commandsign.controller.CommandSignCommands;
 import net.avatar.realms.spigot.commandsign.controller.CommandSignListener;
 import net.avatar.realms.spigot.commandsign.controller.Container;
+import net.avatar.realms.spigot.commandsign.controller.Economy;
 
 public class CommandSign extends JavaPlugin{
 
@@ -14,6 +15,7 @@ public class CommandSign extends JavaPlugin{
 	public void onEnable() {
 		plugin = this;
 
+		Economy.initialize();
 		this.getCommand("commandsign").setExecutor(new CommandSignCommands());
 		this.getServer().getPluginManager().registerEvents(new CommandSignListener(), this);
 	}

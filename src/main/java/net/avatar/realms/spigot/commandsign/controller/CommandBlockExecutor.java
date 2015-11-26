@@ -14,7 +14,6 @@ import org.bukkit.permissions.PermissionAttachment;
 import net.avatar.realms.spigot.commandsign.model.CommandBlock;
 import net.avatar.realms.spigot.commandsign.model.CommandSignsException;
 import net.avatar.realms.spigot.commandsign.utils.Settings;
-import net.milkbowl.vault.economy.Economy;
 
 public class CommandBlockExecutor {
 
@@ -71,11 +70,10 @@ public class CommandBlockExecutor {
 			}
 		}
 
-		if ((Container.getContainer().getEconomy() != null) && (this.cmdBlock.getEconomyPrice() > 0)) {
-			Economy eco = Container.getContainer().getEconomy();
-			if (!eco.has(this.player, this.cmdBlock.getEconomyPrice()) && !this.player.hasPermission("commandsign.costs.bypass")) {
+		if ((Economy.getEconomy() != null) && (this.cmdBlock.getEconomyPrice() > 0)) {
+			if (!Economy.getEconomy().has(this.player, this.cmdBlock.getEconomyPrice()) && !this.player.hasPermission("commandsign.costs.bypass")) {
 				throw new CommandSignsException(
-						"You do not have enough money to use this command block. (" + eco.format(this.cmdBlock.getEconomyPrice()) + ")");
+						"You do not have enough money to use this command block. (" + Economy.getEconomy().format(this.cmdBlock.getEconomyPrice()) + ")");
 			}
 		}
 
@@ -89,12 +87,11 @@ public class CommandBlockExecutor {
 			return false;
 		}
 
-		if ((Container.getContainer().getEconomy() != null) && (this.cmdBlock.getEconomyPrice() > 0)) {
+		if ((Economy.getEconomy() != null) && (this.cmdBlock.getEconomyPrice() > 0)) {
 			if (!this.player.hasPermission("commandsign.costs.bypass")) {
-				Economy eco = Container.getContainer().getEconomy();
-				if (eco.has(this.player, this.cmdBlock.getEconomyPrice())) {
-					eco.withdrawPlayer(this.player, this.cmdBlock.getEconomyPrice());
-					this.player.sendMessage("You paied " + eco.format(this.cmdBlock.getEconomyPrice()) + " to use this command");
+				if (Economy.getEconomy().has(this.player, this.cmdBlock.getEconomyPrice())) {
+					Economy.getEconomy().withdrawPlayer(this.player, this.cmdBlock.getEconomyPrice());
+					this.player.sendMessage("You paied " + Economy.getEconomy().format(this.cmdBlock.getEconomyPrice()) + " to use this command");
 				}
 				else {
 					this.player.sendMessage(ChatColor.DARK_RED + "You do not have enough money to use this command block.");

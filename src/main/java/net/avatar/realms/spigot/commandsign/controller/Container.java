@@ -11,7 +11,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachment;
-import org.bukkit.plugin.RegisteredServiceProvider;
 
 import net.avatar.realms.spigot.commandsign.CommandSign;
 import net.avatar.realms.spigot.commandsign.data.IBlockSaver;
@@ -21,7 +20,6 @@ import net.avatar.realms.spigot.commandsign.menu.MainMenu;
 import net.avatar.realms.spigot.commandsign.model.CommandBlock;
 import net.avatar.realms.spigot.commandsign.tasks.ExecuteTask;
 import net.avatar.realms.spigot.commandsign.tasks.SaverTask;
-import net.milkbowl.vault.economy.Economy;
 
 public class Container {
 
@@ -46,14 +44,11 @@ public class Container {
 	private IBlockSaver	blockSaver;
 	private SaverTask saver;
 
-	private Economy	economy;
-
 	private IEditionMenu<CommandBlock> mainMenu;
 
 	private Container() {
 		CommandSign plugin = CommandSign.getPlugin();
 		initializeDataStructures();
-		initializeEconomy();
 		this.mainMenu = new MainMenu();
 
 		try {
@@ -66,7 +61,7 @@ public class Container {
 		}
 	}
 
-	private void initializeDataStructures() {
+	public void initializeDataStructures() {
 		this.playerPerms = new HashMap<Player, PermissionAttachment>();
 		this.commandBlocks = new HashMap<Location , CommandBlock>();
 		this.creatingConfigurations = new HashMap<Player, EditingConfiguration<CommandBlock>>();
@@ -75,19 +70,6 @@ public class Container {
 		this.deletingBlocks = new HashMap<Player, Location>();
 		this.executingTasks = new HashMap<UUID, ExecuteTask>();
 		this.infoPlayers = new LinkedList<Player>();
-	}
-
-	private void initializeEconomy() {
-		CommandSign plugin = CommandSign.getPlugin();
-		if (plugin.getServer().getPluginManager().getPlugin("Vault") != null) {
-			RegisteredServiceProvider<Economy> rsp = plugin.getServer().getServicesManager().getRegistration(Economy.class);
-			if (rsp != null) {
-				this.economy = rsp.getProvider();
-				if (this.economy != null) {
-					plugin.getLogger().info("Vault economy detected for command signs ! ");
-				}
-			}
-		}
 	}
 
 	private void initializeSaver() throws Exception {
@@ -137,10 +119,6 @@ public class Container {
 
 	public List<Player> getInfoPlayers() {
 		return this.infoPlayers;
-	}
-
-	public Economy getEconomy() {
-		return this.economy;
 	}
 
 	private void loadData() {

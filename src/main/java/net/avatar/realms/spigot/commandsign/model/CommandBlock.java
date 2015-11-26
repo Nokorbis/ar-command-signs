@@ -15,7 +15,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import net.avatar.realms.spigot.commandsign.CommandSign;
-import net.avatar.realms.spigot.commandsign.controller.Container;
+import net.avatar.realms.spigot.commandsign.controller.Economy;
 import net.avatar.realms.spigot.commandsign.utils.CommandSignUtils;
 import net.avatar.realms.spigot.commandsign.utils.Messages;
 
@@ -388,8 +388,8 @@ public class CommandBlock {
 		player.sendMessage(c + "Id : " + this.id);
 		player.sendMessage(c + "Name : " + ((this.name == null)? Messages.NO_NAME : this.name));
 		player.sendMessage(c + "Block : " + blockSummary());
-		if (Container.getContainer().getEconomy() != null) {
-			player.sendMessage(c + "Costs : " + Container.getContainer().getEconomy().format(this.economyPrice));
+		if (Economy.getEconomy() != null) {
+			player.sendMessage(c + "Costs : " + Economy.getEconomy().format(this.economyPrice));
 		}
 		player.sendMessage(c + "Needed permissions :");
 		int cpt = 1;

@@ -2,13 +2,14 @@ package net.avatar.realms.spigot.commandsign.menu;
 
 import java.util.Map.Entry;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import net.avatar.realms.spigot.commandsign.controller.Container;
+import net.avatar.realms.spigot.commandsign.controller.Economy;
 import net.avatar.realms.spigot.commandsign.controller.EditingConfiguration;
 import net.avatar.realms.spigot.commandsign.model.CommandBlock;
-import net.md_5.bungee.api.ChatColor;
 
 public class MainMenu extends EditionMenu {
 
@@ -18,7 +19,7 @@ public class MainMenu extends EditionMenu {
 		this.subMenus.put(3, new NeededPermissionsMenu(this));
 
 		//If Vault is on the server, you can use the cost system
-		if (Container.getContainer().getEconomy() != null) {
+		if (Economy.getEconomy() != null) {
 			this.subMenus.put(4, new CostsMenu(this));
 			this.subMenus.put(5, new TimerMenu(this));
 			this.subMenus.put(6, new TemporaryPermissionsMenu(this));
