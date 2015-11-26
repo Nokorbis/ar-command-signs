@@ -223,19 +223,21 @@ public class CommandSignCommands implements CommandExecutor{
 		else {
 			try {
 				long id = Long.parseLong(args[1]);
-				if (isPlayerAvailable(player)) {
-					CommandBlock cmd = Container.getContainer().getCommandBlockById(id);
-					Container.getContainer().getDeletingBlocks().put(player, cmd.getLocation());
-					player.sendMessage(ChatColor.GOLD + "Click on the command block or enter the same command to delete the block to validate the deletion.");
-				}
-				else if (Container.getContainer().getDeletingBlocks().containsKey(player)){
+				if (Container.getContainer().getDeletingBlocks().containsKey(player)) {
 					Location loc = Container.getContainer().getDeletingBlocks().get(player);
 					CommandBlock cmd = Container.getContainer().getCommandBlocks().get(loc);
 					if  (cmd != null && cmd.getId() == id) {
 						Container.getContainer().getCommandBlocks().remove(loc);
 						Container.getContainer().getDeletingBlocks().remove(player);
 						player.sendMessage(ChatColor.GREEN + "Command block properly deleted");
+						return true;
 					}
+				}
+				else if (isPlayerAvailable(player)) {
+					CommandBlock cmd = Container.getContainer().getCommandBlockById(id);
+					Container.getContainer().getDeletingBlocks().put(player, cmd.getLocation());
+					player.sendMessage(ChatColor.GOLD + "Click on the command block or enter the same command to delete the block to validate the deletion.");
+					return true;
 				}
 			}
 			catch (NumberFormatException ex) {
