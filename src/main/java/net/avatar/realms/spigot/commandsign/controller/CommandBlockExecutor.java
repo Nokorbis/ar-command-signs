@@ -11,7 +11,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachment;
 
-import net.avatar.realms.spigot.commandsign.data.Container;
 import net.avatar.realms.spigot.commandsign.model.CommandBlock;
 import net.avatar.realms.spigot.commandsign.model.CommandSignsException;
 import net.avatar.realms.spigot.commandsign.utils.Settings;

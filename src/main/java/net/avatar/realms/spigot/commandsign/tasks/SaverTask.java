@@ -1,6 +1,6 @@
 package net.avatar.realms.spigot.commandsign.tasks;
 
-import net.avatar.realms.spigot.commandsign.data.Container;
+import net.avatar.realms.spigot.commandsign.controller.Container;
 
 @Deprecated
 public class SaverTask implements Runnable{

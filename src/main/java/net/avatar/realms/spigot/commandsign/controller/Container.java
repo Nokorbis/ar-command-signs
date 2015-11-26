@@ -1,4 +1,4 @@
-package net.avatar.realms.spigot.commandsign.data;
+package net.avatar.realms.spigot.commandsign.controller;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -14,7 +14,8 @@ import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 import net.avatar.realms.spigot.commandsign.CommandSign;
-import net.avatar.realms.spigot.commandsign.controller.EditingConfiguration;
+import net.avatar.realms.spigot.commandsign.data.IBlockSaver;
+import net.avatar.realms.spigot.commandsign.data.JsonBlockSaver;
 import net.avatar.realms.spigot.commandsign.menu.IEditionMenu;
 import net.avatar.realms.spigot.commandsign.menu.MainMenu;
 import net.avatar.realms.spigot.commandsign.model.CommandBlock;

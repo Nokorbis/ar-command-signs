@@ -18,7 +18,6 @@ import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 
 import net.avatar.realms.spigot.commandsign.CommandSign;
-import net.avatar.realms.spigot.commandsign.data.Container;
 import net.avatar.realms.spigot.commandsign.menu.CommandsAddMenu;
 import net.avatar.realms.spigot.commandsign.model.CommandBlock;
 import net.avatar.realms.spigot.commandsign.model.CommandSignsException;

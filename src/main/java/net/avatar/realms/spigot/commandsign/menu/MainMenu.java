@@ -5,8 +5,8 @@ import java.util.Map.Entry;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import net.avatar.realms.spigot.commandsign.controller.Container;
 import net.avatar.realms.spigot.commandsign.controller.EditingConfiguration;
-import net.avatar.realms.spigot.commandsign.data.Container;
 import net.avatar.realms.spigot.commandsign.model.CommandBlock;
 import net.md_5.bungee.api.ChatColor;
 

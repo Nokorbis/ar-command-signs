@@ -13,7 +13,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import net.avatar.realms.spigot.commandsign.CommandSign;
-import net.avatar.realms.spigot.commandsign.data.Container;
 import net.avatar.realms.spigot.commandsign.model.CommandBlock;
 import net.avatar.realms.spigot.commandsign.model.CommandSignsException;
 import net.avatar.realms.spigot.commandsign.utils.CommandSignUtils;

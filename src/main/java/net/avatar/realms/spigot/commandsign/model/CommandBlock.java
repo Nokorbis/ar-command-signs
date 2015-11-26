@@ -15,7 +15,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import net.avatar.realms.spigot.commandsign.CommandSign;
-import net.avatar.realms.spigot.commandsign.data.Container;
+import net.avatar.realms.spigot.commandsign.controller.Container;
 import net.avatar.realms.spigot.commandsign.utils.CommandSignUtils;
 import net.avatar.realms.spigot.commandsign.utils.Messages;
 

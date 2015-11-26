@@ -4,7 +4,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import net.avatar.realms.spigot.commandsign.controller.CommandSignCommands;
 import net.avatar.realms.spigot.commandsign.controller.CommandSignListener;
-import net.avatar.realms.spigot.commandsign.data.Container;
+import net.avatar.realms.spigot.commandsign.controller.Container;
 
 public class CommandSign extends JavaPlugin{
 
