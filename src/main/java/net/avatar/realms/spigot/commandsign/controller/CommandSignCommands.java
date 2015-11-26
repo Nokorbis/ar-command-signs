@@ -46,7 +46,7 @@ public class CommandSignCommands implements CommandExecutor{
 			}
 			else if (subCmd.equals("DELETE") || subCmd.equals("DEL")
 					|| subCmd.equals("REMOVE") || subCmd.equals("REM")) {
-				return delete ((Player) sender);
+				return delete ((Player) sender, args);
 			}
 			else if (subCmd.equals("COPY") || subCmd.equals("CP")) {
 				return copy ((Player) sender, args);
@@ -208,15 +208,39 @@ public class CommandSignCommands implements CommandExecutor{
 		return false;
 	}
 
-	private boolean delete (Player player) throws CommandSignsException {
+	private boolean delete (Player player, String[] args) throws CommandSignsException {
 		if (!player.hasPermission("commandsign.admin.*") && !player.hasPermission("commandsign.admin.delete")) {
 			throw new CommandSignsException(Messages.NO_PERMISSION);
 		}
 
-		if (isPlayerAvailable(player)) {
-			Container.getContainer().getDeletingBlocks().put(player, null);
-			player.sendMessage(ChatColor.GOLD + "Click on the command block you want to delete.");
-			return true;
+		if (args.length < 2) {
+			if (isPlayerAvailable(player)) {
+				Container.getContainer().getDeletingBlocks().put(player, null);
+				player.sendMessage(ChatColor.GOLD + "Click on the command block you want to delete.");
+				return true;
+			}
+		}
+		else {
+			try {
+				long id = Long.parseLong(args[1]);
+				if (isPlayerAvailable(player)) {
+					CommandBlock cmd = Container.getContainer().getCommandBlockById(id);
+					Container.getContainer().getDeletingBlocks().put(player, cmd.getLocation());
+					player.sendMessage(ChatColor.GOLD + "Click on the command block or enter the same command to delete the block to validate the deletion.");
+				}
+				else if (Container.getContainer().getDeletingBlocks().containsKey(player)){
+					Location loc = Container.getContainer().getDeletingBlocks().get(player);
+					CommandBlock cmd = Container.getContainer().getCommandBlocks().get(loc);
+					if  (cmd != null && cmd.getId() == id) {
+						Container.getContainer().getCommandBlocks().remove(loc);
+						Container.getContainer().getDeletingBlocks().remove(player);
+						player.sendMessage(ChatColor.GREEN + "Command block properly deleted");
+					}
+				}
+			}
+			catch (NumberFormatException ex) {
+				throw new CommandSignsException(Messages.NUMBER_ARGUMENT);
+			}
 		}
 
 		return false;
