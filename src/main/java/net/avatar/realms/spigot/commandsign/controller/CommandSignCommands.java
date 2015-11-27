@@ -111,14 +111,19 @@ public class CommandSignCommands implements CommandExecutor{
 			StringBuilder builder = new StringBuilder();
 			builder.append(ChatColor.AQUA);
 			builder.append(cmd.blockSummary());
+			builder.append(ChatColor.GRAY);
 			builder.append(" --- ");
+			builder.append(ChatColor.GOLD);
 			if (cmd.getName() != null) {
 				builder.append(cmd.getName());
 			}
 			else {
 				builder.append(Messages.NO_NAME);
 			}
+			builder.append(ChatColor.GRAY);
 			builder.append(" --- ");
+			builder.append(ChatColor.BOLD);
+			builder.append(ChatColor.DARK_PURPLE);
 			builder.append(cmd.getId());
 			sender.sendMessage(builder.toString());
 		}
@@ -316,7 +321,18 @@ public class CommandSignCommands implements CommandExecutor{
 				}
 			}
 			for (CommandBlock cmd : cmds) {
-				sender.sendMessage("Block [" + cmd.getId() +"] at " + cmd.blockSummary());
+				StringBuilder builder = new StringBuilder();
+				builder.append(ChatColor.GOLD);
+				builder.append(cmd.getName());
+				builder.append(ChatColor.GRAY);
+				builder.append("[");
+				builder.append(ChatColor.DARK_PURPLE);
+				builder.append(cmd.getId());
+				builder.append(ChatColor.GRAY);
+				builder.append("] at");
+				builder.append(ChatColor.AQUA);
+				builder.append(cmd.blockSummary());
+				sender.sendMessage(builder.toString());
 			}
 		}
 		catch (NumberFormatException ex) {
