@@ -313,11 +313,11 @@ public class CommandSignCommands implements CommandExecutor{
 				throw new CommandSignsException(Messages.INVALID_COMMAND_ID);
 			}
 			sender.teleport(cmd.getLocation(), TeleportCause.COMMAND);
+			return true;
 		}
 		catch (NumberFormatException ex) {
 			throw new CommandSignsException(Messages.NUMBER_ARGUMENT);
 		}
-		return false;
 	}
 
 	private boolean list(Player sender, String[] args) throws CommandSignsException {
@@ -333,9 +333,10 @@ public class CommandSignCommands implements CommandExecutor{
 			catch (NumberFormatException ex) {
 			}
 		}
+		int max = index * LIST_SIZE;
 		sender.sendMessage(ChatColor.AQUA + "Command signs list : " + index);
 
-		int max = index * LIST_SIZE;
+
 		List<CommandBlock> cmds = Container.getContainer().getCommandBlocksByIdRange(max - LIST_SIZE, max -1);
 		Collections.sort(cmds, new Comparator<CommandBlock>() {
 			@Override
