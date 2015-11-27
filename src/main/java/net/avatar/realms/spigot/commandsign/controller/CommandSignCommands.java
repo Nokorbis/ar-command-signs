@@ -11,6 +11,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 import net.avatar.realms.spigot.commandsign.CommandSign;
 import net.avatar.realms.spigot.commandsign.model.CommandBlock;
@@ -63,6 +64,9 @@ public class CommandSignCommands implements CommandExecutor{
 			else if (subCmd.equals("LIST") || subCmd.equals("L")) {
 				return list((Player) sender, args);
 			}
+			else if (subCmd.equals("TELEPORT") || subCmd.equals("TP")) {
+				return teleport((Player) sender, args);
+			}
 			else if (subCmd.equals("VERSION") || subCmd.equals("V")) {
 				sender.sendMessage(ChatColor.AQUA + "CommandSign version : " + CommandSign.getPlugin().getDescription().getVersion());
 				return true;
@@ -82,53 +86,6 @@ public class CommandSignCommands implements CommandExecutor{
 	 * These commands are only initiating command block creation/edition/deletion.
 	 * The real configuration is made in the listener.
 	 */
-
-	private boolean list(Player sender, String[] args) throws CommandSignsException {
-		if (!sender.hasPermission("commandsign.admin.*") && !sender.hasPermission("commandsign.admin.list")) {
-			throw new CommandSignsException(Messages.NO_PERMISSION);
-		}
-
-		int index = 1;
-		if (args.length >= 2) {
-			try {
-				index = Integer.parseInt(args[1]);
-			}
-			catch (NumberFormatException ex) {
-			}
-		}
-		sender.sendMessage(ChatColor.AQUA + "Command signs list : " + index);
-
-		int max = index * LIST_SIZE;
-		List<CommandBlock> cmds = Container.getContainer().getCommandBlocksByIdRange(max - LIST_SIZE, max -1);
-		Collections.sort(cmds, new Comparator<CommandBlock>() {
-			@Override
-			public int compare(CommandBlock o1, CommandBlock o2) {
-				return (int) (o1.getId() - o2.getId());
-			}
-		});
-
-		for (CommandBlock cmd : cmds) {
-			StringBuilder builder = new StringBuilder();
-			builder.append(ChatColor.AQUA);
-			builder.append(cmd.blockSummary());
-			builder.append(ChatColor.GRAY);
-			builder.append(" --- ");
-			builder.append(ChatColor.GOLD);
-			if (cmd.getName() != null) {
-				builder.append(cmd.getName());
-			}
-			else {
-				builder.append(Messages.NO_NAME);
-			}
-			builder.append(ChatColor.GRAY);
-			builder.append(" --- ");
-			builder.append(ChatColor.BOLD);
-			builder.append(ChatColor.DARK_PURPLE);
-			builder.append(cmd.getId());
-			sender.sendMessage(builder.toString());
-		}
-		return true;
-	}
 
 	private boolean info(Player player, String[] args) throws CommandSignsException {
 		if (!player.hasPermission("commandsign.admin.*") && !player.hasPermission("commandsign.admin.info")) {
@@ -339,7 +296,74 @@ public class CommandSignCommands implements CommandExecutor{
 			throw new CommandSignsException(Messages.NUMBER_ARGUMENT);
 		}
 
+		return true;
+	}
 
+	private boolean teleport(Player sender, String[] args) throws CommandSignsException {
+		if (!sender.hasPermission("commandsign.admin.*") && !sender.hasPermission("commandsign.admin.teleport")) {
+			throw new CommandSignsException(Messages.NO_PERMISSION);
+		}
+		if (args.length < 2) {
+			throw new CommandSignsException(Messages.COMMAND_NEEDS_ARGUMENTS);
+		}
+		try {
+			long id = Long.parseLong(args[1]);
+			CommandBlock cmd = Container.getContainer().getCommandBlockById(id);
+			if (cmd == null) {
+				throw new CommandSignsException(Messages.INVALID_COMMAND_ID);
+			}
+			sender.teleport(cmd.getLocation(), TeleportCause.COMMAND);
+		}
+		catch (NumberFormatException ex) {
+			throw new CommandSignsException(Messages.NUMBER_ARGUMENT);
+		}
+		return false;
+	}
+
+	private boolean list(Player sender, String[] args) throws CommandSignsException {
+		if (!sender.hasPermission("commandsign.admin.*") && !sender.hasPermission("commandsign.admin.list")) {
+			throw new CommandSignsException(Messages.NO_PERMISSION);
+		}
+
+		int index = 1;
+		if (args.length >= 2) {
+			try {
+				index = Integer.parseInt(args[1]);
+			}
+			catch (NumberFormatException ex) {
+			}
+		}
+		sender.sendMessage(ChatColor.AQUA + "Command signs list : " + index);
+
+		int max = index * LIST_SIZE;
+		List<CommandBlock> cmds = Container.getContainer().getCommandBlocksByIdRange(max - LIST_SIZE, max -1);
+		Collections.sort(cmds, new Comparator<CommandBlock>() {
+			@Override
+			public int compare(CommandBlock o1, CommandBlock o2) {
+				return (int) (o1.getId() - o2.getId());
+			}
+		});
+
+		for (CommandBlock cmd : cmds) {
+			StringBuilder builder = new StringBuilder();
+			builder.append(ChatColor.AQUA);
+			builder.append(cmd.blockSummary());
+			builder.append(ChatColor.GRAY);
+			builder.append(" --- ");
+			builder.append(ChatColor.GOLD);
+			if (cmd.getName() != null) {
+				builder.append(cmd.getName());
+			}
+			else {
+				builder.append(Messages.NO_NAME);
+			}
+			builder.append(ChatColor.GRAY);
+			builder.append(" --- ");
+			builder.append(ChatColor.BOLD);
+			builder.append(ChatColor.DARK_PURPLE);
+			builder.append(cmd.getId());
+			sender.sendMessage(builder.toString());
+		}
 		return true;
 	}
 
