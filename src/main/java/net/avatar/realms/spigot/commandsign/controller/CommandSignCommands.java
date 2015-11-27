@@ -333,11 +333,13 @@ public class CommandSignCommands implements CommandExecutor{
 			catch (NumberFormatException ex) {
 			}
 		}
+
 		int max = index * LIST_SIZE;
-		sender.sendMessage(ChatColor.AQUA + "Command signs list : " + index);
+		int min = max - LIST_SIZE;
+		max--;
+		sender.sendMessage(ChatColor.AQUA + "Command signs list : " + min + "-" + max + "/" + CommandBlock.getBiggerUsedId());
 
-
-		List<CommandBlock> cmds = Container.getContainer().getCommandBlocksByIdRange(max - LIST_SIZE, max -1);
+		List<CommandBlock> cmds = Container.getContainer().getCommandBlocksByIdRange(min, max);
 		Collections.sort(cmds, new Comparator<CommandBlock>() {
 			@Override
 			public int compare(CommandBlock o1, CommandBlock o2) {

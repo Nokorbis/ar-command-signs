@@ -81,6 +81,10 @@ public class CommandBlock {
 		this.setId(id);
 	}
 
+	public static final long getBiggerUsedId() {
+		return biggerUsedId;
+	}
+
 	private static long getFreeId() {
 		for (long i = 0; i <= biggerUsedId; i++) {
 			if (!usedIds.contains(i)) {
