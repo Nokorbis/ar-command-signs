@@ -1,3 +1,29 @@
+CommandSign v1.3.0
+    Add more variable for commands
+        - %all% for all players
+        - %radius=9% (where 9 can be any number) for all players that are less that 9 blocks around the player
+    Add time between usage of the command sign
+        - Global
+       	- Per player
+    Add id to command blocks so that they can be remotely managed
+        - /commandsign edit <id>
+        - /commandsign delete <id>
+        - /commandsign copy <id>
+        - /commandsign info <id>
+    Add name to command blocks (optional) (Mainly for the listing feature)
+    Add a list command
+        - /commandsign list [page]
+    Add purge command (delete invalid command blocks) (invalid location)
+    	- /commandsign purge
+   	Add near command (list all command blocks in a given radius)
+   	    - /commandsign near <radius>
+   	Add teleport command to be teleported to a command block
+   		- /commandsign tp <id>
+    Bugfix : Show command instead of needed permissions when removing a command
+    Bugfix : Can add many times the same command/permission
+    Copy command now also copy Timers and Economy Prices
+    
+
 CommandSign v1.2.4
     Can execute command as op or as server
     Edit command properly show commands (instead of needed permissions)
