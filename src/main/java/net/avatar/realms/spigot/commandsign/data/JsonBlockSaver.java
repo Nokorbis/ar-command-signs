@@ -1,11 +1,6 @@
 package net.avatar.realms.spigot.commandsign.data;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -15,12 +10,14 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
+import com.google.gson.stream.JsonWriter;
 import net.avatar.realms.spigot.commandsign.CommandSign;
 import net.avatar.realms.spigot.commandsign.model.CommandBlock;
 
 public class JsonBlockSaver implements IBlockSaver{
 	
 	private static final String FILENAME = "commandblocks.json";
+	private static final String CHARSET = "UTF-8";
 	
 	private File saveFile;
 	
@@ -54,19 +51,21 @@ public class JsonBlockSaver implements IBlockSaver{
 		}
 		
 		Gson gson = builder.create();
+
 		String json = gson.toJson(datas);
-		
-		FileWriter writer = null;
+
+		OutputStreamWriter osWriter = null;
 		try {
-			writer = new FileWriter(saveFile);
-			writer.write(json);
+			OutputStream os = new FileOutputStream(saveFile);
+			osWriter = new OutputStreamWriter(os, CHARSET);
+			osWriter.write(json);
 		} catch (IOException e) {
 			CommandSign.getPlugin().getLogger().warning("Was not able to save json file");
 		}
 		finally {
-			if (writer != null) {
+			if (osWriter != null) {
 				try {
-					writer.close();
+					osWriter.close();
 				} catch (IOException e) {
 				}
 			}
@@ -80,9 +79,14 @@ public class JsonBlockSaver implements IBlockSaver{
 			return null;
 		}
 		
-		FileReader reader = null;
+		InputStreamReader reader = null;
 		try {
-			reader = new FileReader(saveFile);
+			InputStream is = new FileInputStream(saveFile);
+			try {
+				reader = new InputStreamReader(is, CHARSET);
+			}
+			catch (UnsupportedEncodingException e) {
+			}
 			BufferedReader br = new BufferedReader(reader);
 			Gson gson = builder.create();
 			
