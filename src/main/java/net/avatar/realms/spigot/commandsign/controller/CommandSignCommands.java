@@ -68,7 +68,7 @@ public class CommandSignCommands implements CommandExecutor{
 				return teleport((Player) sender, args);
 			}
 			else if (subCmd.equals("VERSION") || subCmd.equals("V")) {
-				sender.sendMessage(ChatColor.AQUA + "CommandSign version : " + CommandSign.getPlugin().getDescription().getVersion());
+				sender.sendMessage(ChatColor.AQUA + "CommandSign version : " + CommandSign.getPlugin().getDescription().getVersion() + " developed by Nokorbis");
 				return true;
 			}
 			else {
@@ -377,7 +377,7 @@ public class CommandSignCommands implements CommandExecutor{
 	 * <code>false</code> if the player is already doing something
 	 * @throws CommandSignsException 
 	 */
-	private boolean isPlayerAvailable(Player player) throws CommandSignsException {
+	protected boolean isPlayerAvailable(Player player) throws CommandSignsException {
 		if (Container.getContainer().getCreatingConfigurations().containsKey(player)) {
 			throw new CommandSignsException(Messages.ALREADY_CREATING_CONFIGURATION);
 		}

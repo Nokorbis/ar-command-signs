@@ -1,16 +1,66 @@
 name: CommandSign
 main: net.avatar.realms.spigot.commandsign.CommandSign
 author: Nokorbis
-version: 1.3.0
+description: Allows admins to create Command Blocks (signs, buttons or plates) that can be executed on action.
+version: 1.3.1
 website: https://www.spigotmc.org/resources/command-signs.10512/
-softdepend: [Multiverse-Core, Vault]
+softdepend: [Vault]
+load: POSTWORLD
 commands:
-    commandsign:
-        description: Command Signs commands.
-        aliases: [arcs, cmdsign]
-        usage: |
-             /<command> info
-             /<command> create
-             /<command> copy
-             /<command> edit
-             /<command> delete
+   commandsign:
+      description: Command Signs commands.
+      aliases: [arcs, cmdsign]
+      usage: /command ?
+permissions:
+   commandsign.admin.*:
+      default: op
+      description: Gives access to all Command Signs commands
+      children:
+         commandsign.admin.info: true
+         commandsign.admin create: true
+         commandsign.admin.edit: true
+         commandsign.admin.delete: true
+         commandsign.admin.copy: true
+         commandsign.admin.purge: true
+         commandsign.admin.near: true
+         commandsign.admin.list: true
+         commandsign.admin.teleport: true
+         commandsign.admin.version: true
+         commandsign.timer.bypass: true
+         commandsign.costs.bypass: true
+   commandsign.timer.bypass:
+      default: false
+      description: Allows to bypass timers on command signs
+   commandsign.costs.bypass:
+      default: false
+      description: Allows to bypass costs on command signs
+   commandsign.admin.info:
+      default: false
+      description: Gives access to the info subcommand
+   commandsign.admin.create:
+      default: false
+      description: Gives access to the create subcommand
+   commandsign.admin.edit:
+      default: false
+      description: Gives access to the edit command
+   commandsign.admin.delete:
+      default: false
+      description: Gives access to the delete command
+   commandsign.admin.copy:
+      default: false
+      description: Gives access to the copy command
+   commandsign.admin.purge:
+      default: false
+      description: Gives access to the purge command
+   commandsign.admin.near:
+      default: false
+      description: Gives access to the near command
+   commandsign.admin.list:
+      default: false
+      description: Gives access to the list command
+   commandsign.admin.teleport:
+      default: false
+      description: Gives access to the teleport command
+   commandsign.admin.version:
+      default: true
+      description: Gives access to the version command

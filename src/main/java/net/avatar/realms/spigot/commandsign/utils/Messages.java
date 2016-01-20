@@ -26,5 +26,15 @@ public class Messages {
 
 	public static String NO_NAME = "No Name";
 
+	public static String CLICK_FOR_INFO = "Click on command block whose you want information";
+
+	public static String CLICK_TO_EDIT = "Click on the block you want to edit";
+
+	public static String CLICK_TO_DELETE = "Click on the command block you want to delete.";
+
+	public static String COMMAND_DELETED = "Command block properly deleted";
+
+	public static String CONFIRM_DELETION = "Click on the command block or enter the same command to delete the block to validate the deletion.";
+
 
 }
