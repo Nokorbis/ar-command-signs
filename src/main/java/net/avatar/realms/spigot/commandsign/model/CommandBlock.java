@@ -388,46 +388,6 @@ public class CommandBlock {
 		return true;
 	}
 
-	public void info (Player player, ChatColor c) {
-		player.sendMessage(c + "Id : " + this.id);
-		player.sendMessage(c + "Name : " + ((this.name == null)? Messages.NO_NAME : this.name));
-		player.sendMessage(c + "Block : " + blockSummary());
-		if (Economy.getEconomy() != null) {
-			player.sendMessage(c + "Costs : " + Economy.getEconomy().format(this.economyPrice));
-		}
-		player.sendMessage(c + "Needed permissions :");
-		int cpt = 1;
-		for (String perm : this.neededPermissions) {
-			player.sendMessage(ChatColor.GRAY + "---"+ cpt++ + ". " + perm);
-		}
-		player.sendMessage(c + "Permissions :");
-		cpt = 1;
-		for (String perm : this.permissions) {
-			player.sendMessage(ChatColor.GRAY + "---"+ cpt++ + ". " + perm);
-		}
-		player.sendMessage(c + "Commands :");
-		cpt = 1;
-		for (String cmd : this.commands) {
-			player.sendMessage(ChatColor.GRAY + "---"+ cpt++ + ". " + cmd);
-		}
-		if ((this.timeBeforeExecution != null) && (this.timeBeforeExecution > 0)) {
-			player.sendMessage(c + "Time before execution :");
-			player.sendMessage(ChatColor.GRAY + "" + this.timeBeforeExecution + " seconds");
-			if (this.cancelledOnMove) {
-				player.sendMessage(ChatColor.GRAY + "---" + "Cancelled on move");
-			}
-			if (this.resetOnMove) {
-				player.sendMessage(ChatColor.GRAY + "---" + "Reset on move");
-			}
-		}
-		if (this.timeBetweenUsage > 0) {
-			player.sendMessage(c + "Time between usages : " + this.timeBetweenUsage);
-		}
-		if (this.timeBetweenPlayerUsage > 0) {
-			player.sendMessage(c + "Time between commands : " + this.timeBetweenPlayerUsage);
-		}
-	}
-
 	public String blockSummary () {
 		if (this.location == null) {
 			return "";

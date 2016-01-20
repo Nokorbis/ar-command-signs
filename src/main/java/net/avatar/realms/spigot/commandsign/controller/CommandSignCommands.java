@@ -76,7 +76,7 @@ public class CommandSignCommands implements CommandExecutor, TabCompleter {
 	public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
 		List<String> result = new ArrayList<String>();
 		if (args.length == 0) {
-			result.add("bending");
+			result.add("commandsign");
 		}
 		else if (args.length == 1) {
 			List<String> values = new LinkedList<String>();

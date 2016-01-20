@@ -47,4 +47,27 @@ public class Messages {
 
 	public static String LIST_SUMMARY = "Command signs list : {MIN}-{MAX}/{CMD_AMOUNT}";
 
+	public static String NAME = "Name";
+
+	public static String BLOCK = "Block";
+
+	public static String COSTS = "Costs";
+
+	public static String NEEDED_PERMISSIONS = "Needed permissions";
+
+	public static String PERMISSIONS = "Permissions";
+
+	public static String COMMANDS = "Commands";
+
+	public static String TIME_BEFORE_EXECUTION = "Time before execution";
+
+	public static String TIME_BETWEEN_USAGES = "Time between usages";
+
+	public static String TIME_BETWEEN_PLAYER_USAGE = "Time between player usage";
+
+	public static String SECONDS = "seconds";
+
+	public static String CANCELLED_ON_MOVE = "Cancelled on move";
+
+	public static String RESET_ON_MOVE = "Reset on move";
 }
