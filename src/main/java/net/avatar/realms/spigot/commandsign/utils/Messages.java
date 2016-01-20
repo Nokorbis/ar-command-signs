@@ -71,5 +71,11 @@ public class Messages {
 
 	public static String RESET_ON_MOVE = "Reset on move";
 
+	public static String NO_BLOCK_SELECTED = "You haven't select any command block yet.";
+
+	public static String SUCCESS_CREATION = "Command block created !";
+
+	public static String SUCCESS_EDITION = "Command block edited !";
+
 
 }

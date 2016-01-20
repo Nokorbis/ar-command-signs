@@ -1,5 +1,6 @@
 package net.avatar.realms.spigot.commandsign.controller;
 
+import net.avatar.realms.spigot.commandsign.utils.Messages;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -34,7 +35,7 @@ public class EditingConfiguration<T> {
 
 	public void display() {
 		if (this.editingData == null) {
-			this.editor.sendMessage(ChatColor.DARK_RED + "You haven't select any command block yet.");
+			this.editor.sendMessage(ChatColor.DARK_RED + Messages.NO_BLOCK_SELECTED);
 			return;
 		}
 		if (this.currentMenu != null) {
@@ -42,10 +43,10 @@ public class EditingConfiguration<T> {
 		}
 		else {
 			if (this.creating) {
-				this.editor.sendMessage(ChatColor.GREEN + "Command block created !");
+				this.editor.sendMessage(ChatColor.GREEN + Messages.SUCCESS_CREATION);
 			}
 			else {
-				this.editor.sendMessage(ChatColor.GREEN + "Command block edited !");
+				this.editor.sendMessage(ChatColor.GREEN + Messages.SUCCESS_EDITION);
 			}
 		}
 	}
