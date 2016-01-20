@@ -26,6 +26,7 @@ permissions:
          commandsign.admin.list: true
          commandsign.admin.teleport: true
          commandsign.admin.version: true
+         commandsign.admin.help: true
          commandsign.timer.bypass: true
          commandsign.costs.bypass: true
    commandsign.timer.bypass:
@@ -64,3 +65,6 @@ permissions:
    commandsign.admin.version:
       default: true
       description: Gives access to the version command
+   commandsign.admin.help:
+      default: true
+      description: Gives access to the help command

@@ -60,6 +60,7 @@ public class CommandSignCommands implements CommandExecutor, TabCompleter {
 						}
 						catch (CommandSignsCommandException e) {
 							sender.sendMessage(ChatColor.RED + e.getMessage());
+							return true;
 						}
 					}
 					else {

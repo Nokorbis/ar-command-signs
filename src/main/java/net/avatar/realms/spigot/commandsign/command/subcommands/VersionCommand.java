@@ -22,9 +22,6 @@ public class VersionCommand extends Command {
 
     @Override
     public boolean execute(CommandSender sender, List<String> args) throws CommandSignsCommandException {
-        if (!hasBasePermission(sender)) {
-            throw new CommandSignsCommandException(Messages.NO_PERMISSION);
-        }
         sender.sendMessage(ChatColor.AQUA + "CommandSign version : " + CommandSign.getPlugin().getDescription().getVersion() + " developed by Nokorbis");
         return true;
     }

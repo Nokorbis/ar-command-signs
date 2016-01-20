@@ -25,9 +25,6 @@ public class TeleportCommand extends Command {
 
     @Override
     public boolean execute(CommandSender sender, List<String> args) throws CommandSignsCommandException {
-        if (!hasBasePermission(sender)) {
-            throw new CommandSignsCommandException(Messages.NO_PERMISSION);
-        }
         if (!(sender instanceof Player)) {
             throw new CommandSignsCommandException(Messages.PLAYER_COMMAND);
         }
