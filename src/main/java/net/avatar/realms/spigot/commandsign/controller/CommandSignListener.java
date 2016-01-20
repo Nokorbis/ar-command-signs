@@ -250,7 +250,7 @@ public class CommandSignListener implements Listener{
 		}
 
 		if (Container.getContainer().getCommandBlocks().containsKey(block.getLocation())) {
-			Container.getContainer().getCommandBlocks().get(block.getLocation()).info(player, ChatColor.DARK_GREEN);
+			CommandSignUtils.info(player, ChatColor.DARK_GREEN, Container.getContainer().getCommandBlocks().get(block.getLocation()));
 			Container.getContainer().getInfoPlayers().remove(player);
 		}
 		else {

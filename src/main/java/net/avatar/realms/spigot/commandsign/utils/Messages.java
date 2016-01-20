@@ -70,4 +70,6 @@ public class Messages {
 	public static String CANCELLED_ON_MOVE = "Cancelled on move";
 
 	public static String RESET_ON_MOVE = "Reset on move";
+
+
 }
