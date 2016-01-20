@@ -16,7 +16,9 @@ public class CommandSign extends JavaPlugin{
 		plugin = this;
 
 		Economy.initialize();
-		this.getCommand("commandsign").setExecutor(new CommandSignCommands());
+		CommandSignCommands executor = new CommandSignCommands();
+		this.getCommand("commandsign").setExecutor(executor);
+		this.getCommand("commandsign").setTabCompleter(executor);
 		this.getServer().getPluginManager().registerEvents(new CommandSignListener(), this);
 	}
 

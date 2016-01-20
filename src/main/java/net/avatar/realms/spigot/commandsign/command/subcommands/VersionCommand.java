@@ -3,7 +3,6 @@ package net.avatar.realms.spigot.commandsign.command.subcommands;
 import net.avatar.realms.spigot.commandsign.CommandSign;
 import net.avatar.realms.spigot.commandsign.command.Command;
 import net.avatar.realms.spigot.commandsign.model.CommandSignsCommandException;
-import net.avatar.realms.spigot.commandsign.utils.Messages;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
