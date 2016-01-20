@@ -1,5 +1,6 @@
 package net.avatar.realms.spigot.commandsign.utils;
 
+
 public class Messages {
 
 	public static String NO_PERMISSION = "You do NOT have the permission to use this command.";
@@ -36,5 +37,14 @@ public class Messages {
 
 	public static String CONFIRM_DELETION = "Click on the command block or enter the same command to delete the block to validate the deletion.";
 
+	public static String CLICK_TO_COPY= "Click on the command block you want to copy.";
+
+	public static String CLICK_TO_PASTE = "Block copied. Click on another block to paste the configuration.";
+
+	public static String PURGED_INVALID_BLOCKS = "Purged {AMOUNT} invalid command blocks.";
+
+	public static String AT = "at";
+
+	public static String LIST_SUMMARY = "Command signs list : {MIN}-{MAX}/{CMD_AMOUNT}";
 
 }

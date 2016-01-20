@@ -1,0 +1,52 @@
+package net.avatar.realms.spigot.commandsign.command.subcommands;
+
+import net.avatar.realms.spigot.commandsign.command.Command;
+import net.avatar.realms.spigot.commandsign.controller.Container;
+import net.avatar.realms.spigot.commandsign.model.CommandBlock;
+import net.avatar.realms.spigot.commandsign.model.CommandSignsCommandException;
+import net.avatar.realms.spigot.commandsign.utils.Messages;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.command.CommandSender;
+
+import java.util.LinkedList;
+import java.util.List;
+
+/**
+ * Created by nokorbis on 1/20/16.
+ */
+public class PurgeCommand extends Command{
+
+    public PurgeCommand () {
+        this.command = "purge";
+
+        this.basePermission = "commandsign.admin.purge";
+    }
+    @Override
+    public boolean execute(CommandSender sender, List<String> args) throws CommandSignsCommandException {
+        if (!hasBasePermission(sender)) {
+            throw new CommandSignsCommandException(Messages.NO_PERMISSION);
+        }
+
+        LinkedList<Location> toRemove = new LinkedList<Location>();
+        for (CommandBlock cmd : Container.getContainer().getCommandBlocks().values()) {
+            if (!cmd.validate()) {
+                toRemove.add(cmd.getLocation());
+            }
+        }
+
+        for (Location loc : toRemove) {
+            Container.getContainer().getCommandBlocks().remove(loc);
+        }
+
+        String msg = Messages.PURGED_INVALID_BLOCKS;
+        msg = msg.replaceAll("\\{AMOUNT\\}", String.valueOf(toRemove.size()));
+        sender.sendMessage(ChatColor.GREEN + msg);
+        return true;
+    }
+
+    @Override
+    public void printUsage(CommandSender sender) {
+        sender.sendMessage("/commandsign purge");
+    }
+}
