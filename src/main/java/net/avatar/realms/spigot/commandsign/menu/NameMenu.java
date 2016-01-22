@@ -7,22 +7,15 @@ import net.avatar.realms.spigot.commandsign.utils.Messages;
 public class NameMenu extends EditionMenu {
 
 	public NameMenu(EditionMenu parent) {
-		super(parent, "Name");
+		super(parent, Messages.get("menu.name"));
 	}
 
 	@Override
 	public void display(EditingConfiguration<CommandBlock> config) {
 		if (config.getEditor() != null) {
-			StringBuilder builder = new StringBuilder();
-			builder.append("Enter the name of the command block (currently : " );
-			if (config.getEditingData().getName() == null) {
-				builder.append(Messages.NO_NAME);
-			}
-			else {
-				builder.append(config.getEditingData().getName());
-			}
-			builder.append(") : ");
-			config.getEditor().sendMessage(builder.toString());
+			String msg = Messages.get("menu.name_edit");
+			msg = msg.replaceAll("\\{NAME\\}", config.getEditingData().getName() == null ? Messages.get("info.no_name"): config.getEditingData().getName());
+			config.getEditor().sendMessage(msg);
 		}
 	}
 
@@ -43,7 +36,7 @@ public class NameMenu extends EditionMenu {
 			builder.append(cmd.getName());
 		}
 		else {
-			builder.append(Messages.NO_NAME);
+			builder.append(Messages.get("info.no_name"));
 		}
 		return builder.toString();
 	}

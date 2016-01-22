@@ -2,17 +2,17 @@ package net.avatar.realms.spigot.commandsign.menu;
 
 import net.avatar.realms.spigot.commandsign.controller.EditingConfiguration;
 import net.avatar.realms.spigot.commandsign.model.CommandBlock;
+import net.avatar.realms.spigot.commandsign.utils.Messages;
 
 public class TimerUsageSetMenu extends EditionMenu {
 
 	public TimerUsageSetMenu(EditionMenu parent) {
-		super(parent, "Time between usage");
+		super(parent, Messages.get("info.time_between_usages"));
 	}
 
 	@Override
 	public void display(EditingConfiguration<CommandBlock> config) {
-		config.getEditor().sendMessage(
-				c + "Enter the amount of time (in seconds) that players must wait between each usage of the command block:");
+		config.getEditor().sendMessage(c + Messages.get("menu.time_between_edit"));
 
 	}
 

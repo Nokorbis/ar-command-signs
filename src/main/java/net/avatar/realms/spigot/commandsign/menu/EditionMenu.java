@@ -8,7 +8,6 @@ import org.bukkit.ChatColor;
 import net.avatar.realms.spigot.commandsign.model.CommandBlock;
 
 /**
- * Not used yet.
  *
  */
 public abstract class EditionMenu implements IEditionMenu<CommandBlock> {

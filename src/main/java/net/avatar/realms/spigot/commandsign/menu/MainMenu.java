@@ -2,6 +2,7 @@ package net.avatar.realms.spigot.commandsign.menu;
 
 import java.util.Map.Entry;
 
+import net.avatar.realms.spigot.commandsign.utils.Messages;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -14,7 +15,7 @@ import net.avatar.realms.spigot.commandsign.model.CommandBlock;
 public class MainMenu extends EditionMenu {
 
 	public MainMenu() {
-		super(null, "Main Menu");
+		super(null, Messages.get("menu.main_title"));
 		this.subMenus.put(2, new NameMenu(this));
 		this.subMenus.put(3, new NeededPermissionsMenu(this));
 
@@ -35,14 +36,14 @@ public class MainMenu extends EditionMenu {
 	@Override
 	public void display(EditingConfiguration<CommandBlock> config) {
 		Player editor = config.getEditor();
-		editor.sendMessage(c + "1. Refresh");
+		editor.sendMessage(c + "1. " + Messages.get("menu.refresh"));
 		StringBuilder block = new StringBuilder();
 		block.append(c);
-		block.append("   Block: ");
+		block.append("   " + Messages.get("info.block") + ": ");
 		if (config.getEditingData().getLocation() == null) {
-			block.append("None");
+			block.append(Messages.get("menu.none"));
 			if (config.isCreating()) {
-				block.append(" [Set on click]");
+				block.append(" " + Messages.get("menu.set_on_click"));
 			}
 		}
 		else {
@@ -61,7 +62,7 @@ public class MainMenu extends EditionMenu {
 		for (Entry<Integer, EditionMenu> menu : this.subMenus.entrySet()) {
 			editor.sendMessage(c + "" + menu.getKey() + ". " + menu.getValue().formatName(config.getEditingData()));
 		}
-		editor.sendMessage(ChatColor.GREEN + "9. Done");
+		editor.sendMessage(ChatColor.GREEN + "9. " + Messages.get("menu.done"));
 	}
 
 	@Override
@@ -86,7 +87,7 @@ public class MainMenu extends EditionMenu {
 					}
 				}
 				else {
-					config.getEditor().sendMessage(ChatColor.RED + "The command block is not valid.");
+					config.getEditor().sendMessage(ChatColor.RED + Messages.get("menu.invalid_block"));
 				}
 			}
 			else if (this.subMenus.containsKey(index)) {
@@ -98,7 +99,7 @@ public class MainMenu extends EditionMenu {
 			}
 		}
 		catch (NumberFormatException ex) {
-			config.getEditor().sendMessage(ChatColor.DARK_RED + "You must enter a number to go through the menu.");
+			config.getEditor().sendMessage(ChatColor.DARK_RED + Messages.get("menu.number_needed"));
 		}
 	}
 }

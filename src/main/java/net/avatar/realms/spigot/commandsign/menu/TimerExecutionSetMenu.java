@@ -2,17 +2,17 @@ package net.avatar.realms.spigot.commandsign.menu;
 
 import net.avatar.realms.spigot.commandsign.controller.EditingConfiguration;
 import net.avatar.realms.spigot.commandsign.model.CommandBlock;
+import net.avatar.realms.spigot.commandsign.utils.Messages;
 
 public class TimerExecutionSetMenu extends EditionMenu {
 
 	public TimerExecutionSetMenu(EditionMenu parent) {
-		super(parent, "Time before execution");
+		super(parent, Messages.get("info.time_before_execution"));
 	}
 
 	@Override
 	public void display(EditingConfiguration<CommandBlock> config) {
-		config.getEditor().sendMessage(
-				c + "Enter the amount of time (in seconds) that the player must wait before the execution of the command:");
+		config.getEditor().sendMessage(c + Messages.get("menu.time_before_edit"));
 	}
 
 	@Override

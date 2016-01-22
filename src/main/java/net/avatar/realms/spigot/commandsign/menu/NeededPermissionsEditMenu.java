@@ -1,5 +1,6 @@
 package net.avatar.realms.spigot.commandsign.menu;
 
+import net.avatar.realms.spigot.commandsign.utils.Messages;
 import org.bukkit.ChatColor;
 
 import net.avatar.realms.spigot.commandsign.controller.EditingConfiguration;
@@ -8,17 +9,17 @@ import net.avatar.realms.spigot.commandsign.model.CommandBlock;
 public class NeededPermissionsEditMenu extends EditionMenu {
 	
 	public NeededPermissionsEditMenu(EditionMenu parent) {
-		super(parent, "Edit");
+		super(parent, Messages.get("menu.edit"));
 	}
 
 	@Override
 	public void display(EditingConfiguration<CommandBlock> config) {
-		config.getEditor().sendMessage(c + "Needed permissions : ");
+		config.getEditor().sendMessage(c + Messages.get("info.needed_permissions") + " : ");
 		int cpt = 1;
 		for (String perm : config.getEditingData().getNeededPermissions()) {
 			config.getEditor().sendMessage(ChatColor.GRAY + "---" + cpt++ + ". " + perm);
 		}
-		config.getEditor().sendMessage(c + "Enter the index of the permission you want to edit followed by the new permission string : ");
+		config.getEditor().sendMessage(c + Messages.get("menu.edit_permission"));
 	}
 	
 	@Override

@@ -2,6 +2,7 @@ package net.avatar.realms.spigot.commandsign.menu;
 
 import java.util.Map.Entry;
 
+import net.avatar.realms.spigot.commandsign.utils.Messages;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -11,7 +12,7 @@ import net.avatar.realms.spigot.commandsign.model.CommandBlock;
 public class NeededPermissionsMenu extends EditionMenu {
 	
 	public NeededPermissionsMenu(EditionMenu parent) {
-		super(parent, "Needed permissions");
+		super(parent, Messages.get("info.needed_permissions"));
 		
 		this.subMenus.put(2, new NeededPermissionsAddMenu(this));
 		this.subMenus.put(3, new NeededPermissionsEditMenu(this));
@@ -31,11 +32,11 @@ public class NeededPermissionsMenu extends EditionMenu {
 				}
 				
 				//List submenus
-				editor.sendMessage(c + "1. Refresh");
+				editor.sendMessage(c + "1. " + Messages.get("menu.refresh"));
 				for (Entry<Integer, EditionMenu> menu : this.subMenus.entrySet()) {
 					editor.sendMessage(c + "" + menu.getKey() + ". " + menu.getValue().getName());
 				}
-				editor.sendMessage(ChatColor.GREEN + "9. Done");
+				editor.sendMessage(ChatColor.GREEN + "9. " + Messages.get("menu.done"));
 			}
 		}
 	}
@@ -61,7 +62,7 @@ public class NeededPermissionsMenu extends EditionMenu {
 			}
 		}
 		catch (NumberFormatException ex) {
-			config.getEditor().sendMessage(ChatColor.DARK_RED + "You must enter a number to go through the menu.");
+			config.getEditor().sendMessage(ChatColor.DARK_RED + Messages.get("menu.number_needed"));
 		}
 	}
 	
