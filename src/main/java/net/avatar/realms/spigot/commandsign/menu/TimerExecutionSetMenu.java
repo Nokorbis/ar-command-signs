@@ -21,7 +21,7 @@ public class TimerExecutionSetMenu extends EditionMenu {
 			config.setCurrentMenu(getParent());
 			String[] args = message.split(" ", 2);
 			int index = Integer.parseInt(args[0]);
-			config.getEditingData().setTimer(index);
+			config.getEditingData().setTimeBeforeExecution(index);
 		}
 		catch (Exception e) {
 		}
@@ -33,7 +33,7 @@ public class TimerExecutionSetMenu extends EditionMenu {
 		StringBuilder build = new StringBuilder();
 		build.append(getName());
 		build.append(" (");
-		build.append(cmd.getTimer());
+		build.append(cmd.getTimeBeforeExecution());
 		build.append(")");
 		return build.toString();
 	}

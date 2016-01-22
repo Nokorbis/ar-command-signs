@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import net.avatar.realms.spigot.commandsign.model.CommandBlock;
 
+@Deprecated
 public interface IBlockSaver {
 	
 	public void save (Collection<CommandBlock> commandBlocks);

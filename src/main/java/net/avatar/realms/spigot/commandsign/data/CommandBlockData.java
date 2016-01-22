@@ -5,6 +5,7 @@ import java.util.List;
 import net.avatar.realms.spigot.commandsign.CommandSign;
 import net.avatar.realms.spigot.commandsign.model.CommandBlock;
 
+@Deprecated
 public class CommandBlockData {
 
 	private LocationData location;
@@ -98,7 +99,7 @@ public class CommandBlockData {
 		data.setPermissions(cmd.getPermissions());
 		data.setNeededPermissions(cmd.getNeededPermissions());
 		data.setEconomyPrice(cmd.getEconomyPrice());
-		data.setTime(cmd.getTimer());
+		data.setTime(cmd.getTimeBeforeExecution());
 		data.setCancelOnMove(cmd.isCancelledOnMove());
 		data.setResetOnMove(cmd.isResetOnMove());
 		data.setTimeBetweenPlayerUsage(cmd.getTimeBetweenPlayerUsage());
@@ -138,7 +139,7 @@ public class CommandBlockData {
 
 		cmd.setEconomyPrice(data.getEconomyPrice());
 
-		cmd.setTimer(data.getTime());
+		cmd.setTimeBeforeExecution(data.getTime());
 		cmd.setCancelledOnMove(data.getCancelOnMove());
 		cmd.setResetOnMove(data.getResetOnMove());
 

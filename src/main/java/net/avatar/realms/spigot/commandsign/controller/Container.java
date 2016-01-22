@@ -14,7 +14,7 @@ import org.bukkit.permissions.PermissionAttachment;
 
 import net.avatar.realms.spigot.commandsign.CommandSign;
 import net.avatar.realms.spigot.commandsign.data.IBlockSaver;
-import net.avatar.realms.spigot.commandsign.data.JsonBlockSaver;
+import net.avatar.realms.spigot.commandsign.data.json.JsonBlockSaver;
 import net.avatar.realms.spigot.commandsign.menu.IEditionMenu;
 import net.avatar.realms.spigot.commandsign.menu.MainMenu;
 import net.avatar.realms.spigot.commandsign.model.CommandBlock;

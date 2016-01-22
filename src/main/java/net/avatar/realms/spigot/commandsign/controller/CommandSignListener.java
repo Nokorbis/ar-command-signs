@@ -193,10 +193,10 @@ public class CommandSignListener implements Listener{
 					exe.setLocation(player.getLocation().getBlock().getLocation());
 					Container.getContainer().getExecutingTasks().put(player.getUniqueId(), exe);
 					BukkitTask task = CommandSign.getPlugin().getServer().getScheduler().runTaskLater(CommandSign.getPlugin(),
-							exe, cmd.getTimer() * 20);
+							exe, cmd.getTimeBeforeExecution() * 20);
 					exe.setTaskId(task.getTaskId());
 					String msg = Messages.get("info.timer_delayed");
-					msg = msg.replaceAll("\\{TIME\\}", String.valueOf(cmd.getTimer()));
+					msg = msg.replaceAll("\\{TIME\\}", String.valueOf(cmd.getTimeBeforeExecution()));
 					player.sendMessage(msg);
 				}
 			}
@@ -235,7 +235,7 @@ public class CommandSignListener implements Listener{
 				BukkitScheduler sch = CommandSign.getPlugin().getServer().getScheduler();
 				sch.cancelTask(exe.getTaskId());
 				Container.getContainer().getExecutingTasks().remove(player.getUniqueId());
-				BukkitTask task = sch.runTaskLater(CommandSign.getPlugin(), exe, exe.getCommandBlock().getTimer() * 20);
+				BukkitTask task = sch.runTaskLater(CommandSign.getPlugin(), exe, exe.getCommandBlock().getTimeBeforeExecution() * 20);
 				exe.setTaskId(task.getTaskId());
 				exe.setLocation(player.getLocation().getBlock().getLocation());
 				Container.getContainer().getExecutingTasks().put(player.getUniqueId(), exe);

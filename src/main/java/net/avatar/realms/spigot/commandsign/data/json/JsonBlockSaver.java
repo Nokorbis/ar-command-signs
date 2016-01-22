@@ -1,4 +1,4 @@
-package net.avatar.realms.spigot.commandsign.data;
+package net.avatar.realms.spigot.commandsign.data.json;
 
 import java.io.*;
 import java.lang.reflect.Type;
@@ -11,9 +11,12 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import net.avatar.realms.spigot.commandsign.CommandSign;
+import net.avatar.realms.spigot.commandsign.data.CommandBlockData;
+import net.avatar.realms.spigot.commandsign.data.IBlockSaver;
 import net.avatar.realms.spigot.commandsign.model.CommandBlock;
 
-public class JsonBlockSaver implements IBlockSaver{
+@Deprecated
+public class JsonBlockSaver implements IBlockSaver {
 	
 	private static final String FILENAME = "commandblocks.json";
 	private static final String CHARSET = "UTF-8";

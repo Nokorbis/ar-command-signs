@@ -107,9 +107,9 @@ public class CommandSignUtils {
         for (String cmd : cmdB.getCommands()) {
             player.sendMessage(ChatColor.GRAY + "---" + cpt++ + ". " + cmd);
         }
-        if ((cmdB.getTimer() != null) && (cmdB.getTimer() > 0)) {
+        if ((cmdB.getTimeBeforeExecution() != null) && (cmdB.getTimeBeforeExecution() > 0)) {
             player.sendMessage(c + Messages.get("info.time_before_execution") + " : ");
-            player.sendMessage(ChatColor.GRAY + "" + cmdB.getTimer() + " " + Messages.get("info.seconds"));
+            player.sendMessage(ChatColor.GRAY + "" + cmdB.getTimeBeforeExecution() + " " + Messages.get("info.seconds"));
             if (cmdB.isCancelledOnMove()) {
                 player.sendMessage(ChatColor.GRAY + "---" + Messages.get("info.cancelled_on_move"));
             }

@@ -10,19 +10,16 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import net.avatar.realms.spigot.commandsign.CommandSign;
-import net.avatar.realms.spigot.commandsign.controller.Economy;
 import net.avatar.realms.spigot.commandsign.utils.CommandSignUtils;
-import net.avatar.realms.spigot.commandsign.utils.Messages;
 
 public class CommandBlock {
 
-	private static Set<Long> usedIds = new HashSet<Long>();
-	private static Long biggerUsedId = 0L;
+	private transient static Set<Long> usedIds = new HashSet<Long>();
+	private transient static Long biggerUsedId = 0L;
 
 	private long id;
 	private String name;
@@ -35,22 +32,22 @@ public class CommandBlock {
 
 	private Double economyPrice;
 
-	private Integer timeBeforeExecution; // Value in second
+	private Integer timeBeforeExecution; // Value in seconds
 	private Boolean resetOnMove;
 	private Boolean cancelledOnMove;
 
-	private int timeBetweenUsage;
-	private int timeBetweenPlayerUsage;
+	private int timeBetweenUsage; // Value in seconds
+	private int timeBetweenPlayerUsage; // Value in seconds
 
-	private long lastTimeUsed;
-	private Map<UUID, Long> usages;
+	private transient long lastTimeUsed;
+	private transient Map<UUID, Long> usages;
 
 	public CommandBlock () {
 		// We use ArrayList because we want to remove/edit them by the index.
 		this.commands = new ArrayList<String>();
 		this.permissions = new ArrayList<String>();
 		this.neededPermissions = new ArrayList<String>();
-		this.setTimer(0);
+		this.setTimeBeforeExecution(0);
 		this.resetOnMove = false;
 		this.cancelledOnMove = false;
 		this.setEconomyPrice(0.0);
@@ -67,7 +64,7 @@ public class CommandBlock {
 		this.commands = new ArrayList<String>();
 		this.permissions = new ArrayList<String>();
 		this.neededPermissions = new ArrayList<String>();
-		this.setTimer(0);
+		this.setTimeBeforeExecution(0);
 		this.resetOnMove = false;
 		this.cancelledOnMove = false;
 		this.setEconomyPrice(0.0);
@@ -256,11 +253,11 @@ public class CommandBlock {
 
 	/* Timers */
 
-	public Integer getTimer () {
+	public Integer getTimeBeforeExecution() {
 		return this.timeBeforeExecution;
 	}
 
-	public void setTimer (Integer timer) {
+	public void setTimeBeforeExecution(Integer timer) {
 		if ((timer == null) || (timer < 0)) {
 			timer = 0;
 		}
@@ -353,7 +350,7 @@ public class CommandBlock {
 		}
 
 		if (this.hasTimer()) {
-			newBlock.setTimer(this.timeBeforeExecution);
+			newBlock.setTimeBeforeExecution(this.timeBeforeExecution);
 		}
 
 		if (this.cancelledOnMove != null && this.cancelledOnMove) {

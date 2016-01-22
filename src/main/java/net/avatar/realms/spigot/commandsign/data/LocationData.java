@@ -8,6 +8,7 @@ import org.bukkit.World;
 
 import net.avatar.realms.spigot.commandsign.CommandSign;
 
+@Deprecated
 public class LocationData {
 
 	private String worldUuid;
