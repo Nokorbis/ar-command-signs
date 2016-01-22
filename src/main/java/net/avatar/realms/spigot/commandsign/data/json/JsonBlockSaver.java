@@ -18,7 +18,7 @@ import net.avatar.realms.spigot.commandsign.model.CommandBlock;
 @Deprecated
 public class JsonBlockSaver implements IBlockSaver {
 	
-	private static final String FILENAME = "commandblocks.json";
+	public static final String FILENAME = "commandblocks.json";
 	private static final String CHARSET = "UTF-8";
 	
 	private File saveFile;
@@ -110,9 +110,7 @@ public class JsonBlockSaver implements IBlockSaver {
 		} catch (FileNotFoundException e) {
 			CommandSign.getPlugin().getLogger().severe("Was not able to read json file !");
 		}
-		
-		
+
 		return null;
 	}
-
 }

@@ -1,5 +1,6 @@
 package net.avatar.realms.spigot.commandsign.controller;
 
+import java.io.File;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -7,19 +8,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import org.bukkit.Bukkit;
+import net.avatar.realms.spigot.commandsign.data.ICommandBlockSaver;
+import net.avatar.realms.spigot.commandsign.data.json.JsonBlockSaver;
+import net.avatar.realms.spigot.commandsign.data.json.JsonCommandBlockSaver;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachment;
 
 import net.avatar.realms.spigot.commandsign.CommandSign;
 import net.avatar.realms.spigot.commandsign.data.IBlockSaver;
-import net.avatar.realms.spigot.commandsign.data.json.JsonBlockSaver;
 import net.avatar.realms.spigot.commandsign.menu.IEditionMenu;
 import net.avatar.realms.spigot.commandsign.menu.MainMenu;
 import net.avatar.realms.spigot.commandsign.model.CommandBlock;
 import net.avatar.realms.spigot.commandsign.tasks.ExecuteTask;
-import net.avatar.realms.spigot.commandsign.tasks.SaverTask;
 
 public class Container {
 
@@ -42,7 +43,7 @@ public class Container {
 	public List<Player> infoPlayers;
 
 	private IBlockSaver	blockSaver;
-	private SaverTask saver;
+	private ICommandBlockSaver commandBlockSaver;
 
 	private IEditionMenu<CommandBlock> mainMenu;
 
@@ -74,12 +75,29 @@ public class Container {
 
 	private void initializeSaver() throws Exception {
 		CommandSign plugin = CommandSign.getPlugin();
-		this.blockSaver = new JsonBlockSaver(plugin.getDataFolder());
-		loadData();
-		this.saver = new SaverTask(this);
-		long delay = 20 * 60 * 10; //Server ticks
-		long period = 20 * 60 * 5; // Server ticks
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this.saver, delay, period);
+		commandBlockSaver = new JsonCommandBlockSaver(plugin.getDataFolder());
+		for (CommandBlock commandBlock : commandBlockSaver.loadAll()) {
+			this.commandBlocks.put(commandBlock.getLocation(), commandBlock);
+			if (!commandBlock.validate()) {
+				plugin.getLogger().warning("A Command Block is invalid. You may think about deleting it. ID : " + commandBlock.getId());
+			}
+		}
+
+		File old = new File(plugin.getDataFolder(), JsonBlockSaver.FILENAME);
+		if (old.exists() && old.isFile()) {
+			plugin.getLogger().info("Detected old version of data... starting conversion...");
+			this.blockSaver = new JsonBlockSaver(plugin.getDataFolder());
+			for (CommandBlock commandBlock : blockSaver.load()) {
+				this.commandBlocks.put(commandBlock.getLocation(), commandBlock);
+				if (!commandBlock.validate()) {
+					plugin.getLogger().warning("A Command Block is invalid. You may think about deleting it. ID : " + commandBlock.getId());
+				}
+			}
+			commandBlockSaver.saveAll(commandBlocks.values());
+			old.renameTo(new File(plugin.getDataFolder(), "old_data-to_delete.json"));
+			plugin.getLogger().info("Conversion of old data done !");
+		}
+
 	}
 
 	public PermissionAttachment getPlayerPermissions(Player player) {
@@ -121,25 +139,6 @@ public class Container {
 		return this.infoPlayers;
 	}
 
-	private void loadData() {
-		Collection<CommandBlock> data = this.blockSaver.load();
-		if (data == null) {
-			return;
-		}
-		for (CommandBlock block : data) {
-			this.commandBlocks.put(block.getLocation(), block);
-			if (!block.validate()) {
-				CommandSign.getPlugin().getLogger().warning("Invalid command block (" + block.getId() + ") detected at " + block.blockSummary()+ ". You should delete it.");
-			}
-		}
-	}
-
-	public void saveData() {
-		if (this.blockSaver != null) {
-			this.blockSaver.save(this.commandBlocks.values());
-		}
-	}
-
 	public IEditionMenu<CommandBlock> getMainMenu() {
 		return this.mainMenu;
 	}
@@ -161,5 +160,9 @@ public class Container {
 			}
 		}
 		return cmds;
+	}
+
+	public ICommandBlockSaver getSaver() {
+		return commandBlockSaver;
 	}
 }
