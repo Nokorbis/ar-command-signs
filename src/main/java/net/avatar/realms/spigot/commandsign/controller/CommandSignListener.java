@@ -1,5 +1,6 @@
 package net.avatar.realms.spigot.commandsign.controller;
 
+import net.avatar.realms.spigot.commandsign.utils.Messages;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -55,8 +56,8 @@ public class CommandSignListener implements Listener{
 		if (Container.getContainer().getCommandBlocks().containsKey(block.getLocation())) {
 			Player player = event.getPlayer();
 			if (player != null) {
-				player.sendMessage(ChatColor.RED + "This block is a command block. You must remove the commands before deleting it.");
-			}
+				player.sendMessage(ChatColor.RED + Messages.get("error.break_attempt_failed"));
+		}
 			event.setCancelled(true);
 		}
 	}
@@ -135,7 +136,7 @@ public class CommandSignListener implements Listener{
 					conf.display();
 				}
 				else {
-					player.sendMessage(ChatColor.DARK_RED + "The selected block is not valid, aborting...");
+					player.sendMessage(ChatColor.DARK_RED + Messages.get("error.invalid_block_abort"));
 					Container.getContainer().getEditingConfigurations().remove(player);
 				}
 			}
@@ -194,15 +195,16 @@ public class CommandSignListener implements Listener{
 					BukkitTask task = CommandSign.getPlugin().getServer().getScheduler().runTaskLater(CommandSign.getPlugin(),
 							exe, cmd.getTimer() * 20);
 					exe.setTaskId(task.getTaskId());
-					player.sendMessage(
-							"Command sign execution delayed by a timer. Please wait " + cmd.getTimer() + " seconds.");
+					String msg = Messages.get("info.timer_delayed");
+					msg = msg.replaceAll("\\{TIME\\}", String.valueOf(cmd.getTimer()));
+					player.sendMessage(msg);
 				}
 			}
 			catch (CommandSignsException ex) {
 				player.sendMessage(ChatColor.DARK_RED + ex.getMessage());
 			}
 			catch (Exception ex) {
-				player.sendMessage(ChatColor.DARK_RED + "An error occured while checking requirements.");
+				player.sendMessage(ChatColor.DARK_RED + Messages.get("error.requirements_check"));
 			}
 
 		}
@@ -226,7 +228,7 @@ public class CommandSignListener implements Listener{
 			if (exe.getCommandBlock().isCancelledOnMove()) {
 				CommandSign.getPlugin().getServer().getScheduler().cancelTask(exe.getTaskId());
 				Container.getContainer().getExecutingTasks().remove(player.getUniqueId());
-				exe.getPlayer().sendMessage(ChatColor.RED + "Command sign execution cancelled.");
+				exe.getPlayer().sendMessage(ChatColor.RED + Messages.get("usage.execution_cancelled"));
 				return;
 			}
 			if (exe.getCommandBlock().isResetOnMove()) {
@@ -237,14 +239,14 @@ public class CommandSignListener implements Listener{
 				exe.setTaskId(task.getTaskId());
 				exe.setLocation(player.getLocation().getBlock().getLocation());
 				Container.getContainer().getExecutingTasks().put(player.getUniqueId(), exe);
-				exe.getPlayer().sendMessage(ChatColor.RED + "Command sign execution timer reset");
+				exe.getPlayer().sendMessage(ChatColor.RED + Messages.get("usage.execution_timer_reset"));
 			}
 		}
 	}
 
 	private void info(Player player, Block block) {
 		if (!CommandSignUtils.isValidBlock(block)) {
-			player.sendMessage(ChatColor.RED + "Invalid block. Aborting info command");
+			player.sendMessage(ChatColor.RED + Messages.get("error.invalid_block_abort"));
 			Container.getContainer().getInfoPlayers().remove(player);
 			return;
 		}
@@ -254,7 +256,7 @@ public class CommandSignListener implements Listener{
 			Container.getContainer().getInfoPlayers().remove(player);
 		}
 		else {
-			player.sendMessage(ChatColor.RED + "Invalid block. Aborting info command");
+			player.sendMessage(ChatColor.RED + Messages.get("error.invalid_block_abort"));
 			Container.getContainer().getInfoPlayers().remove(player);
 		}
 	}
@@ -270,21 +272,21 @@ public class CommandSignListener implements Listener{
 
 		if (creatingBlock == null) {
 			if (Container.getContainer().getCommandBlocks().containsKey(block.getLocation())) {
-				player.sendMessage(ChatColor.RED + "This block is already a command block.");
+				player.sendMessage(ChatColor.RED + Messages.get("creation.already_command"));
 			}
 			else {
 				commandBlock.setLocation(block.getLocation());
-				player.sendMessage(ChatColor.GREEN + "Block set to command block configuration");
+				player.sendMessage(ChatColor.GREEN + Messages.get("creation.block_set"));
 			}
 		}
 		else {
-			player.sendMessage(ChatColor.RED + "This configuration already has a block.");
+			player.sendMessage(ChatColor.RED + Messages.get("creation.already_command"));
 		}
 	}
 
 	private void copyCommandBlock(Player player, Block block) {
 		if (!CommandSignUtils.isValidBlock(block)) {
-			player.sendMessage(ChatColor.RED + "Not a valid block. Aborting copying.");
+			player.sendMessage(ChatColor.RED + Messages.get("error.invalid_block_abort"));
 			Container.getContainer().getCopyingConfigurations().remove(player);
 			return;
 		}
@@ -294,28 +296,28 @@ public class CommandSignListener implements Listener{
 			if (Container.getContainer().getCommandBlocks().containsKey(block.getLocation())) {
 				copyingBlock = Container.getContainer().getCommandBlocks().get(block.getLocation());
 				Container.getContainer().getCopyingConfigurations().put(player, copyingBlock.copy());
-				player.sendMessage(ChatColor.GOLD + "Block copied. Click on another block to paste the configuration.");
+				player.sendMessage(ChatColor.GOLD + Messages.get("howto.click_to_paste"));
 			}
 			else {
-				player.sendMessage(ChatColor.RED + "This is not a command block. Aborting copying.");
+				player.sendMessage(ChatColor.RED + Messages.get("error.invalid_block_abort"));
 				Container.getContainer().getCopyingConfigurations().remove(player);
 			}
 		}
 		else if (Container.getContainer().getCommandBlocks().containsKey(block.getLocation())) {
-			player.sendMessage(ChatColor.RED + "This block is already a command block. Aborting copying.");
+			player.sendMessage(ChatColor.RED + Messages.get("error.invalid_block_abort"));
 			Container.getContainer().getCopyingConfigurations().remove(player);
 		}
 		else {
 			copyingBlock.setLocation(block.getLocation());
 			Container.getContainer().getCommandBlocks().put(block.getLocation(), copyingBlock);
 			Container.getContainer().getCopyingConfigurations().remove(player);
-			player.sendMessage(ChatColor.GREEN + "Block properly copied.");
+			player.sendMessage(ChatColor.GREEN + Messages.get("info.block_copied"));
 		}
 	}
 
 	private void deleteCommandBlock(Player player, Block block) {
 		if (!CommandSignUtils.isValidBlock(block)) {
-			player.sendMessage(ChatColor.RED + "Not a valid block. Aborting deletion.");
+			player.sendMessage(ChatColor.RED + Messages.get("error.invalid_block_abort"));
 			Container.getContainer().getDeletingBlocks().remove(player);
 			return;
 		}
@@ -324,10 +326,10 @@ public class CommandSignListener implements Listener{
 			/* Is it a command block ?*/
 			if (Container.getContainer().getCommandBlocks().containsKey(block.getLocation())) {
 				Container.getContainer().getDeletingBlocks().put(player, block.getLocation());
-				player.sendMessage(ChatColor.GOLD + "Block selected. Click on it again to accept deletion.");
+				player.sendMessage(ChatColor.GOLD + Messages.get("howto.click_confirm_deletion"));
 			}
 			else {
-				player.sendMessage(ChatColor.RED + "This is not a command block. Aborting deletion.");
+				player.sendMessage(ChatColor.RED + Messages.get("error.invalid_block_abort"));
 				Container.getContainer().getDeletingBlocks().remove(player);
 			}
 
@@ -335,7 +337,7 @@ public class CommandSignListener implements Listener{
 		else if (block.getLocation().equals(deletingBlock)){
 			Container.getContainer().getCommandBlocks().remove(block.getLocation());
 			Container.getContainer().getDeletingBlocks().remove(player);
-			player.sendMessage(ChatColor.GREEN + "Command block properly deleted");
+			player.sendMessage(ChatColor.GREEN + Messages.get("info.command_deleted"));
 		}
 	}
 }
