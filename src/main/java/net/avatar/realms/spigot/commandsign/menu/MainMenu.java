@@ -78,13 +78,13 @@ public class MainMenu extends EditionMenu {
 				if (config.getEditingData().validate()) {
 					config.setCurrentMenu(null);
 					if (config.isCreating()) {
-						Container.getContainer().getCommandBlocks().put(config.getEditingData().getLocation(),
-								config.getEditingData());
+						Container.getContainer().getCommandBlocks().put(config.getEditingData().getLocation(), config.getEditingData());
 						Container.getContainer().getCreatingConfigurations().remove(config.getEditor());
 					}
 					else {
 						Container.getContainer().getEditingConfigurations().remove(config.getEditor());
 					}
+					Container.getContainer().getSaver().save(config.getEditingData());
 				}
 				else {
 					config.getEditor().sendMessage(ChatColor.RED + Messages.get("menu.invalid_block"));

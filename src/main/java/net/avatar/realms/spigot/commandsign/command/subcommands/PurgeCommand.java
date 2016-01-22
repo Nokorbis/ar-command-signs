@@ -32,7 +32,8 @@ public class PurgeCommand extends Command{
         }
 
         for (Location loc : toRemove) {
-            Container.getContainer().getCommandBlocks().remove(loc);
+            CommandBlock temp = Container.getContainer().getCommandBlocks().remove(loc);
+            Container.getContainer().getSaver().delete(temp.getId());
         }
 
         String msg = Messages.get("info.purged_invalid_blocks");

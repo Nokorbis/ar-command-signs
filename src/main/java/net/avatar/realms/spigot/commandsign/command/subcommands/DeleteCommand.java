@@ -39,6 +39,7 @@ public class DeleteCommand extends Command {
                     if  (cmd != null && cmd.getId() == id) {
                         Container.getContainer().getCommandBlocks().remove(loc);
                         Container.getContainer().getDeletingBlocks().remove(player);
+                        Container.getContainer().getSaver().delete(cmd.getId());
                         player.sendMessage(ChatColor.GREEN + Messages.get("info.command_deleted"));
                         return true;
                     }

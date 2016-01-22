@@ -14,7 +14,6 @@ import org.bukkit.entity.Player;
 public class CommandSignUtils {
 
 	public static boolean isPlate(Block block) {
-
 		if (block == null) {
 			return false;
 		}
@@ -32,7 +31,6 @@ public class CommandSignUtils {
 	}
 
 	public static boolean isButton (Block block) {
-
 		if (block == null) {
 			return false;
 		}
@@ -47,7 +45,6 @@ public class CommandSignUtils {
 	}
 
 	public static boolean isSign (Block block) {
-
 		if (block == null) {
 			return false;
 		}

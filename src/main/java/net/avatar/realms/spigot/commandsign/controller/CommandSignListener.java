@@ -311,6 +311,7 @@ public class CommandSignListener implements Listener{
 			copyingBlock.setLocation(block.getLocation());
 			Container.getContainer().getCommandBlocks().put(block.getLocation(), copyingBlock);
 			Container.getContainer().getCopyingConfigurations().remove(player);
+			Container.getContainer().getSaver().save(copyingBlock);
 			player.sendMessage(ChatColor.GREEN + Messages.get("info.block_copied"));
 		}
 	}
@@ -335,8 +336,9 @@ public class CommandSignListener implements Listener{
 
 		}
 		else if (block.getLocation().equals(deletingBlock)){
-			Container.getContainer().getCommandBlocks().remove(block.getLocation());
+			CommandBlock tmp = Container.getContainer().getCommandBlocks().remove(block.getLocation());
 			Container.getContainer().getDeletingBlocks().remove(player);
+			Container.getContainer().getSaver().delete(tmp.getId());
 			player.sendMessage(ChatColor.GREEN + Messages.get("info.command_deleted"));
 		}
 	}
