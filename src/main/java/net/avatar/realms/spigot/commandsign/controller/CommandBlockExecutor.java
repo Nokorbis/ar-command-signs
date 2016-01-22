@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import net.avatar.realms.spigot.commandsign.utils.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -45,12 +46,14 @@ public class CommandBlockExecutor {
 
 	public void checkRequirements() throws CommandSignsException {
 		if (this.player == null) {
-			throw new CommandSignsException("Invalid player.");
+			throw new CommandSignsException(Messages.get("usage.invalid_player"));
 		}
 
 		for (String needed : this.cmdBlock.getNeededPermissions()) {
 			if (!this.player.hasPermission(needed)) {
-				throw new CommandSignsException("You do not have the needed permission : " + needed);
+				String err = Messages.get("usage.miss_needed_permission");
+				err = err.replaceAll("\\{NEEDED_PERM\\}", needed);
+				throw new CommandSignsException(err);
 			}
 		}
 
@@ -59,21 +62,27 @@ public class CommandBlockExecutor {
 			long toWait = this.cmdBlock.getLastTimeUsed() + (this.cmdBlock.getTimeBetweenUsage()*1000) - now;
 			if (toWait > 0) {
 				if (!this.player.hasPermission("commandsign.timer.bypass")) {
-					throw new CommandSignsException("This command block has been used " + df.format(this.cmdBlock.getTimeBetweenUsage() - (toWait/1000.0)) + " seconds ago. You must wait " + df.format(toWait/1000.0) + " more seconds.");
+					String msg = Messages.get("usage.general_cooldown");
+					msg = msg.replaceAll("\\{TIME\\}", df.format(this.cmdBlock.getTimeBetweenUsage() - (toWait/1000.0)));
+					msg = msg.replaceAll("\\{REMAINING\\}", df.format(toWait/1000.0));
+					throw new CommandSignsException(msg);
 				}
 			}
 		}
 
 		if (this.cmdBlock.getTimeBetweenPlayerUsage() > 0) {
 			if (this.cmdBlock.hasPlayerRecentlyUsed(this.player)) {
-				throw new CommandSignsException("You already have used this command block recently. Please wait a moment.");
+				if (!player.hasPermission("commandsign.timer.bypass")) {
+					throw new CommandSignsException(Messages.get("usage.player_cooldown"));
+				}
 			}
 		}
 
 		if ((Economy.getEconomy() != null) && (this.cmdBlock.getEconomyPrice() > 0)) {
 			if (!Economy.getEconomy().has(this.player, this.cmdBlock.getEconomyPrice()) && !this.player.hasPermission("commandsign.costs.bypass")) {
-				throw new CommandSignsException(
-						"You do not have enough money to use this command block. (" + Economy.getEconomy().format(this.cmdBlock.getEconomyPrice()) + ")");
+				String err = Messages.get("usage.not_enough_money");
+				err = err.replaceAll("\\{PRICE\\}", Economy.getEconomy().format(this.cmdBlock.getEconomyPrice()));
+				throw new CommandSignsException(err);
 			}
 		}
 
@@ -91,10 +100,14 @@ public class CommandBlockExecutor {
 			if (!this.player.hasPermission("commandsign.costs.bypass")) {
 				if (Economy.getEconomy().has(this.player, this.cmdBlock.getEconomyPrice())) {
 					Economy.getEconomy().withdrawPlayer(this.player, this.cmdBlock.getEconomyPrice());
-					this.player.sendMessage("You paied " + Economy.getEconomy().format(this.cmdBlock.getEconomyPrice()) + " to use this command");
+					String msg = Messages.get("usage.you_paied");
+					msg = msg.replaceAll("\\{PRICE\\}",Economy.getEconomy().format(this.cmdBlock.getEconomyPrice()));
+					this.player.sendMessage(msg);
 				}
 				else {
-					this.player.sendMessage(ChatColor.DARK_RED + "You do not have enough money to use this command block.");
+					String err = Messages.get("usage.not_enough_money");
+					err = err.replaceAll("\\{PRICE\\}", Economy.getEconomy().format(this.cmdBlock.getEconomyPrice()));
+					this.player.sendMessage(ChatColor.DARK_RED + err);
 					return false;
 				}
 			}
