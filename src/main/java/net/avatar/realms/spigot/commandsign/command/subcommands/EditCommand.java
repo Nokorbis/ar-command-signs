@@ -25,7 +25,7 @@ public class EditCommand extends Command {
     @Override
     public boolean execute(CommandSender sender, List<String> args) throws CommandSignsCommandException {
         if (!(sender instanceof Player)) {
-            throw new CommandSignsCommandException(Messages.PLAYER_COMMAND);
+            throw new CommandSignsCommandException(Messages.get("error.player_command"));
         }
         Player player = (Player) sender;
 
@@ -33,19 +33,19 @@ public class EditCommand extends Command {
             EditingConfiguration<CommandBlock> conf = null;
             if (args.size() < 2) {
                 conf = new EditingConfiguration<CommandBlock>(player, false);
-                player.sendMessage(ChatColor.GOLD + Messages.CLICK_TO_EDIT);
+                player.sendMessage(ChatColor.GOLD + Messages.get("howto.click_to_edit"));
             }
             else {
                 try {
                     long id = Long.parseLong(args.get(1));
                     CommandBlock cmd = Container.getContainer().getCommandBlockById(id);
                     if (cmd == null) {
-                        throw new CommandSignsCommandException(Messages.INVALID_COMMAND_ID);
+                        throw new CommandSignsCommandException(Messages.get("error.invalid_command_id"));
                     }
                     conf = new EditingConfiguration<CommandBlock>(player, cmd, false);
                 }
                 catch (NumberFormatException ex) {
-                    throw new CommandSignsCommandException(Messages.NUMBER_ARGUMENT);
+                    throw new CommandSignsCommandException(Messages.get("error.number_argument"));
                 }
             }
 

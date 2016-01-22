@@ -25,7 +25,7 @@ public class CopyCommand extends Command {
     @Override
     public boolean execute(CommandSender sender, List<String> args) throws CommandSignsCommandException {
         if (!(sender instanceof Player)) {
-            throw new CommandSignsCommandException(Messages.PLAYER_COMMAND);
+            throw new CommandSignsCommandException(Messages.get("error.player_command"));
         }
 
         Player player = (Player) sender;
@@ -33,20 +33,20 @@ public class CopyCommand extends Command {
         if (isPlayerAvailable(player)) {
             if (args.size() < 2) {
                 Container.getContainer().getCopyingConfigurations().put(player, null);
-                player.sendMessage(ChatColor.GOLD + Messages.CLICK_TO_COPY);
+                player.sendMessage(ChatColor.GOLD + Messages.get("howto.click_to_copy"));
             }
             else {
                 try {
                     long id = Long.parseLong(args.get(1));
                     CommandBlock cmd = Container.getContainer().getCommandBlockById(id);
                     if (cmd == null) {
-                        throw new CommandSignsCommandException(Messages.INVALID_COMMAND_ID);
+                        throw new CommandSignsCommandException(Messages.get("error.invalid_command_id"));
                     }
                     Container.getContainer().getCopyingConfigurations().put(player, cmd.copy());
-                    player.sendMessage(ChatColor.GOLD + Messages.CLICK_TO_PASTE);
+                    player.sendMessage(ChatColor.GOLD + Messages.get("howto.click_to_paste"));
                 }
                 catch (NumberFormatException ex) {
-                    throw new CommandSignsCommandException(Messages.NUMBER_ARGUMENT);
+                    throw new CommandSignsCommandException(Messages.get("error.number_argument"));
                 }
             }
             return true;

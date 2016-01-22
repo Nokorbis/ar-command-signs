@@ -26,11 +26,11 @@ public class NearCommand extends Command {
     @Override
     public boolean execute(CommandSender sender, List<String> args) throws CommandSignsCommandException {
         if (!(sender instanceof Player)) {
-            throw new CommandSignsCommandException(Messages.PLAYER_COMMAND);
+            throw new CommandSignsCommandException(Messages.get("error.player_command"));
         }
 
         if (args.size() < 2) {
-            throw new CommandSignsCommandException(Messages.COMMAND_NEEDS_RADIUS);
+            throw new CommandSignsCommandException(Messages.get("error.command_needs_radius"));
         }
 
         Player player = (Player) sender;
@@ -48,7 +48,7 @@ public class NearCommand extends Command {
             }
         }
         catch (NumberFormatException ex) {
-            throw new CommandSignsCommandException(Messages.NUMBER_ARGUMENT);
+            throw new CommandSignsCommandException(Messages.get("error.number_argument"));
         }
 
         return true;
@@ -71,7 +71,7 @@ public class NearCommand extends Command {
         builder.append(cmd.getId());
         builder.append(ChatColor.GRAY);
         builder.append("] ");
-        builder.append(Messages.AT);
+        builder.append(Messages.get("info.at"));
         builder.append(" ");
         builder.append(ChatColor.AQUA);
         builder.append(cmd.blockSummary());

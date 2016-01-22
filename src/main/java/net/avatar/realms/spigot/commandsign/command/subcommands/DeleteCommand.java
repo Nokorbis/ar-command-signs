@@ -19,14 +19,14 @@ public class DeleteCommand extends Command {
     @Override
     public boolean execute(CommandSender sender, List<String> args) throws CommandSignsCommandException {
         if (!(sender instanceof Player)) {
-            throw new CommandSignsCommandException(Messages.PLAYER_COMMAND);
+            throw new CommandSignsCommandException(Messages.get("error.player_command"));
         }
         Player player = (Player) sender;
 
         if (args.size() < 2) {
             if (isPlayerAvailable(player)) {
                 Container.getContainer().getDeletingBlocks().put(player, null);
-                player.sendMessage(ChatColor.GOLD + Messages.CLICK_TO_DELETE);
+                player.sendMessage(ChatColor.GOLD + Messages.get("howto.click_to_delete"));
                 return true;
             }
         }
@@ -39,19 +39,19 @@ public class DeleteCommand extends Command {
                     if  (cmd != null && cmd.getId() == id) {
                         Container.getContainer().getCommandBlocks().remove(loc);
                         Container.getContainer().getDeletingBlocks().remove(player);
-                        player.sendMessage(ChatColor.GREEN + Messages.COMMAND_DELETED);
+                        player.sendMessage(ChatColor.GREEN + Messages.get("info.command_deleted"));
                         return true;
                     }
                 }
                 else if (isPlayerAvailable(player)) {
                     CommandBlock cmd = Container.getContainer().getCommandBlockById(id);
                     Container.getContainer().getDeletingBlocks().put(player, cmd.getLocation());
-                    player.sendMessage(ChatColor.GOLD + Messages.CONFIRM_DELETION);
+                    player.sendMessage(ChatColor.GOLD + Messages.get("howto.confirm_deletion"));
                     return true;
                 }
             }
             catch (NumberFormatException ex) {
-                throw new CommandSignsCommandException(Messages.NUMBER_ARGUMENT);
+                throw new CommandSignsCommandException(Messages.get("error.number_argument"));
             }
         }
         return false;

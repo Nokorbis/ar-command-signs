@@ -26,10 +26,10 @@ public class TeleportCommand extends Command {
     @Override
     public boolean execute(CommandSender sender, List<String> args) throws CommandSignsCommandException {
         if (!(sender instanceof Player)) {
-            throw new CommandSignsCommandException(Messages.PLAYER_COMMAND);
+            throw new CommandSignsCommandException(Messages.get("error.player_command"));
         }
         if (args.size() < 2) {
-            throw new CommandSignsCommandException(Messages.COMMAND_NEEDS_ARGUMENTS);
+            throw new CommandSignsCommandException(Messages.get("error.command_needs_arguments"));
         }
 
         Player player = (Player) sender;
@@ -38,13 +38,13 @@ public class TeleportCommand extends Command {
             long id = Long.parseLong(args.get(1));
             CommandBlock cmd = Container.getContainer().getCommandBlockById(id);
             if (cmd == null) {
-                throw new CommandSignsCommandException(Messages.INVALID_COMMAND_ID);
+                throw new CommandSignsCommandException(Messages.get("error.invalid_command_id"));
             }
             player.teleport(cmd.getLocation(), PlayerTeleportEvent.TeleportCause.COMMAND);
             return true;
         }
         catch (NumberFormatException ex) {
-            throw new CommandSignsCommandException(Messages.NUMBER_ARGUMENT);
+            throw new CommandSignsCommandException(Messages.get("error.number_argument"));
         }
     }
 

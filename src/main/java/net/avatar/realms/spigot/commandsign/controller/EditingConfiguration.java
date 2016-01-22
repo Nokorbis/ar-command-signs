@@ -35,7 +35,7 @@ public class EditingConfiguration<T> {
 
 	public void display() {
 		if (this.editingData == null) {
-			this.editor.sendMessage(ChatColor.DARK_RED + Messages.NO_BLOCK_SELECTED);
+			this.editor.sendMessage(ChatColor.DARK_RED + Messages.get("error.no_block_selected"));
 			return;
 		}
 		if (this.currentMenu != null) {
@@ -43,10 +43,10 @@ public class EditingConfiguration<T> {
 		}
 		else {
 			if (this.creating) {
-				this.editor.sendMessage(ChatColor.GREEN + Messages.SUCCESS_CREATION);
+				this.editor.sendMessage(ChatColor.GREEN + Messages.get("info.success_creation"));
 			}
 			else {
-				this.editor.sendMessage(ChatColor.GREEN + Messages.SUCCESS_EDITION);
+				this.editor.sendMessage(ChatColor.GREEN + Messages.get("info.success_edition"));
 			}
 		}
 	}

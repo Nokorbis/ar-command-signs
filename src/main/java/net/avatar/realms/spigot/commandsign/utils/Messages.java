@@ -1,81 +1,47 @@
 package net.avatar.realms.spigot.commandsign.utils;
 
+import net.avatar.realms.spigot.commandsign.CommandSign;
 
-public class Messages {
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 
-	public static String NO_PERMISSION = "You do NOT have the permission to use this command.";
+public abstract class Messages {
 
-	public static String PLAYER_COMMAND = "You must be a player to execute this command.";
+	private static final String FILENAME = "messages.properties";
 
-	public static String COMMAND_NEEDS_ARGUMENTS = "You must specify at least one argument to use this command.";
+	private static Properties defaultMessages = null;
+	private static Properties messages = null;
 
-	public static String ALREADY_CREATING_CONFIGURATION = "You are already creating a configuration.";
+	public static String get(String key) {
+		if (defaultMessages == null && messages == null) {
+			loadMessages();
+		}
+		return messages.getProperty(key);
+	}
 
-	public static String ALREADY_EDITING_CONFIGURATION = "You are already editing a configuration.";
+	private static void loadMessages() {
+		defaultMessages = new Properties();
 
-	public static String ALREADY_DELETING_CONFIGURATION = "You are already deleting a configuration.";
-
-	public static String ALREADY_INFO_CONFIGURATION = "You are already getting information about a configuration.";
-
-	public static String ALREADY_COPYING_CONFIGURATION = "You are already copying a configuration.";
-
-	public static String COMMAND_NEEDS_RADIUS = "You have to specify the radius to use this command.";
-
-	public static String NUMBER_ARGUMENT = "The argument must be a number.";
-
-	public static String INVALID_COMMAND_ID = "No command block was found with for this ID.";
-
-	public static String NO_NAME = "No Name";
-
-	public static String CLICK_FOR_INFO = "Click on command block whose you want information";
-
-	public static String CLICK_TO_EDIT = "Click on the block you want to edit";
-
-	public static String CLICK_TO_DELETE = "Click on the command block you want to delete.";
-
-	public static String COMMAND_DELETED = "Command block properly deleted";
-
-	public static String CONFIRM_DELETION = "Click on the command block or enter the same command to delete the block to validate the deletion.";
-
-	public static String CLICK_TO_COPY= "Click on the command block you want to copy.";
-
-	public static String CLICK_TO_PASTE = "Block copied. Click on another block to paste the configuration.";
-
-	public static String PURGED_INVALID_BLOCKS = "Purged {AMOUNT} invalid command blocks.";
-
-	public static String AT = "at";
-
-	public static String LIST_SUMMARY = "Command signs list : {MIN}-{MAX}/{CMD_AMOUNT}";
-
-	public static String NAME = "Name";
-
-	public static String BLOCK = "Block";
-
-	public static String COSTS = "Costs";
-
-	public static String NEEDED_PERMISSIONS = "Needed permissions";
-
-	public static String PERMISSIONS = "Permissions";
-
-	public static String COMMANDS = "Commands";
-
-	public static String TIME_BEFORE_EXECUTION = "Time before execution";
-
-	public static String TIME_BETWEEN_USAGES = "Time between usages";
-
-	public static String TIME_BETWEEN_PLAYER_USAGE = "Time between player usage";
-
-	public static String SECONDS = "seconds";
-
-	public static String CANCELLED_ON_MOVE = "Cancelled on move";
-
-	public static String RESET_ON_MOVE = "Reset on move";
-
-	public static String NO_BLOCK_SELECTED = "You haven't select any command block yet.";
-
-	public static String SUCCESS_CREATION = "Command block created !";
-
-	public static String SUCCESS_EDITION = "Command block edited !";
-
-
+		try {
+			InputStream in = Messages.class.getClassLoader().getResourceAsStream(FILENAME);
+			defaultMessages.load(in);
+		}
+		catch (IOException e) {
+			// Should never happens
+		}
+		messages = new Properties(defaultMessages);
+		try {
+			File folder = CommandSign.getPlugin().getDataFolder();
+			File custom = new File(folder, FILENAME);
+			if (custom.exists()) {
+				InputStream in = new FileInputStream(custom);
+				messages.load(in);
+			}
+		}
+		catch (IOException e) {
+		}
+	}
 }

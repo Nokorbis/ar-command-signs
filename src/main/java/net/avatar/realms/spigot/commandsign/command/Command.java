@@ -43,7 +43,7 @@ public abstract class Command implements ICommand{
            printUsage(sender);
        }
        else if (permission) {
-            throw new CommandSignsCommandException(Messages.NO_PERMISSION);
+            throw new CommandSignsCommandException(Messages.get("error.no_permission"));
        }
     }
 
@@ -71,23 +71,23 @@ public abstract class Command implements ICommand{
      */
     protected boolean isPlayerAvailable(Player player) throws CommandSignsCommandException {
         if (Container.getContainer().getCreatingConfigurations().containsKey(player)) {
-            throw new CommandSignsCommandException(Messages.ALREADY_CREATING_CONFIGURATION);
+            throw new CommandSignsCommandException(Messages.get("warning.already_creating_configuration"));
         }
 
         if (Container.getContainer().getEditingConfigurations().containsKey(player)) {
-            throw new CommandSignsCommandException(Messages.ALREADY_EDITING_CONFIGURATION);
+            throw new CommandSignsCommandException(Messages.get("warning.already_editing_configuration"));
         }
 
         if (Container.getContainer().getDeletingBlocks().containsKey(player)) {
-            throw new CommandSignsCommandException(Messages.ALREADY_DELETING_CONFIGURATION);
+            throw new CommandSignsCommandException(Messages.get("warning.already_deleting_configuration"));
         }
 
         if (Container.getContainer().getCopyingConfigurations().containsKey(player)) {
-            throw new CommandSignsCommandException(Messages.ALREADY_COPYING_CONFIGURATION);
+            throw new CommandSignsCommandException(Messages.get("warning.already_copying_configuration"));
         }
 
         if (Container.getContainer().getInfoPlayers().contains(player)) {
-            throw new CommandSignsCommandException(Messages.ALREADY_INFO_CONFIGURATION);
+            throw new CommandSignsCommandException(Messages.get("warning.already_info_configuration"));
         }
         return true;
     }

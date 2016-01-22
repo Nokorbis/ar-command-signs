@@ -64,7 +64,7 @@ public interface ICommand {
      *            subcommand)
      * @return List<String> of possible values
      */
-    public List<String> autoComplete(CommandSender sender, List<String> args);
+    List<String> autoComplete(CommandSender sender, List<String> args);
 
     /**
      * Check if the user has the needed permission for this command
@@ -74,5 +74,5 @@ public interface ICommand {
      *      <code>true</code> If the user has the permission
      *      <code>false</code> If the user does NOT have the permission
      */
-    public boolean hasBasePermission(CommandSender sender);
+    boolean hasBasePermission(CommandSender sender);
 }

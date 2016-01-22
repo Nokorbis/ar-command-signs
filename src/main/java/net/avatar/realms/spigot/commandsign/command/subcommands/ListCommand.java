@@ -28,7 +28,7 @@ public class ListCommand extends Command {
     @Override
     public boolean execute(CommandSender sender, List<String> args) throws CommandSignsCommandException {
         if (!(sender instanceof Player)) {
-            throw new CommandSignsCommandException(Messages.PLAYER_COMMAND);
+            throw new CommandSignsCommandException(Messages.get("error.player_command"));
         }
 
         int index = 1;
@@ -44,7 +44,7 @@ public class ListCommand extends Command {
         int max = index * LIST_SIZE;
         int min = max - LIST_SIZE;
         max--;
-        String m = Messages.LIST_SUMMARY;
+        String m = Messages.get("info.list_summary");
         m = m.replaceAll("\\{MIN\\}", String.valueOf(min));
         m = m.replaceAll("\\{MAX\\}", String.valueOf(max));
         m = m.replaceAll("\\{CMD_AMOUNT\\}", String.valueOf(CommandBlock.getBiggerUsedId()));
@@ -76,7 +76,7 @@ public class ListCommand extends Command {
             builder.append(cmd.getName());
         }
         else {
-            builder.append(Messages.NO_NAME);
+            builder.append(Messages.get("info.no_name"));
         }
         builder.append(ChatColor.GRAY);
         builder.append(" --- ");

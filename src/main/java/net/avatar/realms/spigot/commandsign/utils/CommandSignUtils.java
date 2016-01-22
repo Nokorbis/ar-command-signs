@@ -87,41 +87,41 @@ public class CommandSignUtils {
 
 	public static void info (Player player, ChatColor c, CommandBlock cmdB) {
         player.sendMessage(c + "Id : " + cmdB.getId());
-        player.sendMessage(c + Messages.NAME + " : " + ((cmdB.getName() == null)? Messages.NO_NAME : cmdB.getName()));
-        player.sendMessage(c + Messages.BLOCK + " : " + cmdB.blockSummary());
+        player.sendMessage(c + Messages.get("info.name") + " : " + ((cmdB.getName() == null)? Messages.get("info.no_name") : cmdB.getName()));
+        player.sendMessage(c + Messages.get("info.block") + " : " + cmdB.blockSummary());
         if (Economy.getEconomy() != null) {
-            player.sendMessage(c + Messages.COSTS + " : " + Economy.getEconomy().format(cmdB.getEconomyPrice()));
+            player.sendMessage(c + Messages.get("info.costs") + " : " + Economy.getEconomy().format(cmdB.getEconomyPrice()));
         }
-        player.sendMessage(c + Messages.NEEDED_PERMISSIONS + " :");
+        player.sendMessage(c + Messages.get("info.needed_permissions") + " :");
         int cpt = 1;
         for (String perm : cmdB.getNeededPermissions()) {
             player.sendMessage(ChatColor.GRAY + "---" + cpt++ + ". " + perm);
         }
-        player.sendMessage(c + Messages.PERMISSIONS + " : ");
+        player.sendMessage(c + Messages.get("info.permissions") + " : ");
         cpt = 1;
         for (String perm :cmdB.getPermissions()) {
             player.sendMessage(ChatColor.GRAY + "---"+ cpt++ + ". " + perm);
         }
-        player.sendMessage(c + Messages.COMMANDS + " : ");
+        player.sendMessage(c + Messages.get("info.commands") + " : ");
         cpt = 1;
         for (String cmd : cmdB.getCommands()) {
             player.sendMessage(ChatColor.GRAY + "---" + cpt++ + ". " + cmd);
         }
         if ((cmdB.getTimer() != null) && (cmdB.getTimer() > 0)) {
-            player.sendMessage(c + Messages.TIME_BEFORE_EXECUTION + " : ");
-            player.sendMessage(ChatColor.GRAY + "" + cmdB.getTimer() + " " + Messages.SECONDS);
+            player.sendMessage(c + Messages.get("info.time_before_execution") + " : ");
+            player.sendMessage(ChatColor.GRAY + "" + cmdB.getTimer() + " " + Messages.get("info.seconds"));
             if (cmdB.isCancelledOnMove()) {
-                player.sendMessage(ChatColor.GRAY + "---" + Messages.CANCELLED_ON_MOVE);
+                player.sendMessage(ChatColor.GRAY + "---" + Messages.get("info.cancelled_on_move"));
             }
             if (cmdB.isResetOnMove()) {
-                player.sendMessage(ChatColor.GRAY + "---" + Messages.RESET_ON_MOVE);
+                player.sendMessage(ChatColor.GRAY + "---" + Messages.get("info.reset_on_move"));
             }
         }
         if (cmdB.getTimeBetweenUsage() > 0) {
-            player.sendMessage(c + Messages.TIME_BETWEEN_USAGES + " : " + cmdB.getTimeBetweenUsage());
+            player.sendMessage(c + Messages.get("info.time_between_usages") + " : " + cmdB.getTimeBetweenUsage());
         }
         if (cmdB.getTimeBetweenPlayerUsage() > 0) {
-            player.sendMessage(c + Messages.TIME_BETWEEN_PLAYER_USAGE + " : " + cmdB.getTimeBetweenPlayerUsage());
+            player.sendMessage(c + Messages.get("info.time_between_player_usage") + " : " + cmdB.getTimeBetweenPlayerUsage());
         }
     }
 }
