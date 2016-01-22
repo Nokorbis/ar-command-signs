@@ -16,6 +16,14 @@ import java.util.List;
  * Created by nokorbis on 1/20/16.
  */
 public class DeleteCommand extends Command {
+
+    public DeleteCommand() {
+        this.command = "delete";
+        this.aliases.add("del");
+        this.aliases.add("remove");
+        this.aliases.add("rm");
+        this.basePermission = "commandsign.admin.delete";
+    }
     @Override
     public boolean execute(CommandSender sender, List<String> args) throws CommandSignsCommandException {
         if (!(sender instanceof Player)) {
