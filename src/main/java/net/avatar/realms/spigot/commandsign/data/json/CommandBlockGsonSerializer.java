@@ -22,7 +22,10 @@ public class CommandBlockGsonSerializer implements JsonSerializer<CommandBlock>,
         try {
             long id = root.get("id").getAsLong();
             CommandBlock cmdBlock = new CommandBlock(id);
-            cmdBlock.setName(root.get("name").getAsString());
+            JsonElement name = root.get("name");
+            if (name != null) {
+                cmdBlock.setName(name.getAsString());
+            }
 
             JsonElement loc = root.get("world");
             if (loc != null) {
@@ -70,7 +73,9 @@ public class CommandBlockGsonSerializer implements JsonSerializer<CommandBlock>,
     public JsonElement serialize(CommandBlock commandBlock, Type type, JsonSerializationContext jsonSerializationContext) {
         JsonObject root = new JsonObject();
         root.add("id", new JsonPrimitive(commandBlock.getId()));
-        root.add("name", new JsonPrimitive(commandBlock.getName()));
+        if (commandBlock.getName() != null) {
+            root.add("name", new JsonPrimitive(commandBlock.getName()));
+        }
 
         //Save location
         if (commandBlock.getLocation() != null) {

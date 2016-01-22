@@ -54,6 +54,7 @@ public class JsonCommandBlockSaver implements ICommandBlockSaver {
             OutputStreamWriter writer = new OutputStreamWriter(os, CHARSET);
             String json = gson.toJson(cmdB);
             writer.write(json);
+            writer.close();
             return true;
         } catch (FileNotFoundException e) {
             CommandSign.getPlugin().getLogger().severe("Was not able to find a file while saving a command block : " + cmdB.getId());
@@ -80,6 +81,7 @@ public class JsonCommandBlockSaver implements ICommandBlockSaver {
             InputStream is = new FileInputStream(file);
             InputStreamReader reader = new InputStreamReader(is, CHARSET);
             CommandBlock cmdB = gson.fromJson(reader, CommandBlock.class);
+            reader.close();
             return cmdB;
         } catch (FileNotFoundException e) {
             CommandSign.getPlugin().getLogger().severe("Was not able to find a file while loading a command block : " + file.getName());

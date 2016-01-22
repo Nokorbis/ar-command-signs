@@ -61,6 +61,7 @@ public class JsonBlockSaver implements IBlockSaver {
 			OutputStream os = new FileOutputStream(saveFile);
 			osWriter = new OutputStreamWriter(os, CHARSET);
 			osWriter.write(json);
+			osWriter.close();
 		} catch (IOException e) {
 			CommandSign.getPlugin().getLogger().warning("Was not able to save json file");
 		}
@@ -95,7 +96,7 @@ public class JsonBlockSaver implements IBlockSaver {
 			Collection<CommandBlockData> data = gson.fromJson(br, dataType);
 			
 			List<CommandBlock> blocks = new LinkedList<CommandBlock>();
-			
+			br.close();
 			if (data == null) {
 				return null;
 			}
@@ -109,6 +110,8 @@ public class JsonBlockSaver implements IBlockSaver {
 			return blocks;
 		} catch (FileNotFoundException e) {
 			CommandSign.getPlugin().getLogger().severe("Was not able to read json file !");
+		} catch (IOException e) {
+			CommandSign.getPlugin().getLogger().severe("Was not able to close json file !");
 		}
 
 		return null;

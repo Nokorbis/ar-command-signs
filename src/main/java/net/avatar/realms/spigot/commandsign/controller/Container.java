@@ -94,10 +94,10 @@ public class Container {
 				}
 			}
 			commandBlockSaver.saveAll(commandBlocks.values());
-			old.renameTo(new File(plugin.getDataFolder(), "old_data-to_delete.json"));
+
+			old.delete();
 			plugin.getLogger().info("Conversion of old data done !");
 		}
-
 	}
 
 	public PermissionAttachment getPlayerPermissions(Player player) {
