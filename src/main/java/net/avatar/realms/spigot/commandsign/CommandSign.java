@@ -25,7 +25,7 @@ public class CommandSign extends JavaPlugin{
 	@Override
 	public void onDisable() {
 		plugin = null;
-		Container.getContainer().saveData();
+		Container.getContainer().getSaver().saveAll(Container.getContainer().getCommandBlocks().values());
 	}
 
 	public static CommandSign getPlugin() {
