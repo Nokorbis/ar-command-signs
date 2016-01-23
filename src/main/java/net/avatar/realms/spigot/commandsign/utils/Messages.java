@@ -2,14 +2,12 @@ package net.avatar.realms.spigot.commandsign.utils;
 
 import net.avatar.realms.spigot.commandsign.CommandSign;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.Properties;
 
 public abstract class Messages {
 
+	private static final String CHARSET = "UTF-8";
 	private static final String FILENAME = "messages.properties";
 
 	private static Properties defaultMessages = null;
@@ -27,7 +25,9 @@ public abstract class Messages {
 
 		try {
 			InputStream in = Messages.class.getClassLoader().getResourceAsStream(FILENAME);
-			defaultMessages.load(in);
+			InputStreamReader reader = new InputStreamReader(in, CHARSET);
+			defaultMessages.load(reader);
+			reader.close();
 		}
 		catch (IOException e) {
 			// Should never happens
@@ -38,7 +38,9 @@ public abstract class Messages {
 			File custom = new File(folder, FILENAME);
 			if (custom.exists()) {
 				InputStream in = new FileInputStream(custom);
-				messages.load(in);
+				InputStreamReader reader = new InputStreamReader(in, CHARSET);
+				messages.load(reader);
+				reader.close();
 			}
 		}
 		catch (IOException e) {

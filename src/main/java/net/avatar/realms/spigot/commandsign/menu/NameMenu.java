@@ -14,7 +14,7 @@ public class NameMenu extends EditionMenu {
 	public void display(EditingConfiguration<CommandBlock> config) {
 		if (config.getEditor() != null) {
 			String msg = Messages.get("menu.name_edit");
-			msg = msg.replaceAll("\\{NAME\\}", config.getEditingData().getName() == null ? Messages.get("info.no_name"): config.getEditingData().getName());
+			msg = msg.replace("{NAME}", config.getEditingData().getName() == null ? Messages.get("info.no_name"): config.getEditingData().getName());
 			config.getEditor().sendMessage(msg);
 		}
 	}

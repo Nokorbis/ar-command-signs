@@ -45,9 +45,9 @@ public class ListCommand extends Command {
         int min = max - LIST_SIZE;
         max--;
         String m = Messages.get("info.list_summary");
-        m = m.replaceAll("\\{MIN\\}", String.valueOf(min));
-        m = m.replaceAll("\\{MAX\\}", String.valueOf(max));
-        m = m.replaceAll("\\{CMD_AMOUNT\\}", String.valueOf(CommandBlock.getBiggerUsedId()));
+        m = m.replace("{MIN}", String.valueOf(min));
+        m = m.replace("{MAX}", String.valueOf(max));
+        m = m.replace("{CMD_AMOUNT}", String.valueOf(CommandBlock.getBiggerUsedId()));
         sender.sendMessage(ChatColor.AQUA + m);
 
         List<CommandBlock> cmds = Container.getContainer().getCommandBlocksByIdRange(min, max);

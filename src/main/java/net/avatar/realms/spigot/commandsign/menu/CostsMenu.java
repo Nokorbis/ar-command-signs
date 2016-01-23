@@ -8,6 +8,8 @@ import net.avatar.realms.spigot.commandsign.controller.Economy;
 import net.avatar.realms.spigot.commandsign.controller.EditingConfiguration;
 import net.avatar.realms.spigot.commandsign.model.CommandBlock;
 
+import java.util.Map;
+
 public class CostsMenu extends EditionMenu {
 
 	public CostsMenu(EditionMenu parent) {
@@ -22,9 +24,9 @@ public class CostsMenu extends EditionMenu {
 			CommandBlock cmd = config.getEditingData();
 			if (cmd != null) {
 				editor.sendMessage(c + "1. " + Messages.get("menu.refresh"));
-				String msg = Messages.get("menu.economy");
-				msg = msg.replaceAll("\\{PRICE\\}", Economy.getEconomy().format(config.getEditingData().getEconomyPrice()));
-				editor.sendMessage(c + "2. " + msg);
+				for (Map.Entry<Integer, EditionMenu> menu : subMenus.entrySet()) {
+					editor.sendMessage(c + "" + menu.getKey() + ". " + menu.getValue().formatName(config.getEditingData()));
+				}
 				editor.sendMessage(ChatColor.GREEN + "9. " + Messages.get("menu.done"));
 			}
 		}

@@ -17,7 +17,7 @@ permissions:
       description: Gives access to all Command Signs commands
       children:
          commandsign.admin.info: true
-         commandsign.admin create: true
+         commandsign.admin.create: true
          commandsign.admin.edit: true
          commandsign.admin.delete: true
          commandsign.admin.copy: true

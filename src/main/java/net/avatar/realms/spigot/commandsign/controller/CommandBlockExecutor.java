@@ -52,7 +52,7 @@ public class CommandBlockExecutor {
 		for (String needed : this.cmdBlock.getNeededPermissions()) {
 			if (!this.player.hasPermission(needed)) {
 				String err = Messages.get("usage.miss_needed_permission");
-				err = err.replaceAll("\\{NEEDED_PERM\\}", needed);
+				err = err.replace("{NEEDED_PERM}", needed);
 				throw new CommandSignsException(err);
 			}
 		}
@@ -63,8 +63,8 @@ public class CommandBlockExecutor {
 			if (toWait > 0) {
 				if (!this.player.hasPermission("commandsign.timer.bypass")) {
 					String msg = Messages.get("usage.general_cooldown");
-					msg = msg.replaceAll("\\{TIME\\}", df.format(this.cmdBlock.getTimeBetweenUsage() - (toWait/1000.0)));
-					msg = msg.replaceAll("\\{REMAINING\\}", df.format(toWait/1000.0));
+					msg = msg.replace("{TIME}", df.format(this.cmdBlock.getTimeBetweenUsage() - (toWait/1000.0)));
+					msg = msg.replace("{REMAINING}", df.format(toWait/1000.0));
 					throw new CommandSignsException(msg);
 				}
 			}
@@ -81,7 +81,7 @@ public class CommandBlockExecutor {
 		if ((Economy.getEconomy() != null) && (this.cmdBlock.getEconomyPrice() > 0)) {
 			if (!Economy.getEconomy().has(this.player, this.cmdBlock.getEconomyPrice()) && !this.player.hasPermission("commandsign.costs.bypass")) {
 				String err = Messages.get("usage.not_enough_money");
-				err = err.replaceAll("\\{PRICE\\}", Economy.getEconomy().format(this.cmdBlock.getEconomyPrice()));
+				err = err.replace("{PRICE}", Economy.getEconomy().format(this.cmdBlock.getEconomyPrice()));
 				throw new CommandSignsException(err);
 			}
 		}
@@ -101,12 +101,12 @@ public class CommandBlockExecutor {
 				if (Economy.getEconomy().has(this.player, this.cmdBlock.getEconomyPrice())) {
 					Economy.getEconomy().withdrawPlayer(this.player, this.cmdBlock.getEconomyPrice());
 					String msg = Messages.get("usage.you_paied");
-					msg = msg.replaceAll("\\{PRICE\\}",Economy.getEconomy().format(this.cmdBlock.getEconomyPrice()));
+					msg = msg.replace("{PRICE}",Economy.getEconomy().format(this.cmdBlock.getEconomyPrice()));
 					this.player.sendMessage(msg);
 				}
 				else {
 					String err = Messages.get("usage.not_enough_money");
-					err = err.replaceAll("\\{PRICE\\}", Economy.getEconomy().format(this.cmdBlock.getEconomyPrice()));
+					err = err.replace("{PRICE}", Economy.getEconomy().format(this.cmdBlock.getEconomyPrice()));
 					this.player.sendMessage(ChatColor.DARK_RED + err);
 					return false;
 				}

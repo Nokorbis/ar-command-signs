@@ -196,7 +196,7 @@ public class CommandSignListener implements Listener{
 							exe, cmd.getTimeBeforeExecution() * 20);
 					exe.setTaskId(task.getTaskId());
 					String msg = Messages.get("info.timer_delayed");
-					msg = msg.replaceAll("\\{TIME\\}", String.valueOf(cmd.getTimeBeforeExecution()));
+					msg = msg.replace("{TIME}", String.valueOf(cmd.getTimeBeforeExecution()));
 					player.sendMessage(msg);
 				}
 			}
