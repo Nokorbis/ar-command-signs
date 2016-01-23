@@ -29,7 +29,7 @@ public class InfoCommand extends Command {
         }
         Player player = (Player) sender;
 
-        if (args.size() > 2) {
+        if (args.size() >= 2) {
             try {
                 long id = Long.parseLong(args.get(1));
                 CommandBlock cmd = Container.getContainer().getCommandBlockById(id);
