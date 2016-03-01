@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.logging.Level;
 
 import net.avatar.realms.spigot.commandsign.data.ICommandBlockSaver;
 import net.avatar.realms.spigot.commandsign.data.json.JsonBlockSaver;
@@ -73,30 +74,44 @@ public class Container {
 		this.infoPlayers = new LinkedList<Player>();
 	}
 
-	private void initializeSaver() throws Exception {
+	private void initializeSaver() {
 		CommandSign plugin = CommandSign.getPlugin();
 		commandBlockSaver = new JsonCommandBlockSaver(plugin.getDataFolder());
 		for (CommandBlock commandBlock : commandBlockSaver.loadAll()) {
-			this.commandBlocks.put(commandBlock.getLocation(), commandBlock);
-			if (!commandBlock.validate()) {
-				plugin.getLogger().warning("A Command Block is invalid. You may think about deleting it. ID : " + commandBlock.getId());
-			}
-		}
-
-		File old = new File(plugin.getDataFolder(), JsonBlockSaver.FILENAME);
-		if (old.exists() && old.isFile()) {
-			plugin.getLogger().info("Detected old version of data... starting conversion...");
-			this.blockSaver = new JsonBlockSaver(plugin.getDataFolder());
-			for (CommandBlock commandBlock : blockSaver.load()) {
+			try {
 				this.commandBlocks.put(commandBlock.getLocation(), commandBlock);
 				if (!commandBlock.validate()) {
 					plugin.getLogger().warning("A Command Block is invalid. You may think about deleting it. ID : " + commandBlock.getId());
 				}
 			}
-			commandBlockSaver.saveAll(commandBlocks.values());
+			catch (Exception ex) {
+				plugin.getLogger().log(Level.WARNING,
+						"An exception occured while validating a command block. The plugin should be able to work but here is the exception : ",
+						ex);
+			}
+		}
 
-			old.delete();
-			plugin.getLogger().info("Conversion of old data done !");
+		File old = new File(plugin.getDataFolder(), JsonBlockSaver.FILENAME);
+		if (old.exists() && old.isFile()) {
+			try {
+				plugin.getLogger().info("Detected old version of data... starting conversion...");
+				this.blockSaver = new JsonBlockSaver(plugin.getDataFolder());
+				for (CommandBlock commandBlock : blockSaver.load()) {
+					this.commandBlocks.put(commandBlock.getLocation(), commandBlock);
+					if (!commandBlock.validate()) {
+						plugin.getLogger().warning("A Command Block is invalid. You may think about deleting it. ID : " + commandBlock.getId());
+					}
+				}
+				commandBlockSaver.saveAll(commandBlocks.values());
+
+				old.delete();
+				plugin.getLogger().info("Conversion of old data done !");
+			}
+			catch (Exception e) {
+				plugin.getLogger().log(Level.WARNING,
+						"Command Signs was not able to load the old file of command signs data. The plugin should still work though.",
+						e);
+			}
 		}
 	}
 
