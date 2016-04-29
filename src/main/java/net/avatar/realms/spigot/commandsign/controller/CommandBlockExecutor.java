@@ -114,6 +114,12 @@ public class CommandBlockExecutor {
 		}
 
 		if (this.cmdBlock.getTimeBetweenPlayerUsage() > 0) {
+			if (this.cmdBlock.hasPlayerRecentlyUsed(this.player)) {
+				if (!player.hasPermission("commandsign.timer.bypass")) {
+					this.player.sendMessage(ChatColor.DARK_RED + Messages.get("usage.player_cooldown"));
+					return false;
+				}
+			}
 			this.cmdBlock.addUsage(this.player);
 		}
 

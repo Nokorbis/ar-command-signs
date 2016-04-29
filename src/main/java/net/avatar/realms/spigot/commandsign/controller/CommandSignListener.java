@@ -192,8 +192,7 @@ public class CommandSignListener implements Listener{
 					ExecuteTask exe = new ExecuteTask(executor);
 					exe.setLocation(player.getLocation().getBlock().getLocation());
 					Container.getContainer().getExecutingTasks().put(player.getUniqueId(), exe);
-					BukkitTask task = CommandSign.getPlugin().getServer().getScheduler().runTaskLater(CommandSign.getPlugin(),
-							exe, cmd.getTimeBeforeExecution() * 20);
+					BukkitTask task = CommandSign.getPlugin().getServer().getScheduler().runTaskLater(CommandSign.getPlugin(), exe, cmd.getTimeBeforeExecution() * 20);
 					exe.setTaskId(task.getTaskId());
 					String msg = Messages.get("info.timer_delayed");
 					msg = msg.replace("{TIME}", String.valueOf(cmd.getTimeBeforeExecution()));
@@ -206,7 +205,6 @@ public class CommandSignListener implements Listener{
 			catch (Exception ex) {
 				player.sendMessage(ChatColor.DARK_RED + Messages.get("error.requirements_check"));
 			}
-
 		}
 	}
 

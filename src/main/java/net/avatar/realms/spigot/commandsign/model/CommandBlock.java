@@ -76,6 +76,8 @@ public class CommandBlock {
 			id = getFreeId();
 		}
 		this.setId(id);
+
+		this.usages = new HashMap<UUID, Long>();
 	}
 
 	public static final long getBiggerUsedId() {
@@ -311,7 +313,7 @@ public class CommandBlock {
 		long now = System.currentTimeMillis();
 		LinkedList<UUID> toRemove = new LinkedList<UUID>();
 		for (Entry<UUID, Long> entry : this.usages.entrySet()) {
-			if (entry.getValue() + this.timeBetweenPlayerUsage < now) {
+			if (entry.getValue() + (this.timeBetweenPlayerUsage*1000) < now) {
 				toRemove.add(entry.getKey());
 			}
 		}

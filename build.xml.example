@@ -1,0 +1,44 @@
+<project basedir="." default="deploy" name="spigot-commandsign">
+    <target name="init">
+        <property name="launcher" value="run.bat" />
+        <property name="sourceDir" value="src" />
+        <property name="javaDir" value="src/main/java" />
+        <property name="rscDir" value="src/main/resources" />
+        <property name="outputDir" value="bin" />
+        <property name="libdir" value="libs" />
+        <property name="jarname" value="Spigot-CommandSigns" />
+        <property name="config" value="config/" />
+        <property name="dist" value="/home/minecraft" />
+    </target>
+    <target name="clean" depends="init">
+        <delete dir="${outputDir}" />
+    </target>
+    <target name="prepare" depends="clean">
+        <mkdir dir="${outputDir}" />
+    </target>
+    <target name="compile" depends="prepare">
+        <javac destdir="${outputDir}" debug="true" debuglevel="source,lines,vars" target="1.7" source="1.7">
+            <src path="${javaDir}"/>
+            <classpath>
+                <fileset dir="${libdir}">
+                    <!-- Add dependency here -->
+                </fileset>
+            </classpath>
+        </javac>
+    </target>
+    <target name="deploy" depends="compile">
+        <zip destfile="${outputDir}/${jarname}.jar">
+            <fileset dir="${outputDir}"/>
+            <fileset dir="${rscDir}">
+                <include name="plugin.yml" />
+                <include name="messages.properties" />
+            </fileset>
+        </zip>
+        <copy file="${outputDir}/${jarname}.jar" tofile="${dist}/plugins/${jarname}.jar"/>
+    </target>
+    <target name="run" depends="deploy">
+        <exec  dir="${dist}" executable="bash">
+            <arg line="${launcher}"/>
+        </exec>
+    </target>
+</project>
