@@ -1,3 +1,11 @@
+
+CommandSign v1.4.2
+    Fix spelling mistake
+    Next to come : Factions requirement ?
+
+CommangSign v1.4.1
+    Fix command block per-player cooldown.
+
 CommandSign v1.4.0
     Rework the command system to make it more maintainable (should change nothing for the users).
     /!\Rework the persistence (files) system.
