@@ -1,7 +1,5 @@
 package net.avatar.realms.spigot.commandsign.controller;
 
-import java.io.File;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -10,14 +8,12 @@ import java.util.UUID;
 import java.util.logging.Level;
 
 import net.avatar.realms.spigot.commandsign.data.ICommandBlockSaver;
-import net.avatar.realms.spigot.commandsign.data.json.JsonBlockSaver;
 import net.avatar.realms.spigot.commandsign.data.json.JsonCommandBlockSaver;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachment;
 
 import net.avatar.realms.spigot.commandsign.CommandSign;
-import net.avatar.realms.spigot.commandsign.data.IBlockSaver;
 import net.avatar.realms.spigot.commandsign.menu.IEditionMenu;
 import net.avatar.realms.spigot.commandsign.menu.MainMenu;
 import net.avatar.realms.spigot.commandsign.model.CommandBlock;
@@ -43,7 +39,6 @@ public class Container {
 	private Map<UUID, ExecuteTask> executingTasks;
 	public List<Player> infoPlayers;
 
-	private IBlockSaver	blockSaver;
 	private ICommandBlockSaver commandBlockSaver;
 
 	private IEditionMenu<CommandBlock> mainMenu;
@@ -75,44 +70,33 @@ public class Container {
 	}
 
 	private void initializeSaver() {
+		commandBlockSaver = new JsonCommandBlockSaver(CommandSign.getPlugin().getDataFolder());
+		reload();
+	}
+
+	/**
+	 * Reload all the config files
+	 * @return The number of errors that occured
+	 */
+	public int reload() {
+		int errorCount = 0;
 		CommandSign plugin = CommandSign.getPlugin();
-		commandBlockSaver = new JsonCommandBlockSaver(plugin.getDataFolder());
 		for (CommandBlock commandBlock : commandBlockSaver.loadAll()) {
 			try {
 				this.commandBlocks.put(commandBlock.getLocation(), commandBlock);
 				if (!commandBlock.validate()) {
 					plugin.getLogger().warning("A Command Block is invalid. You may think about deleting it. ID : " + commandBlock.getId());
+					errorCount++;
 				}
 			}
 			catch (Exception ex) {
 				plugin.getLogger().log(Level.WARNING,
 						"An exception occured while validating a command block. The plugin should be able to work but here is the exception : ",
 						ex);
+				errorCount++;
 			}
 		}
-
-		File old = new File(plugin.getDataFolder(), JsonBlockSaver.FILENAME);
-		if (old.exists() && old.isFile()) {
-			try {
-				plugin.getLogger().info("Detected old version of data... starting conversion...");
-				this.blockSaver = new JsonBlockSaver(plugin.getDataFolder());
-				for (CommandBlock commandBlock : blockSaver.load()) {
-					this.commandBlocks.put(commandBlock.getLocation(), commandBlock);
-					if (!commandBlock.validate()) {
-						plugin.getLogger().warning("A Command Block is invalid. You may think about deleting it. ID : " + commandBlock.getId());
-					}
-				}
-				commandBlockSaver.saveAll(commandBlocks.values());
-
-				old.delete();
-				plugin.getLogger().info("Conversion of old data done !");
-			}
-			catch (Exception e) {
-				plugin.getLogger().log(Level.WARNING,
-						"Command Signs was not able to load the old file of command signs data. The plugin should still work though.",
-						e);
-			}
-		}
+		return errorCount;
 	}
 
 	public PermissionAttachment getPlayerPermissions(Player player) {

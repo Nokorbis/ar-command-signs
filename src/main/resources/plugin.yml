@@ -24,6 +24,7 @@ permissions:
          commandsign.admin.purge: true
          commandsign.admin.near: true
          commandsign.admin.list: true
+         commandsign.admin.reload: true
          commandsign.admin.teleport: true
          commandsign.admin.version: true
          commandsign.admin.help: true
@@ -59,6 +60,9 @@ permissions:
    commandsign.admin.list:
       default: false
       description: Gives access to the list command
+    commandsign.admin.reload:
+      default: false
+      description: Gives acces to the load command
    commandsign.admin.teleport:
       default: false
       description: Gives access to the teleport command
