@@ -28,15 +28,20 @@ public class LoadCommand extends Command {
         if (!sender.hasPermission("commandsign.admin.reload")) {
             throw new CommandSignsCommandException(Messages.get("error.no_permission"));
         }
+        args.remove(0); // remove "reload" text
         if (args.isEmpty()) {
+            CommandBlock.reloadUsedIDs();
             int errors = Container.getContainer().reload();
             sender.sendMessage(ChatColor.GREEN + Messages.get("info.reload_done"));
-            sender.sendMessage(ChatColor.YELLOW + Messages.get("info.reload_errors").replace("{ERRORS}", String.valueOf(errors)));
+            if (errors > 0) {
+                sender.sendMessage(ChatColor.YELLOW + Messages.get("info.reload_errors").replace("{ERRORS}", String.valueOf(errors)));
+            }
         }
         else {
             try {
                 String idText = args.remove(0);
                 int id = Integer.parseInt(idText);
+                CommandBlock.reloadUsedID(id);
                 CommandBlock cmdBlock = Container.getContainer().getSaver().load(id);
                 if (cmdBlock == null) {
                     throw new CommandSignsCommandException(Messages.get("error.reload_null"));

@@ -394,4 +394,13 @@ public class CommandBlock {
 		String str = this.location.getBlock().getType() + " #" + this.location.getX() + ":" + this.location.getZ()+"(" +this.location.getY()+")";
 		return str;
 	}
+
+	public static void reloadUsedIDs() {
+		usedIds = new HashSet<Long>();
+		biggerUsedId = 0L;
+	}
+
+	public static void reloadUsedID(long id) {
+		usedIds.remove(id);
+	}
 }
