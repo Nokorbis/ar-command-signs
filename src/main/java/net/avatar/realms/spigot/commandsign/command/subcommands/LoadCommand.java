@@ -50,7 +50,7 @@ public class LoadCommand extends Command {
                 CommandBlock old = blocks.get(cmdBlock.getLocation());
                 if (old != null) {
                     if (old.getId() != id) {
-                        String msg = Messages.get("error.load_location_used");
+                        String msg = Messages.get("error.reload_location_used");
                         Location loc = old.getLocation();
                         msg = msg.replace("{WORLD}", loc.getWorld().getName())
                                 .replace("{X}", String.valueOf(loc.getBlockX()))
