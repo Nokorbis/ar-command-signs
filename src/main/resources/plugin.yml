@@ -60,7 +60,7 @@ permissions:
    commandsign.admin.list:
       default: false
       description: Gives access to the list command
-    commandsign.admin.reload:
+   commandsign.admin.reload:
       default: false
       description: Gives acces to the load command
    commandsign.admin.teleport:
