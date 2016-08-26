@@ -42,6 +42,11 @@ public abstract class Messages {
 				messages.load(reader);
 				reader.close();
 			}
+			else {
+				OutputStream out = new FileOutputStream(custom);
+				defaultMessages.store(out, "See https://github.com/Nokorbis/ar-command-signs/wiki/Custom-messages for more information about this file");
+				out.close();
+			}
 		}
 		catch (IOException e) {
 		}
