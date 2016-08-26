@@ -13,7 +13,7 @@ import net.avatar.realms.spigot.commandsign.model.CommandBlock;
 public class NeededPermissionsMenu extends EditionMenu {
 	
 	public NeededPermissionsMenu(EditionMenu parent) {
-		super(parent, Messages.get("info.needed_permissions"));
+		super(parent, Messages.get("menu.needed_perms_title"));
 		
 		this.subMenus.put(2, new NeededPermissionsAddMenu(this));
 		this.subMenus.put(3, new NeededPermissionsEditMenu(this));

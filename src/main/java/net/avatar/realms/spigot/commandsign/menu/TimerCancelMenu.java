@@ -33,12 +33,7 @@ public class TimerCancelMenu extends EditionMenu {
 	@Override
 	public String formatName(CommandBlock cmd) {
 		//3. Cancel on move (Yes)
-		StringBuilder build = new StringBuilder();
-		build.append(getName());
-		build.append(" (");
-		build.append(cmd.isCancelledOnMove() ? Messages.get("menu.yes") : Messages.get("menu.no"));
-		build.append(")");
-		return build.toString();
+		return getName().replace("{BOOLEAN}", cmd.isCancelledOnMove() ? Messages.get("menu.yes") : Messages.get("menu.no"));
 	}
 
 }

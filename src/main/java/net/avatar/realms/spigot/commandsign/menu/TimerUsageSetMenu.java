@@ -32,12 +32,7 @@ public class TimerUsageSetMenu extends EditionMenu {
 	@Override
 	public String formatName(CommandBlock cmd) {
 		//2. Time (30)
-		StringBuilder build = new StringBuilder();
-		build.append(getName());
-		build.append(" (");
-		build.append(cmd.getTimeBetweenUsage());
-		build.append(")");
-		return build.toString();
+		return getName().replace("{TIME}", String.valueOf(cmd.getTimeBetweenUsage()));
 	}
 
 }

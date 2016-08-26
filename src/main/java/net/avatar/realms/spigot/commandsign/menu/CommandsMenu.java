@@ -12,7 +12,7 @@ import net.avatar.realms.spigot.commandsign.model.CommandBlock;
 public class CommandsMenu extends EditionMenu {
 	
 	public CommandsMenu(EditionMenu parent) {
-		super(parent, Messages.get("info.commands"));
+		super(parent, Messages.get("menu.commands_title"));
 
 		this.subMenus.put(2, new CommandsAddMenu(this));
 		this.subMenus.put(3, new CommandsEditMenu(this));

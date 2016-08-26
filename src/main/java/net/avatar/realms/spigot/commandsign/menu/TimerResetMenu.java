@@ -33,12 +33,7 @@ public class TimerResetMenu extends EditionMenu {
 	@Override
 	public String formatName(CommandBlock cmd) {
 		//4. Reset on move (No)
-		StringBuilder build = new StringBuilder();
-		build.append(getName());
-		build.append(" (");
-		build.append(cmd.isResetOnMove() ? Messages.get("menu.yes") : Messages.get("menu.no"));
-		build.append(")");
-		return build.toString();
+		return getName().replace("{BOOLEAN}", cmd.isCancelledOnMove() ? Messages.get("menu.yes") : Messages.get("menu.no"));
 	}
 	
 }
