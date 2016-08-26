@@ -26,17 +26,23 @@ public class CommandsMenu extends EditionMenu {
 			CommandBlock cmd = config.getEditingData();
 			if (cmd != null) {
 				//List current commands
-				editor.sendMessage(c + getName() + ": ");
-				for (int i = 0; i < cmd.getCommands().size(); i++) {
-					editor.sendMessage(ChatColor.GRAY + " ---" + (i + 1) + ") " + cmd.getCommands().get(i));
+				editor.sendMessage(getName());
+				String format = Messages.get("info.command_format");
+				String msg;
+				int cpt = 1;
+				for (String cmds : config.getEditingData().getCommands()) {
+					msg = format.replace("{NUMBER}", String.valueOf(cpt++)).replace("{COMMAND}", cmds);
+					config.getEditor().sendMessage(msg);
 				}
 
 				//List submenus
-				editor.sendMessage(c + "1. " + Messages.get("menu.refresh"));
+				editor.sendMessage(Messages.get("menu.refresh"));
 				for (Entry<Integer, EditionMenu> menu : this.subMenus.entrySet()) {
-					editor.sendMessage(c + "" + menu.getKey() + ". " + menu.getValue().getName());
+					String menuFormat = Messages.get("menu.format");
+					menuFormat = menuFormat.replace("{NUMBER}", String.valueOf(menu.getKey())).replace("{MENU}", menu.getValue().getName());
+					editor.sendMessage(menuFormat);
 				}
-				editor.sendMessage(ChatColor.GREEN + "9. " + Messages.get("menu.done"));
+				editor.sendMessage(Messages.get("menu.done"));
 			}
 		}
 	}
@@ -62,7 +68,7 @@ public class CommandsMenu extends EditionMenu {
 			}
 		}
 		catch (NumberFormatException ex) {
-			config.getEditor().sendMessage(ChatColor.DARK_RED + Messages.get("menu.number_needed"));
+			config.getEditor().sendMessage(Messages.get("menu.number_needed"));
 		}
 	}
 }

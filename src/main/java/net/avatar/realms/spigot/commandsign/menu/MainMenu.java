@@ -36,33 +36,27 @@ public class MainMenu extends EditionMenu {
 	@Override
 	public void display(EditingConfiguration<CommandBlock> config) {
 		Player editor = config.getEditor();
-		editor.sendMessage(c + "1. " + Messages.get("menu.refresh"));
-		StringBuilder block = new StringBuilder();
-		block.append(c);
-		block.append("   " + Messages.get("info.block") + ": ");
+		editor.sendMessage(Messages.get("menu.refresh"));
+		String msg = Messages.get("info.block_format");
 		if (config.getEditingData().getLocation() == null) {
-			block.append(Messages.get("menu.none"));
 			if (config.isCreating()) {
-				block.append(" " + Messages.get("menu.set_on_click"));
+				msg = msg.replace("{POSITION}", Messages.get("menu.set_on_click"));
+			}
+			else {
+				msg = msg.replace("{POSITION}", Messages.get("menu.none"));
 			}
 		}
 		else {
 			// Block: BlockType#X:Z(Y)
-			Location loc = config.getEditingData().getLocation();
-			block.append(loc.getBlock().getType());
-			block.append("#");
-			block.append(loc.getX());
-			block.append(":");
-			block.append(loc.getZ());
-			block.append("(");
-			block.append(loc.getY());
-			block.append(")");
+			msg = msg.replace("{POSITION}", config.getEditingData().blockSummary());
 		}
-		editor.sendMessage(block.toString());
+		editor.sendMessage(msg);
 		for (Entry<Integer, EditionMenu> menu : this.subMenus.entrySet()) {
-			editor.sendMessage(c + "" + menu.getKey() + ". " + menu.getValue().formatName(config.getEditingData()));
+			String menuFormat = Messages.get("menu.format");
+			menuFormat = menuFormat.replace("{NUMBER}", String.valueOf(menu.getKey())).replace("{MENU}", menu.getValue().formatName(config.getEditingData()));
+			editor.sendMessage(menuFormat);
 		}
-		editor.sendMessage(ChatColor.GREEN + "9. " + Messages.get("menu.done"));
+		editor.sendMessage(Messages.get("menu.done"));
 	}
 
 	@Override
@@ -87,7 +81,7 @@ public class MainMenu extends EditionMenu {
 					Container.getContainer().getSaver().save(config.getEditingData());
 				}
 				else {
-					config.getEditor().sendMessage(ChatColor.RED + Messages.get("menu.invalid_block"));
+					config.getEditor().sendMessage(Messages.get("menu.invalid_block"));
 				}
 			}
 			else if (this.subMenus.containsKey(index)) {
@@ -99,7 +93,7 @@ public class MainMenu extends EditionMenu {
 			}
 		}
 		catch (NumberFormatException ex) {
-			config.getEditor().sendMessage(ChatColor.DARK_RED + Messages.get("menu.number_needed"));
+			config.getEditor().sendMessage(Messages.get("menu.number_needed"));
 		}
 	}
 }

@@ -48,7 +48,7 @@ public class ListCommand extends Command {
         m = m.replace("{MIN}", String.valueOf(min));
         m = m.replace("{MAX}", String.valueOf(max));
         m = m.replace("{CMD_AMOUNT}", String.valueOf(CommandBlock.getBiggerUsedId()));
-        sender.sendMessage(ChatColor.AQUA + m);
+        sender.sendMessage(m);
 
         List<CommandBlock> cmds = Container.getContainer().getCommandBlocksByIdRange(min, max);
         Collections.sort(cmds, new Comparator<CommandBlock>() {
@@ -66,24 +66,18 @@ public class ListCommand extends Command {
     }
 
     private String formatCommandBlock(CommandBlock cmd) {
-        StringBuilder builder = new StringBuilder();
-        builder.append(ChatColor.AQUA);
-        builder.append(cmd.blockSummary());
-        builder.append(ChatColor.GRAY);
-        builder.append(" --- ");
-        builder.append(ChatColor.GOLD);
+        String msg = Messages.get("info.list_format");
+        msg = msg.replace("{POSITION}", cmd.blockSummary());
+
         if (cmd.getName() != null) {
-            builder.append(cmd.getName());
+            msg = msg.replace("{NAME}", cmd.getName());
         }
         else {
-            builder.append(Messages.get("info.no_name"));
+            msg = msg.replace("{NAME}", Messages.get("info.no_name"));
         }
-        builder.append(ChatColor.GRAY);
-        builder.append(" --- ");
-        builder.append(ChatColor.BOLD);
-        builder.append(ChatColor.DARK_PURPLE);
-        builder.append(cmd.getId());
-        return builder.toString();
+        msg = msg.replace("{ID}", String.valueOf(cmd.getId()));
+
+        return msg;
     }
 
     @Override

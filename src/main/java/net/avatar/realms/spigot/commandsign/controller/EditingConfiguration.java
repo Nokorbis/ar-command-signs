@@ -43,10 +43,10 @@ public class EditingConfiguration<T> {
 		}
 		else {
 			if (this.creating) {
-				this.editor.sendMessage(ChatColor.GREEN + Messages.get("info.success_creation"));
+				this.editor.sendMessage(Messages.get("info.success_creation"));
 			}
 			else {
-				this.editor.sendMessage(ChatColor.GREEN + Messages.get("info.success_edition"));
+				this.editor.sendMessage(Messages.get("info.success_edition"));
 			}
 		}
 	}

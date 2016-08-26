@@ -14,12 +14,15 @@ public class CommandsRemoveMenu extends EditionMenu {
 
 	@Override
 	public void display(EditingConfiguration<CommandBlock> config) {
-		config.getEditor().sendMessage(c + Messages.get("info.commands") +" : ");
+		config.getEditor().sendMessage(Messages.get("info.commands"));
 		int cpt = 1;
-		for (String command : config.getEditingData().getCommands()) {
-			config.getEditor().sendMessage(ChatColor.GRAY + "---" + cpt++ + ". " + command);
+		String format = Messages.get("info.command_format");
+		String msg;
+		for (String cmd : config.getEditingData().getCommands()) {
+			msg = format.replace("{NUMBER}", String.valueOf(cpt++)).replace("{COMMAND}", cmd);
+			config.getEditor().sendMessage(msg);
 		}
-		config.getEditor().sendMessage(c + Messages.get("menu.delete_command"));
+		config.getEditor().sendMessage(Messages.get("menu.delete_command"));
 	}
 
 	@Override

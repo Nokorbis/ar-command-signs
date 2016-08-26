@@ -12,13 +12,14 @@ public class TimerCancelMenu extends EditionMenu {
 	
 	@Override
 	public void display(EditingConfiguration<CommandBlock> config) {
-		config.getEditor().sendMessage(c + Messages.get("menu.cancel_edit") + " (Yes/No)");
+		config.getEditor().sendMessage(Messages.get("menu.cancel_edit"));
 	}
 
 	@Override
 	public void input(EditingConfiguration<CommandBlock> config, String message) {
 		String[] args = message.split(" ");
-		if (args[0].equalsIgnoreCase("Yes") || args[0].equalsIgnoreCase("Y") || args[0].equalsIgnoreCase("True")) {
+		String arg = args[0].toUpperCase();
+		if (arg.equals("YES") || arg.equals("Y") || arg.equals("TRUE")) {
 			config.getEditingData().setCancelledOnMove(true);
 		}
 		else {

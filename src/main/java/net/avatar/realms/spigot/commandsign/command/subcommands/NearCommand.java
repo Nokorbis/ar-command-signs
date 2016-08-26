@@ -62,20 +62,11 @@ public class NearCommand extends Command {
      *      A formatted String
      */
     private String formatCommand(CommandBlock cmd) {
-        StringBuilder builder = new StringBuilder();
-        builder.append(ChatColor.GOLD);
-        builder.append(cmd.getName());
-        builder.append(ChatColor.GRAY);
-        builder.append("[");
-        builder.append(ChatColor.DARK_PURPLE);
-        builder.append(cmd.getId());
-        builder.append(ChatColor.GRAY);
-        builder.append("] ");
-        builder.append(Messages.get("info.at"));
-        builder.append(" ");
-        builder.append(ChatColor.AQUA);
-        builder.append(cmd.blockSummary());
-        return builder.toString();
+        String msg = Messages.get("info.near_format");
+        msg = msg.replace("{NAME}", cmd.getName())
+                    .replace("{ID}", String.valueOf(cmd.getId()))
+                    .replace("{POSITION}", cmd.blockSummary());
+        return msg;
     }
 
     @Override

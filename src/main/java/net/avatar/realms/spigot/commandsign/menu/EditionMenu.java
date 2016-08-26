@@ -12,11 +12,6 @@ import net.avatar.realms.spigot.commandsign.model.CommandBlock;
  */
 public abstract class EditionMenu implements IEditionMenu<CommandBlock> {
 
-	/**
-	 * Default color for chat message that are sent to the players
-	 */
-	protected static final ChatColor c = ChatColor.AQUA;
-
 	private String name;
 
 	private EditionMenu parent;

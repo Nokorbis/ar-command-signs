@@ -14,12 +14,15 @@ public class TemporaryPermissionsEditMenu extends EditionMenu {
 	
 	@Override
 	public void display(EditingConfiguration<CommandBlock> config) {
-		config.getEditor().sendMessage(c + Messages.get("info.permissions") + " : ");
+		config.getEditor().sendMessage( Messages.get("info.permissions") + " : ");
 		int cpt = 1;
+		String format = Messages.get("info.permission_format");
+		String msg;
 		for (String perm : config.getEditingData().getPermissions()) {
-			config.getEditor().sendMessage(ChatColor.GRAY + "---" + cpt++ + ". " + perm);
+			msg = format.replace("{NUMBER}", String.valueOf(cpt++)).replace("{PERMISSION}", perm);
+			config.getEditor().sendMessage(msg);
 		}
-		config.getEditor().sendMessage(c + Messages.get("menu.edit_permission"));
+		config.getEditor().sendMessage(Messages.get("menu.edit_permission"));
 	}
 
 	@Override

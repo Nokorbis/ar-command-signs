@@ -14,12 +14,15 @@ public class NeededPermissionsRemoveMenu extends EditionMenu {
 
 	@Override
 	public void display(EditingConfiguration<CommandBlock> config) {
-		config.getEditor().sendMessage(c + Messages.get("info.needed_permissions") + " : ");
+		config.getEditor().sendMessage(Messages.get("info.needed_permissions"));
 		int cpt = 1;
+		String format = Messages.get("info.permission_format");
+		String msg;
 		for (String perm : config.getEditingData().getNeededPermissions()) {
-			config.getEditor().sendMessage(ChatColor.GRAY + "---" + cpt++ + ". " + perm);
+			msg = format.replace("{NUMBER}", String.valueOf(cpt++)).replace("{PERMISSION}", perm);
+			config.getEditor().sendMessage(msg);
 		}
-		config.getEditor().sendMessage(c + Messages.get("menu.remove_permission"));
+		config.getEditor().sendMessage(Messages.get("menu.remove_permission"));
 		
 	}
 	

@@ -60,12 +60,12 @@ public class CommandSignCommands implements CommandExecutor, TabCompleter {
 							return command.execute(sender, argList);
 						}
 						catch (CommandSignsCommandException e) {
-							sender.sendMessage(ChatColor.RED + e.getMessage());
+							sender.sendMessage(e.getMessage());
 							return true;
 						}
 					}
 					else {
-						sender.sendMessage(ChatColor.RED + Messages.get("error.no_permission"));
+						sender.sendMessage(Messages.get("error.no_permission"));
 					}
 					return true;
 				}

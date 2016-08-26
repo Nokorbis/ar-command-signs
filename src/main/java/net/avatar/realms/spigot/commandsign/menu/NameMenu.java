@@ -29,15 +29,13 @@ public class NameMenu extends EditionMenu {
 
 	@Override
 	public String formatName(CommandBlock cmd) {
-		StringBuilder builder = new StringBuilder();
-		builder.append(getName());
-		builder.append(" : ");
+		String msg = Messages.get("info.name_format");
 		if (cmd.getName() != null) {
-			builder.append(cmd.getName());
+			msg = msg.replace("{NAME}", cmd.getName());
 		}
 		else {
-			builder.append(Messages.get("info.no_name"));
+			msg = msg.replace("{NAME}", Messages.get("info.no_name"));
 		}
-		return builder.toString();
+		return msg;
 	}
 }

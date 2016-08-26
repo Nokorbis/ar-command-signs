@@ -32,9 +32,9 @@ public class LoadCommand extends Command {
         if (args.isEmpty()) {
             CommandBlock.reloadUsedIDs();
             int errors = Container.getContainer().reload();
-            sender.sendMessage(ChatColor.GREEN + Messages.get("info.reload_done"));
+            sender.sendMessage(Messages.get("info.reload_done"));
             if (errors > 0) {
-                sender.sendMessage(ChatColor.YELLOW + Messages.get("info.reload_errors").replace("{ERRORS}", String.valueOf(errors)));
+                sender.sendMessage(Messages.get("info.reload_errors").replace("{ERRORS}", String.valueOf(errors)));
             }
         }
         else {

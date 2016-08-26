@@ -13,7 +13,7 @@ public class NeededPermissionsAddMenu extends EditionMenu {
 	@Override
 	public void display(EditingConfiguration<CommandBlock> config) {
 		if (config.getEditor() != null) {
-			config.getEditor().sendMessage(c + Messages.get("menu.enter_permission"));
+			config.getEditor().sendMessage(Messages.get("menu.enter_permission"));
 		}
 	}
 

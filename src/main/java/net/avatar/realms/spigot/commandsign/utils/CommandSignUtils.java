@@ -82,43 +82,50 @@ public class CommandSignUtils {
 		return locations;
 	}
 
-	public static void info (Player player, ChatColor c, CommandBlock cmdB) {
-        player.sendMessage(c + "Id : " + cmdB.getId());
-        player.sendMessage(c + Messages.get("info.name") + " : " + ((cmdB.getName() == null)? Messages.get("info.no_name") : cmdB.getName()));
-        player.sendMessage(c + Messages.get("info.block") + " : " + cmdB.blockSummary());
+	public static void info (Player player, CommandBlock cmdB) {
+
+        player.sendMessage(Messages.get("info.id_format").replace("{ID}", String.valueOf(cmdB.getId())));
+        player.sendMessage(Messages.get("info.name_format").replace("{NAME}", ((cmdB.getName() == null)? Messages.get("info.no_name") : cmdB.getName())));
+        player.sendMessage(Messages.get("info.block_format").replace("{POSITION}", cmdB.blockSummary()));
+
         if (Economy.getEconomy() != null) {
-            player.sendMessage(c + Messages.get("info.costs") + " : " + Economy.getEconomy().format(cmdB.getEconomyPrice()));
+            player.sendMessage(Messages.get("info.costs_format").replace("{PRICE}", Economy.getEconomy().format(cmdB.getEconomyPrice())));
         }
-        player.sendMessage(c + Messages.get("info.needed_permissions") + " :");
+
+        player.sendMessage(Messages.get("info.needed_permissions"));
+        String permFormat = Messages.get("info.permission_format");
         int cpt = 1;
         for (String perm : cmdB.getNeededPermissions()) {
-            player.sendMessage(ChatColor.GRAY + "---" + cpt++ + ". " + perm);
+            player.sendMessage(permFormat.replace("{NUMBER}", String.valueOf(cpt++).replace("{PERMISSION}", perm)));
         }
-        player.sendMessage(c + Messages.get("info.permissions") + " : ");
+
+        player.sendMessage(Messages.get("info.permissions"));
         cpt = 1;
         for (String perm :cmdB.getPermissions()) {
-            player.sendMessage(ChatColor.GRAY + "---"+ cpt++ + ". " + perm);
+            player.sendMessage(permFormat.replace("{NUMBER}", String.valueOf(cpt++).replace("{PERMISSION}", perm)));
         }
-        player.sendMessage(c + Messages.get("info.commands") + " : ");
+
+        player.sendMessage(Messages.get("info.commands"));
         cpt = 1;
+        String cmdFormat = Messages.get("info.command_format");
         for (String cmd : cmdB.getCommands()) {
-            player.sendMessage(ChatColor.GRAY + "---" + cpt++ + ". " + cmd);
+            player.sendMessage(cmdFormat.replace("{NUMBER}", String.valueOf(cpt++).replace("{COMMAND}", cmd)));
         }
+
         if ((cmdB.getTimeBeforeExecution() != null) && (cmdB.getTimeBeforeExecution() > 0)) {
-            player.sendMessage(c + Messages.get("info.time_before_execution") + " : ");
-            player.sendMessage(ChatColor.GRAY + "" + cmdB.getTimeBeforeExecution() + " " + Messages.get("info.seconds"));
+            player.sendMessage(Messages.get("info.time_before_execution").replace("{TIME}", String.valueOf(cmdB.getTimeBeforeExecution())));
             if (cmdB.isCancelledOnMove()) {
-                player.sendMessage(ChatColor.GRAY + "---" + Messages.get("info.cancelled_on_move"));
+                player.sendMessage(Messages.get("info.cancelled_on_move"));
             }
             if (cmdB.isResetOnMove()) {
-                player.sendMessage(ChatColor.GRAY + "---" + Messages.get("info.reset_on_move"));
+                player.sendMessage(Messages.get("info.reset_on_move"));
             }
         }
         if (cmdB.getTimeBetweenUsage() > 0) {
-            player.sendMessage(c + Messages.get("info.time_between_usages") + " : " + cmdB.getTimeBetweenUsage());
+            player.sendMessage(Messages.get("info.time_between_usages").replace("{TIME}", String.valueOf(cmdB.getTimeBetweenUsage())));
         }
         if (cmdB.getTimeBetweenPlayerUsage() > 0) {
-            player.sendMessage(c + Messages.get("info.time_between_player_usage") + " : " + cmdB.getTimeBetweenPlayerUsage());
+            player.sendMessage(Messages.get("info.time_between_player_usage").replace("{TIME}", String.valueOf(cmdB.getTimeBetweenPlayerUsage())));
         }
     }
 }

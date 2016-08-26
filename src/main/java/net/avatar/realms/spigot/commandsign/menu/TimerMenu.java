@@ -1,5 +1,6 @@
 package net.avatar.realms.spigot.commandsign.menu;
 
+import java.util.Map;
 import java.util.Map.Entry;
 
 import net.avatar.realms.spigot.commandsign.utils.Messages;
@@ -27,11 +28,13 @@ public class TimerMenu extends EditionMenu {
 			CommandBlock cmd = config.getEditingData();
 			if (cmd != null) {
 				//List submenus
-				editor.sendMessage(c + "1. " + Messages.get("menu.refresh"));
-				for (Entry<Integer, EditionMenu> menu : this.subMenus.entrySet()) {
-					editor.sendMessage(c + "" + menu.getKey() + ". " + menu.getValue().formatName(cmd));
+				editor.sendMessage(Messages.get("menu.refresh"));
+				for (Map.Entry<Integer, EditionMenu> menu : this.subMenus.entrySet()) {
+					String menuFormat = Messages.get("menu.format");
+					menuFormat = menuFormat.replace("{NUMBER}", String.valueOf(menu.getKey())).replace("{MENU}", menu.getValue().formatName(config.getEditingData()));
+					editor.sendMessage(menuFormat);
 				}
-				editor.sendMessage(ChatColor.GREEN + "9. " + Messages.get("menu.done"));
+				editor.sendMessage(Messages.get("menu.done"));
 			}
 		}
 
@@ -58,7 +61,7 @@ public class TimerMenu extends EditionMenu {
 			}
 		}
 		catch (NumberFormatException ex) {
-			config.getEditor().sendMessage(ChatColor.DARK_RED + Messages.get("menu.number_needed"));
+			config.getEditor().sendMessage(Messages.get("menu.number_needed"));
 		}
 	}
 

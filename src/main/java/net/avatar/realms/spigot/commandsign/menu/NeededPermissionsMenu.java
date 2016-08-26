@@ -1,5 +1,6 @@
 package net.avatar.realms.spigot.commandsign.menu;
 
+import java.util.Map;
 import java.util.Map.Entry;
 
 import net.avatar.realms.spigot.commandsign.utils.Messages;
@@ -26,17 +27,23 @@ public class NeededPermissionsMenu extends EditionMenu {
 			CommandBlock cmd = config.getEditingData();
 			if (cmd != null) {
 				//List current needed permissions
-				editor.sendMessage(c + getName() + ": ");
-				for (int i = 0; i < cmd.getNeededPermissions().size(); i++) {
-					editor.sendMessage(ChatColor.GRAY + " ---" + (i + 1) + ") " + cmd.getNeededPermissions().get(i));
+				editor.sendMessage(getName());
+				String format = Messages.get("info.permission_format");
+				String msg;
+				int cpt = 1;
+				for (String perm : config.getEditingData().getNeededPermissions()) {
+					msg = format.replace("{NUMBER}", String.valueOf(cpt++)).replace("{PERMISSION}", perm);
+					config.getEditor().sendMessage(msg);
 				}
 				
 				//List submenus
-				editor.sendMessage(c + "1. " + Messages.get("menu.refresh"));
-				for (Entry<Integer, EditionMenu> menu : this.subMenus.entrySet()) {
-					editor.sendMessage(c + "" + menu.getKey() + ". " + menu.getValue().getName());
+				editor.sendMessage(Messages.get("menu.refresh"));
+				for (Map.Entry<Integer, EditionMenu> menu : this.subMenus.entrySet()) {
+					String menuFormat = Messages.get("menu.format");
+					menuFormat = menuFormat.replace("{NUMBER}", String.valueOf(menu.getKey())).replace("{MENU}", menu.getValue().formatName(config.getEditingData()));
+					editor.sendMessage(menuFormat);
 				}
-				editor.sendMessage(ChatColor.GREEN + "9. " + Messages.get("menu.done"));
+				editor.sendMessage(Messages.get("menu.done"));
 			}
 		}
 	}
@@ -62,7 +69,7 @@ public class NeededPermissionsMenu extends EditionMenu {
 			}
 		}
 		catch (NumberFormatException ex) {
-			config.getEditor().sendMessage(ChatColor.DARK_RED + Messages.get("menu.number_needed"));
+			config.getEditor().sendMessage(Messages.get("menu.number_needed"));
 		}
 	}
 	

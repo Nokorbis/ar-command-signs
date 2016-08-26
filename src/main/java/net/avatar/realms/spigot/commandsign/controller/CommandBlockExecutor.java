@@ -107,7 +107,7 @@ public class CommandBlockExecutor {
 				else {
 					String err = Messages.get("usage.not_enough_money");
 					err = err.replace("{PRICE}", Economy.getEconomy().format(this.cmdBlock.getEconomyPrice()));
-					this.player.sendMessage(ChatColor.DARK_RED + err);
+					this.player.sendMessage(err);
 					return false;
 				}
 			}
@@ -116,7 +116,7 @@ public class CommandBlockExecutor {
 		if (this.cmdBlock.getTimeBetweenPlayerUsage() > 0) {
 			if (this.cmdBlock.hasPlayerRecentlyUsed(this.player)) {
 				if (!player.hasPermission("commandsign.timer.bypass")) {
-					this.player.sendMessage(ChatColor.DARK_RED + Messages.get("usage.player_cooldown"));
+					this.player.sendMessage(Messages.get("usage.player_cooldown"));
 					return false;
 				}
 			}

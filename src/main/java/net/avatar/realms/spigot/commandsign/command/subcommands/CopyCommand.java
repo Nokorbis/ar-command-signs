@@ -33,7 +33,7 @@ public class CopyCommand extends Command {
         if (isPlayerAvailable(player)) {
             if (args.size() < 2) {
                 Container.getContainer().getCopyingConfigurations().put(player, null);
-                player.sendMessage(ChatColor.GOLD + Messages.get("howto.click_to_copy"));
+                player.sendMessage(Messages.get("howto.click_to_copy"));
             }
             else {
                 try {
@@ -43,7 +43,7 @@ public class CopyCommand extends Command {
                         throw new CommandSignsCommandException(Messages.get("error.invalid_command_id"));
                     }
                     Container.getContainer().getCopyingConfigurations().put(player, cmd.copy());
-                    player.sendMessage(ChatColor.GOLD + Messages.get("howto.click_to_paste"));
+                    player.sendMessage(Messages.get("howto.click_to_paste"));
                 }
                 catch (NumberFormatException ex) {
                     throw new CommandSignsCommandException(Messages.get("error.number_argument"));

@@ -12,7 +12,7 @@ public class TimerPlayerUsageSetMenu extends EditionMenu {
 
 	@Override
 	public void display(EditingConfiguration<CommandBlock> config) {
-		config.getEditor().sendMessage(c + Messages.get("menu.time_between_player_edit"));
+		config.getEditor().sendMessage(Messages.get("menu.time_between_player_edit"));
 
 	}
 

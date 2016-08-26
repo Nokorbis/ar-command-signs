@@ -1,6 +1,7 @@
 package net.avatar.realms.spigot.commandsign.utils;
 
 import net.avatar.realms.spigot.commandsign.CommandSign;
+import org.bukkit.ChatColor;
 
 import java.io.*;
 import java.util.Properties;
@@ -17,7 +18,7 @@ public abstract class Messages {
 		if (defaultMessages == null && messages == null) {
 			loadMessages();
 		}
-		return messages.getProperty(key);
+		return parseColor(messages.getProperty(key));
 	}
 
 	private static void loadMessages() {
@@ -45,5 +46,10 @@ public abstract class Messages {
 		}
 		catch (IOException e) {
 		}
+	}
+
+	private static String parseColor(String line) {
+		line = line.replace("&", "§");
+		return line;
 	}
 }

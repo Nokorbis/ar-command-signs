@@ -36,7 +36,7 @@ public class InfoCommand extends Command {
                 if (cmd == null) {
                     throw new CommandSignsCommandException(Messages.get("error.invalid_command_id"));
                 }
-                CommandSignUtils.info(player, ChatColor.GREEN, cmd);
+                CommandSignUtils.info(player, cmd);
             }
             catch (NumberFormatException ex) {
                 throw new CommandSignsCommandException(Messages.get("error.number_argument"));
@@ -47,7 +47,7 @@ public class InfoCommand extends Command {
                 return false;
             }
             Container.getContainer().getInfoPlayers().add(player);
-            player.sendMessage(ChatColor.GOLD + Messages.get("howto.click_for_info"));
+            player.sendMessage(Messages.get("howto.click_for_info"));
         }
 
         return true;

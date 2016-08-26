@@ -33,7 +33,7 @@ public class EditCommand extends Command {
             EditingConfiguration<CommandBlock> conf = null;
             if (args.size() < 2) {
                 conf = new EditingConfiguration<CommandBlock>(player, false);
-                player.sendMessage(ChatColor.GOLD + Messages.get("howto.click_to_edit"));
+                player.sendMessage(Messages.get("howto.click_to_edit"));
             }
             else {
                 try {

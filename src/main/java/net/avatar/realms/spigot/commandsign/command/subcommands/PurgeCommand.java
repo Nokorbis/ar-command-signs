@@ -38,7 +38,7 @@ public class PurgeCommand extends Command{
 
         String msg = Messages.get("info.purged_invalid_blocks");
         msg = msg.replace("{AMOUNT}", String.valueOf(toRemove.size()));
-        sender.sendMessage(ChatColor.GREEN + msg);
+        sender.sendMessage(msg);
         return true;
     }
 

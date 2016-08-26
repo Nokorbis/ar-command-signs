@@ -226,7 +226,7 @@ public class CommandSignListener implements Listener{
 			if (exe.getCommandBlock().isCancelledOnMove()) {
 				CommandSign.getPlugin().getServer().getScheduler().cancelTask(exe.getTaskId());
 				Container.getContainer().getExecutingTasks().remove(player.getUniqueId());
-				exe.getPlayer().sendMessage(ChatColor.RED + Messages.get("usage.execution_cancelled"));
+				exe.getPlayer().sendMessage(Messages.get("usage.execution_cancelled"));
 				return;
 			}
 			if (exe.getCommandBlock().isResetOnMove()) {
@@ -237,7 +237,7 @@ public class CommandSignListener implements Listener{
 				exe.setTaskId(task.getTaskId());
 				exe.setLocation(player.getLocation().getBlock().getLocation());
 				Container.getContainer().getExecutingTasks().put(player.getUniqueId(), exe);
-				exe.getPlayer().sendMessage(ChatColor.RED + Messages.get("usage.execution_timer_reset"));
+				exe.getPlayer().sendMessage(Messages.get("usage.execution_timer_reset"));
 			}
 		}
 	}
@@ -250,7 +250,7 @@ public class CommandSignListener implements Listener{
 		}
 
 		if (Container.getContainer().getCommandBlocks().containsKey(block.getLocation())) {
-			CommandSignUtils.info(player, ChatColor.DARK_GREEN, Container.getContainer().getCommandBlocks().get(block.getLocation()));
+			CommandSignUtils.info(player, Container.getContainer().getCommandBlocks().get(block.getLocation()));
 			Container.getContainer().getInfoPlayers().remove(player);
 		}
 		else {
@@ -270,15 +270,15 @@ public class CommandSignListener implements Listener{
 
 		if (creatingBlock == null) {
 			if (Container.getContainer().getCommandBlocks().containsKey(block.getLocation())) {
-				player.sendMessage(ChatColor.RED + Messages.get("creation.already_command"));
+				player.sendMessage(Messages.get("creation.already_command"));
 			}
 			else {
 				commandBlock.setLocation(block.getLocation());
-				player.sendMessage(ChatColor.GREEN + Messages.get("creation.block_set"));
+				player.sendMessage(Messages.get("creation.block_set"));
 			}
 		}
 		else {
-			player.sendMessage(ChatColor.RED + Messages.get("creation.already_command"));
+			player.sendMessage(Messages.get("creation.already_command"));
 		}
 	}
 
@@ -294,15 +294,15 @@ public class CommandSignListener implements Listener{
 			if (Container.getContainer().getCommandBlocks().containsKey(block.getLocation())) {
 				copyingBlock = Container.getContainer().getCommandBlocks().get(block.getLocation());
 				Container.getContainer().getCopyingConfigurations().put(player, copyingBlock.copy());
-				player.sendMessage(ChatColor.GOLD + Messages.get("howto.click_to_paste"));
+				player.sendMessage(Messages.get("howto.click_to_paste"));
 			}
 			else {
-				player.sendMessage(ChatColor.RED + Messages.get("error.invalid_block_abort"));
+				player.sendMessage(Messages.get("error.invalid_block_abort"));
 				Container.getContainer().getCopyingConfigurations().remove(player);
 			}
 		}
 		else if (Container.getContainer().getCommandBlocks().containsKey(block.getLocation())) {
-			player.sendMessage(ChatColor.RED + Messages.get("error.invalid_block_abort"));
+			player.sendMessage(Messages.get("error.invalid_block_abort"));
 			Container.getContainer().getCopyingConfigurations().remove(player);
 		}
 		else {
@@ -310,13 +310,13 @@ public class CommandSignListener implements Listener{
 			Container.getContainer().getCommandBlocks().put(block.getLocation(), copyingBlock);
 			Container.getContainer().getCopyingConfigurations().remove(player);
 			Container.getContainer().getSaver().save(copyingBlock);
-			player.sendMessage(ChatColor.GREEN + Messages.get("info.block_copied"));
+			player.sendMessage(Messages.get("info.block_copied"));
 		}
 	}
 
 	private void deleteCommandBlock(Player player, Block block) {
 		if (!CommandSignUtils.isValidBlock(block)) {
-			player.sendMessage(ChatColor.RED + Messages.get("error.invalid_block_abort"));
+			player.sendMessage(Messages.get("error.invalid_block_abort"));
 			Container.getContainer().getDeletingBlocks().remove(player);
 			return;
 		}
@@ -325,10 +325,10 @@ public class CommandSignListener implements Listener{
 			/* Is it a command block ?*/
 			if (Container.getContainer().getCommandBlocks().containsKey(block.getLocation())) {
 				Container.getContainer().getDeletingBlocks().put(player, block.getLocation());
-				player.sendMessage(ChatColor.GOLD + Messages.get("howto.click_confirm_deletion"));
+				player.sendMessage(Messages.get("howto.click_confirm_deletion"));
 			}
 			else {
-				player.sendMessage(ChatColor.RED + Messages.get("error.invalid_block_abort"));
+				player.sendMessage(Messages.get("error.invalid_block_abort"));
 				Container.getContainer().getDeletingBlocks().remove(player);
 			}
 

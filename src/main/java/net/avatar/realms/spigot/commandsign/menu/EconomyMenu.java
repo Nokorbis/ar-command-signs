@@ -15,7 +15,7 @@ public class EconomyMenu extends EditionMenu {
 	public void display(EditingConfiguration<CommandBlock> config) {
 		String msg = Messages.get("menu.economy_edit");
 		msg = msg.replace("{PRICE}", String.valueOf(config.getEditingData().getEconomyPrice()));
-		config.getEditor().sendMessage(c + msg);
+		config.getEditor().sendMessage(msg);
 	}
 
 	@Override

@@ -14,12 +14,15 @@ public class CommandsEditMenu extends EditionMenu {
 
 	@Override
 	public void display(EditingConfiguration<CommandBlock> config) {
-		config.getEditor().sendMessage(c + Messages.get("info.commands") + " : ");
+		config.getEditor().sendMessage(Messages.get("info.commands"));
 		int cpt = 1;
+		String format = Messages.get("info.command_format");
+		String msg;
 		for (String cmd : config.getEditingData().getCommands()) {
-			config.getEditor().sendMessage(ChatColor.GRAY + "---" + cpt++ + ". " + cmd);
+			msg = format.replace("{NUMBER}", String.valueOf(cpt++)).replace("{COMMAND}", cmd);
+			config.getEditor().sendMessage(msg);
 		}
-		config.getEditor().sendMessage(c + Messages.get("menu.edit_command"));
+		config.getEditor().sendMessage(Messages.get("menu.edit_command"));
 	}
 
 	@Override
