@@ -8,7 +8,6 @@ import java.util.regex.Pattern;
 
 import net.avatar.realms.spigot.commandsign.utils.Messages;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachment;
 
@@ -24,8 +23,8 @@ public class CommandBlockExecutor {
 
 	private static DecimalFormat df;
 
-	private Player player;
-	private CommandBlock cmdBlock;
+	private final Player player;
+	private final CommandBlock cmdBlock;
 
 	public CommandBlockExecutor (Player player, CommandBlock cmdBlock) {
 		this.player = player;

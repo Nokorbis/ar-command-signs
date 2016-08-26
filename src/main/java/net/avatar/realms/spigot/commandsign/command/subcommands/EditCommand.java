@@ -6,7 +6,6 @@ import net.avatar.realms.spigot.commandsign.controller.EditingConfiguration;
 import net.avatar.realms.spigot.commandsign.model.CommandBlock;
 import net.avatar.realms.spigot.commandsign.model.CommandSignsCommandException;
 import net.avatar.realms.spigot.commandsign.utils.Messages;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -30,7 +29,7 @@ public class EditCommand extends Command {
         Player player = (Player) sender;
 
         if (isPlayerAvailable(player)) {
-            EditingConfiguration<CommandBlock> conf = null;
+            EditingConfiguration<CommandBlock> conf;
             if (args.size() < 2) {
                 conf = new EditingConfiguration<CommandBlock>(player, false);
                 player.sendMessage(Messages.get("howto.click_to_edit"));

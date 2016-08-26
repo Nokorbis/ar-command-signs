@@ -37,7 +37,7 @@ public class Container {
 	private Map<Player, CommandBlock> copyingConfigurations;
 	private Map<Player, Location> deletingBlocks;
 	private Map<UUID, ExecuteTask> executingTasks;
-	public List<Player> infoPlayers;
+	private List<Player> infoPlayers;
 
 	private ICommandBlockSaver commandBlockSaver;
 

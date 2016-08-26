@@ -6,7 +6,6 @@ import net.avatar.realms.spigot.commandsign.model.CommandBlock;
 import net.avatar.realms.spigot.commandsign.model.CommandSignsCommandException;
 import net.avatar.realms.spigot.commandsign.utils.CommandSignUtils;
 import net.avatar.realms.spigot.commandsign.utils.Messages;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

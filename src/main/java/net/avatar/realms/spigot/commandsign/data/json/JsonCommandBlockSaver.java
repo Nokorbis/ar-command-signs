@@ -110,12 +110,16 @@ public class JsonCommandBlockSaver implements ICommandBlockSaver {
             return Collections.emptyList();
         }
         List<CommandBlock> cmdBs = new LinkedList<CommandBlock>();
-        for (File file : dataFolder.listFiles(filter)) {
-            CommandBlock cmd = load(file);
-            if(cmd != null) {
-                cmdBs.add(cmd);
+        File[] files = dataFolder.listFiles(filter);
+        if (files != null) {
+            for (File file : files) {
+                CommandBlock cmd = load(file);
+                if(cmd != null) {
+                    cmdBs.add(cmd);
+                }
             }
         }
+
         return cmdBs;
     }
 

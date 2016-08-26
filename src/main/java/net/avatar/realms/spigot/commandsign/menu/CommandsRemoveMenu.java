@@ -1,7 +1,6 @@
 package net.avatar.realms.spigot.commandsign.menu;
 
 import net.avatar.realms.spigot.commandsign.utils.Messages;
-import org.bukkit.ChatColor;
 
 import net.avatar.realms.spigot.commandsign.controller.EditingConfiguration;
 import net.avatar.realms.spigot.commandsign.model.CommandBlock;

@@ -1,7 +1,6 @@
 package net.avatar.realms.spigot.commandsign.utils;
 
 import net.avatar.realms.spigot.commandsign.CommandSign;
-import org.bukkit.ChatColor;
 
 import java.io.*;
 import java.util.Properties;

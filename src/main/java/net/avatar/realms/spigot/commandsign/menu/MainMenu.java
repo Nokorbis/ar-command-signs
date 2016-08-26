@@ -3,8 +3,6 @@ package net.avatar.realms.spigot.commandsign.menu;
 import java.util.Map.Entry;
 
 import net.avatar.realms.spigot.commandsign.utils.Messages;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import net.avatar.realms.spigot.commandsign.controller.Container;

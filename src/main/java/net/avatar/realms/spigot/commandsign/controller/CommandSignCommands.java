@@ -5,19 +5,11 @@ import java.util.*;
 import net.avatar.realms.spigot.commandsign.command.ICommand;
 import net.avatar.realms.spigot.commandsign.command.subcommands.*;
 import net.avatar.realms.spigot.commandsign.model.CommandSignsCommandException;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
-import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
-import net.avatar.realms.spigot.commandsign.CommandSign;
-import net.avatar.realms.spigot.commandsign.model.CommandBlock;
-import net.avatar.realms.spigot.commandsign.model.CommandSignsException;
-import net.avatar.realms.spigot.commandsign.utils.CommandSignUtils;
 import net.avatar.realms.spigot.commandsign.utils.Messages;
 
 public class CommandSignCommands implements CommandExecutor, TabCompleter {

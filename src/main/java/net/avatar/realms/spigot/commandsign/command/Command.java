@@ -15,10 +15,10 @@ import java.util.List;
  */
 public abstract class Command implements ICommand{
     protected String command;
-    protected List<String> aliases;
+    protected final List<String> aliases;
     protected String basePermission;
 
-    public Command() {
+    protected Command() {
         this.aliases = new LinkedList<String>();
     }
 

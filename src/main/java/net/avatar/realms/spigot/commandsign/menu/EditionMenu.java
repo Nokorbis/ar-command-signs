@@ -3,8 +3,6 @@ package net.avatar.realms.spigot.commandsign.menu;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.bukkit.ChatColor;
-
 import net.avatar.realms.spigot.commandsign.model.CommandBlock;
 
 /**

@@ -4,8 +4,8 @@ import net.avatar.realms.spigot.commandsign.controller.EditingConfiguration;
 
 public interface IEditionMenu<T> {
 	
-	public void display(EditingConfiguration<T> config);
+	void display(EditingConfiguration<T> config);
 	
-	public void input(EditingConfiguration<T> config, String message);
+	void input(EditingConfiguration<T> config, String message);
 
 }

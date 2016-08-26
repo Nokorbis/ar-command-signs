@@ -5,7 +5,6 @@ import java.util.List;
 
 import net.avatar.realms.spigot.commandsign.controller.Economy;
 import net.avatar.realms.spigot.commandsign.model.CommandBlock;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -96,20 +95,20 @@ public class CommandSignUtils {
         String permFormat = Messages.get("info.permission_format");
         int cpt = 1;
         for (String perm : cmdB.getNeededPermissions()) {
-            player.sendMessage(permFormat.replace("{NUMBER}", String.valueOf(cpt++).replace("{PERMISSION}", perm)));
+            player.sendMessage(permFormat.replace("{NUMBER}", String.valueOf(cpt++)).replace("{PERMISSION}", perm));
         }
 
         player.sendMessage(Messages.get("info.permissions"));
         cpt = 1;
         for (String perm :cmdB.getPermissions()) {
-            player.sendMessage(permFormat.replace("{NUMBER}", String.valueOf(cpt++).replace("{PERMISSION}", perm)));
+            player.sendMessage(permFormat.replace("{NUMBER}", String.valueOf(cpt++)).replace("{PERMISSION}", perm));
         }
 
         player.sendMessage(Messages.get("info.commands"));
         cpt = 1;
         String cmdFormat = Messages.get("info.command_format");
         for (String cmd : cmdB.getCommands()) {
-            player.sendMessage(cmdFormat.replace("{NUMBER}", String.valueOf(cpt++).replace("{COMMAND}", cmd)));
+            player.sendMessage(cmdFormat.replace("{NUMBER}", String.valueOf(cpt++)).replace("{COMMAND}", cmd));
         }
 
         if ((cmdB.getTimeBeforeExecution() != null) && (cmdB.getTimeBeforeExecution() > 0)) {

@@ -4,7 +4,6 @@ import net.avatar.realms.spigot.commandsign.command.Command;
 import net.avatar.realms.spigot.commandsign.command.ICommand;
 import net.avatar.realms.spigot.commandsign.model.CommandSignsCommandException;
 import net.avatar.realms.spigot.commandsign.utils.Messages;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 

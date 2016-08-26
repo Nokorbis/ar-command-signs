@@ -26,9 +26,9 @@ public class CommandBlock {
 
 	private Location location;
 
-	private List<String> neededPermissions;
-	private List<String> commands;
-	private List<String> permissions;
+	private final List<String> neededPermissions;
+	private final List<String> commands;
+	private final List<String> permissions;
 
 	private Double economyPrice;
 
@@ -40,7 +40,7 @@ public class CommandBlock {
 	private int timeBetweenPlayerUsage; // Value in seconds
 
 	private transient long lastTimeUsed;
-	private transient Map<UUID, Long> usages;
+	private final transient Map<UUID, Long> usages;
 
 	public CommandBlock () {
 		// We use ArrayList because we want to remove/edit them by the index.
@@ -391,8 +391,7 @@ public class CommandBlock {
 		if (this.location == null) {
 			return "";
 		}
-		String str = this.location.getBlock().getType() + " #" + this.location.getX() + ":" + this.location.getZ()+"(" +this.location.getY()+")";
-		return str;
+		return this.location.getBlock().getType() + " #" + this.location.getX() + ":" + this.location.getZ()+"(" + this.location.getY()+")";
 	}
 
 	public static void reloadUsedIDs() {
