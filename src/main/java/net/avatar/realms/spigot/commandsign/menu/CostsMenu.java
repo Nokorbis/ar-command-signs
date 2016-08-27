@@ -11,7 +11,7 @@ import java.util.Map;
 public class CostsMenu extends EditionMenu {
 
 	public CostsMenu(EditionMenu parent) {
-		super(parent, Messages.get("info.costs"));
+		super(parent, Messages.get("menu.costs_title"));
 		this.subMenus.put(2, new EconomyMenu(this));
 	}
 

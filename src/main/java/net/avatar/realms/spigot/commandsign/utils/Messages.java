@@ -17,7 +17,13 @@ public abstract class Messages {
 		if (defaultMessages == null && messages == null) {
 			loadMessages();
 		}
-		return parseColor(messages.getProperty(key));
+		try {
+			return parseColor(messages.getProperty(key));
+		}
+		catch (NullPointerException ex) {
+			CommandSign.getPlugin().getLogger().severe("A null pointer exception occurred while parsing color on key : " + key);
+			return key;
+		}
 	}
 
 	private static void loadMessages() {
@@ -53,7 +59,6 @@ public abstract class Messages {
 	}
 
 	private static String parseColor(String line) {
-		line = line.replace("&", "§");
-		return line;
+		return line.replace("&", "§");
 	}
 }
