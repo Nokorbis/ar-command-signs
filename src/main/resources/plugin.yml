@@ -1,8 +1,8 @@
 name: CommandSign
-main: net.avatar.realms.spigot.commandsign.CommandSign
+main: net.bendercraft.spigot.commandsigns.CommandSign
 author: Nokorbis
 description: Allows admins to create Command Blocks (signs, buttons or plates) that can be executed on action.
-version: 1.5.1
+version: 1.5.2
 website: https://www.spigotmc.org/resources/command-signs.10512/
 softdepend: [Multiverse-Core,Vault]
 load: POSTWORLD

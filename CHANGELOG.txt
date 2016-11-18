@@ -1,0 +1,112 @@
+CommandSign v1.5.2
+    Switch to maven.
+    Rename the packages to 'bendercraft' (new server name)
+
+CommandSign v1.5.1
+    Add colors in the language file (and reformat languages entries)
+
+CommandSign v1.5.0
+    No more support for savefiles before 1.4.0
+    Fix spelling mistake
+    Reload command
+
+CommandSign v1.4.2
+    Fix spelling mistake
+    Next to come : Factions requirement ?
+
+CommangSign v1.4.1
+    Fix command block per-player cooldown.
+
+CommandSign v1.4.0
+    Rework the command system to make it more maintainable (should change nothing for the users).
+    /!\Rework the persistence (files) system.
+    Rework the permissions system based on the plugin.yml file. (Better way)
+    Create localization system
+    Works on Craftbukkit and Spigot 1.8.7+
+
+CommandSign v1.3.0
+    Add more variable for commands
+        - %all% for all players
+        - %radius=9% (where 9 can be any number) for all players that are less that 9 blocks around the player
+    Add time between usage of the command sign
+        - Global
+       	- Per player
+    Add id to command blocks so that they can be remotely managed
+        - /commandsign edit <id>
+        - /commandsign delete <id>
+        - /commandsign copy <id>
+        - /commandsign info <id>
+    Add name to command blocks (optional) (Mainly for the listing feature)
+    Add a list command
+        - /commandsign list [page]
+    Add purge command (delete invalid command blocks) (invalid location)
+    	- /commandsign purge
+   	Add near command (list all command blocks in a given radius)
+   	    - /commandsign near <radius>
+   	Add teleport command to be teleported to a command block
+   		- /commandsign tp <id>
+    Bugfix : Show command instead of needed permissions when removing a command
+    Bugfix : Can add many times the same command/permission
+    Copy command now also copy Timers and Economy Prices
+    Works on Craftbukkit and Spigot 1.8.7+
+    
+
+CommandSign v1.2.4
+    Can execute command as op or as server
+    Edit command properly show commands (instead of needed permissions)
+    Works on Craftbukkit and Spigot 1.8.7+
+
+CommandSign v1.2.2
+    Menus are handled a new way (easier maintenance)
+    Menus are organized the same way as the process.
+    Add "commandsign.costs.bypass"  to bypass costs of signs
+    Actions that a player is doing are cancelled if the player disconnect
+    Works on Craftbukkit and Spigot 1.8.7+
+
+Command Sign v1.2.1
+    Timer should not redirect to cost anymore
+    Works on Craftbukkit and Spigot 1.8.7+
+
+Command Sign v1.2.0
+    Add a cost system based on vault
+    Works on Craftbukkit and Spigot 1.8.7+
+
+Command Sign v1.1.3
+    "Done" are now on the 9. in the menus
+    Set high priority on chat events
+    Works on Craftbukkit and Spigot 1.8.7+
+    
+Command Sign v1.1.2
+    Add timer in the command block information
+    Correct a minor bug
+    Works on Craftbukkit and Spigot 1.8.7+
+
+Command Sign v1.1.1
+    Big security fixes. Everyone should update
+    Works on Craftbukkit and Spigot 1.8.7+
+
+Command Sign v1.1.0
+    Add version subcommand
+    Add timer (check the user guide)
+    Works on Craftbukkit and Spigot 1.8.7+
+
+Command Sign v1.0.15
+    Does not execute commands when the interaction has been cancelled by other plugin (such as Factions and WorldGuard)
+    Cannot executes plates commands on click anymore
+    Works on Craftbukkit and Spigot 1.8.7+
+
+Command Sign v1.0.11
+    Multiverse now load before Command Sign so that other world's command blocks can load too.
+    Works on Craftbukkit and Spigot 1.8.7+
+
+Command sign v1.0.4
+    Add mk alias for the create sub-command
+    Fix a null pointer exception on world when loading save file
+    Works on Craftbukkit and Spigot 1.8.7+
+
+Command sign v1.0.2
+    First version of the plugin.
+
+    Works on Craftbukkit and Spigot 1.8.7+
+
+Note that 1.8.7+ means that the plugin has never been tested before that version. It may work since Craftbukkit and Spigot 1.8.1+
