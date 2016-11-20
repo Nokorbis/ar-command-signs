@@ -41,6 +41,9 @@ public abstract class Messages {
 		messages = new Properties(defaultMessages);
 		try {
 			File folder = CommandSignsPlugin.getPlugin().getDataFolder();
+			if (!folder.exists()) {
+				folder.mkdirs();
+			}
 			File custom = new File(folder, FILENAME);
 			if (custom.exists()) {
 				InputStream in = new FileInputStream(custom);
