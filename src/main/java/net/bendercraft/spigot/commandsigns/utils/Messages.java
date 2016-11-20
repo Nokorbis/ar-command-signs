@@ -54,7 +54,7 @@ public abstract class Messages {
 				out.close();
 			}
 		}
-		catch (IOException e) {
+		catch (IOException ignored) {
 		}
 	}
 

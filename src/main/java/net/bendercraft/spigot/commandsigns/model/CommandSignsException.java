@@ -7,7 +7,7 @@ public class CommandSignsException extends Exception {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private String message;
+	private final String message;
 
 	public CommandSignsException(String message) {
 		this.message = message;

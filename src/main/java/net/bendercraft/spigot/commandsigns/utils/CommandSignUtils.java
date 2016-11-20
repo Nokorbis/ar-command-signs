@@ -10,6 +10,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
+@SuppressWarnings("WeakerAccess")
 public class CommandSignUtils {
 
 	public static boolean isPlate(Block block) {

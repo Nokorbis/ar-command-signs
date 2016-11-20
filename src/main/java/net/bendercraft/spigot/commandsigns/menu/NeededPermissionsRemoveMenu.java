@@ -33,7 +33,7 @@ public class NeededPermissionsRemoveMenu extends EditionMenu {
 			int index = Integer.parseInt(args[0]);
 			config.getEditingData().removeNeededPermission(index - 1);
 		}
-		catch (Exception e) {
+		catch (Exception ignored) {
 		}
 	}
 }

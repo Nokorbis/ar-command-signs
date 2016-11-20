@@ -32,7 +32,7 @@ public class CommandsEditMenu extends EditionMenu {
 			int index = Integer.parseInt(args[0]);
 			config.getEditingData().editCommand(index - 1, args[1]);
 		}
-		catch (Exception e) {
+		catch (Exception ignored) {
 		}
 	}
 

@@ -24,7 +24,7 @@ public class TimerPlayerUsageSetMenu extends EditionMenu {
 			int index = Integer.parseInt(args[0]);
 			config.getEditingData().setTimeBetweenPlayerUsage(index);
 		}
-		catch (Exception e) {
+		catch (Exception ignored) {
 		}
 
 	}

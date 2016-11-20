@@ -23,7 +23,7 @@ public class TimerExecutionSetMenu extends EditionMenu {
 			int index = Integer.parseInt(args[0]);
 			config.getEditingData().setTimeBeforeExecution(index);
 		}
-		catch (Exception e) {
+		catch (Exception ignored) {
 		}
 	}
 

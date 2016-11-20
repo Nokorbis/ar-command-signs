@@ -58,7 +58,7 @@ public class Container {
 		}
 	}
 
-	public void initializeDataStructures() {
+	private void initializeDataStructures() {
 		this.playerPerms = new HashMap<Player, PermissionAttachment>();
 		this.commandBlocks = new HashMap<Location , CommandBlock>();
 		this.creatingConfigurations = new HashMap<Player, EditingConfiguration<CommandBlock>>();

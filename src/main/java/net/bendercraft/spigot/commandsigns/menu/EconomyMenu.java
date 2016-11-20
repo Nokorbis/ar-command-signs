@@ -25,7 +25,7 @@ public class EconomyMenu extends EditionMenu {
 			Double value = Double.parseDouble(args[0]);
 			config.getEditingData().setEconomyPrice(value);
 		}
-		catch (Exception e) {
+		catch (Exception ignored) {
 		}
 		config.setCurrentMenu(getParent());
 	}

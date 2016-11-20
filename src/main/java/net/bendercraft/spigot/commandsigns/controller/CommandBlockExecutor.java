@@ -173,7 +173,7 @@ public class CommandBlockExecutor {
 
 	private List<String> formatCommand (String command, Player player) {
 		List<String> cmds = new LinkedList<String>();
-		String cmd = new String(command);
+		String cmd = command;
 
 		Matcher m = PLAYER_PATTERN.matcher(cmd);
 		if (m.find()) {
@@ -199,7 +199,7 @@ public class CommandBlockExecutor {
 						}
 					}
 				}
-				catch (Exception ex) {
+				catch (Exception ignored) {
 				}
 			}
 			else {

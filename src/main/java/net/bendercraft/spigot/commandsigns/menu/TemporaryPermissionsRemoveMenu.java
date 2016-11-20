@@ -32,7 +32,7 @@ public class TemporaryPermissionsRemoveMenu extends EditionMenu {
 			int index = Integer.parseInt(args[0]);
 			config.getEditingData().removePermission(index - 1);
 		}
-		catch (Exception e) {
+		catch (Exception ignored) {
 		}
 	}
 	

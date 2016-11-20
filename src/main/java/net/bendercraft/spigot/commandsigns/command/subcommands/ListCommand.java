@@ -36,7 +36,7 @@ public class ListCommand extends Command {
             try {
                 index = Integer.parseInt(args.get(1));
             }
-            catch (NumberFormatException ex) {
+            catch (NumberFormatException ignored) {
             }
         }
 

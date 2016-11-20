@@ -73,7 +73,7 @@ public class CommandBlock {
 		this.usages = new HashMap<UUID, Long>();
 	}
 
-	public static final long getBiggerUsedId() {
+	public static long getBiggerUsedId() {
 		return biggerUsedId;
 	}
 

@@ -11,7 +11,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Created by nokorbis on 1/20/16.
+ * Created by Nokorbis on 1/20/16.
  */
 public abstract class Command implements ICommand{
     protected String command;

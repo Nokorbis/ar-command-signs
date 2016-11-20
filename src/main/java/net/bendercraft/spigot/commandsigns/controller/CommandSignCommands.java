@@ -16,7 +16,7 @@ public class CommandSignCommands implements CommandExecutor, TabCompleter {
 
 	private static final int LIST_SIZE = 10;
 
-	private List<ICommand> commands;
+	private final List<ICommand> commands;
 
 	public CommandSignCommands () {
 		commands = new LinkedList<ICommand>();

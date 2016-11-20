@@ -1,7 +1,2 @@
-/bin/
-/.externalToolBuilders/
 /target/
 /.idea/
-.classpath
-.project
-spigot.commandsigns.iml
