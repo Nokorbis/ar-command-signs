@@ -6,9 +6,9 @@ import net.bendercraft.spigot.commandsigns.controller.Container;
 import net.bendercraft.spigot.commandsigns.controller.Economy;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class CommandSign extends JavaPlugin{
+public class CommandSignsPlugin extends JavaPlugin{
 
-	private static CommandSign plugin;
+	private static CommandSignsPlugin plugin;
 
 	@Override
 	public void onEnable() {
@@ -17,8 +17,8 @@ public class CommandSign extends JavaPlugin{
 		Economy.initialize();
 		CommandSignCommands executor = new CommandSignCommands();
 		Container.getContainer(); // Intialize the all stuff
-		this.getCommand("commandsigns").setExecutor(executor);
-		this.getCommand("commandsigns").setTabCompleter(executor);
+		this.getCommand("commandsign").setExecutor(executor);
+		this.getCommand("commandsign").setTabCompleter(executor);
 		this.getServer().getPluginManager().registerEvents(new CommandSignListener(), this);
 	}
 
@@ -28,7 +28,7 @@ public class CommandSign extends JavaPlugin{
 		Container.getContainer().getSaver().saveAll(Container.getContainer().getCommandBlocks().values());
 	}
 
-	public static CommandSign getPlugin() {
+	public static CommandSignsPlugin getPlugin() {
 		return plugin;
 	}
 }

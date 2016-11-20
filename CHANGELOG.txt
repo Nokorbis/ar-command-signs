@@ -1,3 +1,8 @@
+CommandSigns v1.5.3
+    Rename CommandSign to CommandSigns
+    Add bcs (For Bendercraft Command Signs) alias
+    Check : https://github.com/Nokorbis/ar-command-signs/wiki/Updates
+
 CommandSign v1.5.2
     Switch to maven.
     Rename the packages to 'bendercraft' (new server name)

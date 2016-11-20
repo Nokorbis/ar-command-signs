@@ -4,5 +4,4 @@
 /.idea/
 .classpath
 .project
-spigot-ar-command-signs.iml
-build.xml
+spigot.commandsigns.iml

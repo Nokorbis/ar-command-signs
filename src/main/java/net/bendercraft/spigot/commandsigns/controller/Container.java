@@ -13,7 +13,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachment;
 
-import net.bendercraft.spigot.commandsigns.CommandSign;
+import net.bendercraft.spigot.commandsigns.CommandSignsPlugin;
 import net.bendercraft.spigot.commandsigns.menu.IEditionMenu;
 import net.bendercraft.spigot.commandsigns.menu.MainMenu;
 import net.bendercraft.spigot.commandsigns.model.CommandBlock;
@@ -44,7 +44,7 @@ public class Container {
 	private IEditionMenu<CommandBlock> mainMenu;
 
 	private Container() {
-		CommandSign plugin = CommandSign.getPlugin();
+		CommandSignsPlugin plugin = CommandSignsPlugin.getPlugin();
 		initializeDataStructures();
 		this.mainMenu = new MainMenu();
 
@@ -70,7 +70,7 @@ public class Container {
 	}
 
 	private void initializeSaver() {
-		commandBlockSaver = new JsonCommandBlockSaver(CommandSign.getPlugin().getDataFolder());
+		commandBlockSaver = new JsonCommandBlockSaver(CommandSignsPlugin.getPlugin().getDataFolder());
 		reload();
 	}
 
@@ -80,7 +80,7 @@ public class Container {
 	 */
 	public int reload() {
 		int errorCount = 0;
-		CommandSign plugin = CommandSign.getPlugin();
+		CommandSignsPlugin plugin = CommandSignsPlugin.getPlugin();
 		for (CommandBlock commandBlock : commandBlockSaver.loadAll()) {
 			try {
 				this.commandBlocks.put(commandBlock.getLocation(), commandBlock);
@@ -104,7 +104,7 @@ public class Container {
 			return this.playerPerms.get(player);
 		}
 
-		PermissionAttachment perms = player.addAttachment(CommandSign.getPlugin());
+		PermissionAttachment perms = player.addAttachment(CommandSignsPlugin.getPlugin());
 		this.playerPerms.put(player, perms);
 
 		return perms;

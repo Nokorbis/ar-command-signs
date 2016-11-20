@@ -1,6 +1,6 @@
 package net.bendercraft.spigot.commandsigns.command.subcommands;
 
-import net.bendercraft.spigot.commandsigns.CommandSign;
+import net.bendercraft.spigot.commandsigns.CommandSignsPlugin;
 import net.bendercraft.spigot.commandsigns.command.Command;
 import net.bendercraft.spigot.commandsigns.model.CommandSignsCommandException;
 import org.bukkit.ChatColor;
@@ -21,7 +21,7 @@ public class VersionCommand extends Command {
 
     @Override
     public boolean execute(CommandSender sender, List<String> args) throws CommandSignsCommandException {
-        sender.sendMessage(ChatColor.AQUA + "CommandSign version : " + CommandSign.getPlugin().getDescription().getVersion() + " developed by Nokorbis");
+        sender.sendMessage(ChatColor.AQUA + "CommandSign version : " + CommandSignsPlugin.getPlugin().getDescription().getVersion() + " developed by Nokorbis");
         return true;
     }
 

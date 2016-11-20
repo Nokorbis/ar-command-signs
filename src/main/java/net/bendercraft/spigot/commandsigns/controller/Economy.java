@@ -2,7 +2,7 @@ package net.bendercraft.spigot.commandsigns.controller;
 
 import org.bukkit.plugin.RegisteredServiceProvider;
 
-import net.bendercraft.spigot.commandsigns.CommandSign;
+import net.bendercraft.spigot.commandsigns.CommandSignsPlugin;
 
 
 public class Economy {
@@ -10,7 +10,7 @@ public class Economy {
 	private static net.milkbowl.vault.economy.Economy economy = null;
 
 	public static void initialize() {
-		CommandSign plugin = CommandSign.getPlugin();
+		CommandSignsPlugin plugin = CommandSignsPlugin.getPlugin();
 		if (plugin.getServer().getPluginManager().getPlugin("Vault") != null) {
 			plugin.getLogger().info("Plugin vault detected");
 			RegisteredServiceProvider<net.milkbowl.vault.economy.Economy> rsp = plugin.getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);

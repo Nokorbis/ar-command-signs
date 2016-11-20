@@ -1,6 +1,6 @@
 package net.bendercraft.spigot.commandsigns.utils;
 
-import net.bendercraft.spigot.commandsigns.CommandSign;
+import net.bendercraft.spigot.commandsigns.CommandSignsPlugin;
 
 import java.io.*;
 import java.util.Properties;
@@ -21,7 +21,7 @@ public abstract class Messages {
 			return parseColor(messages.getProperty(key));
 		}
 		catch (NullPointerException ex) {
-			CommandSign.getPlugin().getLogger().severe("A null pointer exception occurred while parsing color on key : " + key);
+			CommandSignsPlugin.getPlugin().getLogger().severe("A null pointer exception occurred while parsing color on key : " + key);
 			return key;
 		}
 	}
@@ -40,7 +40,7 @@ public abstract class Messages {
 		}
 		messages = new Properties(defaultMessages);
 		try {
-			File folder = CommandSign.getPlugin().getDataFolder();
+			File folder = CommandSignsPlugin.getPlugin().getDataFolder();
 			File custom = new File(folder, FILENAME);
 			if (custom.exists()) {
 				InputStream in = new FileInputStream(custom);

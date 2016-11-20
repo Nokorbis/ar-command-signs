@@ -2,7 +2,7 @@ package net.bendercraft.spigot.commandsigns.data.json;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import net.bendercraft.spigot.commandsigns.CommandSign;
+import net.bendercraft.spigot.commandsigns.CommandSignsPlugin;
 import net.bendercraft.spigot.commandsigns.data.ICommandBlockSaver;
 import net.bendercraft.spigot.commandsigns.model.CommandBlock;
 
@@ -57,12 +57,12 @@ public class JsonCommandBlockSaver implements ICommandBlockSaver {
             writer.close();
             return true;
         } catch (FileNotFoundException e) {
-            CommandSign.getPlugin().getLogger().severe("Was not able to find a file while saving a command block : " + cmdB.getId());
-            CommandSign.getPlugin().getLogger().severe(e.getMessage());
+            CommandSignsPlugin.getPlugin().getLogger().severe("Was not able to find a file while saving a command block : " + cmdB.getId());
+            CommandSignsPlugin.getPlugin().getLogger().severe(e.getMessage());
             return false;
         } catch (IOException e) {
-            CommandSign.getPlugin().getLogger().severe("Was not able to create a file while saving a command block : " + cmdB.getId());
-            CommandSign.getPlugin().getLogger().severe(e.getMessage());
+            CommandSignsPlugin.getPlugin().getLogger().severe("Was not able to create a file while saving a command block : " + cmdB.getId());
+            CommandSignsPlugin.getPlugin().getLogger().severe(e.getMessage());
             return false;
         }
     }
@@ -84,13 +84,13 @@ public class JsonCommandBlockSaver implements ICommandBlockSaver {
             reader.close();
             return cmdB;
         } catch (FileNotFoundException e) {
-            CommandSign.getPlugin().getLogger().severe("Was not able to find a file while loading a command block : " + file.getName());
-            CommandSign.getPlugin().getLogger().severe(e.getMessage());
+            CommandSignsPlugin.getPlugin().getLogger().severe("Was not able to find a file while loading a command block : " + file.getName());
+            CommandSignsPlugin.getPlugin().getLogger().severe(e.getMessage());
         } catch (UnsupportedEncodingException e) {
-            CommandSign.getPlugin().getLogger().severe("Was not able to handle the charset : " + CHARSET);
+            CommandSignsPlugin.getPlugin().getLogger().severe("Was not able to handle the charset : " + CHARSET);
         } catch (IOException e) {
-            CommandSign.getPlugin().getLogger().severe("Was not able to read a file while loading a command block : " + file.getName());
-            CommandSign.getPlugin().getLogger().severe(e.getMessage());
+            CommandSignsPlugin.getPlugin().getLogger().severe("Was not able to read a file while loading a command block : " + file.getName());
+            CommandSignsPlugin.getPlugin().getLogger().severe(e.getMessage());
         }
         return null;
     }

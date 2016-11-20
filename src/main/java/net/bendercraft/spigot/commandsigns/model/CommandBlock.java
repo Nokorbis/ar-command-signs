@@ -13,7 +13,7 @@ import java.util.UUID;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import net.bendercraft.spigot.commandsigns.CommandSign;
+import net.bendercraft.spigot.commandsigns.CommandSignsPlugin;
 import net.bendercraft.spigot.commandsigns.utils.CommandSignUtils;
 
 public class CommandBlock {
@@ -72,7 +72,7 @@ public class CommandBlock {
 		this.setTimeBetweenUsage(0);
 		this.lastTimeUsed = 0;
 		if (usedIds.contains(id)) {
-			CommandSign.getPlugin().getLogger().warning("A strange error occured : It seems that the registered id (" + id + ") is already in used... Getting a new one..."); 
+			CommandSignsPlugin.getPlugin().getLogger().warning("A strange error occured : It seems that the registered id (" + id + ") is already in used... Getting a new one...");
 			id = getFreeId();
 		}
 		this.setId(id);

@@ -23,7 +23,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 
-import net.bendercraft.spigot.commandsigns.CommandSign;
+import net.bendercraft.spigot.commandsigns.CommandSignsPlugin;
 
 
 public class CommandSignListener implements Listener{
@@ -192,7 +192,7 @@ public class CommandSignListener implements Listener{
 					ExecuteTask exe = new ExecuteTask(executor);
 					exe.setLocation(player.getLocation().getBlock().getLocation());
 					Container.getContainer().getExecutingTasks().put(player.getUniqueId(), exe);
-					BukkitTask task = CommandSign.getPlugin().getServer().getScheduler().runTaskLater(CommandSign.getPlugin(), exe, cmd.getTimeBeforeExecution() * 20);
+					BukkitTask task = CommandSignsPlugin.getPlugin().getServer().getScheduler().runTaskLater(CommandSignsPlugin.getPlugin(), exe, cmd.getTimeBeforeExecution() * 20);
 					exe.setTaskId(task.getTaskId());
 					String msg = Messages.get("info.timer_delayed");
 					msg = msg.replace("{TIME}", String.valueOf(cmd.getTimeBeforeExecution()));
@@ -224,16 +224,16 @@ public class CommandSignListener implements Listener{
 			}
 
 			if (exe.getCommandBlock().isCancelledOnMove()) {
-				CommandSign.getPlugin().getServer().getScheduler().cancelTask(exe.getTaskId());
+				CommandSignsPlugin.getPlugin().getServer().getScheduler().cancelTask(exe.getTaskId());
 				Container.getContainer().getExecutingTasks().remove(player.getUniqueId());
 				exe.getPlayer().sendMessage(Messages.get("usage.execution_cancelled"));
 				return;
 			}
 			if (exe.getCommandBlock().isResetOnMove()) {
-				BukkitScheduler sch = CommandSign.getPlugin().getServer().getScheduler();
+				BukkitScheduler sch = CommandSignsPlugin.getPlugin().getServer().getScheduler();
 				sch.cancelTask(exe.getTaskId());
 				Container.getContainer().getExecutingTasks().remove(player.getUniqueId());
-				BukkitTask task = sch.runTaskLater(CommandSign.getPlugin(), exe, exe.getCommandBlock().getTimeBeforeExecution() * 20);
+				BukkitTask task = sch.runTaskLater(CommandSignsPlugin.getPlugin(), exe, exe.getCommandBlock().getTimeBeforeExecution() * 20);
 				exe.setTaskId(task.getTaskId());
 				exe.setLocation(player.getLocation().getBlock().getLocation());
 				Container.getContainer().getExecutingTasks().put(player.getUniqueId(), exe);
