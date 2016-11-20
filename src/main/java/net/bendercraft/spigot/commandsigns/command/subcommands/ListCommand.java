@@ -22,7 +22,7 @@ public class ListCommand extends Command {
     public ListCommand() {
         this.command = "list";
         this.aliases.add("l");
-        this.basePermission = "commandsigns.admin.list";
+        this.basePermission = "commandsign.admin.list";
     }
     @Override
     public boolean execute(CommandSender sender, List<String> args) throws CommandSignsCommandException {
@@ -81,6 +81,6 @@ public class ListCommand extends Command {
 
     @Override
     public void printUsage(CommandSender sender) {
-        sender.sendMessage("/commandsigns list [page]");
+        sender.sendMessage("/commandsign list [page]");
     }
 }

@@ -19,7 +19,7 @@ public class EditCommand extends Command {
     public EditCommand () {
         this.command = "edit";
 
-        this.basePermission = "commandsigns.admin.edit";
+        this.basePermission = "commandsign.admin.edit";
     }
     @Override
     public boolean execute(CommandSender sender, List<String> args) throws CommandSignsCommandException {
@@ -61,6 +61,6 @@ public class EditCommand extends Command {
 
     @Override
     public void printUsage(CommandSender sender) {
-        sender.sendMessage("/commandsigns edit [ID]");
+        sender.sendMessage("/commandsign edit [ID]");
     }
 }

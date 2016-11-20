@@ -19,7 +19,7 @@ public class PurgeCommand extends Command{
     public PurgeCommand () {
         this.command = "purge";
 
-        this.basePermission = "commandsigns.admin.purge";
+        this.basePermission = "commandsign.admin.purge";
     }
     @Override
     public boolean execute(CommandSender sender, List<String> args) throws CommandSignsCommandException {
@@ -43,6 +43,6 @@ public class PurgeCommand extends Command{
 
     @Override
     public void printUsage(CommandSender sender) {
-        sender.sendMessage("/commandsigns purge");
+        sender.sendMessage("/commandsign purge");
     }
 }

@@ -18,7 +18,7 @@ public class CopyCommand extends Command {
     public CopyCommand() {
         this.command = "copy";
         this.aliases.add("cp");
-        this.basePermission = "commandsigns.admin.copy";
+        this.basePermission = "commandsign.admin.copy";
     }
 
     @Override
@@ -56,6 +56,6 @@ public class CopyCommand extends Command {
 
     @Override
     public void printUsage(CommandSender sender) {
-        sender.sendMessage("/commandsigns copy [ID]");
+        sender.sendMessage("/commandsign copy [ID]");
     }
 }

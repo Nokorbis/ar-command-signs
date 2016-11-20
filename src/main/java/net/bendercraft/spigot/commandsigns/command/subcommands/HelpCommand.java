@@ -21,7 +21,7 @@ public class HelpCommand extends Command {
         this.command = "help";
         this.aliases.add("h");
         this.aliases.add("?");
-        this.basePermission = "commandsigns.admin.help";
+        this.basePermission = "commandsign.admin.help";
 
         this.commands = commands;
     }
@@ -49,7 +49,7 @@ public class HelpCommand extends Command {
 
     @Override
     public void printUsage(CommandSender sender) {
-        sender.sendMessage("/commandsigns help [command]");
+        sender.sendMessage("/commandsign help [command]");
     }
 
     @Override

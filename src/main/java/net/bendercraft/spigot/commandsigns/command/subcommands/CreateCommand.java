@@ -21,7 +21,7 @@ public class CreateCommand extends Command {
         this.aliases.add("cr");
         this.aliases.add("mk");
         this.aliases.add("make");
-        this.basePermission = "commandsigns.admin.create";
+        this.basePermission = "commandsign.admin.create";
 
     }
     @Override
@@ -47,6 +47,6 @@ public class CreateCommand extends Command {
 
     @Override
     public void printUsage(CommandSender sender) {
-        sender.sendMessage("/commandsigns create");
+        sender.sendMessage("/commandsign create");
     }
 }

@@ -19,7 +19,7 @@ public class TeleportCommand extends Command {
     public TeleportCommand() {
         this.command = "teleport";
         this.aliases.add("tp");
-        this.basePermission = "commandsigns.admin.teleport";
+        this.basePermission = "commandsign.admin.teleport";
     }
 
     @Override
@@ -49,6 +49,6 @@ public class TeleportCommand extends Command {
 
     @Override
     public void printUsage(CommandSender sender) {
-        sender.sendMessage("/commandsigns teleport <ID>");
+        sender.sendMessage("/commandsign teleport <ID>");
     }
 }

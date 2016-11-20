@@ -21,7 +21,7 @@ public class DeleteCommand extends Command {
         this.aliases.add("del");
         this.aliases.add("remove");
         this.aliases.add("rm");
-        this.basePermission = "commandsigns.admin.delete";
+        this.basePermission = "commandsign.admin.delete";
     }
     @Override
     public boolean execute(CommandSender sender, List<String> args) throws CommandSignsCommandException {
@@ -67,6 +67,6 @@ public class DeleteCommand extends Command {
 
     @Override
     public void printUsage(CommandSender sender) {
-        sender.sendMessage("/commandsigns delete [ID]");
+        sender.sendMessage("/commandsign delete [ID]");
     }
 }

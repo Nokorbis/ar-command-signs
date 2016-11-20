@@ -19,7 +19,7 @@ public class InfoCommand extends Command {
     public InfoCommand() {
         this.command = "info";
         this.aliases.add("i");
-        this.basePermission = "commandsigns.admin.info";
+        this.basePermission = "commandsign.admin.info";
     }
     @Override
     public boolean execute(CommandSender sender, List<String> args) throws CommandSignsCommandException {
@@ -54,6 +54,6 @@ public class InfoCommand extends Command {
 
     @Override
     public void printUsage(CommandSender sender) {
-        sender.sendMessage("/commandsigns info [ID]");
+        sender.sendMessage("/commandsign info [ID]");
     }
 }

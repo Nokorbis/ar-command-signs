@@ -20,12 +20,12 @@ public class LoadCommand extends Command {
     public LoadCommand() {
         this.command = "reload";
         this.aliases.add("load");
-        this.basePermission = "commandsigns.admin.reload";
+        this.basePermission = "commandsign.admin.reload";
     }
 
     @Override
     public boolean execute(CommandSender sender, List<String> args) throws CommandSignsCommandException {
-        if (!sender.hasPermission("commandsigns.admin.reload")) {
+        if (!sender.hasPermission(basePermission)) {
             throw new CommandSignsCommandException(Messages.get("error.no_permission"));
         }
         args.remove(0); // remove "reload" text
@@ -73,6 +73,6 @@ public class LoadCommand extends Command {
 
     @Override
     public void printUsage(CommandSender sender) {
-        sender.sendMessage("/commandsigns reload [ID]");
+        sender.sendMessage("/commandsign reload [ID]");
     }
 }

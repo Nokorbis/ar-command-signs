@@ -185,7 +185,7 @@ public class CommandSignListener implements Listener{
 			try {
 				CommandBlockExecutor executor = new CommandBlockExecutor(player, cmd);
 				executor.checkRequirements();
-				if (!cmd.hasTimer() || player.hasPermission("commandsigns.timer.bypass")) {
+				if (!cmd.hasTimer() || player.hasPermission("commandsign.timer.bypass")) {
 					executor.execute();
 				}
 				else {

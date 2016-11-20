@@ -60,7 +60,7 @@ public class CommandBlockExecutor {
 			long now = System.currentTimeMillis();
 			long toWait = this.cmdBlock.getLastTimeUsed() + (this.cmdBlock.getTimeBetweenUsage()*1000) - now;
 			if (toWait > 0) {
-				if (!this.player.hasPermission("commandsigns.timer.bypass")) {
+				if (!this.player.hasPermission("commandsign.timer.bypass")) {
 					String msg = Messages.get("usage.general_cooldown");
 					msg = msg.replace("{TIME}", df.format(this.cmdBlock.getTimeBetweenUsage() - (toWait/1000.0)));
 					msg = msg.replace("{REMAINING}", df.format(toWait/1000.0));
@@ -71,21 +71,21 @@ public class CommandBlockExecutor {
 
 		if (this.cmdBlock.getTimeBetweenPlayerUsage() > 0) {
 			if (this.cmdBlock.hasPlayerRecentlyUsed(this.player)) {
-				if (!player.hasPermission("commandsigns.timer.bypass")) {
+				if (!player.hasPermission("commandsign.timer.bypass")) {
 					throw new CommandSignsException(Messages.get("usage.player_cooldown"));
 				}
 			}
 		}
 
 		if ((Economy.getEconomy() != null) && (this.cmdBlock.getEconomyPrice() > 0)) {
-			if (!Economy.getEconomy().has(this.player, this.cmdBlock.getEconomyPrice()) && !this.player.hasPermission("commandsigns.costs.bypass")) {
+			if (!Economy.getEconomy().has(this.player, this.cmdBlock.getEconomyPrice()) && !this.player.hasPermission("commandsign.costs.bypass")) {
 				String err = Messages.get("usage.not_enough_money");
 				err = err.replace("{PRICE}", Economy.getEconomy().format(this.cmdBlock.getEconomyPrice()));
 				throw new CommandSignsException(err);
 			}
 		}
 
-		if (!this.player.hasPermission("commandsigns.timer.bypass")) {
+		if (!this.player.hasPermission("commandsign.timer.bypass")) {
 			this.cmdBlock.refreshLastTime();
 		}
 	}
@@ -96,7 +96,7 @@ public class CommandBlockExecutor {
 		}
 
 		if ((Economy.getEconomy() != null) && (this.cmdBlock.getEconomyPrice() > 0)) {
-			if (!this.player.hasPermission("commandsigns.costs.bypass")) {
+			if (!this.player.hasPermission("commandsign.costs.bypass")) {
 				if (Economy.getEconomy().has(this.player, this.cmdBlock.getEconomyPrice())) {
 					Economy.getEconomy().withdrawPlayer(this.player, this.cmdBlock.getEconomyPrice());
 					String msg = Messages.get("usage.you_paied");
@@ -114,7 +114,7 @@ public class CommandBlockExecutor {
 
 		if (this.cmdBlock.getTimeBetweenPlayerUsage() > 0) {
 			if (this.cmdBlock.hasPlayerRecentlyUsed(this.player)) {
-				if (!player.hasPermission("commandsigns.timer.bypass")) {
+				if (!player.hasPermission("commandsign.timer.bypass")) {
 					this.player.sendMessage(Messages.get("usage.player_cooldown"));
 					return false;
 				}

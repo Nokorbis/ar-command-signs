@@ -16,7 +16,7 @@ public class VersionCommand extends Command {
     public VersionCommand() {
         this.command = "version";
         this.aliases.add("v");
-        this.basePermission = "commandsigns.admin.version";
+        this.basePermission = "commandsign.admin.version";
     }
 
     @Override
@@ -27,6 +27,6 @@ public class VersionCommand extends Command {
 
     @Override
     public void printUsage(CommandSender sender) {
-        sender.sendMessage("/commandsigns version");
+        sender.sendMessage("/commandsign version");
     }
 }

@@ -20,7 +20,7 @@ public class NearCommand extends Command {
 
     public NearCommand() {
         this.command = "near";
-        this.basePermission = "commandsigns.admin.near";
+        this.basePermission = "commandsign.admin.near";
     }
     @Override
     public boolean execute(CommandSender sender, List<String> args) throws CommandSignsCommandException {
@@ -70,6 +70,6 @@ public class NearCommand extends Command {
 
     @Override
     public void printUsage(CommandSender sender) {
-        sender.sendMessage("/commandsigns near <radius>");
+        sender.sendMessage("/commandsign near <radius>");
     }
 }
