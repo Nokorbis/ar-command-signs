@@ -75,7 +75,7 @@ public class CommandBlockExecutor {
 				long toWait = this.cmdBlock.getLastTimePlayerRecentlyUsed(this.player) + (this.cmdBlock.getTimeBetweenUsage()*1000) - now;
 				if (!player.hasPermission("commandsign.timer.bypass")) {
 					String msg = Messages.get("usage.player_cooldown");
-					msg = msg.replace("{TIME}", df.format(this.cmdBlock.getTimeBetweenUsage() - (toWait/1000.0)));
+					msg = msg.replace("{TIME}", df.format(this.cmdBlock.getTimeBetweenPlayerUsage() - (toWait/1000.0)));
 					msg = msg.replace("{REMAINING}", df.format(toWait/1000.0));
 					throw new CommandSignsException(msg);
 				}
