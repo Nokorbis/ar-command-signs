@@ -6,6 +6,7 @@ CommandSigns v1.5.3
 CommandSign v1.5.2
     Switch to maven.
     Rename the packages to 'bendercraft' (new server name)
+    /!\ Change the name of the plugin. (From 'CommandSign' to 'CommandSigns')
 
 CommandSign v1.5.1
     Add colors in the language file (and reformat languages entries)

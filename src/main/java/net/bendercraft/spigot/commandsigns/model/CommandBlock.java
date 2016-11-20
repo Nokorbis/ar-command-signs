@@ -1,14 +1,7 @@
 package net.bendercraft.spigot.commandsigns.model;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
-import java.util.UUID;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -311,14 +304,12 @@ public class CommandBlock {
 			return false;
 		}
 		long now = System.currentTimeMillis();
-		LinkedList<UUID> toRemove = new LinkedList<UUID>();
-		for (Entry<UUID, Long> entry : this.usages.entrySet()) {
+		Iterator<Entry<UUID, Long>> it = this.usages.entrySet().iterator();
+		while (it.hasNext()) {
+			Entry<UUID, Long> entry = it.next();
 			if (entry.getValue() + (this.timeBetweenPlayerUsage*1000) < now) {
-				toRemove.add(entry.getKey());
+				it.remove();
 			}
-		}
-		for (UUID id : toRemove) {
-			this.usages.remove(id);
 		}
 
 		return this.usages.containsKey(player.getUniqueId());
@@ -328,6 +319,23 @@ public class CommandBlock {
 		if (this.timeBetweenPlayerUsage != 0) {
 			this.usages.put(player.getUniqueId(), System.currentTimeMillis());
 		}
+	}
+
+	public Long getLastTimePlayerRecentlyUsed(Player player) {
+		if (this.timeBetweenPlayerUsage == 0) {
+			return null;
+		}
+
+		long now = System.currentTimeMillis();
+		Iterator<Entry<UUID, Long>> it = this.usages.entrySet().iterator();
+		while (it.hasNext()) {
+			Entry<UUID, Long> entry = it.next();
+			if (entry.getValue() + (this.timeBetweenPlayerUsage*1000) < now) {
+				it.remove();
+			}
+		}
+
+		return this.usages.get(player.getUniqueId());
 	}
 
 	/* Business */
