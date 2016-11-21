@@ -2,6 +2,7 @@ package net.bendercraft.spigot.commandsigns.menu;
 
 import java.util.Map.Entry;
 
+import net.bendercraft.spigot.commandsigns.model.CommandSignsException;
 import net.bendercraft.spigot.commandsigns.utils.Messages;
 import net.bendercraft.spigot.commandsigns.controller.Container;
 import net.bendercraft.spigot.commandsigns.controller.Economy;
@@ -66,7 +67,8 @@ public class MainMenu extends EditionMenu {
 			}
 			int index = Integer.parseInt(args[0]);
 			if (index == 9) {
-				if (config.getEditingData().validate()) {
+				try {
+					config.getEditingData().validate();
 					config.setCurrentMenu(null);
 					if (config.isCreating()) {
 						Container.getContainer().getCommandBlocks().put(config.getEditingData().getLocation(), config.getEditingData());
@@ -77,8 +79,9 @@ public class MainMenu extends EditionMenu {
 					}
 					Container.getContainer().getSaver().save(config.getEditingData());
 				}
-				else {
+				catch (CommandSignsException ex) {
 					config.getEditor().sendMessage(Messages.get("menu.invalid_block"));
+
 				}
 			}
 			else if (this.subMenus.containsKey(index)) {

@@ -4,6 +4,7 @@ import net.bendercraft.spigot.commandsigns.command.Command;
 import net.bendercraft.spigot.commandsigns.controller.Container;
 import net.bendercraft.spigot.commandsigns.model.CommandBlock;
 import net.bendercraft.spigot.commandsigns.model.CommandSignsCommandException;
+import net.bendercraft.spigot.commandsigns.model.CommandSignsException;
 import net.bendercraft.spigot.commandsigns.utils.Messages;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -25,7 +26,10 @@ public class PurgeCommand extends Command{
     public boolean execute(CommandSender sender, List<String> args) throws CommandSignsCommandException {
         LinkedList<Location> toRemove = new LinkedList<Location>();
         for (CommandBlock cmd : Container.getContainer().getCommandBlocks().values()) {
-            if (!cmd.validate()) {
+            try {
+                cmd.validate();
+            }
+            catch (CommandSignsException ex) {
                 toRemove.add(cmd.getLocation());
             }
         }

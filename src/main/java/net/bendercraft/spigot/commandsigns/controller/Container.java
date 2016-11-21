@@ -9,6 +9,7 @@ import java.util.logging.Level;
 
 import net.bendercraft.spigot.commandsigns.data.ICommandBlockSaver;
 import net.bendercraft.spigot.commandsigns.data.json.JsonCommandBlockSaver;
+import net.bendercraft.spigot.commandsigns.model.CommandSignsException;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachment;
@@ -84,10 +85,11 @@ public class Container {
 		for (CommandBlock commandBlock : commandBlockSaver.loadAll()) {
 			try {
 				this.commandBlocks.put(commandBlock.getLocation(), commandBlock);
-				if (!commandBlock.validate()) {
-					plugin.getLogger().warning("A Command Block is invalid. You may think about deleting it. ID : " + commandBlock.getId());
-					errorCount++;
-				}
+				commandBlock.validate();
+			}
+			catch (CommandSignsException ex) {
+				plugin.getLogger().warning(ex.getMessage());
+				errorCount++;
 			}
 			catch (Exception ex) {
 				plugin.getLogger().log(Level.WARNING,

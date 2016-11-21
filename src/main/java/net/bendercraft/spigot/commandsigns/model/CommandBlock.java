@@ -379,17 +379,25 @@ public class CommandBlock {
 		return newBlock;
 	}
 
-	public boolean validate() {
+	public boolean validate() throws CommandSignsException {
 		if (this.location == null) {
-			return false;
+			throw new CommandSignsException("A command block is invalid due to null location. You may think about deleting it, its id : " + this.id);
 		}
 
 		if (!CommandSignUtils.isValidBlock(this.location.getBlock())) {
-			return false;
+			throw new CommandSignsException("A command block is invalid due to an invalid type (must be sign, plate or button). You may think about deleting it, its id : " + this.id);
 		}
 
-		if ((this.permissions == null) || (this.commands == null) || (this.neededPermissions == null)) {
-			return false;
+		if (this.permissions == null) {
+			throw new CommandSignsException("A command block is invalid due to null permissions. You may think about deleting it, its id : " + this.id);
+		}
+
+		if (this.commands == null) {
+			throw new CommandSignsException("A command block is invalid due to null commands. You may think about deleting it, its id : " + this.id);
+		}
+
+		if (this.neededPermissions == null) {
+			throw new CommandSignsException("A command block is invalid due to null needed permissions. You may think about deleting it, its id : " + this.id);
 		}
 
 		return true;
