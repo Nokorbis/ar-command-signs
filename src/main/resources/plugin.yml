@@ -28,8 +28,6 @@ permissions:
          commandsign.admin.teleport: true
          commandsign.admin.version: true
          commandsign.admin.help: true
-         commandsign.timer.bypass: true
-         commandsign.costs.bypass: true
    commandsign.timer.bypass:
       default: false
       description: Allows to bypass timers on command signs
