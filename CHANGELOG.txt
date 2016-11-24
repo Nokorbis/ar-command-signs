@@ -1,3 +1,6 @@
+CommandSigns v1.5.4
+    Remove bypass permissions from ops default
+
 CommandSigns v1.5.3
     Rename CommandSign to CommandSigns
     Add bcs (For Bendercraft Command Signs) alias
