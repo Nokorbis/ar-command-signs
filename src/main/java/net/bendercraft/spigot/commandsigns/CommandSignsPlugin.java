@@ -4,6 +4,7 @@ import net.bendercraft.spigot.commandsigns.controller.CommandSignCommands;
 import net.bendercraft.spigot.commandsigns.controller.CommandSignListener;
 import net.bendercraft.spigot.commandsigns.controller.Container;
 import net.bendercraft.spigot.commandsigns.controller.Economy;
+import net.bendercraft.spigot.commandsigns.utils.Settings;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class CommandSignsPlugin extends JavaPlugin{
@@ -14,6 +15,7 @@ public class CommandSignsPlugin extends JavaPlugin{
 	public void onEnable() {
 		plugin = this;
 
+		Settings.loadSettings(this);
 		Economy.initialize();
 		CommandSignCommands executor = new CommandSignCommands();
 		Container.getContainer(); // Intialize the all stuff
@@ -25,7 +27,9 @@ public class CommandSignsPlugin extends JavaPlugin{
 	@Override
 	public void onDisable() {
 		plugin = null;
-		Container.getContainer().getSaver().saveAll(Container.getContainer().getCommandBlocks().values());
+		if (Settings.savePlayerCooldowns()) {
+			Container.getContainer().getSaver().saveAll(Container.getContainer().getCommandBlocks().values());
+		}
 	}
 
 	public static CommandSignsPlugin getPlugin() {
