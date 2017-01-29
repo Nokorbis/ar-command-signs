@@ -1,6 +1,8 @@
 package net.bendercraft.spigot.commandsigns.controller;
 
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -31,6 +33,9 @@ public class CommandBlockExecutor {
 		this.cmdBlock = cmdBlock;
 		if (df == null) {
 			df = new DecimalFormat();
+			DecimalFormatSymbols symbols = df.getDecimalFormatSymbols();
+			symbols.setGroupingSeparator(' ');
+			df.setDecimalFormatSymbols(symbols);
 			df.setMaximumFractionDigits(2);
 		}
 	}
@@ -72,10 +77,11 @@ public class CommandBlockExecutor {
 		if (this.cmdBlock.getTimeBetweenPlayerUsage() > 0) {
 			if (this.cmdBlock.hasPlayerRecentlyUsed(this.player)) {
 				long now = System.currentTimeMillis();
-				long toWait = this.cmdBlock.getLastTimePlayerRecentlyUsed(this.player) + (this.cmdBlock.getTimeBetweenUsage()*1000) - now;
+				long lastUsage = this.cmdBlock.getLastTimePlayerRecentlyUsed(this.player);
+				long toWait = lastUsage + (this.cmdBlock.getTimeBetweenPlayerUsage()*1000) - now;
 				if (!player.hasPermission("commandsign.timer.bypass")) {
 					String msg = Messages.get("usage.player_cooldown");
-					msg = msg.replace("{TIME}", df.format(this.cmdBlock.getTimeBetweenPlayerUsage() - (toWait/1000.0)));
+					msg = msg.replace("{TIME}", df.format((now-lastUsage)/1000.0));
 					msg = msg.replace("{REMAINING}", df.format(toWait/1000.0));
 					throw new CommandSignsException(msg);
 				}

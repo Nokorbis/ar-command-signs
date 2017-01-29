@@ -1,3 +1,7 @@
+CommandSigns v1.5.5
+    Cooldowns (global and per users) can now support bigger numbers
+    Player usage cooldown should now display properly
+
 CommandSigns v1.5.4
     Remove bypass permissions from ops default
 

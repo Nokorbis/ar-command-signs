@@ -29,8 +29,8 @@ public class CommandBlock {
 	private Boolean resetOnMove;
 	private Boolean cancelledOnMove;
 
-	private int timeBetweenUsage; // Value in seconds
-	private int timeBetweenPlayerUsage; // Value in seconds
+	private long timeBetweenUsage; // Value in seconds
+	private long timeBetweenPlayerUsage; // Value in seconds
 
 	private transient long lastTimeUsed;
 	private final transient Map<UUID, Long> usages;
@@ -115,11 +115,11 @@ public class CommandBlock {
 
 	/* Time between usage */
 
-	public int getTimeBetweenUsage() {
+	public long getTimeBetweenUsage() {
 		return this.timeBetweenUsage;
 	}
 
-	public void setTimeBetweenUsage(int timeBetweenUsage) {
+	public void setTimeBetweenUsage(long timeBetweenUsage) {
 		if (timeBetweenUsage < 0) {
 			timeBetweenUsage = 0;
 		}
@@ -128,11 +128,11 @@ public class CommandBlock {
 
 	/* Time between player usage */
 
-	public int getTimeBetweenPlayerUsage() {
+	public long getTimeBetweenPlayerUsage() {
 		return this.timeBetweenPlayerUsage;
 	}
 
-	public void setTimeBetweenPlayerUsage(int timeBetweenPlayerUsage) {
+	public void setTimeBetweenPlayerUsage(long timeBetweenPlayerUsage) {
 		if (timeBetweenPlayerUsage < 0) {
 			timeBetweenPlayerUsage = 0;
 		}
