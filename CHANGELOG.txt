@@ -1,3 +1,6 @@
+CommandSigns v1.5.8
+    Add the possiblity to delay betweens commands using ` followed by the number of seconds
+
 CommandSigns v1.5.5
     Cooldowns (global and per users) can now support bigger numbers
     Player usage cooldown should now display properly

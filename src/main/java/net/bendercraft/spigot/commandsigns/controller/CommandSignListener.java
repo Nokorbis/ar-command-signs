@@ -184,20 +184,24 @@ public class CommandSignListener implements Listener{
 		if (cmd != null) {
 			try {
 				CommandBlockExecutor executor = new CommandBlockExecutor(player, cmd);
-				executor.checkRequirements();
-				if (!cmd.hasTimer() || player.hasPermission("commandsign.timer.bypass")) {
-					executor.execute();
-				}
-				else {
-					ExecuteTask exe = new ExecuteTask(executor);
-					exe.setLocation(player.getLocation().getBlock().getLocation());
-					Container.getContainer().getExecutingTasks().put(player.getUniqueId(), exe);
-					BukkitTask task = CommandSignsPlugin.getPlugin().getServer().getScheduler().runTaskLater(CommandSignsPlugin.getPlugin(), exe, cmd.getTimeBeforeExecution() * 20);
-					exe.setTaskId(task.getTaskId());
+				long time = 0;
+				if (cmd.hasTimer() && !player.hasPermission("commandsign.timer.bypass"))
+				{
+					executor.checkRequirements();
+					time = cmd.getTimeBeforeExecution();
 					String msg = Messages.get("info.timer_delayed");
-					msg = msg.replace("{TIME}", String.valueOf(cmd.getTimeBeforeExecution()));
+					msg = msg.replace("{TIME}", String.valueOf(time));
 					player.sendMessage(msg);
 				}
+
+				ExecuteTask exe = new ExecuteTask(executor);
+				exe.setLocation(player.getLocation().getBlock().getLocation());
+				Container.getContainer().getExecutingTasks().put(player.getUniqueId(), exe);
+
+				BukkitScheduler scheduler = CommandSignsPlugin.getPlugin().getServer().getScheduler();
+
+				BukkitTask task = scheduler.runTaskLaterAsynchronously(CommandSignsPlugin.getPlugin(), exe, time * 20);
+				exe.setTaskId(task.getTaskId());
 			}
 			catch (CommandSignsException ex) {
 				player.sendMessage(ChatColor.DARK_RED + ex.getMessage());
