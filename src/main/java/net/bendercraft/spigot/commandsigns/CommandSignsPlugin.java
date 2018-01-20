@@ -27,7 +27,8 @@ public class CommandSignsPlugin extends JavaPlugin{
 	@Override
 	public void onDisable() {
 		plugin = null;
-		if (Settings.savePlayerCooldowns()) {
+		if (Settings.savePlayerCooldowns())
+		{
 			Container.getContainer().getSaver().saveAll(Container.getContainer().getCommandBlocks().values());
 		}
 	}

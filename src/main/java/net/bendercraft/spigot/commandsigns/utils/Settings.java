@@ -11,7 +11,7 @@ public abstract class Settings {
 
 	public final static char delayChar = '`';
 
-	private static boolean savePlayerCooldowns;
+	private static boolean savePlayerCooldowns = false;
 
 
 	public static void loadSettings(JavaPlugin plugin) {
