@@ -6,7 +6,7 @@
 
     <groupId>net.bendercraft</groupId>
     <artifactId>spigot.commandsigns</artifactId>
-    <version>1.5.8-SNAPSHOT</version>
+    <version>1.6.0</version>
     <name>Spigot-CommandSigns</name>
     <packaging>jar</packaging>
 

@@ -1,4 +1,4 @@
-CommandSigns v1.5.8
+CommandSigns v1.6.0
     Add the possibility to delay between commands using ` followed by the number of seconds
     Use world's name instead of world uuid by default (but world uuid is still supported)
     Add the possibility to disable a command sign.
