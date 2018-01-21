@@ -10,7 +10,7 @@ commands:
    commandsign:
       description: Command Signs commands.
       aliases: [arcs, bcs, cmdsign, commandsigns]
-      usage: /<command> ?
+      usage: /<command> help
 permissions:
    commandsign.admin.*:
       default: op
