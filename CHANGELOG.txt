@@ -1,3 +1,6 @@
+CommandSigns v1.6.2
+    Fix permission being removed before commands are executed.
+
 CommandSigns v1.6.1
     Should fix potential concurrent modification exception
     Default error message updated to "help" instead of "?"

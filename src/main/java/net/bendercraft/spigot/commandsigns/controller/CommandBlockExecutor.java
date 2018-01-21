@@ -175,13 +175,16 @@ public class CommandBlockExecutor
 			handleCommand(command);
 		}
 
-		for (String perm : this.cmdBlock.getPermissions())
+		CommandSignsPlugin plugin = CommandSignsPlugin.getPlugin();
+		BukkitScheduler scheduler = plugin.getServer().getScheduler();
+		scheduler.runTaskLater(plugin, () ->
 		{
-			if (perms.getPermissions().containsKey(perm))
+			for (String perm : this.cmdBlock.getPermissions())
 			{
 				perms.unsetPermission(perm);
 			}
-		}
+		}, 2);
+
 
 		return true;
 	}
