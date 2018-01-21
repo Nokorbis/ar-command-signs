@@ -9,7 +9,7 @@ load: POSTWORLD
 commands:
    commandsign:
       description: Command Signs commands.
-      aliases: [arcs, bcs, cmdsign, commandsigns]
+      aliases: [arcs, bcs, ahcs, cmdsign, commandsigns]
       usage: /<command> help
 permissions:
    commandsign.admin.*:
