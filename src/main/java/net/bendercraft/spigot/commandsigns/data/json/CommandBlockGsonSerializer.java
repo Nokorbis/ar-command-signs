@@ -46,6 +46,12 @@ public class CommandBlockGsonSerializer implements JsonSerializer<CommandBlock>,
                 cmdBlock.setLocation(location);
             }
 
+            JsonElement disabled = root.get("disabled");
+            if (disabled != null)
+            {
+                cmdBlock.setDisabled(disabled.getAsBoolean());
+            }
+
             cmdBlock.setEconomyPrice(root.get("price").getAsDouble());
 
             cmdBlock.setTimeBeforeExecution(root.get("time_before_execution").getAsInt());
@@ -87,17 +93,19 @@ public class CommandBlockGsonSerializer implements JsonSerializer<CommandBlock>,
         root.add("id", new JsonPrimitive(commandBlock.getId()));
         if (commandBlock.getName() != null)
         {
-            root.add("name", new JsonPrimitive(commandBlock.getName()));
+            root.addProperty("name", commandBlock.getName());
         }
 
         //Save location
         if (commandBlock.getLocation() != null)
         {
-            root.add("world", new JsonPrimitive(commandBlock.getLocation().getWorld().getName()));
-            root.add("x", new JsonPrimitive(commandBlock.getLocation().getBlockX()));
-            root.add("y", new JsonPrimitive(commandBlock.getLocation().getBlockY()));
-            root.add("z", new JsonPrimitive(commandBlock.getLocation().getBlockZ()));
+            root.addProperty("world", commandBlock.getLocation().getWorld().getName());
+            root.addProperty("x", commandBlock.getLocation().getBlockX());
+            root.addProperty("y", commandBlock.getLocation().getBlockY());
+            root.addProperty("z", commandBlock.getLocation().getBlockZ());
         }
+
+        root.addProperty("disabled", commandBlock.isDisabled());
 
         //Save commands
         JsonArray jsonCmds = new JsonArray();
@@ -123,14 +131,14 @@ public class CommandBlockGsonSerializer implements JsonSerializer<CommandBlock>,
         }
         root.add("temporary_permissions", jsonTempPerms);
 
-        root.add("price", new JsonPrimitive(commandBlock.getEconomyPrice()));
+        root.addProperty("price", commandBlock.getEconomyPrice());
 
-        root.add("time_before_execution", new JsonPrimitive(commandBlock.getTimeBeforeExecution()));
-        root.add("move_cancel_timer", new JsonPrimitive(commandBlock.isCancelledOnMove()));
-        root.add("move_reset_timer", new JsonPrimitive(commandBlock.isResetOnMove()));
+        root.addProperty("time_before_execution", commandBlock.getTimeBeforeExecution());
+        root.addProperty("move_cancel_timer", commandBlock.isCancelledOnMove());
+        root.addProperty("move_reset_timer", commandBlock.isResetOnMove());
 
-        root.add("global_time_between_usages", new JsonPrimitive(commandBlock.getTimeBetweenUsage()));
-        root.add("player_time_between_usages", new JsonPrimitive(commandBlock.getTimeBetweenPlayerUsage()));
+        root.addProperty("global_time_between_usages", commandBlock.getTimeBetweenUsage());
+        root.addProperty("player_time_between_usages", commandBlock.getTimeBetweenPlayerUsage());
         return root;
     }
 }

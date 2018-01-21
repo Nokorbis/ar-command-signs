@@ -1,6 +1,7 @@
 CommandSigns v1.5.8
     Add the possibility to delay between commands using ` followed by the number of seconds
-    Use world'sname instead of world uuid by default (but world uuid is still supported)
+    Use world's name instead of world uuid by default (but world uuid is still supported)
+    Add the possibility to disable a command sign.
 
 CommandSigns v1.5.5
     Cooldowns (global and per users) can now support bigger numbers
