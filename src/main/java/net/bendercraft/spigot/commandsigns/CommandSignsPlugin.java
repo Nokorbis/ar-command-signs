@@ -15,7 +15,6 @@ public class CommandSignsPlugin extends JavaPlugin{
 	public void onEnable() {
 		plugin = this;
 
-		Settings.loadSettings(this);
 		Economy.initialize();
 		CommandSignCommands executor = new CommandSignCommands();
 		Container.getContainer(); // Intialize the all stuff
@@ -27,10 +26,6 @@ public class CommandSignsPlugin extends JavaPlugin{
 	@Override
 	public void onDisable() {
 		plugin = null;
-		if (Settings.savePlayerCooldowns())
-		{
-			Container.getContainer().getSaver().saveAll(Container.getContainer().getCommandBlocks().values());
-		}
 	}
 
 	public static CommandSignsPlugin getPlugin() {
