@@ -1,3 +1,8 @@
+CommandSigns v1.6.1
+    Should fix potential concurrent modification exception
+    Default error message updated to "help" instead of "?"
+    Added "ahcs" aliases. People don't care
+
 CommandSigns v1.6.0
     Add the possibility to delay between commands using ` followed by the number of seconds
     Use world's name instead of world uuid by default (but world uuid is still supported)

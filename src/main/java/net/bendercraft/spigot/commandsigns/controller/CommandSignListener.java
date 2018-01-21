@@ -6,6 +6,7 @@ import net.bendercraft.spigot.commandsigns.model.CommandBlock;
 import net.bendercraft.spigot.commandsigns.model.CommandSignsException;
 import net.bendercraft.spigot.commandsigns.tasks.ExecuteTask;
 import net.bendercraft.spigot.commandsigns.utils.CommandSignUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -207,7 +208,7 @@ public class CommandSignListener implements Listener{
 					exe.setLocation(player.getLocation().getBlock().getLocation());
 					Container.getContainer().getExecutingTasks().put(player.getUniqueId(), exe);
 
-					BukkitScheduler scheduler = CommandSignsPlugin.getPlugin().getServer().getScheduler();
+					BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
 
 					BukkitTask task = scheduler.runTaskLaterAsynchronously(CommandSignsPlugin.getPlugin(), exe, time * 20);
 					exe.setTaskId(task.getTaskId());

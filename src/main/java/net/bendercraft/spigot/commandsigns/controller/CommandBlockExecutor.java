@@ -17,6 +17,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachment;
 
 import net.bendercraft.spigot.commandsigns.utils.Settings;
+import org.bukkit.scheduler.BukkitScheduler;
 
 public class CommandBlockExecutor
 {
@@ -187,29 +188,11 @@ public class CommandBlockExecutor
 
 	private void handleCommand(String command)
 	{
+		CommandSignsPlugin plugin = CommandSignsPlugin.getPlugin();
 		for (String cmd : formatCommand(command, this.player))
 		{
 			char special = cmd.charAt(0);
-			if (special == Settings.opChar)
-			{
-				cmd = "/" + cmd.substring(1);
-				if (!this.player.isOp())
-				{
-					this.player.setOp(true);
-					this.player.chat(cmd);
-					this.player.setOp(false);
-				}
-				else
-				{
-					this.player.chat(cmd);
-				}
-			}
-			else if (special == Settings.serverChar)
-			{
-				cmd = cmd.substring(1);
-				Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), cmd);
-			}
-			else if (special == Settings.delayChar)
+			if (special == Settings.delayChar)
 			{
 				try
 				{
@@ -218,15 +201,28 @@ public class CommandBlockExecutor
 				}
 				catch (NumberFormatException e)
 				{
-					CommandSignsPlugin.getPlugin().getLogger().warning("A command sign is using a delay that isn't a number.");
+					plugin.getLogger().warning("A command sign is using a delay that isn't a number.");
 				} catch (InterruptedException e)
 				{
-					CommandSignsPlugin.getPlugin().getLogger().warning("Interrupted exception while delaying a command");
+					plugin.getLogger().warning("Interrupted exception while delaying a command");
 				}
 			}
 			else
 			{
-				this.player.chat(cmd);
+				BukkitScheduler scheduler = plugin.getServer().getScheduler();
+
+				if (special == Settings.opChar)
+				{
+					scheduler.runTask(plugin, new OpCommandTask(player, "/" + cmd.substring(1)));
+				}
+				else if (special == Settings.serverChar)
+				{
+					scheduler.runTask(plugin, new ServerCommandTask(cmd.substring(1)));
+				}
+				else
+				{
+					scheduler.runTask(plugin, new DefaultCommandTask(player, cmd));
+				}
 			}
 		}
 	}
@@ -280,5 +276,66 @@ public class CommandBlockExecutor
 		}
 
 		return cmds;
+	}
+
+	private static class OpCommandTask implements Runnable
+	{
+		private Player player;
+		private String command;
+
+		public OpCommandTask(Player player, String command)
+		{
+			this.player = player;
+			this.command = command;
+		}
+
+		@Override
+		public void run()
+		{
+			if (!this.player.isOp())
+			{
+				this.player.setOp(true);
+				this.player.chat(command);
+				this.player.setOp(false);
+			}
+			else
+			{
+				this.player.chat(command);
+			}
+		}
+	}
+
+	private static class DefaultCommandTask implements Runnable
+	{
+		private Player player;
+		private String command;
+
+		public DefaultCommandTask(Player player, String command)
+		{
+			this.player = player;
+			this.command = command;
+		}
+
+		@Override
+		public void run()
+		{
+			this.player.chat(command);
+		}
+	}
+
+	private static class ServerCommandTask implements Runnable
+	{
+		private String command;
+
+		public ServerCommandTask(String command)
+		{
+			this.command = command;
+		}
+
+		@Override
+		public void run()
+		{
+			Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command);
+		}
 	}
 }
