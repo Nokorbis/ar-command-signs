@@ -1,3 +1,5 @@
+CommandSigns v1.6.3
+
 CommandSigns v1.6.2
     Fix permission being removed before commands are executed.
 

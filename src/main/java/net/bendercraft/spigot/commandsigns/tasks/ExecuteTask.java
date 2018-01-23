@@ -1,8 +1,11 @@
 package net.bendercraft.spigot.commandsigns.tasks;
 
+import net.bendercraft.spigot.commandsigns.CommandSignsPlugin;
 import net.bendercraft.spigot.commandsigns.controller.CommandBlockExecutor;
 import net.bendercraft.spigot.commandsigns.controller.Container;
 import net.bendercraft.spigot.commandsigns.model.CommandBlock;
+import net.bendercraft.spigot.commandsigns.model.CommandSignsException;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -27,8 +30,22 @@ public class ExecuteTask implements Runnable
 				Container.getContainer().getExecutingTasks().remove(this.executor.getPlayer().getUniqueId());
 				return;
 			}
-			this.executor.execute();
-			Container.getContainer().getExecutingTasks().remove(this.executor.getPlayer().getUniqueId());
+			try
+			{
+				this.executor.checkRequirements();
+				this.executor.execute();
+			}
+			catch (CommandSignsException e)
+			{
+				Bukkit.getScheduler().runTask(CommandSignsPlugin.getPlugin(), () ->
+				{
+					this.executor.getPlayer().sendMessage(e.getMessage());
+				});
+			}
+			finally
+			{
+				Container.getContainer().getExecutingTasks().remove(this.executor.getPlayer().getUniqueId());
+			}
 		}
 	}
 
