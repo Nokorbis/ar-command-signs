@@ -1,4 +1,5 @@
-CommandSigns v1.6.3
+CommandSigns v1.6.4
+    Load My_Worlds before CommandSign to handle multiple worlds
 
 CommandSigns v1.6.2
     Fix permission being removed before commands are executed.

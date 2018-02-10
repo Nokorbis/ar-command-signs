@@ -84,8 +84,8 @@ public class Container {
 		CommandSignsPlugin plugin = CommandSignsPlugin.getPlugin();
 		for (CommandBlock commandBlock : commandBlockSaver.loadAll()) {
 			try {
-				this.commandBlocks.put(commandBlock.getLocation(), commandBlock);
 				commandBlock.validate();
+				this.commandBlocks.put(commandBlock.getLocation(), commandBlock);
 			}
 			catch (CommandSignsException ex) {
 				plugin.getLogger().warning(ex.getMessage());
