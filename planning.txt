@@ -1,3 +1,3 @@
-Planning for v1.6.0
+Planning for v2.0.0
 
 Add an api to easily add requirements and costs to command signs.
