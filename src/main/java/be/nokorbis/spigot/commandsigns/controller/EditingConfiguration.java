@@ -1,6 +1,6 @@
 package be.nokorbis.spigot.commandsigns.controller;
 
-import be.nokorbis.spigot.commandsigns.menu.IEditionMenu;
+import be.nokorbis.spigot.commandsigns.menus.old.IEditionMenu;
 import be.nokorbis.spigot.commandsigns.utils.Messages;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;

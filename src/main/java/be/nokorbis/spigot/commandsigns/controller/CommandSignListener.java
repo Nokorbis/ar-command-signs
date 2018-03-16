@@ -1,7 +1,7 @@
 package be.nokorbis.spigot.commandsigns.controller;
 
 import be.nokorbis.spigot.commandsigns.CommandSignsPlugin;
-import be.nokorbis.spigot.commandsigns.menu.CommandsAddMenu;
+import be.nokorbis.spigot.commandsigns.menus.old.CommandsAddMenu;
 import be.nokorbis.spigot.commandsigns.model.CommandBlock;
 import be.nokorbis.spigot.commandsigns.model.CommandSignsException;
 import be.nokorbis.spigot.commandsigns.tasks.ExecuteTask;

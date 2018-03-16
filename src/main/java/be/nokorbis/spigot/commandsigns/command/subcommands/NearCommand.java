@@ -16,27 +16,33 @@ import java.util.List;
 /**
  * Created by nokorbis on 1/20/16.
  */
-public class NearCommand extends Command {
-
-    public NearCommand() {
-        this.command = "near";
+public class NearCommand extends Command
+{
+    public NearCommand()
+    {
+        super("near", new String[0]);
         this.basePermission = "commandsign.admin.near";
     }
+
     @Override
     public boolean execute(CommandSender sender, List<String> args) throws CommandSignsCommandException
     {
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player))
+        {
             throw new CommandSignsCommandException(Messages.get("error.player_command"));
         }
 
-        if (args.size() < 2) {
+        if (args.size() < 2)
+        {
             throw new CommandSignsCommandException(Messages.get("error.command_needs_radius"));
         }
 
         Player player = (Player) sender;
 
-        try {
+        try
+        {
             int radius = Integer.parseInt(args.get(1));
+
             LinkedList<CommandBlock> cmds = new LinkedList<CommandBlock>();
             for (Location loc : CommandSignUtils.getLocationsAroundPoint(player.getLocation(), radius)) {
                 if (Container.getContainer().getCommandBlocks().containsKey(loc))  {
@@ -47,7 +53,8 @@ public class NearCommand extends Command {
                 sender.sendMessage(formatCommand(cmd));
             }
         }
-        catch (NumberFormatException ex) {
+        catch (NumberFormatException ex)
+        {
             throw new CommandSignsCommandException(Messages.get("error.number_argument"));
         }
 
@@ -61,7 +68,8 @@ public class NearCommand extends Command {
      * @return
      *      A formatted String
      */
-    private String formatCommand(CommandBlock cmd) {
+    private String formatCommand(CommandBlock cmd)
+    {
         String msg = Messages.get("info.near_format");
         msg = msg.replace("{NAME}", cmd.getName())
                     .replace("{ID}", String.valueOf(cmd.getId()))
@@ -70,7 +78,8 @@ public class NearCommand extends Command {
     }
 
     @Override
-    public void printUsage(CommandSender sender) {
+    public void printUsage(CommandSender sender)
+    {
         sender.sendMessage("/commandsign near <radius>");
     }
 }

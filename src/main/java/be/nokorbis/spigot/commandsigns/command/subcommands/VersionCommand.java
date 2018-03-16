@@ -11,11 +11,11 @@ import java.util.List;
 /**
  * Created by nokorbis on 1/20/16.
  */
-public class VersionCommand extends Command {
-
-    public VersionCommand() {
-        this.command = "version";
-        this.aliases.add("v");
+public class VersionCommand extends Command
+{
+    public VersionCommand()
+    {
+        super("version", new String[]{ "v" });
         this.basePermission = "commandsign.admin.version";
     }
 
@@ -27,7 +27,8 @@ public class VersionCommand extends Command {
     }
 
     @Override
-    public void printUsage(CommandSender sender) {
+    public void printUsage(CommandSender sender)
+    {
         sender.sendMessage("/commandsign version");
     }
 }

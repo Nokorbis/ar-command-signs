@@ -15,42 +15,50 @@ import java.util.Map;
 /**
  * Created by Nokorbis on 22/08/2016.
  */
-public class LoadCommand extends Command {
-
-    public LoadCommand() {
-        this.command = "reload";
-        this.aliases.add("load");
+public class LoadCommand extends Command
+{
+    public LoadCommand()
+    {
+        super("reload", new String[]{ "load" });
         this.basePermission = "commandsign.admin.reload";
     }
 
     @Override
     public boolean execute(CommandSender sender, List<String> args) throws CommandSignsCommandException
     {
-        if (!sender.hasPermission(basePermission)) {
+        if (!sender.hasPermission(basePermission))
+        {
             throw new CommandSignsCommandException(Messages.get("error.no_permission"));
         }
         args.remove(0); // remove "reload" text
-        if (args.isEmpty()) {
+        if (args.isEmpty())
+        {
             CommandBlock.reloadUsedIDs();
             int errors = Container.getContainer().reload();
             sender.sendMessage(Messages.get("info.reload_done"));
-            if (errors > 0) {
+            if (errors > 0)
+            {
                 sender.sendMessage(Messages.get("info.reload_errors").replace("{ERRORS}", String.valueOf(errors)));
             }
         }
-        else {
-            try {
+        else
+        {
+            try
+            {
                 String idText = args.remove(0);
                 int id = Integer.parseInt(idText);
                 CommandBlock.reloadUsedID(id);
                 CommandBlock cmdBlock = Container.getContainer().getSaver().load(id);
-                if (cmdBlock == null) {
+                if (cmdBlock == null)
+                {
                     throw new CommandSignsCommandException(Messages.get("error.reload_null"));
                 }
                 Map<Location, CommandBlock> blocks = Container.getContainer().getCommandBlocks();
                 CommandBlock old = blocks.get(cmdBlock.getLocation());
-                if (old != null) {
-                    if (old.getId() != id) {
+                if (old != null)
+                {
+                    if (old.getId() != id)
+                    {
                         String msg = Messages.get("error.reload_location_used");
                         Location loc = old.getLocation();
                         msg = msg.replace("{WORLD}", loc.getWorld().getName())
@@ -64,7 +72,8 @@ public class LoadCommand extends Command {
                 blocks.put(cmdBlock.getLocation(), cmdBlock);
                 sender.sendMessage(ChatColor.GREEN + Messages.get("info.reload_done"));
             }
-            catch (NumberFormatException ex) {
+            catch (NumberFormatException ex)
+            {
                 throw new CommandSignsCommandException(Messages.get("error.number_argument"));
             }
         }
@@ -73,7 +82,8 @@ public class LoadCommand extends Command {
     }
 
     @Override
-    public void printUsage(CommandSender sender) {
+    public void printUsage(CommandSender sender)
+    {
         sender.sendMessage("/commandsign reload [ID]");
     }
 }

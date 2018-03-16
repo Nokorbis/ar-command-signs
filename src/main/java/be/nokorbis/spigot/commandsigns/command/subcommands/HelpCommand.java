@@ -17,51 +17,52 @@ public class HelpCommand extends Command {
 
     private List<ICommand> commands;
 
-    public HelpCommand(List<ICommand> commands) {
-        this.command = "help";
-        this.aliases.add("h");
-        this.aliases.add("?");
+    public HelpCommand(List<ICommand> commands)
+    {
+        super("help", new String[] { "h", "?" });
         this.basePermission = "commandsign.admin.help";
-
         this.commands = commands;
     }
+
     @Override
     public boolean execute(CommandSender sender, List<String> args) throws CommandSignsCommandException
     {
-        if (args.size() < 2) {
-            if (!(sender instanceof Player)) {
+        if (args.size() < 2)
+        {
+            if (!(sender instanceof Player))
+            {
                 throw new CommandSignsCommandException(Messages.get("error.player_command"));
             }
-            for (ICommand cmd : this.commands) {
+            for (ICommand cmd : this.commands)
+            {
                 cmd.printUsage(sender, false);
             }
         }
-        else {
-            String subCmd = args.get(1);
-            for (ICommand cmd : this.commands) {
-                if (cmd.isCommand(subCmd)) {
-                    cmd.printUsage(sender);
-                    break;
-                }
-            }
+        else
+        {
+            String subCmd = args.get(1).toLowerCase();
+            this.commands.stream()
+                    .filter((cmd) -> cmd.isCommand(subCmd))
+                    .forEach((cmd) -> cmd.printUsage(sender));
         }
         return true;
     }
 
     @Override
-    public void printUsage(CommandSender sender) {
+    public void printUsage(CommandSender sender)
+    {
         sender.sendMessage("/commandsign help [command]");
     }
 
     @Override
-    public List<String> autoComplete(CommandSender sender, List<String> args) {
-        LinkedList<String> values = new LinkedList<String>();
-        if (args.size() == 1) {
-            for (ICommand cmd : this.commands) {
-                if (cmd.hasBasePermission(sender)) {
-                    values.add(cmd.getCommand());
-                }
-            }
+    public List<String> autoComplete(CommandSender sender, List<String> args)
+    {
+        LinkedList<String> values = new LinkedList<>();
+        if (args.size() == 1)
+        {
+            this.commands.stream()
+                    .filter(cmd -> cmd.hasBasePermission(sender))
+                    .forEach(cmd -> values.add(cmd.getCommand()));
         }
         return values;
     }

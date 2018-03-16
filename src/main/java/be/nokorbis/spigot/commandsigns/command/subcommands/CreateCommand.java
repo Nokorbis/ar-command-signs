@@ -14,16 +14,14 @@ import java.util.List;
 /**
  * Created by nokorbis on 1/20/16.
  */
-public class CreateCommand extends Command {
-
-    public CreateCommand() {
-        this.command = "create";
-        this.aliases.add("cr");
-        this.aliases.add("mk");
-        this.aliases.add("make");
+public class CreateCommand extends Command
+{
+    public CreateCommand()
+    {
+        super("create", new String[] { "cr", "mk", "make" });
         this.basePermission = "commandsign.admin.create";
-
     }
+
     @Override
     public boolean execute(CommandSender sender, List<String> args) throws CommandSignsCommandException
     {
