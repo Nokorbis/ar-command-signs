@@ -6,7 +6,6 @@ import be.nokorbis.spigot.commandsigns.command.ICommand;
 import be.nokorbis.spigot.commandsigns.command.subcommands.*;
 import be.nokorbis.spigot.commandsigns.model.CommandSignsCommandException;
 import be.nokorbis.spigot.commandsigns.utils.Messages;
-import net.bendercraft.spigot.commandsigns.command.subcommands.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
