@@ -10,6 +10,7 @@ public class EditingConfiguration
     private final CommandBlock editingData;
     private EditionMenu currentMenu;
     private boolean creating;
+    private int page;
 
     /**
      * @param player
@@ -80,5 +81,22 @@ public class EditingConfiguration
     public EditionMenu getCurrentMenu()
     {
         return this.currentMenu;
+    }
+
+    public int getPage()
+    {
+        return this.page;
+    }
+
+    public void setPage(int page)
+    {
+        if (page < 1)
+        {
+            this.page = 1;
+        }
+        else
+        {
+            this.page = page;
+        }
     }
 }
