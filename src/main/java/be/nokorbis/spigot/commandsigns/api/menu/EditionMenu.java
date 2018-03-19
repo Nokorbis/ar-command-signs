@@ -2,9 +2,14 @@ package be.nokorbis.spigot.commandsigns.api.menu;
 
 
 import be.nokorbis.spigot.commandsigns.model.CommandBlock;
+import org.bukkit.entity.Player;
+
+import java.util.ResourceBundle;
 
 public abstract class EditionMenu
 {
+    protected static final ResourceBundle mainMessages = ResourceBundle.getBundle("messages/menu");
+
     private String name;
     private EditionMenu parent;
 
@@ -21,7 +26,8 @@ public abstract class EditionMenu
 
 
     /**
-     * Get the name of this menu
+     * Get the name of this menu. <br>
+     * Will be displayed in the breadcrumb at the top of each submenu.
      *
      * @return
      * 		A String with the name
@@ -51,6 +57,30 @@ public abstract class EditionMenu
     public String getDisplayString(CommandBlock data)
     {
         return this.name;
+    }
+
+    protected final static void displayBreadcrumb(Player editor, EditionMenu currentMenu)
+    {
+        String divider = mainMessages.getString("breadcrumb.divider");
+        String nameColor = mainMessages.getString("breadcrumb.name_color");
+        StringBuilder sb = new StringBuilder();
+
+        int i = 0;
+        while(currentMenu != null && i < 4)
+        {
+            sb.insert(0, divider + nameColor + currentMenu.getName());
+            currentMenu = currentMenu.getParent();
+            i++;
+        }
+        if(i != 0)
+        {
+            sb.delete(0, 3);
+        }
+        if(i == 4)
+        {
+            sb.insert(0, divider);
+        }
+        editor.sendMessage(sb.toString());
     }
 
     public abstract void display(EditingConfiguration config);

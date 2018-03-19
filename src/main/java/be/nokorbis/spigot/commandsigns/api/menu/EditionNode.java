@@ -1,19 +1,19 @@
 package be.nokorbis.spigot.commandsigns.api.menu;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ListIterator;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 public class EditionNode extends EditionMenu
 {
-    // Use treemap to make sure the display is done properly
-    private final Map<Integer, EditionMenu> menus;
+    protected final List<EditionMenu> menus;
 
     public EditionNode(String name, EditionMenu parent)
     {
         super(name, parent);
-        this.menus = new TreeMap<>();
+        this.menus = new ArrayList<>();
     }
 
     public EditionNode(String name)
@@ -21,39 +21,47 @@ public class EditionNode extends EditionMenu
         this(name, null);
     }
 
-    public void addMenu(int number, EditionMenu menu)
+    public void addMenu(EditionMenu menu)
     {
-        if(menus.containsKey(number))
-        {
-            throw new IllegalArgumentException();
-        }
-        menus.put(number, menu);
+        menus.add(menu);
     }
 
     @Override
-    public void display(EditingConfiguration config) {
+    public void display(EditingConfiguration config)
+    {
         Player editor = config.getEditor();
-        editor.sendMessage(ChatColor.GRAY+"-------------------");
-        StringBuilder sb = new StringBuilder();
-        EditionMenu current = config.getCurrentMenu();
-        int i = 0;
-        while(current != null || i > 4) {
-            sb.insert(0, " > "+current.getName());
-            current = current.getParent();
-            i++;
+
+        displayBreadcrumb(editor, config.getCurrentMenu());
+
+        editor.sendMessage(mainMessages.getString("menu.entry.refresh"));
+
+        boolean displayPageNavigation = false;
+        int entriesToDisplay = 6;
+        int page = config.getPage();
+        int startingIndex = 0;
+        if (menus.size() > 8)
+        {
+            displayPageNavigation = true;
+            startingIndex = (page-1) * entriesToDisplay;
         }
-        if(i != 0) {
-            sb.delete(0, 3);
+        else
+        {
+            entriesToDisplay = menus.size();
         }
-        if(i == 4) {
-            sb.insert(0, " ... > ");
+
+        ListIterator<EditionMenu> menuIterator = menus.listIterator(startingIndex);
+        for (int i = 1; i <= entriesToDisplay && menuIterator.hasNext(); i++)
+        {
+            EditionMenu menu = menuIterator.next();
+            editor.sendMessage(menu.getDisplayString(config.getEditingData()));
         }
-        editor.sendMessage(ChatColor.GRAY+sb.toString());
-        editor.sendMessage(ChatColor.LIGHT_PURPLE + "0. Refresh");
-        for (Map.Entry<Integer, EditionMenu> menu : menus.entrySet()) {
-            editor.sendMessage( menu.getKey() + ". " + menu.getValue().getDisplayString(config.getEditingData()));
+
+        if (displayPageNavigation)
+        {
+            editor.sendMessage(mainMessages.getString("menu.entry.previous"));
+            editor.sendMessage(mainMessages.getString("menu.entry.next"));
         }
-        editor.sendMessage(ChatColor.GREEN + String.valueOf(menus.size()+1)+". Done");
+        editor.sendMessage(mainMessages.getString("menu.entry.done"));
     }
 
     @Override
