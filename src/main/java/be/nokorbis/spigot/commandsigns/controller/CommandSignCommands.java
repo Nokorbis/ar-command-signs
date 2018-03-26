@@ -12,14 +12,12 @@ import org.bukkit.command.TabCompleter;
 
 import be.nokorbis.spigot.commandsigns.utils.Messages;
 
-public class CommandSignCommands implements CommandExecutor, TabCompleter {
-
-	private static final int LIST_SIZE = 10;
-
+public class CommandSignCommands implements CommandExecutor, TabCompleter
+{
 	private final List<ICommand> commands;
 
 	public CommandSignCommands () {
-		commands = new LinkedList<ICommand>();
+		commands = new ArrayList<>(12);
 		commands.add(new CopyCommand());
 		commands.add(new CreateCommand());
 		commands.add(new DeleteCommand());
@@ -67,19 +65,19 @@ public class CommandSignCommands implements CommandExecutor, TabCompleter {
 
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
-		List<String> result = new ArrayList<String>();
+		List<String> result = new ArrayList<>();
 		if (args.length == 0) {
 			result.add("commandsign");
 		}
 		else if (args.length == 1) {
-			List<String> values = new LinkedList<String>();
+			List<String> values = new LinkedList<>();
 			for (ICommand command : this.commands) {
 				values.add(command.getCommand());
 			}
 			result.add(autoCompleteParameter(args[0], values));
 		}
 		else {
-			List<String> argList = new LinkedList<String>(Arrays.asList(args));
+			List<String> argList = new LinkedList<>(Arrays.asList(args));
 			String sub = argList.remove(0);
 			for (ICommand command : this.commands) {
 				if (command.isCommand(sub)) {
@@ -105,7 +103,7 @@ public class CommandSignCommands implements CommandExecutor, TabCompleter {
 			return " ";
 		}
 
-		List<String> valids = new LinkedList<String>();
+		List<String> valids = new LinkedList<>();
 		if (values == null) {
 			return start;
 		}

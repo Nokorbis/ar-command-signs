@@ -40,9 +40,9 @@ public class CommandBlock
 	public CommandBlock ()
 	{
 		// We use ArrayList because we want to remove/edit them by the index.
-		this.commands = new ArrayList<String>();
-		this.permissions = new ArrayList<String>();
-		this.neededPermissions = new ArrayList<String>();
+		this.commands = new ArrayList<>();
+		this.permissions = new ArrayList<>();
+		this.neededPermissions = new ArrayList<>();
 		this.setTimeBeforeExecution(0);
 		this.resetOnMove = false;
 		this.cancelledOnMove = false;
@@ -53,14 +53,14 @@ public class CommandBlock
 		this.lastTimeUsed = 0;
 		this.setId(getFreeId());
 
-		this.usages = new HashMap<UUID, Long>();
+		this.usages = new HashMap<>();
 	}
 
 	public CommandBlock (Long id)
 	{
-		this.commands = new ArrayList<String>();
-		this.permissions = new ArrayList<String>();
-		this.neededPermissions = new ArrayList<String>();
+		this.commands = new ArrayList<>();
+		this.permissions = new ArrayList<>();
+		this.neededPermissions = new ArrayList<>();
 		this.setTimeBeforeExecution(0);
 		this.resetOnMove = false;
 		this.cancelledOnMove = false;
@@ -75,7 +75,7 @@ public class CommandBlock
 		}
 		this.setId(id);
 
-		this.usages = new HashMap<UUID, Long>();
+		this.usages = new HashMap<>();
 	}
 
 	public static long getBiggerUsedId()
@@ -360,15 +360,7 @@ public class CommandBlock
 			return false;
 		}
 		long now = System.currentTimeMillis();
-		Iterator<Entry<UUID, Long>> it = this.usages.entrySet().iterator();
-		while (it.hasNext())
-		{
-			Entry<UUID, Long> entry = it.next();
-			if (entry.getValue() + (this.timeBetweenPlayerUsage*1000) < now)
-			{
-				it.remove();
-			}
-		}
+		this.usages.entrySet().removeIf(entry -> entry.getValue() + (this.timeBetweenPlayerUsage * 1000) < now);
 
 		return this.usages.containsKey(player.getUniqueId());
 	}

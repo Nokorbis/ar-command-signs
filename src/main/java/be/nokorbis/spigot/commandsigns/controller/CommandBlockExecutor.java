@@ -157,7 +157,6 @@ public class CommandBlockExecutor
 					return false;
 				}
 			}
-			this.cmdBlock.addUsage(this.player);
 		}
 
 		PermissionAttachment perms = Container.getContainer().getPlayerPermissions(this.player);
@@ -178,11 +177,12 @@ public class CommandBlockExecutor
 		BukkitScheduler scheduler = plugin.getServer().getScheduler();
 		scheduler.runTaskLater(plugin, () ->
 		{
+			this.cmdBlock.addUsage(this.player);
 			for (String perm : this.cmdBlock.getPermissions())
 			{
 				perms.unsetPermission(perm);
 			}
-		}, 2);
+		}, 1);
 
 
 		return true;
@@ -231,7 +231,7 @@ public class CommandBlockExecutor
 
 	private List<String> formatCommand (String command, Player player)
 	{
-		List<String> cmds = new LinkedList<String>();
+		List<String> cmds = new LinkedList<>();
 		String cmd = command;
 
 		Matcher m = PLAYER_PATTERN.matcher(cmd);
