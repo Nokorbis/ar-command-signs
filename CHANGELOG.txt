@@ -1,3 +1,6 @@
+CommandSigns v1.6.5
+    Check requirements before the wait time
+
 CommandSigns v1.6.4
     Load My_Worlds before CommandSign to handle multiple worlds
 

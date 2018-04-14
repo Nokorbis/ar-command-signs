@@ -81,20 +81,10 @@ public class CommandSignListener implements Listener{
 	}
 
 	@EventHandler (priority = EventPriority.LOW)
-	public void onPlayerLeave(PlayerQuitEvent event) {
+	public void onPlayerLeave(PlayerQuitEvent event)
+	{
 		Player player = event.getPlayer();
-		if (Container.getContainer().getCopyingConfigurations().containsKey(player)) {
-			Container.getContainer().getCopyingConfigurations().remove(player);
-		}
-		if (Container.getContainer().getEditingConfigurations().containsKey(player)) {
-			Container.getContainer().getEditingConfigurations().remove(player);
-		}
-		if (Container.getContainer().getCreatingConfigurations().containsKey(player)) {
-			Container.getContainer().getCreatingConfigurations().remove(player);
-		}
-		if (Container.getContainer().getInfoPlayers().contains(player)) {
-			Container.getContainer().getInfoPlayers().remove(player);
-		}
+		Container.getContainer().handlePlayerDisconnection(player);
 	}
 
 	@EventHandler(ignoreCancelled=true)
@@ -192,25 +182,22 @@ public class CommandSignListener implements Listener{
 			{
 				try
 				{
-					CommandBlockExecutor executor = new CommandBlockExecutor(player, cmd);
-					long time = 0;
-					if (cmd.hasTimer() && !player.hasPermission("commandsign.timer.bypass"))
+					if (Container.getContainer().isPlayerExecutingCommandBlock(player, cmd))
 					{
-						executor.checkRequirements();
-						time = cmd.getTimeBeforeExecution();
-						String msg = Messages.get("info.timer_delayed");
-						msg = msg.replace("{TIME}", String.valueOf(time));
-						player.sendMessage(msg);
+						player.sendMessage(Messages.get("warning.already_executing_task"));
 					}
+					else
+					{
+						CommandBlockExecutor executor = new CommandBlockExecutor(player, cmd);
+						executor.checkRequirements();
 
-					ExecuteTask exe = new ExecuteTask(executor);
-					exe.setLocation(player.getLocation().getBlock().getLocation());
-					Container.getContainer().getExecutingTasks().put(player.getUniqueId(), exe);
+						ExecuteTask exe = new ExecuteTask(executor);
+						exe.setLocation(player.getLocation().getBlock().getLocation());
+						Container.getContainer().getExecutingTasks(player).add(exe);
 
-					BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
-
-					BukkitTask task = scheduler.runTaskLaterAsynchronously(CommandSignsPlugin.getPlugin(), exe, time * 20);
-					exe.setTaskId(task.getTaskId());
+						BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
+						scheduler.runTaskAsynchronously(CommandSignsPlugin.getPlugin(), exe);
+					}
 				}
 				catch (CommandSignsException ex)
 				{
@@ -225,35 +212,24 @@ public class CommandSignListener implements Listener{
 	}
 
 	@EventHandler(ignoreCancelled=true)
-	public void onPlayerMove (PlayerMoveEvent event) {
+	public void onPlayerMove (PlayerMoveEvent event)
+	{
 		Player player = event.getPlayer();
-		if ((player == null) || !player.isOnline() || player.isDead()) {
-			// Yes, there is no reason to be here
-			return;
-		}
 
-		if (Container.getContainer().getExecutingTasks().containsKey(player.getUniqueId())) {
-			ExecuteTask exe = Container.getContainer().getExecutingTasks().get(player.getUniqueId());
-
-			if (player.getLocation().getBlock().getLocation().equals(exe.getLocation())) {
-				return;
+		for (ExecuteTask executeTask : Container.getContainer().getExecutingTasks(player))
+		{
+			if (player.getLocation().getBlock().getLocation().equals(executeTask.getLocation()))
+			{
+				continue;
 			}
 
-			if (exe.getCommandBlock().isCancelledOnMove()) {
-				CommandSignsPlugin.getPlugin().getServer().getScheduler().cancelTask(exe.getTaskId());
-				Container.getContainer().getExecutingTasks().remove(player.getUniqueId());
-				exe.getPlayer().sendMessage(Messages.get("usage.execution_cancelled"));
-				return;
+			if (executeTask.getCommandBlock().isCancelledOnMove())
+			{
+				executeTask.cancel();
 			}
-			if (exe.getCommandBlock().isResetOnMove()) {
-				BukkitScheduler sch = CommandSignsPlugin.getPlugin().getServer().getScheduler();
-				sch.cancelTask(exe.getTaskId());
-				Container.getContainer().getExecutingTasks().remove(player.getUniqueId());
-				BukkitTask task = sch.runTaskLater(CommandSignsPlugin.getPlugin(), exe, exe.getCommandBlock().getTimeBeforeExecution() * 20);
-				exe.setTaskId(task.getTaskId());
-				exe.setLocation(player.getLocation().getBlock().getLocation());
-				Container.getContainer().getExecutingTasks().put(player.getUniqueId(), exe);
-				exe.getPlayer().sendMessage(Messages.get("usage.execution_timer_reset"));
+			else if (executeTask.getCommandBlock().isResetOnMove())
+			{
+				executeTask.resetTimer();
 			}
 		}
 	}

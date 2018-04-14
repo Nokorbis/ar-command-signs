@@ -29,6 +29,9 @@ public class CommandBlockExecutor
 	private final Player player;
 	private final CommandBlock cmdBlock;
 
+	private long timeBeforeExecution;
+	private long resetTime;
+
 	public CommandBlockExecutor (Player player, CommandBlock cmdBlock)
 	{
 		this.player = player;
@@ -41,6 +44,7 @@ public class CommandBlockExecutor
 			df.setDecimalFormatSymbols(symbols);
 			df.setMaximumFractionDigits(2);
 		}
+		this.resetTime = System.currentTimeMillis();
 	}
 
 	public Player getPlayer()
@@ -53,9 +57,36 @@ public class CommandBlockExecutor
 		return this.cmdBlock;
 	}
 
+	public void waitBeforeExecution()
+	{
+		if (cmdBlock.hasTimer() && !player.hasPermission("commandsign.timer.bypass"))
+		{
+			try
+			{
+				timeBeforeExecution = cmdBlock.getTimeBeforeExecution();
+				final String msg = Messages.get("info.timer_delayed").replace("{TIME}", String.valueOf(timeBeforeExecution));
+				Bukkit.getScheduler().runTask(CommandSignsPlugin.getPlugin(), () ->
+				{
+					player.sendMessage(msg);
+				});
+				timeBeforeExecution *= 1000;
+				while (timeBeforeExecution > 0)
+				{
+					Thread.sleep(timeBeforeExecution);
+					timeBeforeExecution = (cmdBlock.getTimeBeforeExecution()*1000)-(System.currentTimeMillis()-resetTime);
+				}
+			}
+			catch (InterruptedException e)
+			{
+				CommandSignsPlugin.getPlugin().getLogger()
+						.warning(String.format("An interruption occured while waiting before the execution of a command sign (id : %s, player: %s", cmdBlock.getId(), player.getName()));
+			}
+		}
+	}
+
 	public void checkRequirements() throws CommandSignsException
 	{
-		if (this.player == null)
+		if (this.player == null || this.player.isDead() || !this.player.isOnline())
 		{
 			throw new CommandSignsException(Messages.get("usage.invalid_player"));
 		}
@@ -227,6 +258,11 @@ public class CommandBlockExecutor
 				}
 			}
 		}
+	}
+
+	public void resetTimer()
+	{
+		this.resetTime = System.currentTimeMillis();
 	}
 
 	private List<String> formatCommand (String command, Player player)

@@ -1,10 +1,6 @@
 package be.nokorbis.spigot.commandsigns.controller;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.logging.Level;
 
 import be.nokorbis.spigot.commandsigns.CommandSignsPlugin;
@@ -19,11 +15,13 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachment;
 
-public class Container {
+public class Container
+{
 
 	private static Container instance;
 
-	public static Container getContainer() {
+	public static Container getContainer()
+	{
 		if (instance == null) {
 			instance = new Container();
 		}
@@ -36,40 +34,45 @@ public class Container {
 	private Map<Player, EditingConfiguration<CommandBlock>> editingConfigurations;
 	private Map<Player, CommandBlock> copyingConfigurations;
 	private Map<Player, Location> deletingBlocks;
-	private Map<UUID, ExecuteTask> executingTasks;
+	private Map<UUID, Set<ExecuteTask>> executingTasks;
 	private List<Player> infoPlayers;
 
 	private ICommandBlockSaver commandBlockSaver;
 
 	private IEditionMenu<CommandBlock> mainMenu;
 
-	private Container() {
+	private Container()
+	{
 		CommandSignsPlugin plugin = CommandSignsPlugin.getPlugin();
 		initializeDataStructures();
 		this.mainMenu = new MainMenu();
 
-		try {
+		try
+		{
 			initializeSaver();
 			plugin.getLogger().info("CommandSigns properly enabled !");
 		}
-		catch (Exception e) {
+		catch (Exception e)
+		{
 			plugin.getLogger().severe("Was not able to create the save file for command sign plugin");
 			e.printStackTrace();
 		}
 	}
 
-	private void initializeDataStructures() {
-		this.playerPerms = new HashMap<Player, PermissionAttachment>();
-		this.commandBlocks = new HashMap<Location , CommandBlock>();
-		this.creatingConfigurations = new HashMap<Player, EditingConfiguration<CommandBlock>>();
-		this.editingConfigurations = new HashMap<Player, EditingConfiguration<CommandBlock>>();
-		this.copyingConfigurations = new HashMap<Player, CommandBlock>();
-		this.deletingBlocks = new HashMap<Player, Location>();
-		this.executingTasks = new HashMap<UUID, ExecuteTask>();
-		this.infoPlayers = new LinkedList<Player>();
+	private void initializeDataStructures()
+	{
+		this.playerPerms = new HashMap<>();
+		this.commandBlocks = new HashMap<>();
+		this.creatingConfigurations = new HashMap<>();
+		this.editingConfigurations = new HashMap<>();
+		this.copyingConfigurations = new HashMap<>();
+		this.deletingBlocks = new HashMap<>();
+		this.executingTasks = new HashMap<>();
+		this.infoPlayers = new LinkedList<>();
 	}
 
-	private void initializeSaver() {
+	private void initializeSaver()
+	{
 		commandBlockSaver = new JsonCommandBlockSaver(CommandSignsPlugin.getPlugin().getDataFolder());
 		reload();
 	}
@@ -100,8 +103,10 @@ public class Container {
 		return errorCount;
 	}
 
-	public PermissionAttachment getPlayerPermissions(Player player) {
-		if (this.playerPerms.containsKey(player)) {
+	public PermissionAttachment getPlayerPermissions(Player player)
+	{
+		if (this.playerPerms.containsKey(player))
+		{
 			return this.playerPerms.get(player);
 		}
 
@@ -111,39 +116,86 @@ public class Container {
 		return perms;
 	}
 
-	public Map<Location, CommandBlock> getCommandBlocks() {
+	public void handlePlayerDisconnection(Player player)
+	{
+		copyingConfigurations.remove(player);
+		editingConfigurations.remove(player);
+		creatingConfigurations.remove(player);
+		infoPlayers.remove(player);
+		if (executingTasks.containsKey(player.getUniqueId()))
+		{
+			for (ExecuteTask executeTask : executingTasks.get(player.getUniqueId()))
+			{
+				executeTask.cancel();
+			}
+			executingTasks.remove(player.getUniqueId());
+		}
+	}
+
+	public Map<Location, CommandBlock> getCommandBlocks()
+	{
 		return this.commandBlocks;
 	}
 
-	public Map<Player, EditingConfiguration<CommandBlock>> getCreatingConfigurations() {
+	public Map<Player, EditingConfiguration<CommandBlock>> getCreatingConfigurations()
+	{
 		return this.creatingConfigurations;
 	}
 
-	public Map<Player, EditingConfiguration<CommandBlock>> getEditingConfigurations() {
+	public Map<Player, EditingConfiguration<CommandBlock>> getEditingConfigurations()
+	{
 		return this.editingConfigurations;
 	}
 
-	public Map<Player, CommandBlock> getCopyingConfigurations() {
+	public Map<Player, CommandBlock> getCopyingConfigurations()
+	{
 		return this.copyingConfigurations;
 	}
 
-	public Map<UUID, ExecuteTask> getExecutingTasks() {
-		return this.executingTasks;
+	public Set<ExecuteTask> getExecutingTasks(Player player)
+	{
+		return this.executingTasks.computeIfAbsent(player.getUniqueId(), k -> new HashSet<>());
 	}
 
-	public Map<Player, Location> getDeletingBlocks() {
+	public boolean isPlayerExecutingCommandBlock(Player player, CommandBlock cmdblock)
+	{
+		Set<ExecuteTask> executingTasks = getExecutingTasks(player);
+		for (ExecuteTask task : executingTasks)
+		{
+			if (task.getCommandBlock().getId() == cmdblock.getId())
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public void removeExecuteTask(ExecuteTask task)
+	{
+		Set<ExecuteTask> tasks = this.getExecutingTasks(task.getPlayer());
+		synchronized (tasks)
+		{
+			tasks.remove(task);
+		}
+	}
+
+	public Map<Player, Location> getDeletingBlocks()
+	{
 		return this.deletingBlocks;
 	}
 
-	public List<Player> getInfoPlayers() {
+	public List<Player> getInfoPlayers()
+	{
 		return this.infoPlayers;
 	}
 
-	public IEditionMenu<CommandBlock> getMainMenu() {
+	public IEditionMenu<CommandBlock> getMainMenu()
+	{
 		return this.mainMenu;
 	}
 
-	public CommandBlock getCommandBlockById(long id) {
+	public CommandBlock getCommandBlockById(long id)
+	{
 		for (CommandBlock cmd : this.commandBlocks.values()) {
 			if (cmd.getId() == id) {
 				return cmd;
@@ -152,17 +204,21 @@ public class Container {
 		return null;
 	}
 
-	public List<CommandBlock> getCommandBlocksByIdRange(long minId, long maxId) {
-		List<CommandBlock> cmds = new LinkedList<CommandBlock>();
-		for (CommandBlock cmd : this.commandBlocks.values()){
-			if (cmd.getId() >= minId && cmd.getId() <= maxId) {
+	public List<CommandBlock> getCommandBlocksByIdRange(long minId, long maxId)
+	{
+		List<CommandBlock> cmds = new LinkedList<>();
+		for (CommandBlock cmd : this.commandBlocks.values())
+		{
+			if (cmd.getId() >= minId && cmd.getId() <= maxId)
+			{
 				cmds.add(cmd);
 			}
 		}
 		return cmds;
 	}
 
-	public ICommandBlockSaver getSaver() {
+	public ICommandBlockSaver getSaver()
+	{
 		return commandBlockSaver;
 	}
 }
