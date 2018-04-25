@@ -17,9 +17,5 @@ E.g : If you want only VIP people to go into a specific area, you could add the 
 
 Commands :
 ----------
-    /commandsign
+    /commandsign help
 
-
-Version compatibilities
-
-Command Sign 1.0.2 => Bukkit/Spigot 1.8.1+

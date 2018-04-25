@@ -1,0 +1,7 @@
+prefix_char:
+  op: ^
+  server: #
+  delay: `
+cache:
+  time_to_live: 30 #minutes
+  max_size: 100 #max number of signs loaded at one time
