@@ -14,8 +14,8 @@ public final class Settings {
 	private static char DELAY_CHAR;
 	public static char DELAY_CHAR() { return DELAY_CHAR; }
 
-	private static long CACHE_TIME_TO_LIVE; //minutes
-	public static long CACHE_TIME_TO_LIVE() { return CACHE_TIME_TO_LIVE; }
+	private static long CACHE_TIME_TO_IDLE; //minutes
+	public static long CACHE_TIME_TO_IDLE() { return CACHE_TIME_TO_IDLE; }
 
 	private static long CACHE_MAX_SIZE;
 	public static long CACHE_MAX_SIZE() { return CACHE_MAX_SIZE; }
@@ -31,7 +31,7 @@ public final class Settings {
 		SERVER_CHAR = config.getString("prefix_char.server", "#").charAt(0);
 		DELAY_CHAR 	= config.getString("prefix_char.delay", "`").charAt(0);
 
-		CACHE_TIME_TO_LIVE 	= config.getLong("cache.time_to_live", 30L);
+		CACHE_TIME_TO_IDLE = config.getLong("cache.time_to_idle", 30L);
 		CACHE_MAX_SIZE 		= config.getLong("cache.max_size", 100L);
 	}
 

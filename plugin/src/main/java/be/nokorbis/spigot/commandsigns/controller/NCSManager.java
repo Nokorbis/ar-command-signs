@@ -26,7 +26,7 @@ public class NCSManager
 
         this.cache = Caffeine.newBuilder()
                 .maximumSize(Settings.CACHE_MAX_SIZE())
-                .expireAfterAccess(Settings.CACHE_TIME_TO_LIVE(), TimeUnit.MINUTES)
+                .expireAfterAccess(Settings.CACHE_TIME_TO_IDLE(), TimeUnit.MINUTES)
                 .removalListener(this::onCacheRemove)
                 .build(key -> new CommandBlock());
     }

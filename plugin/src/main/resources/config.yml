@@ -3,5 +3,5 @@ prefix_char:
   server: #
   delay: `
 cache:
-  time_to_live: 30 #minutes
+  time_to_idle: 30 #minutes
   max_size: 100 #max number of signs loaded at one time
