@@ -13,14 +13,14 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
-public class NCSManager
+public class NCommandSignsManager
 {
     private final Logger logger;
 
     private final Map<Location, Long> locationsToIds = new HashMap<>();
     private final LoadingCache<Long, CommandBlock> cache;
 
-    public NCSManager(CommandSignsPlugin plugin)
+    public NCommandSignsManager(CommandSignsPlugin plugin)
     {
         this.logger = plugin.getLogger();
 
@@ -50,8 +50,8 @@ public class NCSManager
         return this.getCommandBlock(id);
     }
 
-    public void onCacheRemove(Long id, CommandBlock cmdBlock, RemovalCause cause)
+    private void onCacheRemove(Long id, CommandBlock cmdBlock, RemovalCause cause)
     {
-        this.logger.info(String.format("The command block : %s (%n) was removed from the cache because : %s.", cmdBlock.getName(), id, cause.name()));
+        this.logger.info(String.format("The command block : %s (%d) was removed from the cache because : %s.", cmdBlock.getName(), id, cause.name()));
     }
 }
