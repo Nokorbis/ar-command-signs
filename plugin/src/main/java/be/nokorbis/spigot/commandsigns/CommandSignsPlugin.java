@@ -1,9 +1,6 @@
 package be.nokorbis.spigot.commandsigns;
 
-import be.nokorbis.spigot.commandsigns.controller.CommandSignCommands;
-import be.nokorbis.spigot.commandsigns.controller.CommandSignListener;
-import be.nokorbis.spigot.commandsigns.controller.Container;
-import be.nokorbis.spigot.commandsigns.controller.Economy;
+import be.nokorbis.spigot.commandsigns.controller.*;
 import be.nokorbis.spigot.commandsigns.utils.Settings;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -23,7 +20,8 @@ public class CommandSignsPlugin extends JavaPlugin{
 	public void onEnable()
 	{
 		Economy.initialize();
-		CommandSignCommands executor = new CommandSignCommands();
+		NCommandSignsManager manager = new NCommandSignsManager(this);
+		CommandSignCommands executor = new CommandSignCommands(manager);
 		Container.getContainer(); // Intialize the all stuff
 		this.getCommand("commandsign").setExecutor(executor);
 		this.getCommand("commandsign").setTabCompleter(executor);

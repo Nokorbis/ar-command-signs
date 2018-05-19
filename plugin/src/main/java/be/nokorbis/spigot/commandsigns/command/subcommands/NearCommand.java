@@ -1,6 +1,7 @@
 package be.nokorbis.spigot.commandsigns.command.subcommands;
 
 import be.nokorbis.spigot.commandsigns.controller.Container;
+import be.nokorbis.spigot.commandsigns.controller.NCommandSignsManager;
 import be.nokorbis.spigot.commandsigns.model.CommandBlock;
 import be.nokorbis.spigot.commandsigns.model.CommandSignsCommandException;
 import be.nokorbis.spigot.commandsigns.utils.CommandSignUtils;
@@ -18,9 +19,12 @@ import java.util.List;
  */
 public class NearCommand extends Command
 {
-    public NearCommand()
+    private NCommandSignsManager manager;
+
+    public NearCommand(NCommandSignsManager manager)
     {
         super("near", new String[0]);
+        this.manager = manager;
         this.basePermission = "commandsign.admin.near";
     }
 
@@ -32,7 +36,7 @@ public class NearCommand extends Command
             throw new CommandSignsCommandException(Messages.get("error.player_command"));
         }
 
-        if (args.size() < 2)
+        if (args.isEmpty())
         {
             throw new CommandSignsCommandException(Messages.get("error.command_needs_radius"));
         }
@@ -41,9 +45,9 @@ public class NearCommand extends Command
 
         try
         {
-            int radius = Integer.parseInt(args.get(1));
+            int radius = Integer.parseInt(args.get(0));
 
-            LinkedList<CommandBlock> cmds = new LinkedList<CommandBlock>();
+            LinkedList<CommandBlock> cmds = new LinkedList<>();
             for (Location loc : CommandSignUtils.getLocationsAroundPoint(player.getLocation(), radius)) {
                 if (Container.getContainer().getCommandBlocks().containsKey(loc))  {
                     cmds.add(Container.getContainer().getCommandBlocks().get(loc));

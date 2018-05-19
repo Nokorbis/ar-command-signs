@@ -1,6 +1,7 @@
 package be.nokorbis.spigot.commandsigns.command.subcommands;
 
 import be.nokorbis.spigot.commandsigns.controller.Container;
+import be.nokorbis.spigot.commandsigns.controller.NCommandSignsManager;
 import be.nokorbis.spigot.commandsigns.model.CommandBlock;
 import be.nokorbis.spigot.commandsigns.model.CommandSignsCommandException;
 import be.nokorbis.spigot.commandsigns.api.exceptions.CommandSignsException;
@@ -18,9 +19,12 @@ import java.util.Map;
  */
 public class PurgeCommand extends Command
 {
-    public PurgeCommand()
+    private NCommandSignsManager manager;
+
+    public PurgeCommand(NCommandSignsManager manager)
     {
         super("purge", new String[0]);
+        this.manager = manager;
         this.basePermission = "commandsign.admin.purge";
     }
 

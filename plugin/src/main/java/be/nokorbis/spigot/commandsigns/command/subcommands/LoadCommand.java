@@ -1,6 +1,7 @@
 package be.nokorbis.spigot.commandsigns.command.subcommands;
 
 import be.nokorbis.spigot.commandsigns.controller.Container;
+import be.nokorbis.spigot.commandsigns.controller.NCommandSignsManager;
 import be.nokorbis.spigot.commandsigns.model.CommandBlock;
 import be.nokorbis.spigot.commandsigns.model.CommandSignsCommandException;
 import be.nokorbis.spigot.commandsigns.utils.Messages;
@@ -17,9 +18,12 @@ import java.util.Map;
  */
 public class LoadCommand extends Command
 {
-    public LoadCommand()
+    private NCommandSignsManager manager;
+
+    public LoadCommand(NCommandSignsManager manager)
     {
         super("reload", new String[]{ "load" });
+        this.manager = manager;
         this.basePermission = "commandsign.admin.reload";
     }
 
@@ -30,7 +34,6 @@ public class LoadCommand extends Command
         {
             throw new CommandSignsCommandException(Messages.get("error.no_permission"));
         }
-        args.remove(0); // remove "reload" text
         if (args.isEmpty())
         {
             CommandBlock.reloadUsedIDs();

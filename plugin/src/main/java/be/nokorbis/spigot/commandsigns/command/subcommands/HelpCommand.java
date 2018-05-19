@@ -7,8 +7,11 @@ import be.nokorbis.spigot.commandsigns.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Created by nokorbis on 1/20/16.
@@ -27,7 +30,7 @@ public class HelpCommand extends Command {
     @Override
     public boolean execute(CommandSender sender, List<String> args) throws CommandSignsCommandException
     {
-        if (args.size() < 2)
+        if (args.isEmpty())
         {
             if (!(sender instanceof Player))
             {
@@ -57,13 +60,15 @@ public class HelpCommand extends Command {
     @Override
     public List<String> autoComplete(CommandSender sender, List<String> args)
     {
-        LinkedList<String> values = new LinkedList<>();
-        if (args.size() == 1)
+        Stream<String> commandStream = this.commands.stream()
+                .filter(cmd -> cmd.hasBasePermission(sender))
+                .map(ICommand::getCommand);
+
+        if (!args.isEmpty())
         {
-            this.commands.stream()
-                    .filter(cmd -> cmd.hasBasePermission(sender))
-                    .forEach(cmd -> values.add(cmd.getCommand()));
+            final String start = args.get(0).toLowerCase();
+            commandStream = commandStream.filter(value -> value.startsWith(start));
         }
-        return values;
+        return commandStream.collect(Collectors.toList());
     }
 }

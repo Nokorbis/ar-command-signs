@@ -2,6 +2,7 @@ package be.nokorbis.spigot.commandsigns.command.subcommands;
 
 import be.nokorbis.spigot.commandsigns.controller.Container;
 import be.nokorbis.spigot.commandsigns.controller.EditingConfiguration;
+import be.nokorbis.spigot.commandsigns.controller.NCommandSignsManager;
 import be.nokorbis.spigot.commandsigns.model.CommandBlock;
 import be.nokorbis.spigot.commandsigns.model.CommandSignsCommandException;
 import be.nokorbis.spigot.commandsigns.utils.Messages;
@@ -16,9 +17,12 @@ import java.util.List;
  */
 public class EditCommand extends Command
 {
-    public EditCommand()
+    private NCommandSignsManager manager;
+
+    public EditCommand(NCommandSignsManager manager)
     {
         super("edit", new String[0]);
+        this.manager = manager;
         this.basePermission = "commandsign.admin.edit";
     }
 
@@ -34,7 +38,7 @@ public class EditCommand extends Command
         if (isPlayerAvailable(player))
         {
             EditingConfiguration<CommandBlock> conf;
-            if (args.size() < 2)
+            if (args.isEmpty())
             {
                 conf = new EditingConfiguration(player, false);
                 player.sendMessage(Messages.get("howto.click_to_edit"));

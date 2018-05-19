@@ -1,6 +1,7 @@
 package be.nokorbis.spigot.commandsigns.command.subcommands;
 
 import be.nokorbis.spigot.commandsigns.controller.Container;
+import be.nokorbis.spigot.commandsigns.controller.NCommandSignsManager;
 import be.nokorbis.spigot.commandsigns.model.CommandBlock;
 import be.nokorbis.spigot.commandsigns.model.CommandSignsCommandException;
 import be.nokorbis.spigot.commandsigns.utils.Messages;
@@ -18,10 +19,12 @@ import java.util.List;
 public class ListCommand extends Command
 {
     private static final int LIST_SIZE = 10;
+    private NCommandSignsManager manager;
 
-    public ListCommand()
+    public ListCommand(NCommandSignsManager manager)
     {
         super("list", new String[]{ "l" });
+        this.manager = manager;
         this.basePermission = "commandsign.admin.list";
     }
 
@@ -35,11 +38,11 @@ public class ListCommand extends Command
 
         int index = 1;
         //If there is an argument, try to use it as page number
-        if (args.size() >= 2)
+        if (!args.isEmpty())
         {
             try
             {
-                index = Integer.parseInt(args.get(1));
+                index = Integer.parseInt(args.get(0));
             }
             catch (NumberFormatException ignored)
             {

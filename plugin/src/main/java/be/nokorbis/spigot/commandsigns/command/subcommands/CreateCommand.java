@@ -2,6 +2,7 @@ package be.nokorbis.spigot.commandsigns.command.subcommands;
 
 import be.nokorbis.spigot.commandsigns.controller.Container;
 import be.nokorbis.spigot.commandsigns.controller.EditingConfiguration;
+import be.nokorbis.spigot.commandsigns.controller.NCommandSignsManager;
 import be.nokorbis.spigot.commandsigns.model.CommandBlock;
 import be.nokorbis.spigot.commandsigns.model.CommandSignsCommandException;
 import be.nokorbis.spigot.commandsigns.utils.Messages;
@@ -16,16 +17,20 @@ import java.util.List;
  */
 public class CreateCommand extends Command
 {
-    public CreateCommand()
+    private NCommandSignsManager manager;
+
+    public CreateCommand(NCommandSignsManager manager)
     {
         super("create", new String[] { "cr", "mk", "make" });
+        this.manager = manager;
         this.basePermission = "commandsign.admin.create";
     }
 
     @Override
     public boolean execute(CommandSender sender, List<String> args) throws CommandSignsCommandException
     {
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player))
+        {
             throw new CommandSignsCommandException(Messages.get("error.player_command"));
         }
         Player player = (Player) sender;
@@ -33,7 +38,7 @@ public class CreateCommand extends Command
         if (isPlayerAvailable(player)) {
             CommandBlock cmdBlock = new CommandBlock();
 
-            EditingConfiguration<CommandBlock> ecf = new EditingConfiguration<CommandBlock>(player, cmdBlock, true);
+            EditingConfiguration<CommandBlock> ecf = new EditingConfiguration<>(player, cmdBlock, true);
             ecf.setCurrentMenu(Container.getContainer().getMainMenu());
             ecf.display();
             Container.getContainer().getCreatingConfigurations().put(player, ecf);

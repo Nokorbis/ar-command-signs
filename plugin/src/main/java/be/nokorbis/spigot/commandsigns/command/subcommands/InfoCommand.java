@@ -1,6 +1,7 @@
 package be.nokorbis.spigot.commandsigns.command.subcommands;
 
 import be.nokorbis.spigot.commandsigns.controller.Container;
+import be.nokorbis.spigot.commandsigns.controller.NCommandSignsManager;
 import be.nokorbis.spigot.commandsigns.model.CommandBlock;
 import be.nokorbis.spigot.commandsigns.model.CommandSignsCommandException;
 import be.nokorbis.spigot.commandsigns.utils.CommandSignUtils;
@@ -16,9 +17,12 @@ import java.util.List;
  */
 public class InfoCommand extends Command
 {
-    public InfoCommand()
+    private NCommandSignsManager manager;
+
+    public InfoCommand(NCommandSignsManager manager)
     {
         super("info", new String[] { "i" });
+        this.manager = manager;
         this.basePermission = "commandsign.admin.info";
     }
 
@@ -31,7 +35,16 @@ public class InfoCommand extends Command
         }
         Player player = (Player) sender;
 
-        if (args.size() >= 2)
+        if (args.isEmpty())
+        {
+            if (!isPlayerAvailable(player))
+            {
+                return false;
+            }
+            Container.getContainer().getInfoPlayers().add(player);
+            player.sendMessage(Messages.get("howto.click_for_info"));
+        }
+        else
         {
             try
             {
@@ -47,15 +60,6 @@ public class InfoCommand extends Command
             {
                 throw new CommandSignsCommandException(Messages.get("error.number_argument"));
             }
-        }
-        else
-        {
-            if (!isPlayerAvailable(player))
-            {
-                return false;
-            }
-            Container.getContainer().getInfoPlayers().add(player);
-            player.sendMessage(Messages.get("howto.click_for_info"));
         }
         return true;
     }

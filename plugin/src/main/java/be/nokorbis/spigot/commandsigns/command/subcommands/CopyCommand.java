@@ -1,6 +1,7 @@
 package be.nokorbis.spigot.commandsigns.command.subcommands;
 
 import be.nokorbis.spigot.commandsigns.controller.Container;
+import be.nokorbis.spigot.commandsigns.controller.NCommandSignsManager;
 import be.nokorbis.spigot.commandsigns.model.CommandBlock;
 import be.nokorbis.spigot.commandsigns.model.CommandSignsCommandException;
 import be.nokorbis.spigot.commandsigns.utils.Messages;
@@ -15,9 +16,12 @@ import java.util.List;
  */
 public class CopyCommand extends Command
 {
-    public CopyCommand()
+    private NCommandSignsManager manager;
+
+    public CopyCommand(NCommandSignsManager manager)
     {
         super("copy", new String[] { "cp" });
+        this.manager = manager;
         this.basePermission = "commandsign.admin.copy";
     }
 
@@ -33,7 +37,7 @@ public class CopyCommand extends Command
 
         if (isPlayerAvailable(player))
         {
-            if (args.size() < 2)
+            if (args.isEmpty())
             {
                 Container.getContainer().getCopyingConfigurations().put(player, null);
                 player.sendMessage(Messages.get("howto.click_to_copy"));
@@ -42,7 +46,7 @@ public class CopyCommand extends Command
             {
                 try
                 {
-                    long id = Long.parseLong(args.get(1));
+                    long id = Long.parseLong(args.get(0));
                     CommandBlock cmd = Container.getContainer().getCommandBlockById(id);
                     if (cmd == null)
                     {
