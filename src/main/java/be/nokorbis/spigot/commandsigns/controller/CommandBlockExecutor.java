@@ -143,11 +143,6 @@ public class CommandBlockExecutor
 				throw new CommandSignsException(err);
 			}
 		}
-
-		if (!this.player.hasPermission("commandsign.timer.bypass"))
-		{
-			this.cmdBlock.refreshLastTime();
-		}
 	}
 
 	public boolean execute()
@@ -178,18 +173,6 @@ public class CommandBlockExecutor
 			}
 		}
 
-		if (this.cmdBlock.getTimeBetweenPlayerUsage() > 0)
-		{
-			if (this.cmdBlock.hasPlayerRecentlyUsed(this.player))
-			{
-				if (!player.hasPermission("commandsign.timer.bypass"))
-				{
-					this.player.sendMessage(Messages.get("usage.player_cooldown"));
-					return false;
-				}
-			}
-		}
-
 		PermissionAttachment perms = Container.getContainer().getPlayerPermissions(this.player);
 		for (String perm : this.cmdBlock.getPermissions())
 		{
@@ -197,6 +180,11 @@ public class CommandBlockExecutor
 			{
 				perms.setPermission(perm, true);
 			}
+		}
+
+		if (!this.player.hasPermission("commandsign.timer.bypass"))
+		{
+			this.cmdBlock.refreshLastTime();
 		}
 
 		for (String command : this.cmdBlock.getCommands())

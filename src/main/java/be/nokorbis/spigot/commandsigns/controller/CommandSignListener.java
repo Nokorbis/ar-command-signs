@@ -206,6 +206,7 @@ public class CommandSignListener implements Listener{
 				catch (Exception ex)
 				{
 					player.sendMessage(ChatColor.DARK_RED + Messages.get("error.requirements_check"));
+					CommandSignsPlugin.getPlugin().getLogger().warning(ex.getMessage());
 				}
 			}
 		}
