@@ -1,3 +1,6 @@
+CommandSigns v1.6.7
+    Clear recipients of chat to avoid players to see the chat menu responses.
+
 CommandSigns v1.6.6
     Reset global cooldown a little bit later to avoid incompatibility with timer
 

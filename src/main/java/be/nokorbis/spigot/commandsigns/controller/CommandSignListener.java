@@ -78,6 +78,7 @@ public class CommandSignListener implements Listener{
 		conf.input(str);
 		conf.display();
 		event.setCancelled(true);
+		event.getRecipients().clear();
 	}
 
 	@EventHandler (priority = EventPriority.LOW)

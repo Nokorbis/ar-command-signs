@@ -2,7 +2,7 @@ name: CommandSigns
 main: be.nokorbis.spigot.commandsigns.CommandSignsPlugin
 author: Nokorbis
 description: Allows admins to create Command Blocks (signs, buttons or plates) that can be executed on action.
-version: 1.6.6
+version: 1.6.7
 website: https://www.spigotmc.org/resources/command-signs.10512/
 softdepend: [Multiverse-Core,Vault,My_Worlds]
 load: POSTWORLD
