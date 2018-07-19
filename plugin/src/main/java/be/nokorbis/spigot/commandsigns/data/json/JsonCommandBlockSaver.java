@@ -113,12 +113,12 @@ public class JsonCommandBlockSaver implements CommandBlockSaver
     @Override
     public Collection<CommandBlock> loadAll()
     {
+        List<CommandBlock> cmdBs = new LinkedList<>();
         if (!dataFolder.exists())
         {
             dataFolder.mkdirs();
-            return Collections.emptyList();
+            return cmdBs;
         }
-        List<CommandBlock> cmdBs = new LinkedList<CommandBlock>();
         File[] files = dataFolder.listFiles(filter);
         if (files != null)
         {

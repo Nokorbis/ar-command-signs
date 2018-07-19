@@ -5,6 +5,7 @@ import be.nokorbis.spigot.commandsigns.menus.old.CommandsAddMenu;
 import be.nokorbis.spigot.commandsigns.model.CommandBlock;
 import be.nokorbis.spigot.commandsigns.api.exceptions.CommandSignsException;
 import be.nokorbis.spigot.commandsigns.tasks.ExecuteTask;
+import be.nokorbis.spigot.commandsigns.utils.CommandBlockValidator;
 import be.nokorbis.spigot.commandsigns.utils.CommandSignUtils;
 import be.nokorbis.spigot.commandsigns.utils.Messages;
 import org.bukkit.Bukkit;
@@ -26,101 +27,91 @@ import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 
 
-public class CommandSignListener implements Listener{
+public class CommandSignListener implements Listener
+{
+	private NCommandSignsManager manager;
 
-
-	public CommandSignListener () {
+	public CommandSignListener(NCommandSignsManager manager)
+	{
+		this.manager = manager;
 	}
 
-	@EventHandler(priority=EventPriority.HIGHEST)
-	public void onPlayerCommand (PlayerCommandPreprocessEvent event) {
-		Player player = event.getPlayer();
-		if (Container.getContainer().getCreatingConfigurations().containsKey(player) || Container.getContainer().getEditingConfigurations().containsKey(player)) {
-			EditingConfiguration<CommandBlock> conf = Container.getContainer().getCreatingConfigurations().get(player);
-			if (conf == null) {
-				conf = Container.getContainer().getEditingConfigurations().get(player);
-			}
-			if (conf.getCurrentMenu() instanceof CommandsAddMenu) {
-				String msg = event.getMessage();
-				conf.input(msg);
-				conf.display();
+	@EventHandler (priority = EventPriority.LOWEST)
+	public void onPlayerCommand(PlayerCommandPreprocessEvent event)
+	{
+		NCommandSignsConfigurationManager configurationManager = this.manager.getConfigurationManager(event.getPlayer());
+		if (configurationManager != null)
+		{
+			boolean treated = configurationManager.handleCommandInput(event.getMessage());
+			if (treated)
+			{
 				event.setCancelled(true);
 			}
 		}
 	}
 
 	@EventHandler
-	public void onBlockBreakEvent (BlockBreakEvent event) {
-		Block block =  event.getBlock();
-		// This is a command block, so this should not be delete
-		if (Container.getContainer().getCommandBlocks().containsKey(block.getLocation())) {
-			Player player = event.getPlayer();
-			if (player != null) {
-				player.sendMessage(ChatColor.RED + Messages.get("error.break_attempt_failed"));
-		}
+	public void onBlockBreakEvent(BlockBreakEvent event)
+	{
+		if (this.manager.hasCommandSignsAdjacentToBlock(event.getBlock()))
+		{
+			event.getPlayer().sendMessage(Messages.get("error.break_attempt_failed"));
 			event.setCancelled(true);
 		}
 	}
 
-	@EventHandler(priority=EventPriority.HIGHEST)
-	public void onChatEvent (AsyncPlayerChatEvent event) {
-		Player player = event.getPlayer();
-
-		if (!(Container.getContainer().getCreatingConfigurations().containsKey(player) || Container.getContainer().getEditingConfigurations().containsKey(player))) {
-			return;
+	@EventHandler (priority = EventPriority.LOWEST)
+	public void onChatEvent(AsyncPlayerChatEvent event)
+	{
+		NCommandSignsConfigurationManager configurationManager = this.manager.getConfigurationManager(event.getPlayer());
+		if (configurationManager != null)
+		{
+			boolean treated = configurationManager.handleChatInput(event.getMessage());
+			if (treated)
+			{
+				event.getRecipients().clear();
+				event.setCancelled(true);
+			}
 		}
-		EditingConfiguration<CommandBlock> conf = Container.getContainer().getCreatingConfigurations().get(player);
-		if (conf == null) {
-			conf = Container.getContainer().getEditingConfigurations().get(player);
-		}
-
-		String str = event.getMessage();
-		conf.input(str);
-		conf.display();
-		event.setCancelled(true);
 	}
 
 	@EventHandler (priority = EventPriority.LOW)
-	public void onPlayerLeave(PlayerQuitEvent event) {
-		Player player = event.getPlayer();
-		if (Container.getContainer().getCopyingConfigurations().containsKey(player)) {
-			Container.getContainer().getCopyingConfigurations().remove(player);
-		}
-		if (Container.getContainer().getEditingConfigurations().containsKey(player)) {
-			Container.getContainer().getEditingConfigurations().remove(player);
-		}
-		if (Container.getContainer().getCreatingConfigurations().containsKey(player)) {
-			Container.getContainer().getCreatingConfigurations().remove(player);
-		}
-		if (Container.getContainer().getInfoPlayers().contains(player)) {
-			Container.getContainer().getInfoPlayers().remove(player);
-		}
+	public void onPlayerLeave(PlayerQuitEvent event)
+	{
+		manager.handlePlayerExit(event.getPlayer());
 	}
 
-	@EventHandler(ignoreCancelled=true)
-	public void onInteractEvent (PlayerInteractEvent event) {
+	@EventHandler (ignoreCancelled = true)
+	public void onInteractEvent(PlayerInteractEvent event)
+	{
 
 		Block block = event.getClickedBlock();
 		Player player = event.getPlayer();
 
-		if (block == null) {
+		if (block == null)
+		{
 			return;
 		}
-		if (block.getLocation() == null) {
+		if (block.getLocation() == null)
+		{
 			return;
 		}
 
 		/* Do we have to delete this command block ? */
-		if (Container.getContainer().getDeletingBlocks().containsKey(player)) {
-			if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+		if (Container.getContainer().getDeletingBlocks().containsKey(player))
+		{
+			if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK))
+			{
 				return;
 			}
 			deleteCommandBlock(player, block);
 		}
 
 		/* Do we have to edit the command block configuration ? */
-		else if (Container.getContainer().getEditingConfigurations().containsKey(player)) {
-			if (!CommandSignUtils.isValidBlock(block)) {
+		else if (Container.getContainer().getEditingConfigurations().containsKey(player))
+		{
+			if (!CommandBlockValidator.isValidBlock(block))
+			{
 				return;
 			}
 
@@ -128,50 +119,62 @@ public class CommandSignListener implements Listener{
 			CommandBlock commandBlock = conf.getEditingData();
 
 			// We want to select the block to edit.
-			if (commandBlock == null) {
+			if (commandBlock == null)
+			{
 				// The block we hit is a valid block
-				if (Container.getContainer().getCommandBlocks().containsKey(block.getLocation())) {
+				if (Container.getContainer().getCommandBlocks().containsKey(block.getLocation()))
+				{
 					CommandBlock editingBlock = Container.getContainer().getCommandBlocks().get(block.getLocation());
 					conf.setEditingData(editingBlock);
 					conf.display();
 				}
-				else {
+				else
+				{
 					player.sendMessage(ChatColor.DARK_RED + Messages.get("error.invalid_block_abort"));
 					Container.getContainer().getEditingConfigurations().remove(player);
 				}
 			}
 			// We've already selected the block we want to edit
-			else {
+			else
+			{
 				// Nothing to do, I think
 			}
 		}
 
 		/* Do we have to create the command block configuration ? */
-		else if (Container.getContainer().getCreatingConfigurations().containsKey(player)) {
-			if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+		else if (Container.getContainer().getCreatingConfigurations().containsKey(player))
+		{
+			if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK))
+			{
 				return;
 			}
 			createCommandBlock(player, block);
 		}
 
 		/* Do we have to copy the command block configuration ? */
-		else if (Container.getContainer().getCopyingConfigurations().containsKey(player)) {
-			if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+		else if (Container.getContainer().getCopyingConfigurations().containsKey(player))
+		{
+			if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK))
+			{
 				return;
 			}
 			copyCommandBlock(player, block);
 		}
 
-		else if (Container.getContainer().getInfoPlayers().contains(player)) {
-			if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+		else if (Container.getContainer().getInfoPlayers().contains(player))
+		{
+			if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK))
+			{
 				return;
 			}
-			info (player, block);
+			info(player, block);
 		}
 
 		/* Is that a block that we can execute ? */
-		else if (Container.getContainer().getCommandBlocks().containsKey(block.getLocation())) {
-			if (CommandSignUtils.isPlate(block) && (!event.getAction().equals(Action.PHYSICAL))){
+		else if (Container.getContainer().getCommandBlocks().containsKey(block.getLocation()))
+		{
+			if (CommandBlockValidator.isPlate(block) && (!event.getAction().equals(Action.PHYSICAL)))
+			{
 				return;
 			}
 			executeCommandBlock(player, block);
@@ -224,28 +227,34 @@ public class CommandSignListener implements Listener{
 		}
 	}
 
-	@EventHandler(ignoreCancelled=true)
-	public void onPlayerMove (PlayerMoveEvent event) {
+	@EventHandler (ignoreCancelled = true)
+	public void onPlayerMove(PlayerMoveEvent event)
+	{
 		Player player = event.getPlayer();
-		if ((player == null) || !player.isOnline() || player.isDead()) {
+		if ((player == null) || !player.isOnline() || player.isDead())
+		{
 			// Yes, there is no reason to be here
 			return;
 		}
 
-		if (Container.getContainer().getExecutingTasks().containsKey(player.getUniqueId())) {
+		if (Container.getContainer().getExecutingTasks().containsKey(player.getUniqueId()))
+		{
 			ExecuteTask exe = Container.getContainer().getExecutingTasks().get(player.getUniqueId());
 
-			if (player.getLocation().getBlock().getLocation().equals(exe.getLocation())) {
+			if (player.getLocation().getBlock().getLocation().equals(exe.getLocation()))
+			{
 				return;
 			}
 
-			if (exe.getCommandBlock().isCancelledOnMove()) {
+			if (exe.getCommandBlock().isCancelledOnMove())
+			{
 				CommandSignsPlugin.getPlugin().getServer().getScheduler().cancelTask(exe.getTaskId());
 				Container.getContainer().getExecutingTasks().remove(player.getUniqueId());
 				exe.getPlayer().sendMessage(Messages.get("usage.execution_cancelled"));
 				return;
 			}
-			if (exe.getCommandBlock().isResetOnMove()) {
+			if (exe.getCommandBlock().isResetOnMove())
+			{
 				BukkitScheduler sch = CommandSignsPlugin.getPlugin().getServer().getScheduler();
 				sch.cancelTask(exe.getTaskId());
 				Container.getContainer().getExecutingTasks().remove(player.getUniqueId());
@@ -258,25 +267,31 @@ public class CommandSignListener implements Listener{
 		}
 	}
 
-	private void info(Player player, Block block) {
-		if (!CommandSignUtils.isValidBlock(block)) {
+	private void info(Player player, Block block)
+	{
+		if (!CommandBlockValidator.isValidBlock(block))
+		{
 			player.sendMessage(ChatColor.RED + Messages.get("error.invalid_block_abort"));
 			Container.getContainer().getInfoPlayers().remove(player);
 			return;
 		}
 
-		if (Container.getContainer().getCommandBlocks().containsKey(block.getLocation())) {
+		if (Container.getContainer().getCommandBlocks().containsKey(block.getLocation()))
+		{
 			CommandSignUtils.info(player, Container.getContainer().getCommandBlocks().get(block.getLocation()));
 			Container.getContainer().getInfoPlayers().remove(player);
 		}
-		else {
+		else
+		{
 			player.sendMessage(ChatColor.RED + Messages.get("error.invalid_block_abort"));
 			Container.getContainer().getInfoPlayers().remove(player);
 		}
 	}
 
-	private void createCommandBlock(Player player, Block block) {
-		if (!CommandSignUtils.isValidBlock(block)) {
+	private void createCommandBlock(Player player, Block block)
+	{
+		if (!CommandBlockValidator.isValidBlock(block))
+		{
 			return;
 		}
 
@@ -284,44 +299,55 @@ public class CommandSignListener implements Listener{
 		CommandBlock commandBlock = conf.getEditingData();
 		Location creatingBlock = commandBlock.getLocation();
 
-		if (creatingBlock == null) {
-			if (Container.getContainer().getCommandBlocks().containsKey(block.getLocation())) {
+		if (creatingBlock == null)
+		{
+			if (Container.getContainer().getCommandBlocks().containsKey(block.getLocation()))
+			{
 				player.sendMessage(Messages.get("creation.already_command"));
 			}
-			else {
+			else
+			{
 				commandBlock.setLocation(block.getLocation());
 				player.sendMessage(Messages.get("creation.block_set"));
 			}
 		}
-		else {
+		else
+		{
 			player.sendMessage(Messages.get("creation.already_command"));
 		}
 	}
 
-	private void copyCommandBlock(Player player, Block block) {
-		if (!CommandSignUtils.isValidBlock(block)) {
+	private void copyCommandBlock(Player player, Block block)
+	{
+		if (!CommandBlockValidator.isValidBlock(block))
+		{
 			player.sendMessage(ChatColor.RED + Messages.get("error.invalid_block_abort"));
 			Container.getContainer().getCopyingConfigurations().remove(player);
 			return;
 		}
 
 		CommandBlock copyingBlock = Container.getContainer().getCopyingConfigurations().get(player);
-		if (copyingBlock == null) {
-			if (Container.getContainer().getCommandBlocks().containsKey(block.getLocation())) {
+		if (copyingBlock == null)
+		{
+			if (Container.getContainer().getCommandBlocks().containsKey(block.getLocation()))
+			{
 				copyingBlock = Container.getContainer().getCommandBlocks().get(block.getLocation());
 				Container.getContainer().getCopyingConfigurations().put(player, copyingBlock.copy());
 				player.sendMessage(Messages.get("howto.click_to_paste"));
 			}
-			else {
+			else
+			{
 				player.sendMessage(Messages.get("error.invalid_block_abort"));
 				Container.getContainer().getCopyingConfigurations().remove(player);
 			}
 		}
-		else if (Container.getContainer().getCommandBlocks().containsKey(block.getLocation())) {
+		else if (Container.getContainer().getCommandBlocks().containsKey(block.getLocation()))
+		{
 			player.sendMessage(Messages.get("error.invalid_block_abort"));
 			Container.getContainer().getCopyingConfigurations().remove(player);
 		}
-		else {
+		else
+		{
 			copyingBlock.setLocation(block.getLocation());
 			Container.getContainer().getCommandBlocks().put(block.getLocation(), copyingBlock);
 			Container.getContainer().getCopyingConfigurations().remove(player);
@@ -330,26 +356,32 @@ public class CommandSignListener implements Listener{
 		}
 	}
 
-	private void deleteCommandBlock(Player player, Block block) {
-		if (!CommandSignUtils.isValidBlock(block)) {
+	private void deleteCommandBlock(Player player, Block block)
+	{
+		if (!CommandBlockValidator.isValidBlock(block))
+		{
 			player.sendMessage(Messages.get("error.invalid_block_abort"));
 			Container.getContainer().getDeletingBlocks().remove(player);
 			return;
 		}
 		Location deletingBlock = Container.getContainer().getDeletingBlocks().get(player);
-		if (deletingBlock == null) {
+		if (deletingBlock == null)
+		{
 			/* Is it a command block ?*/
-			if (Container.getContainer().getCommandBlocks().containsKey(block.getLocation())) {
+			if (Container.getContainer().getCommandBlocks().containsKey(block.getLocation()))
+			{
 				Container.getContainer().getDeletingBlocks().put(player, block.getLocation());
 				player.sendMessage(Messages.get("howto.click_confirm_deletion"));
 			}
-			else {
+			else
+			{
 				player.sendMessage(Messages.get("error.invalid_block_abort"));
 				Container.getContainer().getDeletingBlocks().remove(player);
 			}
 
 		}
-		else if (block.getLocation().equals(deletingBlock)){
+		else if (block.getLocation().equals(deletingBlock))
+		{
 			CommandBlock tmp = Container.getContainer().getCommandBlocks().remove(block.getLocation());
 			Container.getContainer().getDeletingBlocks().remove(player);
 			Container.getContainer().getSaver().delete(tmp.getId());

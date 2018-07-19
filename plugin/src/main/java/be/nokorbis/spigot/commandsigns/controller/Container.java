@@ -152,15 +152,6 @@ public class Container {
 		return null;
 	}
 
-	public List<CommandBlock> getCommandBlocksByIdRange(long minId, long maxId) {
-		List<CommandBlock> cmds = new LinkedList<CommandBlock>();
-		for (CommandBlock cmd : this.commandBlocks.values()){
-			if (cmd.getId() >= minId && cmd.getId() <= maxId) {
-				cmds.add(cmd);
-			}
-		}
-		return cmds;
-	}
 
 	public CommandBlockSaver getSaver() {
 		return commandBlockSaver;

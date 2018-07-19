@@ -1,8 +1,9 @@
 package be.nokorbis.spigot.commandsigns.addons.permissions;
 
-import be.nokorbis.spigot.commandsigns.api.addons.Addon;
-import be.nokorbis.spigot.commandsigns.api.addons.CostHandler;
-import be.nokorbis.spigot.commandsigns.api.addons.RequirementHandler;
+import be.nokorbis.spigot.commandsigns.api.addons.*;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonSerializer;
+
 
 public class PermissionsAddon implements Addon
 {
@@ -29,6 +30,30 @@ public class PermissionsAddon implements Addon
 
     @Override
     public CostHandler getCostHandler()
+    {
+        return null;
+    }
+
+    @Override
+    public JsonSerializer<? extends AddonConfigurationData> getConfigurationDataSerializer()
+    {
+        return null;
+    }
+
+    @Override
+    public JsonDeserializer<? extends AddonConfigurationData> getConfigurationDataDeserializer()
+    {
+        return null;
+    }
+
+    @Override
+    public JsonSerializer<? extends AddonExecutionData> getExecutionDataSerializer()
+    {
+        return null;
+    }
+
+    @Override
+    public JsonDeserializer<? extends AddonExecutionData> getExecutionDataDeserializer()
     {
         return null;
     }

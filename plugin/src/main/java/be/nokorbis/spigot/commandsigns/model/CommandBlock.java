@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.Map.Entry;
 
 import be.nokorbis.spigot.commandsigns.api.exceptions.CommandSignsException;
+import be.nokorbis.spigot.commandsigns.utils.CommandBlockValidator;
 import be.nokorbis.spigot.commandsigns.utils.CommandSignUtils;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -468,7 +469,7 @@ public class CommandBlock
 		{
 			throw new CommandSignsException("A command block is invalid due to null location. You may think about deleting it, its id : " + this.id);
 		}
-		if (!CommandSignUtils.isValidBlock(this.location.getBlock()))
+		if (!CommandBlockValidator.isValidBlock(this.location.getBlock()))
 		{
 			throw new CommandSignsException("A command block is invalid due to an invalid type (must be sign, plate or button). You may think about deleting it, its id : " + this.id);
 		}
@@ -498,7 +499,7 @@ public class CommandBlock
 
 	public static void reloadUsedIDs()
 	{
-		usedIds = new HashSet<Long>();
+		usedIds = new HashSet<>();
 		biggerUsedId = 0L;
 	}
 

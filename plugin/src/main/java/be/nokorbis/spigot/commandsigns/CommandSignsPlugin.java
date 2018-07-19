@@ -25,7 +25,7 @@ public class CommandSignsPlugin extends JavaPlugin{
 		Container.getContainer(); // Intialize the all stuff
 		this.getCommand("commandsign").setExecutor(executor);
 		this.getCommand("commandsign").setTabCompleter(executor);
-		this.getServer().getPluginManager().registerEvents(new CommandSignListener(), this);
+		this.getServer().getPluginManager().registerEvents(new CommandSignListener(manager), this);
 	}
 
 	@Override
