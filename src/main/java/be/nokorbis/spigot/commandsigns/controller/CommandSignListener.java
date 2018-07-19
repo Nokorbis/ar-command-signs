@@ -23,16 +23,16 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitScheduler;
-import org.bukkit.scheduler.BukkitTask;
 
 
-public class CommandSignListener implements Listener{
+public class CommandSignListener implements Listener
+{
 
-
-	public CommandSignListener () {
+	public CommandSignListener ()
+	{
 	}
 
-	@EventHandler(priority=EventPriority.HIGHEST)
+	@EventHandler(priority=EventPriority.LOWEST)
 	public void onPlayerCommand (PlayerCommandPreprocessEvent event) {
 		Player player = event.getPlayer();
 		if (Container.getContainer().getCreatingConfigurations().containsKey(player) || Container.getContainer().getEditingConfigurations().containsKey(player)) {
@@ -57,12 +57,12 @@ public class CommandSignListener implements Listener{
 			Player player = event.getPlayer();
 			if (player != null) {
 				player.sendMessage(ChatColor.RED + Messages.get("error.break_attempt_failed"));
-		}
+			}
 			event.setCancelled(true);
 		}
 	}
 
-	@EventHandler(priority=EventPriority.HIGHEST)
+	@EventHandler(priority=EventPriority.LOWEST)
 	public void onChatEvent (AsyncPlayerChatEvent event) {
 		Player player = event.getPlayer();
 
@@ -80,6 +80,7 @@ public class CommandSignListener implements Listener{
 		event.setCancelled(true);
 		event.getRecipients().clear();
 	}
+
 
 	@EventHandler (priority = EventPriority.LOW)
 	public void onPlayerLeave(PlayerQuitEvent event)
