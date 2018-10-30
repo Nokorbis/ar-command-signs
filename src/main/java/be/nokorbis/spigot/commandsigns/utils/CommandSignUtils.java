@@ -19,11 +19,15 @@ public class CommandSignUtils {
 		}
 
 		Material t = block.getType();
-
-		if (t.equals(Material.WOOD_PLATE) 
-				|| t.equals(Material.STONE_PLATE) 
-				|| t.equals(Material.IRON_PLATE) 
-				|| t.equals(Material.GOLD_PLATE)) {
+		if (Material.ACACIA_PRESSURE_PLATE.equals(t)
+			|| Material.BIRCH_PRESSURE_PLATE.equals(t)
+			|| Material.DARK_OAK_PRESSURE_PLATE.equals(t)
+			|| Material.JUNGLE_PRESSURE_PLATE.equals(t)
+			|| Material.OAK_PRESSURE_PLATE.equals(t)
+			|| Material.SPRUCE_PRESSURE_PLATE.equals(t)
+			|| Material.LIGHT_WEIGHTED_PRESSURE_PLATE.equals(t)
+			|| Material.HEAVY_WEIGHTED_PRESSURE_PLATE.equals(t)
+			|| Material.STONE_PRESSURE_PLATE.equals(t)) {
 			return true;
 		}
 
@@ -36,8 +40,13 @@ public class CommandSignUtils {
 		}
 
 		Material t = block.getType();
-
-		if (t.equals(Material.WOOD_BUTTON) || t.equals(Material.STONE_BUTTON)) {
+		if (Material.STONE_BUTTON.equals(t)
+			|| Material.BIRCH_BUTTON.equals(t)
+			|| Material.ACACIA_BUTTON.equals(t)
+			|| Material.DARK_OAK_BUTTON.equals(t)
+			|| Material.JUNGLE_BUTTON.equals(t)
+			|| Material.OAK_BUTTON.equals(t)
+			|| Material.SPRUCE_BUTTON.equals(t)) {
 			return true;
 		}
 
@@ -51,7 +60,8 @@ public class CommandSignUtils {
 
 		Material t = block.getType();
 
-		if (t.equals(Material.SIGN_POST) || t.equals(Material.WALL_SIGN)) {
+		if (t.equals(Material.SIGN)
+			|| t.equals(Material.WALL_SIGN)) {
 			return true;
 		}
 
@@ -63,7 +73,7 @@ public class CommandSignUtils {
 	}
 
 	public static List<Location> getLocationsAroundPoint(Location location, int radius) {
-		List<Location> locations = new LinkedList<Location>();
+		List<Location> locations = new LinkedList<>();
 
 		int xorg = location.getBlockX();
 		int yorg = location.getBlockY();
