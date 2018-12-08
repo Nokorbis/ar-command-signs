@@ -2,7 +2,7 @@ package be.nokorbis.spigot.commandsigns.api.addons;
 
 import org.bukkit.entity.Player;
 
-public interface CostHandler <T extends CostHolder> extends RequirementHandler <T>
+public interface CostHandler extends RequirementHandler
 {
-    void withdrawPlayer(Player player, T holder);
+    void withdrawPlayer(final Player player, final AddonConfigurationData configurationData, final AddonExecutionData executionData);
 }

@@ -4,7 +4,7 @@ import be.nokorbis.spigot.commandsigns.CommandSignsPlugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 
-public class Economy {
+public class EconomyWrapper {
 
 	private static net.milkbowl.vault.economy.Economy economy = null;
 

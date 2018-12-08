@@ -59,14 +59,14 @@ public class Container {
 	}
 
 	private void initializeDataStructures() {
-		this.playerPerms = new HashMap<Player, PermissionAttachment>();
-		this.commandBlocks = new HashMap<Location , CommandBlock>();
-		this.creatingConfigurations = new HashMap<Player, EditingConfiguration<CommandBlock>>();
-		this.editingConfigurations = new HashMap<Player, EditingConfiguration<CommandBlock>>();
-		this.copyingConfigurations = new HashMap<Player, CommandBlock>();
-		this.deletingBlocks = new HashMap<Player, Location>();
-		this.executingTasks = new HashMap<UUID, ExecuteTask>();
-		this.infoPlayers = new LinkedList<Player>();
+		this.playerPerms = new HashMap<>();
+		this.commandBlocks = new HashMap<>();
+		this.creatingConfigurations = new HashMap<>();
+		this.editingConfigurations = new HashMap<>();
+		this.copyingConfigurations = new HashMap<>();
+		this.deletingBlocks = new HashMap<>();
+		this.executingTasks = new HashMap<>();
+		this.infoPlayers = new LinkedList<>();
 	}
 
 	private void initializeSaver() {

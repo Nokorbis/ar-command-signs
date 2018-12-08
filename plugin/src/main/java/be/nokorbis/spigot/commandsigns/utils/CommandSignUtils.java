@@ -3,10 +3,9 @@ package be.nokorbis.spigot.commandsigns.utils;
 import java.util.LinkedList;
 import java.util.List;
 
-import be.nokorbis.spigot.commandsigns.controller.Economy;
+import be.nokorbis.spigot.commandsigns.controller.EconomyWrapper;
 import be.nokorbis.spigot.commandsigns.model.CommandBlock;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
@@ -41,8 +40,8 @@ public class CommandSignUtils {
         player.sendMessage(Messages.get("info.name_format").replace("{NAME}", ((cmdB.getName() == null)? Messages.get("info.no_name") : cmdB.getName())));
         player.sendMessage(Messages.get("info.block_format").replace("{POSITION}", cmdB.blockSummary()));
 
-        if (Economy.getEconomy() != null) {
-            player.sendMessage(Messages.get("info.costs_format").replace("{PRICE}", Economy.getEconomy().format(cmdB.getEconomyPrice())));
+        if (EconomyWrapper.getEconomy() != null) {
+            player.sendMessage(Messages.get("info.costs_format").replace("{PRICE}", EconomyWrapper.getEconomy().format(cmdB.getEconomyPrice())));
         }
 
         player.sendMessage(Messages.get("info.needed_permissions"));

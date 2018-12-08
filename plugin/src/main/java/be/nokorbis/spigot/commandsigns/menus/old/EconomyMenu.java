@@ -1,8 +1,8 @@
 package be.nokorbis.spigot.commandsigns.menus.old;
 
+import be.nokorbis.spigot.commandsigns.controller.EconomyWrapper;
 import be.nokorbis.spigot.commandsigns.model.CommandBlock;
 import be.nokorbis.spigot.commandsigns.utils.Messages;
-import be.nokorbis.spigot.commandsigns.controller.Economy;
 import be.nokorbis.spigot.commandsigns.controller.EditingConfiguration;
 
 public class EconomyMenu extends EditionMenu {
@@ -33,7 +33,7 @@ public class EconomyMenu extends EditionMenu {
 	@Override
 	public String formatName(CommandBlock cmdB) {
 		String msg = getName();
-		msg = msg.replace("{PRICE}", Economy.getEconomy().format(cmdB.getEconomyPrice()));
+		msg = msg.replace("{PRICE}", EconomyWrapper.getEconomy().format(cmdB.getEconomyPrice()));
 		return msg;
 	}
 }

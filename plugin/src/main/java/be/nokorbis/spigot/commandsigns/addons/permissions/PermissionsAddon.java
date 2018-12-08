@@ -1,23 +1,23 @@
 package be.nokorbis.spigot.commandsigns.addons.permissions;
 
 import be.nokorbis.spigot.commandsigns.api.addons.*;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializer;
+
+import java.util.Objects;
 
 
 public class PermissionsAddon implements Addon
 {
-    public static final String NAME = "ncs_required_permissions";
+    public final String NAME = "ncs_required_permissions";
 
-    private PermissionsRequirementHandler handler;
+    private PermissionsRequirementHandler handler = new PermissionsRequirementHandler();
 
-    public PermissionsAddon()
-    {
-        this.handler = new PermissionsRequirementHandler();
-    }
 
     @Override
-    public String getName()
+    public final String getName()
     {
         return NAME;
     }
@@ -35,26 +35,31 @@ public class PermissionsAddon implements Addon
     }
 
     @Override
-    public JsonSerializer<? extends AddonConfigurationData> getConfigurationDataSerializer()
-    {
+    public JsonObject createConfigurationData() {
+		JsonObject root = new JsonObject();
+		root.add("required_permissions", new JsonArray());
+		return root;
+    }
+
+    @Override
+    public JsonObject createExecutionData() {
         return null;
     }
 
     @Override
-    public JsonDeserializer<? extends AddonConfigurationData> getConfigurationDataDeserializer()
-    {
-        return null;
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Addon that = (Addon) o;
+        return Objects.equals(NAME, that.getName());
     }
 
     @Override
-    public JsonSerializer<? extends AddonExecutionData> getExecutionDataSerializer()
-    {
-        return null;
-    }
-
-    @Override
-    public JsonDeserializer<? extends AddonExecutionData> getExecutionDataDeserializer()
-    {
-        return null;
+    public int hashCode() {
+        return Objects.hash(NAME);
     }
 }

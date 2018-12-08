@@ -1,41 +1,62 @@
 package be.nokorbis.spigot.commandsigns;
 
+import be.nokorbis.spigot.commandsigns.addons.economy.EconomyAddon;
+import be.nokorbis.spigot.commandsigns.api.AddonRegister;
 import be.nokorbis.spigot.commandsigns.controller.*;
 import be.nokorbis.spigot.commandsigns.utils.Settings;
+import org.bukkit.command.PluginCommand;
+import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class CommandSignsPlugin extends JavaPlugin{
+public class CommandSignsPlugin extends JavaPlugin {
 
 	private static CommandSignsPlugin plugin;
 
-	@Override
-	public void onLoad()
-	{
-		plugin = this;
+	private NCommandSignsManager manager;
 
+	@Override
+	public void onLoad() {
 		Settings.loadSettings(plugin);
+
+		this.manager = new NCommandSignsManager(this);
+		NCommandBlockExecutor.setManager(manager);
+
+		AddonRegister addonRegister = new NCommandSignsAddonRegister(manager);
+		getServer().getServicesManager().register(AddonRegister.class, addonRegister, this, ServicePriority.Normal);
+
+		EconomyAddon economyAddon = new EconomyAddon(this);
+		if (economyAddon.isEconomyLinked()) {
+			addonRegister.registerAddon(economyAddon);
+		}
 	}
 
 	@Override
-	public void onEnable()
-	{
-		Economy.initialize();
-		NCommandSignsManager manager = new NCommandSignsManager(this);
-		CommandSignCommands executor = new CommandSignCommands(manager);
-		Container.getContainer(); // Intialize the all stuff
-		this.getCommand("commandsign").setExecutor(executor);
-		this.getCommand("commandsign").setTabCompleter(executor);
+	public void onEnable() {
+		plugin = this;
+		EconomyWrapper.initialize();
+		Container.getContainer(); // Initialize the all stuff
+
+		CommandSignCommands commandExecutor = new CommandSignCommands(manager);
+
+		PluginCommand mainCommand = this.getCommand("commandsign");
+		mainCommand.setExecutor(commandExecutor);
+		mainCommand.setTabCompleter(commandExecutor);
+
+
 		this.getServer().getPluginManager().registerEvents(new CommandSignListener(manager), this);
 	}
 
 	@Override
-	public void onDisable()
-	{
+	public void onDisable() {
 		plugin = null;
+		this.manager = null;
+
+		PluginCommand mainCommand = this.getCommand("commandsign");
+		mainCommand.setExecutor(null);
+		mainCommand.setTabCompleter(null);
 	}
 
-	public static CommandSignsPlugin getPlugin()
-	{
+	public static CommandSignsPlugin getPlugin() {
 		return plugin;
 	}
 }

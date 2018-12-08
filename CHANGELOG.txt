@@ -71,7 +71,7 @@ CommandSign v1.3.0
     Add name to command blocks (optional) (Mainly for the listing feature)
     Add a list command
         - /commandsign list [page]
-    Add purge command (delete invalid command blocks) (invalid location)
+    Add purge command (delete invalid command blocks) (invalid initialLocation)
     	- /commandsign purge
    	Add near command (list all command blocks in a given radius)
    	    - /commandsign near <radius>

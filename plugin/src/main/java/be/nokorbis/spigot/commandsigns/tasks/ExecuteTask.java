@@ -1,81 +1,74 @@
 package be.nokorbis.spigot.commandsigns.tasks;
 
 import be.nokorbis.spigot.commandsigns.CommandSignsPlugin;
-import be.nokorbis.spigot.commandsigns.controller.CommandBlockExecutor;
 import be.nokorbis.spigot.commandsigns.controller.Container;
+import be.nokorbis.spigot.commandsigns.controller.NCommandBlockExecutor;
 import be.nokorbis.spigot.commandsigns.model.CommandBlock;
 import be.nokorbis.spigot.commandsigns.api.exceptions.CommandSignsException;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-public class ExecuteTask implements Runnable
-{
-	private CommandBlockExecutor executor;
-	private int taskId;
-	private Location location;
+import java.util.Map;
+import java.util.UUID;
 
-	public ExecuteTask(CommandBlockExecutor cmd)
-	{
+
+public class ExecuteTask implements Runnable {
+
+	private NCommandBlockExecutor executor;
+	private int taskId;
+	private Location initialLocation;
+
+	public ExecuteTask(NCommandBlockExecutor cmd) {
 		this.executor = cmd;
 	}
 
 	@Override
-	public void run ()
-	{
-		synchronized (Container.getContainer().getExecutingTasks())
-		{
-			if ((this.executor.getPlayer() == null) || !this.executor.getPlayer().isOnline() || this.executor.getPlayer().isDead())
-			{
-				Container.getContainer().getExecutingTasks().remove(this.executor.getPlayer().getUniqueId());
-				return;
-			}
-			try
-			{
-				this.executor.checkRequirements();
-				this.executor.execute();
-			}
-			catch (CommandSignsException e)
-			{
-				Bukkit.getScheduler().runTask(CommandSignsPlugin.getPlugin(), () ->
-				{
-					this.executor.getPlayer().sendMessage(e.getMessage());
-				});
-			}
-			finally
-			{
-				Container.getContainer().getExecutingTasks().remove(this.executor.getPlayer().getUniqueId());
+	public void run() {
+		final Player player = this.executor.getPlayer();
+		if (player != null) {
+			final Map<UUID, ExecuteTask> executingTasks = Container.getContainer().getExecutingTasks();
+			synchronized (executingTasks) {
+				try {
+					if (player.isOnline() && !player.isDead()) {
+						this.executor.checkRequirements();
+						this.executor.execute();
+
+					}
+				}
+				catch (CommandSignsException e) {
+					Bukkit.getScheduler().runTask(CommandSignsPlugin.getPlugin(), () -> {
+						player.sendMessage(e.getMessage());
+					});
+				}
+				finally {
+					executingTasks.remove(player.getUniqueId());
+				}
 			}
 		}
 	}
 
-	public CommandBlock getCommandBlock()
-	{
+	public CommandBlock getCommandBlock() {
 		return this.executor.getCommandBlock();
 	}
 
-	public int getTaskId ()
-	{
+	public int getTaskId() {
 		return this.taskId;
 	}
 
-	public void setTaskId (int taskId)
-	{
+	public void setTaskId(int taskId) {
 		this.taskId = taskId;
 	}
 
-	public Location getLocation ()
-	{
-		return this.location;
+	public Location getInitialLocation() {
+		return this.initialLocation;
 	}
 
-	public void setLocation (Location location)
-	{
-		this.location = location;
+	public void setInitialLocation(Location initialLocation) {
+		this.initialLocation = initialLocation;
 	}
 
-	public Player getPlayer()
-	{
+	public Player getPlayer() {
 		return this.executor.getPlayer();
 	}
 }

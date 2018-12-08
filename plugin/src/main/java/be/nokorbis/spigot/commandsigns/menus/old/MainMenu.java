@@ -6,7 +6,7 @@ import be.nokorbis.spigot.commandsigns.model.CommandBlock;
 import be.nokorbis.spigot.commandsigns.api.exceptions.CommandSignsException;
 import be.nokorbis.spigot.commandsigns.utils.Messages;
 import be.nokorbis.spigot.commandsigns.controller.Container;
-import be.nokorbis.spigot.commandsigns.controller.Economy;
+import be.nokorbis.spigot.commandsigns.controller.EconomyWrapper;
 import be.nokorbis.spigot.commandsigns.controller.EditingConfiguration;
 import org.bukkit.entity.Player;
 
@@ -20,7 +20,7 @@ public class MainMenu extends EditionMenu
 		this.subMenus.put(4, new NeededPermissionsMenu(this));
 
 		//If Vault is on the server, you can use the cost system
-		if (Economy.getEconomy() != null)
+		if (EconomyWrapper.getEconomy() != null)
 		{
 			this.subMenus.put(5, new CostsMenu(this));
 			this.subMenus.put(6, new TimerMenu(this));

@@ -1,5 +1,8 @@
 package be.nokorbis.spigot.commandsigns.api;
 
-public interface AddonRegister
-{
+import be.nokorbis.spigot.commandsigns.api.addons.Addon;
+
+
+public interface AddonRegister {
+	void registerAddon(final Addon addon);
 }

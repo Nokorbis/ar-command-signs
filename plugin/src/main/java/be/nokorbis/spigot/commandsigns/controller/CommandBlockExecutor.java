@@ -9,8 +9,6 @@ import java.util.regex.Pattern;
 
 import be.nokorbis.spigot.commandsigns.CommandSignsPlugin;
 import be.nokorbis.spigot.commandsigns.model.CommandBlock;
-import be.nokorbis.spigot.commandsigns.api.exceptions.CommandSignsException;
-import be.nokorbis.spigot.commandsigns.utils.Messages;
 import be.nokorbis.spigot.commandsigns.utils.Settings;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -48,116 +46,12 @@ public class CommandBlockExecutor
 		return this.player;
 	}
 
-	public CommandBlock getCommandBlock()
-	{
-		return this.cmdBlock;
-	}
-
-	public void checkRequirements() throws CommandSignsException
-	{
-		if (this.player == null)
-		{
-			throw new CommandSignsException(Messages.get("usage.invalid_player"));
-		}
-
-		for (String needed : this.cmdBlock.getNeededPermissions())
-		{
-			if (!this.player.hasPermission(needed))
-			{
-				String err = Messages.get("usage.miss_needed_permission");
-				err = err.replace("{NEEDED_PERM}", needed);
-				throw new CommandSignsException(err);
-			}
-		}
-
-		if (this.cmdBlock.getTimeBetweenUsage() > 0)
-		{
-			long now = System.currentTimeMillis();
-			long toWait = this.cmdBlock.getLastTimeUsed() + (this.cmdBlock.getTimeBetweenUsage()*1000) - now;
-			if (toWait > 0)
-			{
-				if (!this.player.hasPermission("commandsign.timer.bypass"))
-				{
-					String msg = Messages.get("usage.general_cooldown");
-					msg = msg.replace("{TIME}", df.format(this.cmdBlock.getTimeBetweenUsage() - (toWait/1000.0)));
-					msg = msg.replace("{REMAINING}", df.format(toWait/1000.0));
-					throw new CommandSignsException(msg);
-				}
-			}
-		}
-
-		if (this.cmdBlock.getTimeBetweenPlayerUsage() > 0)
-		{
-			if (this.cmdBlock.hasPlayerRecentlyUsed(this.player))
-			{
-				long now = System.currentTimeMillis();
-				long lastUsage = this.cmdBlock.getLastTimePlayerRecentlyUsed(this.player);
-				long toWait = lastUsage + (this.cmdBlock.getTimeBetweenPlayerUsage()*1000) - now;
-				if (!player.hasPermission("commandsign.timer.bypass"))
-				{
-					String msg = Messages.get("usage.player_cooldown");
-					msg = msg.replace("{TIME}", df.format((now-lastUsage)/1000.0));
-					msg = msg.replace("{REMAINING}", df.format(toWait/1000.0));
-					throw new CommandSignsException(msg);
-				}
-			}
-		}
-
-		if ((Economy.getEconomy() != null) && (this.cmdBlock.getEconomyPrice() > 0))
-		{
-			if (!Economy.getEconomy().has(this.player, this.cmdBlock.getEconomyPrice()) && !this.player.hasPermission("commandsign.costs.bypass"))
-			{
-				String err = Messages.get("usage.not_enough_money");
-				err = err.replace("{PRICE}", Economy.getEconomy().format(this.cmdBlock.getEconomyPrice()));
-				throw new CommandSignsException(err);
-			}
-		}
-
-		if (!this.player.hasPermission("commandsign.timer.bypass"))
-		{
-			this.cmdBlock.refreshLastTime();
-		}
-	}
 
 	public boolean execute()
 	{
 		if (this.player == null)
 		{
 			return false;
-		}
-
-		if ((Economy.getEconomy() != null) && (this.cmdBlock.getEconomyPrice() > 0))
-		{
-			if (!this.player.hasPermission("commandsign.costs.bypass"))
-			{
-				if (Economy.getEconomy().has(this.player, this.cmdBlock.getEconomyPrice()))
-				{
-					Economy.getEconomy().withdrawPlayer(this.player, this.cmdBlock.getEconomyPrice());
-					String msg = Messages.get("usage.you_paied");
-					msg = msg.replace("{PRICE}",Economy.getEconomy().format(this.cmdBlock.getEconomyPrice()));
-					this.player.sendMessage(msg);
-				}
-				else
-				{
-					String err = Messages.get("usage.not_enough_money");
-					err = err.replace("{PRICE}", Economy.getEconomy().format(this.cmdBlock.getEconomyPrice()));
-					this.player.sendMessage(err);
-					return false;
-				}
-			}
-		}
-
-		if (this.cmdBlock.getTimeBetweenPlayerUsage() > 0)
-		{
-			if (this.cmdBlock.hasPlayerRecentlyUsed(this.player))
-			{
-				if (!player.hasPermission("commandsign.timer.bypass"))
-				{
-					this.player.sendMessage(Messages.get("usage.player_cooldown"));
-					return false;
-				}
-			}
-			this.cmdBlock.addUsage(this.player);
 		}
 
 		PermissionAttachment perms = Container.getContainer().getPlayerPermissions(this.player);
@@ -231,7 +125,7 @@ public class CommandBlockExecutor
 
 	private List<String> formatCommand (String command, Player player)
 	{
-		List<String> cmds = new LinkedList<String>();
+		List<String> cmds = new LinkedList<>();
 		String cmd = command;
 
 		Matcher m = PLAYER_PATTERN.matcher(cmd);
