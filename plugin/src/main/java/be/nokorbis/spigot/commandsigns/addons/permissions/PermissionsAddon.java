@@ -11,9 +11,11 @@ import java.util.Objects;
 
 public class PermissionsAddon implements Addon
 {
-    public final String NAME = "ncs_required_permissions";
+    private final String NAME = "ncs_required_permissions";
 
     private PermissionsRequirementHandler handler = new PermissionsRequirementHandler();
+
+    private final PermissionsConfigurationDataTransformer configurationDataTransformer = new PermissionsConfigurationDataTransformer(this);
 
 
     @Override
@@ -35,15 +37,38 @@ public class PermissionsAddon implements Addon
     }
 
     @Override
-    public JsonObject createConfigurationData() {
-		JsonObject root = new JsonObject();
-		root.add("required_permissions", new JsonArray());
-		return root;
+    public PermissionsConfigurationData createConfigurationData() {
+		return new PermissionsConfigurationData(this);
     }
 
     @Override
-    public JsonObject createExecutionData() {
+    public AddonExecutionData createExecutionData() {
         return null;
+    }
+
+    @Override
+    public AddonExecutionDataUpdater getAddonExecutionDataUpdater() {
+        return null;
+    }
+
+    @Override
+    public JsonSerializer<? extends AddonExecutionData> getExecutionDataSerializer() {
+        return null;
+    }
+
+    @Override
+    public JsonDeserializer<? extends AddonExecutionData> getExecutionDataDeserializer() {
+        return null;
+    }
+
+    @Override
+    public PermissionsConfigurationDataTransformer getConfigurationDataSerializer() {
+        return configurationDataTransformer;
+    }
+
+    @Override
+    public PermissionsConfigurationDataTransformer getConfigurationDataDeserializer() {
+        return configurationDataTransformer;
     }
 
     @Override

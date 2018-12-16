@@ -15,6 +15,8 @@ public class EconomyAddon implements Addon {
 
 	private EconomyCostHandler handler = null;
 
+	private final EconomyConfigurationDataTransformer configurationDataTransformer = new EconomyConfigurationDataTransformer(this);
+
 	public EconomyAddon(CommandSignsPlugin plugin) {
 		if (plugin.getServer().getPluginManager().getPlugin("Vault") != null) {
 			plugin.getLogger().info("Plugin vault detected");
@@ -47,15 +49,38 @@ public class EconomyAddon implements Addon {
 	}
 
 	@Override
-	public JsonObject createConfigurationData() {
-		JsonObject root = new JsonObject();
-		root.addProperty("price", 0.0);
-		return root;
+	public EconomyConfigurationData createConfigurationData() {
+		return new EconomyConfigurationData(this);
 	}
 
 	@Override
-	public JsonObject createExecutionData() {
+	public AddonExecutionData createExecutionData() {
 		return null;
+	}
+
+	@Override
+	public AddonExecutionDataUpdater getAddonExecutionDataUpdater() {
+		return null;
+	}
+
+	@Override
+	public JsonSerializer<? extends AddonExecutionData> getExecutionDataSerializer() {
+		return null;
+	}
+
+	@Override
+	public JsonDeserializer<? extends AddonExecutionData> getExecutionDataDeserializer() {
+		return null;
+	}
+
+	@Override
+	public EconomyConfigurationDataTransformer getConfigurationDataSerializer() {
+		return configurationDataTransformer;
+	}
+
+	@Override
+	public EconomyConfigurationDataTransformer getConfigurationDataDeserializer() {
+		return configurationDataTransformer;
 	}
 
 	public final boolean isEconomyLinked() {

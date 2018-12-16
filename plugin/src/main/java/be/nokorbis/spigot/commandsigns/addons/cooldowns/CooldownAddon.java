@@ -1,21 +1,22 @@
 package be.nokorbis.spigot.commandsigns.addons.cooldowns;
 
-import be.nokorbis.spigot.commandsigns.api.addons.Addon;
-import be.nokorbis.spigot.commandsigns.api.addons.CostHandler;
-import be.nokorbis.spigot.commandsigns.api.addons.RequirementHandler;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+import be.nokorbis.spigot.commandsigns.api.addons.*;
 
 
 public class CooldownAddon implements Addon {
 
-	private final String name = "ncs_cooldowns";
+	private final String NAME = "ncs_cooldowns";
 
-	private CooldownRequirementHandler handler = new CooldownRequirementHandler();
+	private final CooldownExecutionDataUpdater updater = new CooldownExecutionDataUpdater();
+
+	private final CooldownRequirementHandler handler = new CooldownRequirementHandler();
+
+	private final CooldownExecutionDataTransformer executionDataTransformer = new CooldownExecutionDataTransformer(this);
+	private final CooldownConfigurationDataTransformer configurationDataTransformer = new CooldownConfigurationDataTransformer(this);
 
 	@Override
 	public String getName() {
-		return name;
+		return NAME;
 	}
 
 	@Override
@@ -29,17 +30,37 @@ public class CooldownAddon implements Addon {
 	}
 
 	@Override
-	public JsonObject createConfigurationData() {
-		JsonObject root = new JsonObject();
-		root.addProperty("global_cooldown", 0L);
-		root.addProperty("player_cooldown", 0L);
-		return root;
+	public CooldownConfigurationData createConfigurationData() {
+		return new CooldownConfigurationData(this);
 	}
 
 	@Override
-	public JsonObject createExecutionData() {
-		JsonObject root = new JsonObject();
-		root.add("usages", new JsonArray());
-		return root;
+	public CooldownExecutionData createExecutionData() {
+		return new CooldownExecutionData(this);
+	}
+
+	@Override
+	public AddonExecutionDataUpdater getAddonExecutionDataUpdater() {
+		return this.updater;
+	}
+
+	@Override
+	public CooldownExecutionDataTransformer getExecutionDataSerializer() {
+		return executionDataTransformer;
+	}
+
+	@Override
+	public CooldownExecutionDataTransformer getExecutionDataDeserializer() {
+		return executionDataTransformer;
+	}
+
+	@Override
+	public CooldownConfigurationDataTransformer getConfigurationDataSerializer() {
+		return configurationDataTransformer;
+	}
+
+	@Override
+	public CooldownConfigurationDataTransformer getConfigurationDataDeserializer() {
+		return configurationDataTransformer;
 	}
 }

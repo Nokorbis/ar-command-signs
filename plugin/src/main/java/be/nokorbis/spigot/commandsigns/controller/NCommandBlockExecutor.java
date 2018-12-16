@@ -2,6 +2,7 @@ package be.nokorbis.spigot.commandsigns.controller;
 
 import be.nokorbis.spigot.commandsigns.CommandSignsPlugin;
 import be.nokorbis.spigot.commandsigns.api.addons.Addon;
+import be.nokorbis.spigot.commandsigns.api.addons.AddonExecutionDataUpdater;
 import be.nokorbis.spigot.commandsigns.api.addons.CostHandler;
 import be.nokorbis.spigot.commandsigns.api.addons.RequirementHandler;
 import be.nokorbis.spigot.commandsigns.api.exceptions.CommandSignsException;
@@ -58,8 +59,18 @@ public class NCommandBlockExecutor {
 	public void execute() throws CommandSignsException {
 		withdrawAddonCosts();
 
-		//TODO : update cooldown usages
-		// execute command
+		//TODO :  execute command
+
+		updateAddonsExecutionData();
+	}
+
+	private void updateAddonsExecutionData() {
+		for (Addon addon : manager.getRegisteredAddons()) {
+			AddonExecutionDataUpdater updater = addon.getAddonExecutionDataUpdater();
+			if (updater != null) {
+				updater.update(this.commandBlock.getAddonConfigurationData(addon), this.commandBlock.getAddonExecutionData(addon), this.player);
+			}
+		}
 	}
 
 	private void withdrawAddonCosts() {

@@ -10,21 +10,24 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import org.bukkit.entity.Player;
 
+import java.util.List;
+
+
 public class PermissionsRequirementHandler implements RequirementHandler
 {
     @Override
     public void checkRequirement(final Player player, final AddonConfigurationData configurationData, final AddonExecutionData executionData) throws CommandSignsRequirementException {
         if (player != null) {
-			JsonObject data = configurationData.getConfigurationData();
-			JsonArray permissions = data.getAsJsonArray("required_permissions");
-			for (JsonElement permissionObject : permissions) {
-				String permission = permissionObject.getAsString();
-				if (!player.hasPermission(permission)) {
-					String err = Messages.get("usage.miss_needed_permission");
-					err = err.replace("{NEEDED_PERM}", permission);
-					throw new CommandSignsRequirementException(err);
-				}
-			}
+	        final PermissionsConfigurationData configuration = (PermissionsConfigurationData) configurationData;
+	        final List<String> requiredPermissions = configuration.getRequiredPermissions();
+
+	        for (String permission : requiredPermissions) {
+		        if (!player.hasPermission(permission)) {
+			        String err = Messages.get("usage.miss_needed_permission");
+			        err = err.replace("{NEEDED_PERM}", permission);
+			        throw new CommandSignsRequirementException(err);
+		        }
+	        }
 		}
     }
 }

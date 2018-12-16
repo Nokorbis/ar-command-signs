@@ -5,9 +5,7 @@ import be.nokorbis.spigot.commandsigns.api.addons.AddonExecutionData;
 import be.nokorbis.spigot.commandsigns.api.addons.RequirementHandler;
 import be.nokorbis.spigot.commandsigns.api.exceptions.CommandSignsRequirementException;
 import be.nokorbis.spigot.commandsigns.utils.Messages;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+
 import org.bukkit.entity.Player;
 
 import java.text.DecimalFormat;
@@ -27,39 +25,21 @@ public class CooldownRequirementHandler implements RequirementHandler {
 	@Override
 	public void checkRequirement(final Player player, final AddonConfigurationData configurationData, final AddonExecutionData executionData) throws CommandSignsRequirementException {
 		if (player != null && !player.hasPermission("commandsign.timer.bypass")) {
-			JsonObject conf = configurationData.getConfigurationData();
-			long globalCooldown = conf.getAsJsonPrimitive("global_cooldown").getAsLong();
-			long playerCooldown = conf.getAsJsonPrimitive("player_cooldown").getAsLong();
-			if (globalCooldown > 0 || playerCooldown > 0) {
+			final CooldownConfigurationData conf = (CooldownConfigurationData) configurationData;
 
+			if (conf.hasGlobalCooldown() || conf.hasPlayerCooldown()) {
 
-				String playerUuid = player.getUniqueId().toString();
+				final CooldownExecutionData data = (CooldownExecutionData) executionData;
+				final Long lastTimeSomeoneUsed = data.getLastTimeUsed();
+				final Long lastTimePlayerUsed = data.getLastPlayerUsage(player);
 
-				JsonObject data = executionData.getExecutionData();
-				JsonArray usages = data.getAsJsonArray("usages");
-				Long lastTimeSomeoneUsed = null;
-				Long lastTimePlayerUsed = null;
-
-				for (JsonElement usage : usages) {
-					JsonObject object = usage.getAsJsonObject();
-					long usageTime = object.getAsJsonPrimitive("time").getAsLong();
-					if (lastTimeSomeoneUsed == null || lastTimeSomeoneUsed < usageTime) {
-						lastTimeSomeoneUsed = usageTime;
-					}
-
-					String usageUuid = object.getAsJsonPrimitive("player_uuid").getAsString();
-					if (playerUuid.equals(usageUuid)) {
-						lastTimePlayerUsed = usageTime;
-					}
-				}
-
-				checkPlayerCooldown(lastTimePlayerUsed, playerCooldown);
-				checkGlobalCooldown(lastTimeSomeoneUsed, globalCooldown);
+				checkPlayerCooldown(lastTimePlayerUsed, conf.getPlayerCooldown());
+				checkGlobalCooldown(lastTimeSomeoneUsed, conf.getGlobalCooldown());
 			}
 		}
 	}
 
-	private void checkGlobalCooldown(Long lastTimeSomeoneUsed, long globalCooldown) throws CommandSignsRequirementException {
+	private void checkGlobalCooldown(final Long lastTimeSomeoneUsed, final long globalCooldown) throws CommandSignsRequirementException {
 		if (lastTimeSomeoneUsed != null) {
 			final long now = System.currentTimeMillis();
 			long timeToWait = lastTimeSomeoneUsed + globalCooldown - now;
@@ -72,7 +52,7 @@ public class CooldownRequirementHandler implements RequirementHandler {
 		}
 	}
 
-	private void checkPlayerCooldown(Long lastTimePlayerUsed, long playerCooldown) throws CommandSignsRequirementException {
+	private void checkPlayerCooldown(final Long lastTimePlayerUsed, final long playerCooldown) throws CommandSignsRequirementException {
 		if (lastTimePlayerUsed != null) {
 			final long now = System.currentTimeMillis();
 			long timeToWait = lastTimePlayerUsed + playerCooldown - now;

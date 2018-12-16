@@ -21,8 +21,8 @@ public class EconomyCostHandler implements CostHandler {
     @Override
     public void checkRequirement(final Player player, final AddonConfigurationData configurationData, final AddonExecutionData executionData) throws CommandSignsRequirementException {
     	if (economy != null) {
-			JsonObject data = configurationData.getConfigurationData();
-			double price = data.getAsJsonPrimitive("price").getAsDouble();
+			EconomyConfigurationData configuration = (EconomyConfigurationData) configurationData;
+			double price = configuration.getPrice();
 			if (price > 0.0) {
 				if (!economy.has(player, player.getWorld().getName(), price) && !player.hasPermission("commandsign.costs.bypass")) {
 					String err = Messages.get("usage.not_enough_money");
@@ -36,8 +36,8 @@ public class EconomyCostHandler implements CostHandler {
     @Override
     public void withdrawPlayer(final Player player, final AddonConfigurationData configurationData, final AddonExecutionData executionData) {
 		if (economy != null) {
-			JsonObject data = configurationData.getConfigurationData();
-			double price = data.getAsJsonPrimitive("price").getAsDouble();
+			EconomyConfigurationData configuration = (EconomyConfigurationData) configurationData;
+			double price = configuration.getPrice();
 			if (price > 0.0) {
 				economy.withdrawPlayer(player, player.getWorld().getName(), price);
 			}
