@@ -3,14 +3,13 @@ package be.nokorbis.spigot.commandsigns.addons.economy;
 import be.nokorbis.spigot.commandsigns.CommandSignsPlugin;
 import be.nokorbis.spigot.commandsigns.api.addons.*;
 import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializer;
 
 import java.util.Objects;
 
 
 public class EconomyAddon implements Addon {
-	private final String name = "ncs_economy";
+	private final String IDENTIFIER = "ncs_economy";
 	private net.milkbowl.vault.economy.Economy economy = null;
 
 	private EconomyCostHandler handler = null;
@@ -34,8 +33,13 @@ public class EconomyAddon implements Addon {
 	}
 
 	@Override
-	public String getName() {
-		return this.name;
+	public String getIdentifier() {
+		return IDENTIFIER;
+	}
+
+	@Override
+	public final String getName() {
+		return "Economy";
 	}
 
 	@Override
@@ -96,11 +100,11 @@ public class EconomyAddon implements Addon {
 			return false;
 		}
 		Addon that = (Addon) o;
-		return Objects.equals(name, that.getName());
+		return Objects.equals(IDENTIFIER, that.getIdentifier());
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(name);
+		return Objects.hash(IDENTIFIER);
 	}
 }

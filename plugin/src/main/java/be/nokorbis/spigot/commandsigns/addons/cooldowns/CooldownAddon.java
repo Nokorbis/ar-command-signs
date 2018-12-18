@@ -2,10 +2,12 @@ package be.nokorbis.spigot.commandsigns.addons.cooldowns;
 
 import be.nokorbis.spigot.commandsigns.api.addons.*;
 
+import java.util.Objects;
+
 
 public class CooldownAddon implements Addon {
 
-	private final String NAME = "ncs_cooldowns";
+	private final String IDENTIFIER = "ncs_cooldowns";
 
 	private final CooldownExecutionDataUpdater updater = new CooldownExecutionDataUpdater();
 
@@ -15,8 +17,13 @@ public class CooldownAddon implements Addon {
 	private final CooldownConfigurationDataTransformer configurationDataTransformer = new CooldownConfigurationDataTransformer(this);
 
 	@Override
+	public String getIdentifier() {
+		return IDENTIFIER;
+	}
+
+	@Override
 	public String getName() {
-		return NAME;
+		return "Cooldowns";
 	}
 
 	@Override
@@ -62,5 +69,18 @@ public class CooldownAddon implements Addon {
 	@Override
 	public CooldownConfigurationDataTransformer getConfigurationDataDeserializer() {
 		return configurationDataTransformer;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) { return true; }
+		if (o == null || getClass() != o.getClass()) { return false; }
+		Addon that = (Addon) o;
+		return Objects.equals(IDENTIFIER, that.getIdentifier());
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(IDENTIFIER);
 	}
 }

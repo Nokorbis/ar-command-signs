@@ -11,17 +11,21 @@ import java.util.Objects;
 
 public class PermissionsAddon implements Addon
 {
-    private final String NAME = "ncs_required_permissions";
+    private final String IDENTIFIER = "ncs_required_permissions";
 
     private PermissionsRequirementHandler handler = new PermissionsRequirementHandler();
 
     private final PermissionsConfigurationDataTransformer configurationDataTransformer = new PermissionsConfigurationDataTransformer(this);
 
+    @Override
+    public String getIdentifier() {
+        return IDENTIFIER;
+    }
 
     @Override
     public final String getName()
     {
-        return NAME;
+        return "Required permissions";
     }
 
     @Override
@@ -80,11 +84,11 @@ public class PermissionsAddon implements Addon
             return false;
         }
         Addon that = (Addon) o;
-        return Objects.equals(NAME, that.getName());
+        return Objects.equals(IDENTIFIER, that.getIdentifier());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(NAME);
+        return Objects.hash(IDENTIFIER);
     }
 }

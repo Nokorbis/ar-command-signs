@@ -7,6 +7,7 @@ import com.google.gson.JsonSerializer;
 
 public interface Addon
 {
+	String getIdentifier();
     String getName();
 
     RequirementHandler getRequirementHandler();

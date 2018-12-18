@@ -92,26 +92,14 @@ public class CommandBlock {
 		if (addon == null) {
 			return null;
 		}
-		return this.addonConfigurations.computeIfAbsent(addon.getName(), (name) -> {
-			JsonObject data = addon.createConfigurationData();
-			if (data != null) {
-				return new AddonConfigurationData(addon, data);
-			}
-			return null;
-		});
+		return this.addonConfigurations.computeIfAbsent(addon.getIdentifier(), (identifier) -> addon.createConfigurationData());
 	}
 
 	public AddonExecutionData getAddonExecutionData(final Addon addon) {
 		if (addon == null) {
 			return null;
 		}
-		return this.addonExecutions.computeIfAbsent(addon.getName(), (name) -> {
-			JsonObject data = addon.createExecutionData();
-			if (data != null) {
-				return new AddonExecutionData(addon, data);
-			}
-			return null;
-		});
+		return this.addonExecutions.computeIfAbsent(addon.getIdentifier(), (identifier) -> addon.createExecutionData());
 	}
 
 	/* Name */
