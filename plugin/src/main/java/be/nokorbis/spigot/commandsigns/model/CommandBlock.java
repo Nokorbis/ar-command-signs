@@ -6,6 +6,7 @@ import be.nokorbis.spigot.commandsigns.api.addons.Addon;
 import be.nokorbis.spigot.commandsigns.api.addons.AddonConfigurationData;
 import be.nokorbis.spigot.commandsigns.api.addons.AddonExecutionData;
 import be.nokorbis.spigot.commandsigns.api.exceptions.CommandSignsException;
+import be.nokorbis.spigot.commandsigns.api.menu.MenuEditable;
 import be.nokorbis.spigot.commandsigns.utils.CommandBlockValidator;
 import com.google.gson.JsonObject;
 import org.bukkit.Location;
@@ -13,7 +14,8 @@ import org.bukkit.Location;
 import be.nokorbis.spigot.commandsigns.CommandSignsPlugin;
 
 
-public class CommandBlock {
+public class CommandBlock implements MenuEditable
+{
 	private transient static Set<Long> usedIds = new HashSet<>();
 	private transient static Long biggerUsedId = 0L;
 

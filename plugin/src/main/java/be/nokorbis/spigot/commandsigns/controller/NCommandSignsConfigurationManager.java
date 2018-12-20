@@ -1,13 +1,18 @@
 package be.nokorbis.spigot.commandsigns.controller;
 
+import be.nokorbis.spigot.commandsigns.api.menu.EditionMenu;
+import be.nokorbis.spigot.commandsigns.api.menu.MenuEditable;
+import be.nokorbis.spigot.commandsigns.model.CommandBlock;
 import org.bukkit.entity.Player;
 
 
 public class NCommandSignsConfigurationManager {
-	private Player editor;
+	private final Player editor;
+	private CommandBlock commandBlock;
 	private boolean isCreating;
+	private EditionMenu<? extends MenuEditable> currentMenu= null;
 
-	public NCommandSignsConfigurationManager(Player player) {
+	public NCommandSignsConfigurationManager(final Player player) {
 		this.editor = player;
 	}
 
@@ -21,6 +26,30 @@ public class NCommandSignsConfigurationManager {
 
 	public boolean isEditing() {
 		return !this.isCreating();
+	}
+
+	public void setCreating(boolean creating) {
+		this.isCreating = creating;
+	}
+
+	public void setEditing(boolean editing) {
+		this.setCreating(!editing);
+	}
+
+	public CommandBlock getCommandBlock() {
+		return commandBlock;
+	}
+
+	public void setCommandBlock(CommandBlock commandBlock) {
+		this.commandBlock = commandBlock;
+	}
+
+	public void setCurrentMenu(EditionMenu<? extends MenuEditable> menu) {
+		this.currentMenu = menu;
+	}
+
+	public void display() {
+
 	}
 
 	public boolean handleCommandInput(String command) {

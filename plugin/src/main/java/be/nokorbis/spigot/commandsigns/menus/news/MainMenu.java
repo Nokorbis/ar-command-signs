@@ -1,15 +1,19 @@
 package be.nokorbis.spigot.commandsigns.menus.news;
 
 import be.nokorbis.spigot.commandsigns.api.menu.EditionNode;
+import be.nokorbis.spigot.commandsigns.model.CommandBlock;
 
-import java.util.ResourceBundle;
 
-public class MainMenu extends EditionNode
-{
-    private final ResourceBundle messages = ResourceBundle.getBundle("messages/menu");
+public class MainMenu extends EditionNode<CommandBlock> {
 
-    public MainMenu()
-    {
+    public MainMenu() {
         super("Main");
+    }
+
+    @Override
+    protected void initializeSubMenus() {
+
+        addMenu(new CoreMenuDisable(this));
+        addMenu(new CoreMenuName(this));
     }
 }

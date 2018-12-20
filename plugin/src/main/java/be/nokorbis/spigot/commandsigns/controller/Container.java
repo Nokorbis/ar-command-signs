@@ -41,12 +41,9 @@ public class Container {
 
 	private CommandBlockSaver commandBlockSaver;
 
-	private IEditionMenu<CommandBlock> mainMenu;
-
 	private Container() {
 		CommandSignsPlugin plugin = CommandSignsPlugin.getPlugin();
 		initializeDataStructures();
-		this.mainMenu = new MainMenu();
 
 		try {
 			initializeSaver();
@@ -137,10 +134,6 @@ public class Container {
 
 	public List<Player> getInfoPlayers() {
 		return this.infoPlayers;
-	}
-
-	public IEditionMenu<CommandBlock> getMainMenu() {
-		return this.mainMenu;
 	}
 
 	public CommandBlock getCommandBlockById(long id) {

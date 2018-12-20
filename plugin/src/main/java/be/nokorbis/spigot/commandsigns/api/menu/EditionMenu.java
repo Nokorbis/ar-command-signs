@@ -1,26 +1,23 @@
 package be.nokorbis.spigot.commandsigns.api.menu;
 
-
-import be.nokorbis.spigot.commandsigns.model.CommandBlock;
 import org.bukkit.entity.Player;
 
 import java.util.ResourceBundle;
 
-public abstract class EditionMenu
-{
+
+public abstract class EditionMenu<EDITABLE extends MenuEditable> {
+
     protected static final ResourceBundle mainMessages = ResourceBundle.getBundle("messages/menu");
 
-    private String name;
-    private EditionMenu parent;
+    protected final String name;
+    private EditionMenu<? extends MenuEditable> parent;
 
-    public EditionMenu(String name, EditionMenu parent)
-    {
+    public EditionMenu(String name, EditionMenu<? extends MenuEditable> parent) {
         this.parent = parent;
         this.name = name;
     }
 
-    public EditionMenu(String name)
-    {
+    public EditionMenu(String name) {
         this(name, null);
     }
 
@@ -42,7 +39,7 @@ public abstract class EditionMenu
      * @return <code>null</code> if this is the main menu
      *         <code>An EditionMenu</code> otherwise
      */
-    public final EditionMenu getParent() {
+    public final EditionMenu<? extends MenuEditable> getParent() {
         return this.parent;
     }
 
@@ -54,36 +51,34 @@ public abstract class EditionMenu
      * @return
      * 		A String containing the format name to show
      */
-    public String getDisplayString(CommandBlock data)
-    {
+    public String getDisplayString(EDITABLE data) {
         return this.name;
     }
 
-    protected final static void displayBreadcrumb(Player editor, EditionMenu currentMenu)
-    {
+    protected final static void displayBreadcrumb(final Player editor, EditionMenu currentMenu) {
         String divider = mainMessages.getString("breadcrumb.divider");
         String nameColor = mainMessages.getString("breadcrumb.name_color");
         StringBuilder sb = new StringBuilder();
 
         int i = 0;
-        while(currentMenu != null && i < 4)
-        {
+        while(currentMenu != null && i < 4) {
             sb.insert(0, divider + nameColor + currentMenu.getName());
             currentMenu = currentMenu.getParent();
             i++;
         }
-        if(i != 0)
-        {
+
+        if(i != 0) {
             sb.delete(0, 3);
         }
-        if(i == 4)
-        {
+
+        if(i == 4) {
             sb.insert(0, divider);
         }
+
         editor.sendMessage(sb.toString());
     }
 
-    public abstract void display(EditingConfiguration config);
+    public abstract void display(final Player editor, final EDITABLE data, final int page);
 
-    public abstract void input(EditingConfiguration config, String message);
+    public abstract void input(final Player player, final EDITABLE data, final String message, final MenuNavigationResult navigationResult);
 }

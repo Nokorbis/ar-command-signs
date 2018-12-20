@@ -6,58 +6,55 @@ import java.util.ListIterator;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-public class EditionNode extends EditionMenu
-{
-    protected final List<EditionMenu> menus;
+public abstract class EditionNode<EDITABLE extends MenuEditable> extends EditionMenu<EDITABLE> {
+    protected final List<EditionMenu<? extends MenuEditable>> menus;
 
-    public EditionNode(String name, EditionMenu parent)
-    {
+    private boolean displayPageNavigation = false;
+    private int entriesToDisplay = 6;
+
+    public EditionNode(String name, EditionMenu parent) {
         super(name, parent);
         this.menus = new ArrayList<>();
+        initializeSubMenus();
+        initializeNavigation();
     }
 
-    public EditionNode(String name)
-    {
+    public EditionNode(String name) {
         this(name, null);
     }
 
-    public void addMenu(EditionMenu menu)
-    {
+    public void addMenu(EditionMenu menu) {
         menus.add(menu);
     }
 
-    @Override
-    public void display(EditingConfiguration config)
-    {
-        Player editor = config.getEditor();
+    protected abstract void initializeSubMenus();
 
-        displayBreadcrumb(editor, config.getCurrentMenu());
+    private void initializeNavigation() {
+        if (menus.size() > 8) {
+            displayPageNavigation = true;
+            entriesToDisplay = 6;
+        }
+        else {
+            displayPageNavigation = false;
+            entriesToDisplay = menus.size();
+        }
+    }
+
+    @Override
+    public void display(final Player editor, final EDITABLE data, final int page) {
+        displayBreadcrumb(editor, this);
 
         editor.sendMessage(mainMessages.getString("menu.entry.refresh"));
 
-        boolean displayPageNavigation = false;
-        int entriesToDisplay = 6;
-        int page = config.getPage();
-        int startingIndex = 0;
-        if (menus.size() > 8)
-        {
-            displayPageNavigation = true;
-            startingIndex = (page-1) * entriesToDisplay;
-        }
-        else
-        {
-            entriesToDisplay = menus.size();
-        }
+        final int startingIndex = (page-1) * entriesToDisplay;
 
-        ListIterator<EditionMenu> menuIterator = menus.listIterator(startingIndex);
-        for (int i = 1; i <= entriesToDisplay && menuIterator.hasNext(); i++)
-        {
+        ListIterator<EditionMenu<? extends MenuEditable>> menuIterator = menus.listIterator(startingIndex);
+        for (int i = 1; i <= entriesToDisplay && menuIterator.hasNext(); i++) {
             EditionMenu menu = menuIterator.next();
-            editor.sendMessage(menu.getDisplayString(config.getDataBeingEdited()));
+            editor.sendMessage(menu.getDisplayString(data));
         }
 
-        if (displayPageNavigation)
-        {
+        if (displayPageNavigation) {
             editor.sendMessage(mainMessages.getString("menu.entry.previous"));
             editor.sendMessage(mainMessages.getString("menu.entry.next"));
         }
@@ -65,45 +62,37 @@ public class EditionNode extends EditionMenu
     }
 
     @Override
-    public void input(EditingConfiguration config, String message) {
-        try
-        {
+    public void input(final Player player, final EDITABLE data, final String message, final MenuNavigationResult navigationResult) {
+        try {
+            //TODO fix paging
             int choice = Integer.parseInt(message);
             // Choice 0 ? Do nothing !
-            if(0 < choice && choice < menus.size()+1)
-            {
-                config.setCurrentMenu(menus.get(choice));
+            if(0 < choice && choice < menus.size()+1) {
+                navigationResult.setMenu(menus.get(choice));
             }
-            else if(choice == menus.size()+1)
-            {
-                if(getParent() == null)
-                {
-                    if(complete(config))
-                    {
-                        config.setCurrentMenu(getParent());
+            else if(choice == menus.size()+1) {
+                if(getParent() == null) {
+                    if(complete(player, data)) {
+                        navigationResult.setMenu(getParent());
                     }
                 }
-                else
-                {
-                    config.setCurrentMenu(getParent());
+                else {
+                    navigationResult.setMenu(getParent());
                 }
             }
-            else if(choice != 0)
-            {
+            else if(choice != 0) {
                 throw new NumberFormatException();
             }
         }
-        catch(NumberFormatException e)
-        {
-            config.getEditor().sendMessage(ChatColor.RED+"Expecting a number between 0-"+(menus.size()+1)+" but got : "+message);
+        catch(NumberFormatException e) {
+            player.sendMessage(ChatColor.RED + "Expecting a number between 0-"+(menus.size()+1)+" but got : "+message);
         }
     }
 
     /**
      * Action to take when an edition is about to end
-     * @param config
      */
-    public boolean complete(EditingConfiguration config) {
+    public boolean complete(final Player player, final EDITABLE data) {
         return true;
     }
 }

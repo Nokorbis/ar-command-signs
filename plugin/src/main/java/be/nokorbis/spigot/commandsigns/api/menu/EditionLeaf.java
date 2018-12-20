@@ -1,20 +1,17 @@
 package be.nokorbis.spigot.commandsigns.api.menu;
 
-import be.nokorbis.spigot.commandsigns.model.CommandBlock;
 import org.bukkit.ChatColor;
 
-public abstract class EditionLeaf extends EditionMenu
-{
-    public EditionLeaf(String name, EditionMenu parent)
-    {
+public abstract class EditionLeaf<EDITABLE extends MenuEditable> extends EditionMenu<EDITABLE> {
+
+    public EditionLeaf(final String name, final EditionMenu<? extends MenuEditable> parent) {
         super(name, parent);
     }
 
     @Override
-    public final String getDisplayString(CommandBlock data)
-    {
+    public final String getDisplayString(EDITABLE data) {
         return super.getDisplayString(data)+" - ["+ChatColor.GOLD+getDataString(data) + "]";
     }
 
-    public abstract String getDataString(CommandBlock data);
+    public abstract String getDataString(EDITABLE data);
 }

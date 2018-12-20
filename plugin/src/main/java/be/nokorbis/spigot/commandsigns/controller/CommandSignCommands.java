@@ -12,8 +12,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 
-public class CommandSignCommands implements CommandExecutor, TabCompleter
-{
+public class CommandSignCommands implements CommandExecutor, TabCompleter {
 	private final List<ICommand> commands;
 
 	public CommandSignCommands (NCommandSignsManager manager) {
@@ -33,47 +32,37 @@ public class CommandSignCommands implements CommandExecutor, TabCompleter
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
-	{
-			if (args.length < 1)
-			{
-				return false;
-			}
-
-			List<String> argList = Arrays.asList(args);
-			String sub = argList.remove(0);
-
-			for (ICommand command : this.commands)
-			{
-				if (command.isCommand(sub))
-				{
-					if (command.hasBasePermission(sender))
-					{
-						try
-						{
-							return command.execute(sender, argList);
-						}
-						catch (CommandSignsCommandException e)
-						{
-							sender.sendMessage(e.getMessage());
-							return true;
-						}
-					}
-					else
-					{
-						sender.sendMessage(Messages.get("error.no_permission"));
-					}
-					return true;
-				}
-			}
+	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+		if (args.length < 1) {
 			return false;
+		}
+
+		List<String> argList = Arrays.asList(args);
+		String sub = argList.remove(0);
+
+		for (ICommand command : this.commands) {
+			if (command.isCommand(sub)) {
+				if (command.hasBasePermission(sender)) {
+					try {
+						return command.execute(sender, argList);
+					}
+					catch (CommandSignsCommandException e) {
+						sender.sendMessage(e.getMessage());
+						return true;
+					}
+				}
+				else {
+					sender.sendMessage(Messages.get("error.no_permission"));
+				}
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override
-	public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args)
-	{
-		if (args.length == 0)
-		{
+	public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
+		if (args.length == 0) {
 			return Collections.singletonList("commandsign");
 		}
 		else if (args.length == 1) {
@@ -87,10 +76,8 @@ public class CommandSignCommands implements CommandExecutor, TabCompleter
 		else {
 			List<String> argList = Arrays.asList(args);
 			String sub = argList.remove(0);
-			for (ICommand command : this.commands)
-			{
-				if (command.isCommand(sub))
-				{
+			for (ICommand command : this.commands) {
+				if (command.isCommand(sub)) {
 					return command.autoComplete(sender, argList);
 				}
 			}

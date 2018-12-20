@@ -4,6 +4,7 @@ import be.nokorbis.spigot.commandsigns.CommandSignsPlugin;
 import be.nokorbis.spigot.commandsigns.api.addons.Addon;
 import be.nokorbis.spigot.commandsigns.controller.positionchecker.CommandBlockPositionChecker;
 import be.nokorbis.spigot.commandsigns.controller.positionchecker.PositionCheckerFactory;
+import be.nokorbis.spigot.commandsigns.menus.news.MainMenu;
 import be.nokorbis.spigot.commandsigns.model.CommandBlock;
 import be.nokorbis.spigot.commandsigns.utils.Settings;
 
@@ -31,8 +32,12 @@ public class NCommandSignsManager {
 
 	private Map<UUID, NCommandSignsConfigurationManager> ncsConfigurationManagers = new HashMap<>();
 
+	private final MainMenu mainMenu;
+
 	public NCommandSignsManager(CommandSignsPlugin plugin) {
 		this.logger = plugin.getLogger();
+
+		this.mainMenu = new MainMenu();
 
 		this.cache = CacheBuilder.newBuilder()
 								 .maximumSize(Settings.CACHE_MAX_SIZE())
@@ -68,8 +73,11 @@ public class NCommandSignsManager {
 		return this.getCommandBlock(id);
 	}
 
+	public boolean doesPlayerHaveAConfigurationManagerRunning(Player player) {
+		return this.ncsConfigurationManagers.containsKey(player.getUniqueId());
+	}
 
-	public NCommandSignsConfigurationManager getConfigurationManager(Player player) {
+	public NCommandSignsConfigurationManager getPlayerConfigurationManager(Player player) {
 		return this.ncsConfigurationManagers.get(player.getUniqueId());
 	}
 
@@ -105,6 +113,10 @@ public class NCommandSignsManager {
 		Material material = blockData.getMaterial();
 		CommandBlockPositionChecker checker = PositionCheckerFactory.createChecker(material);
 		return checker.isCommandBlockPosedOnBlock(blockData, block, face);
+	}
+
+	public MainMenu getMainMenu() {
+		return mainMenu;
 	}
 
 	private void onCacheRemove(RemovalNotification<Long, CommandBlock> removalNotification) {

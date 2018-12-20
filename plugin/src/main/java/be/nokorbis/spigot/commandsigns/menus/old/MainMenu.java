@@ -15,8 +15,6 @@ public class MainMenu extends EditionMenu
 	public MainMenu()
 	{
 		super(null, Messages.get("menu.main_title"));
-		this.subMenus.put(2, new NameMenu(this));
-		this.subMenus.put(3, new DisableMenu(this));
 		this.subMenus.put(4, new NeededPermissionsMenu(this));
 
 		//If Vault is on the server, you can use the cost system

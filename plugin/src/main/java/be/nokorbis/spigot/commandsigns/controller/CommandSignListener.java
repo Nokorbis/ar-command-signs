@@ -2,12 +2,10 @@ package be.nokorbis.spigot.commandsigns.controller;
 
 import be.nokorbis.spigot.commandsigns.CommandSignsPlugin;
 import be.nokorbis.spigot.commandsigns.model.CommandBlock;
-import be.nokorbis.spigot.commandsigns.api.exceptions.CommandSignsException;
 import be.nokorbis.spigot.commandsigns.tasks.ExecuteTask;
 import be.nokorbis.spigot.commandsigns.utils.CommandBlockValidator;
 import be.nokorbis.spigot.commandsigns.utils.CommandSignUtils;
 import be.nokorbis.spigot.commandsigns.utils.Messages;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -35,7 +33,7 @@ public class CommandSignListener implements Listener {
 
 	@EventHandler( priority = EventPriority.LOWEST )
 	public void onPlayerCommand(PlayerCommandPreprocessEvent event) {
-		NCommandSignsConfigurationManager configurationManager = this.manager.getConfigurationManager(event.getPlayer());
+		NCommandSignsConfigurationManager configurationManager = this.manager.getPlayerConfigurationManager(event.getPlayer());
 		if (configurationManager != null) {
 			boolean treated = configurationManager.handleCommandInput(event.getMessage());
 			if (treated) {
@@ -46,7 +44,7 @@ public class CommandSignListener implements Listener {
 
 	@EventHandler( priority = EventPriority.LOWEST )
 	public void onChatEvent(AsyncPlayerChatEvent event) {
-		NCommandSignsConfigurationManager configurationManager = this.manager.getConfigurationManager(event.getPlayer());
+		NCommandSignsConfigurationManager configurationManager = this.manager.getPlayerConfigurationManager(event.getPlayer());
 		if (configurationManager != null) {
 			boolean treated = configurationManager.handleChatInput(event.getMessage());
 			if (treated) {
