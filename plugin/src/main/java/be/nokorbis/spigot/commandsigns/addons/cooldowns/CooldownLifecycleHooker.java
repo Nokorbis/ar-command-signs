@@ -2,17 +2,17 @@ package be.nokorbis.spigot.commandsigns.addons.cooldowns;
 
 import be.nokorbis.spigot.commandsigns.api.addons.AddonConfigurationData;
 import be.nokorbis.spigot.commandsigns.api.addons.AddonExecutionData;
-import be.nokorbis.spigot.commandsigns.api.addons.RequirementHandler;
+import be.nokorbis.spigot.commandsigns.api.addons.AddonLifecycleHookerBase;
+import be.nokorbis.spigot.commandsigns.api.addons.NCSLifecycleHook;
 import be.nokorbis.spigot.commandsigns.api.exceptions.CommandSignsRequirementException;
 import be.nokorbis.spigot.commandsigns.utils.Messages;
-
 import org.bukkit.entity.Player;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 
 
-public class CooldownRequirementHandler implements RequirementHandler {
+public class CooldownLifecycleHooker extends AddonLifecycleHookerBase {
 
 	private static final DecimalFormat decimalFormat = new DecimalFormat();
 	static {
@@ -23,7 +23,8 @@ public class CooldownRequirementHandler implements RequirementHandler {
 	}
 
 	@Override
-	public void checkRequirement(final Player player, final AddonConfigurationData configurationData, final AddonExecutionData executionData) throws CommandSignsRequirementException {
+	@NCSLifecycleHook
+	public final void onRequirementCheck(final Player player, final AddonConfigurationData configurationData, final AddonExecutionData executionData) throws CommandSignsRequirementException {
 		if (player != null && !player.hasPermission("commandsign.timer.bypass")) {
 			final CooldownConfigurationData conf = (CooldownConfigurationData) configurationData;
 
@@ -63,5 +64,14 @@ public class CooldownRequirementHandler implements RequirementHandler {
 				throw new CommandSignsRequirementException(msg);
 			}
 		}
+	}
+
+	@Override
+	@NCSLifecycleHook
+	public final void onPostExecution(final Player player, final AddonConfigurationData configurationData, final AddonExecutionData executionData) {
+		final CooldownExecutionData data = (CooldownExecutionData) executionData;
+
+		data.refresh((CooldownConfigurationData) configurationData);
+		data.addPlayerUsage(player);
 	}
 }

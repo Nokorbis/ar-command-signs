@@ -2,53 +2,32 @@ package be.nokorbis.spigot.commandsigns.addons.cooldowns;
 
 import be.nokorbis.spigot.commandsigns.api.addons.*;
 
-import java.util.Objects;
 
+public class CooldownAddon extends AddonBase {
 
-public class CooldownAddon implements Addon {
+	private static final String IDENTIFIER    = "ncs_cooldowns";
 
-	private final String IDENTIFIER = "ncs_cooldowns";
-
-	private final CooldownExecutionDataUpdater updater = new CooldownExecutionDataUpdater();
-
-	private final CooldownRequirementHandler handler = new CooldownRequirementHandler();
-
+	private final CooldownLifecycleHooker lifecycleHooker = new CooldownLifecycleHooker();
 	private final CooldownExecutionDataTransformer executionDataTransformer = new CooldownExecutionDataTransformer(this);
 	private final CooldownConfigurationDataTransformer configurationDataTransformer = new CooldownConfigurationDataTransformer(this);
 
-	@Override
-	public String getIdentifier() {
-		return IDENTIFIER;
+	public CooldownAddon() {
+		super(IDENTIFIER,"Cooldowns");
 	}
 
 	@Override
-	public String getName() {
-		return "Cooldowns";
+	public AddonLifecycleHooker getLifecycleHooker() {
+		return lifecycleHooker;
 	}
 
 	@Override
-	public RequirementHandler getRequirementHandler() {
-		return handler;
-	}
-
-	@Override
-	public CostHandler getCostHandler() {
-		return null;
-	}
-
-	@Override
-	public CooldownConfigurationData createConfigurationData() {
+	public final CooldownConfigurationData createConfigurationData() {
 		return new CooldownConfigurationData(this);
 	}
 
 	@Override
-	public CooldownExecutionData createExecutionData() {
+	public final CooldownExecutionData createExecutionData() {
 		return new CooldownExecutionData(this);
-	}
-
-	@Override
-	public AddonExecutionDataUpdater getAddonExecutionDataUpdater() {
-		return this.updater;
 	}
 
 	@Override
@@ -71,16 +50,4 @@ public class CooldownAddon implements Addon {
 		return configurationDataTransformer;
 	}
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) { return true; }
-		if (o == null || getClass() != o.getClass()) { return false; }
-		Addon that = (Addon) o;
-		return Objects.equals(IDENTIFIER, that.getIdentifier());
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(IDENTIFIER);
-	}
 }

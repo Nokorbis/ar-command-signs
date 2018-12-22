@@ -5,51 +5,44 @@ import be.nokorbis.spigot.commandsigns.api.addons.*;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonSerializer;
 
-import java.util.Objects;
 
+public class EconomyAddon extends AddonBase {
+	private static final String IDENTIFIER = "ncs_economy";
 
-public class EconomyAddon implements Addon {
-	private final String IDENTIFIER = "ncs_economy";
-	private net.milkbowl.vault.economy.Economy economy = null;
-
-	private EconomyCostHandler handler = null;
+	private final net.milkbowl.vault.economy.Economy economy;
+	private EconomyLifecycleHooker lifecycleHooker = null;
 
 	private final EconomyConfigurationDataTransformer configurationDataTransformer = new EconomyConfigurationDataTransformer(this);
 
 	public EconomyAddon(CommandSignsPlugin plugin) {
+		super(IDENTIFIER, "Economy");
+
 		if (plugin.getServer().getPluginManager().getPlugin("Vault") != null) {
 			plugin.getLogger().info("Plugin vault detected");
 
 			this.economy = plugin.getServer().getServicesManager().load(net.milkbowl.vault.economy.Economy.class);
 
 			if (this.economy != null) {
-				this.handler = new EconomyCostHandler(this.economy);
+				this.lifecycleHooker = new EconomyLifecycleHooker(economy);
 				plugin.getLogger().info("Vault economy linked with command signs ! ");
 			}
 			else {
 				plugin.getLogger().info("No vault economy hooked.");
 			}
 		}
+		else {
+			this.economy = null;
+		}
 	}
 
 	@Override
-	public String getIdentifier() {
-		return IDENTIFIER;
+	public final boolean shouldAddonBeHooked() {
+		return isEconomyLinked() && this.lifecycleHooker != null;
 	}
 
 	@Override
-	public final String getName() {
-		return "Economy";
-	}
-
-	@Override
-	public RequirementHandler getRequirementHandler() {
-		return null;
-	}
-
-	@Override
-	public CostHandler getCostHandler() {
-		return this.handler;
+	public AddonLifecycleHooker getLifecycleHooker() {
+		return lifecycleHooker;
 	}
 
 	@Override
@@ -59,11 +52,6 @@ public class EconomyAddon implements Addon {
 
 	@Override
 	public AddonExecutionData createExecutionData() {
-		return null;
-	}
-
-	@Override
-	public AddonExecutionDataUpdater getAddonExecutionDataUpdater() {
 		return null;
 	}
 
@@ -91,20 +79,4 @@ public class EconomyAddon implements Addon {
 		return this.economy != null;
 	}
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) {
-			return true;
-		}
-		if (o == null || getClass() != o.getClass()) {
-			return false;
-		}
-		Addon that = (Addon) o;
-		return Objects.equals(IDENTIFIER, that.getIdentifier());
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(IDENTIFIER);
-	}
 }

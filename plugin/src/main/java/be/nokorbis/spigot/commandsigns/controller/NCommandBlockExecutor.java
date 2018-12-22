@@ -2,9 +2,9 @@ package be.nokorbis.spigot.commandsigns.controller;
 
 import be.nokorbis.spigot.commandsigns.CommandSignsPlugin;
 import be.nokorbis.spigot.commandsigns.api.addons.Addon;
-import be.nokorbis.spigot.commandsigns.api.addons.AddonExecutionDataUpdater;
-import be.nokorbis.spigot.commandsigns.api.addons.CostHandler;
-import be.nokorbis.spigot.commandsigns.api.addons.RequirementHandler;
+import be.nokorbis.spigot.commandsigns.api.addons.AddonConfigurationData;
+import be.nokorbis.spigot.commandsigns.api.addons.AddonExecutionData;
+import be.nokorbis.spigot.commandsigns.api.addons.AddonLifecycleHooker;
 import be.nokorbis.spigot.commandsigns.api.exceptions.CommandSignsException;
 import be.nokorbis.spigot.commandsigns.api.exceptions.CommandSignsRequirementException;
 import be.nokorbis.spigot.commandsigns.model.CommandBlock;
@@ -17,7 +17,6 @@ import org.bukkit.scheduler.BukkitTask;
 
 
 public class NCommandBlockExecutor {
-
 
 	private static NCommandSignsManager manager;
 
@@ -57,52 +56,89 @@ public class NCommandBlockExecutor {
 	}
 
 	public void execute() throws CommandSignsException {
-		withdrawAddonCosts();
+		final NCommandSignsAddonLifecycleHolder lifecycleHolder = manager.getLifecycleHolder();
 
-		//TODO :  execute command
+		processStart(lifecycleHolder);
+		processRequirementsCheck(lifecycleHolder);
+		processCostsWithdrawn(lifecycleHolder);
+		processPreExecution(lifecycleHolder);
+		processExecution(lifecycleHolder);
+		processPostExecution(lifecycleHolder);
+		processComplete(lifecycleHolder);
 
-		updateAddonsExecutionData();
 	}
 
-	private void updateAddonsExecutionData() {
-		for (Addon addon : manager.getRegisteredAddons()) {
-			AddonExecutionDataUpdater updater = addon.getAddonExecutionDataUpdater();
-			if (updater != null) {
-				updater.update(this.commandBlock.getAddonConfigurationData(addon), this.commandBlock.getAddonExecutionData(addon), this.player);
-			}
+	private void processStart(final NCommandSignsAddonLifecycleHolder lifecycleHolder) {
+		for (final Addon addon : lifecycleHolder.onStartHandlers) {
+			final AddonLifecycleHooker hook = addon.getLifecycleHooker();
+			final AddonConfigurationData configuration = commandBlock.getAddonConfigurationData(addon);
+			final AddonExecutionData data = commandBlock.getAddonExecutionData(addon);
+
+			hook.onStarted(player, configuration, data);
 		}
 	}
 
-	private void withdrawAddonCosts() {
-		for (Addon addon : manager.getRegisteredAddons()) {
-			CostHandler handler = addon.getCostHandler();
-			if (handler != null) {
-				handler.withdrawPlayer(player, this.commandBlock.getAddonConfigurationData(addon), this.commandBlock.getAddonExecutionData(addon));
-			}
+	private void processRequirementsCheck(final NCommandSignsAddonLifecycleHolder lifecycleHolder) throws CommandSignsRequirementException {
+		for (final Addon addon : lifecycleHolder.onRequirementCheckHandlers) {
+			final AddonLifecycleHooker hook = addon.getLifecycleHooker();
+			final AddonConfigurationData configuration = commandBlock.getAddonConfigurationData(addon);
+			final AddonExecutionData data = commandBlock.getAddonExecutionData(addon);
+
+			hook.onRequirementCheck(player, configuration, data);
 		}
 	}
 
-	public  void checkRequirements() throws CommandSignsRequirementException {
-		if (this.player == null) {
-			throw new CommandSignsRequirementException(Messages.get("usage.invalid_player"));
-		}
 
-		checkAddonRequirements();
-	}
+	private void processCostsWithdrawn(final NCommandSignsAddonLifecycleHolder lifecycleHolder) {
+		for (final Addon addon : lifecycleHolder.onCostWithdrawHandlers) {
+			final AddonLifecycleHooker hook = addon.getLifecycleHooker();
+			final AddonConfigurationData configuration = commandBlock.getAddonConfigurationData(addon);
+			final AddonExecutionData data = commandBlock.getAddonExecutionData(addon);
 
-	private void checkAddonRequirements() throws CommandSignsRequirementException {
-		for (Addon addon : manager.getRegisteredAddons()) {
-			RequirementHandler handler = addon.getRequirementHandler();
-			if (handler != null) {
-				handler.checkRequirement(player, this.commandBlock.getAddonConfigurationData(addon), this.commandBlock.getAddonExecutionData(addon));
-			}
-
-			handler = addon.getCostHandler();
-			if (handler != null) {
-				handler.checkRequirement(player, this.commandBlock.getAddonConfigurationData(addon), this.commandBlock.getAddonExecutionData(addon));
-			}
+			hook.onCostWithdraw(player, configuration, data);
 		}
 	}
+
+	private void processPreExecution(final NCommandSignsAddonLifecycleHolder lifecycleHolder) {
+		for (final Addon addon : lifecycleHolder.onPreExecutionHandlers) {
+			final AddonLifecycleHooker hook = addon.getLifecycleHooker();
+			final AddonConfigurationData configuration = commandBlock.getAddonConfigurationData(addon);
+			final AddonExecutionData data = commandBlock.getAddonExecutionData(addon);
+
+			hook.onPreExecution(player, configuration, data);
+		}
+	}
+
+	private void processExecution(final NCommandSignsAddonLifecycleHolder lifecycleHolder) {
+		for (final Addon addon : lifecycleHolder.onExecutionHandlers) {
+			final AddonLifecycleHooker hook = addon.getLifecycleHooker();
+			final AddonConfigurationData configuration = commandBlock.getAddonConfigurationData(addon);
+			final AddonExecutionData data = commandBlock.getAddonExecutionData(addon);
+
+			hook.onExecution(player, configuration, data);
+		}
+	}
+
+	private void processPostExecution(final NCommandSignsAddonLifecycleHolder lifecycleHolder) {
+		for (final Addon addon : lifecycleHolder.onPostExecutionHandlers) {
+			final AddonLifecycleHooker hook = addon.getLifecycleHooker();
+			final AddonConfigurationData configuration = commandBlock.getAddonConfigurationData(addon);
+			final AddonExecutionData data = commandBlock.getAddonExecutionData(addon);
+
+			hook.onPostExecution(player, configuration, data);
+		}
+	}
+
+	private void processComplete(final NCommandSignsAddonLifecycleHolder lifecycleHolder) {
+		for (final Addon addon : lifecycleHolder.onCompletedHandlers) {
+			final AddonLifecycleHooker hook = addon.getLifecycleHooker();
+			final AddonConfigurationData configuration = commandBlock.getAddonConfigurationData(addon);
+			final AddonExecutionData data = commandBlock.getAddonExecutionData(addon);
+
+			hook.onCompleted(player, configuration, data);
+		}
+	}
+
 
 	public static void setManager(final NCommandSignsManager manager) {
 		NCommandBlockExecutor.manager = manager;

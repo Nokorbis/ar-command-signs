@@ -31,7 +31,6 @@ public class ExecuteTask implements Runnable {
 			synchronized (executingTasks) {
 				try {
 					if (player.isOnline() && !player.isDead()) {
-						this.executor.checkRequirements();
 						this.executor.execute();
 					}
 				}

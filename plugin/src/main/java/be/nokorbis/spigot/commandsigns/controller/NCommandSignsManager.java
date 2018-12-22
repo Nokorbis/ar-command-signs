@@ -25,6 +25,7 @@ public class NCommandSignsManager {
 	private final Logger logger;
 
 	private Set<Addon> registeredAddons = new HashSet<>();
+	private NCommandSignsAddonLifecycleHolder lifecycleHolder = new NCommandSignsAddonLifecycleHolder();
 	private Set<Addon> accessibleAddons = Collections.unmodifiableSet(registeredAddons);
 
 	private final Map<Location, Long> locationsToIds = new HashMap<>();
@@ -56,6 +57,10 @@ public class NCommandSignsManager {
 
 	public Set<Addon> getRegisteredAddons() {
 		return this.accessibleAddons;
+	}
+
+	public NCommandSignsAddonLifecycleHolder getLifecycleHolder() {
+		return lifecycleHolder;
 	}
 
 	public CommandBlock getCommandBlock(Long id) {

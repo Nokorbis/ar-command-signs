@@ -10,8 +10,9 @@ public interface Addon
 	String getIdentifier();
     String getName();
 
-    RequirementHandler getRequirementHandler();
-    CostHandler getCostHandler();
+    boolean shouldAddonBeHooked();
+
+    AddonLifecycleHooker getLifecycleHooker();
 
 	/**
 	 * Instantiate the base object of the configuration data or your addon. One object will be created for each command sign existing in the server.<br>
@@ -26,8 +27,6 @@ public interface Addon
 	 * @return A Json root object for the base of your command sign data.
 	 */
     AddonExecutionData createExecutionData();
-
-    AddonExecutionDataUpdater getAddonExecutionDataUpdater();
 
     JsonSerializer<? extends AddonExecutionData> getExecutionDataSerializer();
     JsonDeserializer<? extends AddonExecutionData> getExecutionDataDeserializer();

@@ -9,35 +9,20 @@ import com.google.gson.JsonSerializer;
 import java.util.Objects;
 
 
-public class PermissionsAddon implements Addon
-{
-    private final String IDENTIFIER = "ncs_required_permissions";
+public class PermissionsAddon extends AddonBase {
 
-    private PermissionsRequirementHandler handler = new PermissionsRequirementHandler();
+    private static final String IDENTIFIER = "ncs_required_permissions";
 
+    private final RequiredPermissionsLifecycleHooker lifecycleHooker = new RequiredPermissionsLifecycleHooker();
     private final PermissionsConfigurationDataTransformer configurationDataTransformer = new PermissionsConfigurationDataTransformer(this);
 
-    @Override
-    public String getIdentifier() {
-        return IDENTIFIER;
+    public PermissionsAddon() {
+        super(IDENTIFIER, "Required permissions");
     }
 
     @Override
-    public final String getName()
-    {
-        return "Required permissions";
-    }
-
-    @Override
-    public RequirementHandler getRequirementHandler()
-    {
-        return handler;
-    }
-
-    @Override
-    public CostHandler getCostHandler()
-    {
-        return null;
+    public AddonLifecycleHooker getLifecycleHooker() {
+        return lifecycleHooker;
     }
 
     @Override
@@ -47,11 +32,6 @@ public class PermissionsAddon implements Addon
 
     @Override
     public AddonExecutionData createExecutionData() {
-        return null;
-    }
-
-    @Override
-    public AddonExecutionDataUpdater getAddonExecutionDataUpdater() {
         return null;
     }
 
@@ -73,22 +53,5 @@ public class PermissionsAddon implements Addon
     @Override
     public PermissionsConfigurationDataTransformer getConfigurationDataDeserializer() {
         return configurationDataTransformer;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        Addon that = (Addon) o;
-        return Objects.equals(IDENTIFIER, that.getIdentifier());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(IDENTIFIER);
     }
 }

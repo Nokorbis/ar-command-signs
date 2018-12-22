@@ -1,6 +1,8 @@
 package be.nokorbis.spigot.commandsigns;
 
+import be.nokorbis.spigot.commandsigns.addons.cooldowns.CooldownAddon;
 import be.nokorbis.spigot.commandsigns.addons.economy.EconomyAddon;
+import be.nokorbis.spigot.commandsigns.addons.permissions.PermissionsAddon;
 import be.nokorbis.spigot.commandsigns.api.AddonRegister;
 import be.nokorbis.spigot.commandsigns.controller.*;
 import be.nokorbis.spigot.commandsigns.utils.Settings;
@@ -24,6 +26,8 @@ public class CommandSignsPlugin extends JavaPlugin {
 		AddonRegister addonRegister = new NCommandSignsAddonRegister(manager);
 		getServer().getServicesManager().register(AddonRegister.class, addonRegister, this, ServicePriority.Normal);
 
+		addonRegister.registerAddon(new PermissionsAddon());
+		addonRegister.registerAddon(new CooldownAddon());
 		EconomyAddon economyAddon = new EconomyAddon(this);
 		if (economyAddon.isEconomyLinked()) {
 			addonRegister.registerAddon(economyAddon);

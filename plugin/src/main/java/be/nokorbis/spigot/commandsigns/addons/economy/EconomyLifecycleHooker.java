@@ -2,25 +2,26 @@ package be.nokorbis.spigot.commandsigns.addons.economy;
 
 import be.nokorbis.spigot.commandsigns.api.addons.AddonConfigurationData;
 import be.nokorbis.spigot.commandsigns.api.addons.AddonExecutionData;
-import be.nokorbis.spigot.commandsigns.api.addons.CostHandler;
+import be.nokorbis.spigot.commandsigns.api.addons.AddonLifecycleHookerBase;
+import be.nokorbis.spigot.commandsigns.api.addons.NCSLifecycleHook;
 import be.nokorbis.spigot.commandsigns.api.exceptions.CommandSignsRequirementException;
 import be.nokorbis.spigot.commandsigns.utils.Messages;
-
-import com.google.gson.JsonObject;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.entity.Player;
 
-public class EconomyCostHandler implements CostHandler {
 
-    private Economy economy;
+public class EconomyLifecycleHooker extends AddonLifecycleHookerBase {
 
-    EconomyCostHandler(Economy economy) {
-        this.economy = economy;
-    }
+	private Economy economy;
 
-    @Override
-    public void checkRequirement(final Player player, final AddonConfigurationData configurationData, final AddonExecutionData executionData) throws CommandSignsRequirementException {
-    	if (economy != null) {
+	public EconomyLifecycleHooker(Economy economy) {
+		this.economy = economy;
+	}
+
+	@Override
+	@NCSLifecycleHook
+	public void onRequirementCheck(final Player player, final AddonConfigurationData configurationData, final AddonExecutionData executionData) throws CommandSignsRequirementException {
+		if (economy != null) {
 			EconomyConfigurationData configuration = (EconomyConfigurationData) configurationData;
 			double price = configuration.getPrice();
 			if (price > 0.0) {
@@ -31,10 +32,11 @@ public class EconomyCostHandler implements CostHandler {
 				}
 			}
 		}
-    }
+	}
 
-    @Override
-    public void withdrawPlayer(final Player player, final AddonConfigurationData configurationData, final AddonExecutionData executionData) {
+	@Override
+	@NCSLifecycleHook
+	public void onCostWithdraw(final Player player, final AddonConfigurationData configurationData, final AddonExecutionData executionData) {
 		if (economy != null) {
 			EconomyConfigurationData configuration = (EconomyConfigurationData) configurationData;
 			double price = configuration.getPrice();
@@ -42,5 +44,6 @@ public class EconomyCostHandler implements CostHandler {
 				economy.withdrawPlayer(player, player.getWorld().getName(), price);
 			}
 		}
-    }
+	}
+
 }
