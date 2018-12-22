@@ -1,10 +1,7 @@
 package be.nokorbis.spigot.commandsigns.menus.news;
 
-import be.nokorbis.spigot.commandsigns.api.menu.EditionNode;
-import be.nokorbis.spigot.commandsigns.model.CommandBlock;
 
-
-public class MainMenu extends EditionNode<CommandBlock> {
+public class MainMenu extends EditionNodeCore {
 
     public MainMenu() {
         super("Main");
@@ -16,4 +13,5 @@ public class MainMenu extends EditionNode<CommandBlock> {
         addMenu(new CoreMenuDisable(this));
         addMenu(new CoreMenuName(this));
     }
+
 }

@@ -10,9 +10,9 @@ public abstract class EditionMenu<EDITABLE extends MenuEditable> {
     protected static final ResourceBundle mainMessages = ResourceBundle.getBundle("messages/menu");
 
     protected final String name;
-    private EditionMenu<? extends MenuEditable> parent;
+    private EditionMenu<EDITABLE> parent;
 
-    public EditionMenu(String name, EditionMenu<? extends MenuEditable> parent) {
+    public EditionMenu(String name, EditionMenu<EDITABLE> parent) {
         this.parent = parent;
         this.name = name;
     }
@@ -39,7 +39,7 @@ public abstract class EditionMenu<EDITABLE extends MenuEditable> {
      * @return <code>null</code> if this is the main menu
      *         <code>An EditionMenu</code> otherwise
      */
-    public final EditionMenu<? extends MenuEditable> getParent() {
+    public final EditionMenu<EDITABLE> getParent() {
         return this.parent;
     }
 
@@ -55,10 +55,12 @@ public abstract class EditionMenu<EDITABLE extends MenuEditable> {
         return this.name;
     }
 
-    protected final static void displayBreadcrumb(final Player editor, EditionMenu currentMenu) {
+    protected final  void displayBreadcrumb(final Player editor) {
         String divider = mainMessages.getString("breadcrumb.divider");
         String nameColor = mainMessages.getString("breadcrumb.name_color");
         StringBuilder sb = new StringBuilder();
+
+        EditionMenu<EDITABLE> currentMenu = this;
 
         int i = 0;
         while(currentMenu != null && i < 4) {
@@ -78,7 +80,7 @@ public abstract class EditionMenu<EDITABLE extends MenuEditable> {
         editor.sendMessage(sb.toString());
     }
 
-    public abstract void display(final Player editor, final EDITABLE data, final int page);
+    public abstract void display(final Player editor, final EDITABLE data, final MenuNavigationContext navigationContext);
 
-    public abstract void input(final Player player, final EDITABLE data, final String message, final MenuNavigationResult navigationResult);
+    public abstract void input(final Player player, final EDITABLE data, final String message, final MenuNavigationContext navigationContext);
 }

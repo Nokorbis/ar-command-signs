@@ -36,7 +36,7 @@ public class Container {
 	private Map<Player, EditingConfiguration<CommandBlock>> editingConfigurations;
 	private Map<Player, CommandBlock> copyingConfigurations;
 	private Map<Player, Location> deletingBlocks;
-	private Map<UUID, ExecuteTask> executingTasks;
+	private final Map<UUID, ExecuteTask> executingTasks = new HashMap<>();
 	private List<Player> infoPlayers;
 
 	private CommandBlockSaver commandBlockSaver;
@@ -62,7 +62,6 @@ public class Container {
 		this.editingConfigurations = new HashMap<>();
 		this.copyingConfigurations = new HashMap<>();
 		this.deletingBlocks = new HashMap<>();
-		this.executingTasks = new HashMap<>();
 		this.infoPlayers = new LinkedList<>();
 	}
 

@@ -4,7 +4,7 @@ import org.bukkit.ChatColor;
 
 public abstract class EditionLeaf<EDITABLE extends MenuEditable> extends EditionMenu<EDITABLE> {
 
-    public EditionLeaf(final String name, final EditionMenu<? extends MenuEditable> parent) {
+    public EditionLeaf(final String name, final EditionMenu<EDITABLE> parent) {
         super(name, parent);
     }
 

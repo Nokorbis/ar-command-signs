@@ -33,7 +33,6 @@ public class ExecuteTask implements Runnable {
 					if (player.isOnline() && !player.isDead()) {
 						this.executor.checkRequirements();
 						this.executor.execute();
-
 					}
 				}
 				catch (CommandSignsException e) {
