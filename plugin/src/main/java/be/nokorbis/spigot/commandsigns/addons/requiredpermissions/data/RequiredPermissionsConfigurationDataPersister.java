@@ -1,5 +1,6 @@
-package be.nokorbis.spigot.commandsigns.addons.requiredpermissions;
+package be.nokorbis.spigot.commandsigns.addons.requiredpermissions.data;
 
+import be.nokorbis.spigot.commandsigns.addons.requiredpermissions.RequiredPermissionsAddon;
 import com.google.gson.*;
 
 import java.lang.reflect.Type;

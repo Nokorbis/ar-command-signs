@@ -1,6 +1,6 @@
 package be.nokorbis.spigot.commandsigns.addons.cooldowns.menus;
 
-import be.nokorbis.spigot.commandsigns.addons.cooldowns.CooldownConfigurationData;
+import be.nokorbis.spigot.commandsigns.addons.cooldowns.data.CooldownConfigurationData;
 import be.nokorbis.spigot.commandsigns.api.addons.AddonConfigurationData;
 import be.nokorbis.spigot.commandsigns.api.menu.EditionLeaf;
 import be.nokorbis.spigot.commandsigns.api.menu.EditionMenu;

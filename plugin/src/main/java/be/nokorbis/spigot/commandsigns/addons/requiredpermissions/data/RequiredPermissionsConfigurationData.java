@@ -1,4 +1,4 @@
-package be.nokorbis.spigot.commandsigns.addons.requiredpermissions;
+package be.nokorbis.spigot.commandsigns.addons.requiredpermissions.data;
 
 import be.nokorbis.spigot.commandsigns.api.addons.Addon;
 import be.nokorbis.spigot.commandsigns.api.addons.AddonConfigurationData;

@@ -1,5 +1,6 @@
-package be.nokorbis.spigot.commandsigns.addons.economy;
+package be.nokorbis.spigot.commandsigns.addons.economy.data;
 
+import be.nokorbis.spigot.commandsigns.addons.economy.EconomyAddon;
 import com.google.gson.*;
 
 import java.lang.reflect.Type;

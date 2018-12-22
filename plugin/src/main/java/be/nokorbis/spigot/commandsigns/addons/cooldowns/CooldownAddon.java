@@ -1,5 +1,9 @@
 package be.nokorbis.spigot.commandsigns.addons.cooldowns;
 
+import be.nokorbis.spigot.commandsigns.addons.cooldowns.data.CooldownConfigurationData;
+import be.nokorbis.spigot.commandsigns.addons.cooldowns.data.CooldownConfigurationDataPersister;
+import be.nokorbis.spigot.commandsigns.addons.cooldowns.data.CooldownExecutionData;
+import be.nokorbis.spigot.commandsigns.addons.cooldowns.data.CooldownExecutionDataPersister;
 import be.nokorbis.spigot.commandsigns.api.addons.*;
 
 

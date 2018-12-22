@@ -1,5 +1,6 @@
-package be.nokorbis.spigot.commandsigns.addons.cooldowns;
+package be.nokorbis.spigot.commandsigns.addons.cooldowns.data;
 
+import be.nokorbis.spigot.commandsigns.addons.cooldowns.CooldownAddon;
 import com.google.gson.*;
 
 import java.lang.reflect.Type;

@@ -1,5 +1,6 @@
 package be.nokorbis.spigot.commandsigns.addons.economy;
 
+import be.nokorbis.spigot.commandsigns.addons.economy.data.EconomyConfigurationData;
 import be.nokorbis.spigot.commandsigns.api.addons.AddonConfigurationData;
 import be.nokorbis.spigot.commandsigns.api.addons.AddonExecutionData;
 import be.nokorbis.spigot.commandsigns.api.addons.AddonLifecycleHookerBase;

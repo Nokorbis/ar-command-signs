@@ -1,5 +1,7 @@
 package be.nokorbis.spigot.commandsigns.addons.requiredpermissions;
 
+import be.nokorbis.spigot.commandsigns.addons.requiredpermissions.data.RequiredPermissionsConfigurationData;
+import be.nokorbis.spigot.commandsigns.addons.requiredpermissions.data.RequiredPermissionsConfigurationDataPersister;
 import be.nokorbis.spigot.commandsigns.api.addons.*;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonSerializer;

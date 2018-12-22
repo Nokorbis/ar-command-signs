@@ -1,6 +1,8 @@
 package be.nokorbis.spigot.commandsigns.addons.economy;
 
 import be.nokorbis.spigot.commandsigns.CommandSignsPlugin;
+import be.nokorbis.spigot.commandsigns.addons.economy.data.EconomyConfigurationData;
+import be.nokorbis.spigot.commandsigns.addons.economy.data.EconomyConfigurationDataPersister;
 import be.nokorbis.spigot.commandsigns.api.addons.*;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonSerializer;

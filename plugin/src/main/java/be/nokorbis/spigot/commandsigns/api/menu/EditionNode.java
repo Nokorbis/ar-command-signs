@@ -45,6 +45,10 @@ public abstract class EditionNode<EDITABLE extends MenuEditable> extends Edition
     public void display(final Player editor, final EDITABLE data, final MenuNavigationContext navigationContext) {
         displayBreadcrumb(editor);
 
+        displaySubMenus(editor, data, navigationContext);
+    }
+
+    protected final void displaySubMenus(Player editor, EDITABLE data, MenuNavigationContext navigationContext) {
         editor.sendMessage(mainMessages.getString("menu.entry.refresh"));
 
         final int page = navigationContext.getPage();
