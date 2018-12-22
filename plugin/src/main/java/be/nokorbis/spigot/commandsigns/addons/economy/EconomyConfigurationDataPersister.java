@@ -5,11 +5,11 @@ import com.google.gson.*;
 import java.lang.reflect.Type;
 
 
-public class EconomyConfigurationDataTransformer implements JsonSerializer<EconomyConfigurationData>, JsonDeserializer<EconomyConfigurationData> {
+public class EconomyConfigurationDataPersister implements JsonSerializer<EconomyConfigurationData>, JsonDeserializer<EconomyConfigurationData> {
 
 	private final EconomyAddon addon;
 
-	public EconomyConfigurationDataTransformer(EconomyAddon addon) {
+	public EconomyConfigurationDataPersister(EconomyAddon addon) {
 		this.addon = addon;
 	}
 

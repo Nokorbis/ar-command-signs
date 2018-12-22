@@ -22,7 +22,7 @@ public class TemporaryPermissionsMenu extends EditionMenu {
 		if (editor != null) {
 			CommandBlock cmd = config.getEditingData();
 			if (cmd != null) {
-				//List current permissions
+				//List current requiredpermissions
 				editor.sendMessage(getName());
 				String format = Messages.get("info.permission_format");
 				String msg;

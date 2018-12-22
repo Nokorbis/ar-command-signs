@@ -7,11 +7,11 @@ import java.util.Map;
 import java.util.UUID;
 
 
-public class CooldownExecutionDataTransformer implements JsonSerializer<CooldownExecutionData>, JsonDeserializer<CooldownExecutionData> {
+public class CooldownExecutionDataPersister implements JsonSerializer<CooldownExecutionData>, JsonDeserializer<CooldownExecutionData> {
 
 	private final CooldownAddon addon;
 
-	public CooldownExecutionDataTransformer(CooldownAddon addon) {
+	public CooldownExecutionDataPersister(CooldownAddon addon) {
 		this.addon = addon;
 	}
 

@@ -7,9 +7,9 @@ public class CooldownAddon extends AddonBase {
 
 	private static final String IDENTIFIER    = "ncs_cooldowns";
 
-	private final CooldownLifecycleHooker lifecycleHooker = new CooldownLifecycleHooker();
-	private final CooldownExecutionDataTransformer executionDataTransformer = new CooldownExecutionDataTransformer(this);
-	private final CooldownConfigurationDataTransformer configurationDataTransformer = new CooldownConfigurationDataTransformer(this);
+	private final CooldownLifecycleHooker            lifecycleHooker              = new CooldownLifecycleHooker();
+	private final CooldownExecutionDataPersister     executionDataTransformer     = new CooldownExecutionDataPersister(this);
+	private final CooldownConfigurationDataPersister configurationDataTransformer = new CooldownConfigurationDataPersister(this);
 
 	public CooldownAddon() {
 		super(IDENTIFIER,"Cooldowns");
@@ -31,22 +31,22 @@ public class CooldownAddon extends AddonBase {
 	}
 
 	@Override
-	public CooldownExecutionDataTransformer getExecutionDataSerializer() {
+	public CooldownExecutionDataPersister getExecutionDataSerializer() {
 		return executionDataTransformer;
 	}
 
 	@Override
-	public CooldownExecutionDataTransformer getExecutionDataDeserializer() {
+	public CooldownExecutionDataPersister getExecutionDataDeserializer() {
 		return executionDataTransformer;
 	}
 
 	@Override
-	public CooldownConfigurationDataTransformer getConfigurationDataSerializer() {
+	public CooldownConfigurationDataPersister getConfigurationDataSerializer() {
 		return configurationDataTransformer;
 	}
 
 	@Override
-	public CooldownConfigurationDataTransformer getConfigurationDataDeserializer() {
+	public CooldownConfigurationDataPersister getConfigurationDataDeserializer() {
 		return configurationDataTransformer;
 	}
 

@@ -158,7 +158,7 @@ public class CommandBlock
 		this.commands.add(index, newCmd);
 	}
 
-	/* Needed permissions */
+	/* Needed requiredpermissions */
 	public void addNeededPermission (String permission) {
 		this.neededPermissions.add(permission);
 	}

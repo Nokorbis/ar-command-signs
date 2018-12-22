@@ -115,7 +115,7 @@ public class CommandBlockGsonSerializer implements JsonSerializer<CommandBlock>,
         }
         root.add("commands", jsonCmds);
 
-        //Save needed permissions
+        //Save needed requiredpermissions
         JsonArray jsonNeededPerms = new JsonArray();
         for (String perm : commandBlock.getNeededPermissions())
         {
@@ -123,7 +123,7 @@ public class CommandBlockGsonSerializer implements JsonSerializer<CommandBlock>,
         }
         root.add("needed_permissions", jsonNeededPerms);
 
-        //Save temporary permissions
+        //Save temporary requiredpermissions
         JsonArray jsonTempPerms = new JsonArray();
         for (String perm : commandBlock.getPermissions())
         {

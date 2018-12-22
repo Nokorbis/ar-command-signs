@@ -1,4 +1,4 @@
-package be.nokorbis.spigot.commandsigns.addons.permissions;
+package be.nokorbis.spigot.commandsigns.addons.requiredpermissions;
 
 import be.nokorbis.spigot.commandsigns.api.addons.AddonConfigurationData;
 import be.nokorbis.spigot.commandsigns.api.addons.AddonExecutionData;
@@ -17,7 +17,7 @@ public class RequiredPermissionsLifecycleHooker extends AddonLifecycleHookerBase
 	@NCSLifecycleHook
 	public void onRequirementCheck(final Player player, final AddonConfigurationData configurationData, final AddonExecutionData executionData) throws CommandSignsRequirementException {
 		if (player != null) {
-			final PermissionsConfigurationData configuration = (PermissionsConfigurationData) configurationData;
+			final RequiredPermissionsConfigurationData configuration = (RequiredPermissionsConfigurationData) configurationData;
 			final List<String> requiredPermissions = configuration.getRequiredPermissions();
 
 			for (String permission : requiredPermissions) {

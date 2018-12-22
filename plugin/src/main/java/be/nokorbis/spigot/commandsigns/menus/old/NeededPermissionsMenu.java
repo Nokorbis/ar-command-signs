@@ -23,7 +23,7 @@ public class NeededPermissionsMenu extends EditionMenu {
 		if (editor != null) {
 			CommandBlock cmd = config.getEditingData();
 			if (cmd != null) {
-				//List current needed permissions
+				//List current needed requiredpermissions
 				editor.sendMessage(getName());
 				String format = Messages.get("info.permission_format");
 				String msg;

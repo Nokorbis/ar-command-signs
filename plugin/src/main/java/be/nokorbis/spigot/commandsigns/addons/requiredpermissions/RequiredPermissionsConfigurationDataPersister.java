@@ -1,4 +1,4 @@
-package be.nokorbis.spigot.commandsigns.addons.permissions;
+package be.nokorbis.spigot.commandsigns.addons.requiredpermissions;
 
 import com.google.gson.*;
 
@@ -6,17 +6,17 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 
-public class PermissionsConfigurationDataTransformer implements JsonSerializer<PermissionsConfigurationData>, JsonDeserializer<PermissionsConfigurationData> {
+public class RequiredPermissionsConfigurationDataPersister implements JsonSerializer<RequiredPermissionsConfigurationData>, JsonDeserializer<RequiredPermissionsConfigurationData> {
 
-	private final PermissionsAddon addon;
+	private final RequiredPermissionsAddon addon;
 
-	public PermissionsConfigurationDataTransformer(PermissionsAddon addon) {
+	public RequiredPermissionsConfigurationDataPersister(RequiredPermissionsAddon addon) {
 		this.addon = addon;
 	}
 
 	@Override
-	public PermissionsConfigurationData deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-		final PermissionsConfigurationData configurationData = addon.createConfigurationData();
+	public RequiredPermissionsConfigurationData deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+		final RequiredPermissionsConfigurationData configurationData = addon.createConfigurationData();
 
 		if (configurationData != null) {
 			List<String> permissions = configurationData.getRequiredPermissions();
@@ -33,7 +33,7 @@ public class PermissionsConfigurationDataTransformer implements JsonSerializer<P
 	}
 
 	@Override
-	public JsonElement serialize(PermissionsConfigurationData src, Type typeOfSrc, JsonSerializationContext context) {
+	public JsonElement serialize(RequiredPermissionsConfigurationData src, Type typeOfSrc, JsonSerializationContext context) {
 		JsonObject root = new JsonObject();
 
 		JsonArray permissions = new JsonArray();

@@ -12,7 +12,7 @@ public class EconomyAddon extends AddonBase {
 	private final net.milkbowl.vault.economy.Economy economy;
 	private EconomyLifecycleHooker lifecycleHooker = null;
 
-	private final EconomyConfigurationDataTransformer configurationDataTransformer = new EconomyConfigurationDataTransformer(this);
+	private final EconomyConfigurationDataPersister configurationDataTransformer = new EconomyConfigurationDataPersister(this);
 
 	public EconomyAddon(CommandSignsPlugin plugin) {
 		super(IDENTIFIER, "Economy");
@@ -66,12 +66,12 @@ public class EconomyAddon extends AddonBase {
 	}
 
 	@Override
-	public EconomyConfigurationDataTransformer getConfigurationDataSerializer() {
+	public EconomyConfigurationDataPersister getConfigurationDataSerializer() {
 		return configurationDataTransformer;
 	}
 
 	@Override
-	public EconomyConfigurationDataTransformer getConfigurationDataDeserializer() {
+	public EconomyConfigurationDataPersister getConfigurationDataDeserializer() {
 		return configurationDataTransformer;
 	}
 

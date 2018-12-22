@@ -5,11 +5,11 @@ import com.google.gson.*;
 import java.lang.reflect.Type;
 
 
-public class CooldownConfigurationDataTransformer implements JsonDeserializer<CooldownConfigurationData>, JsonSerializer<CooldownConfigurationData> {
+public class CooldownConfigurationDataPersister implements JsonDeserializer<CooldownConfigurationData>, JsonSerializer<CooldownConfigurationData> {
 
 	private final CooldownAddon addon;
 
-	public CooldownConfigurationDataTransformer(CooldownAddon addon) {
+	public CooldownConfigurationDataPersister(CooldownAddon addon) {
 		this.addon = addon;
 	}
 

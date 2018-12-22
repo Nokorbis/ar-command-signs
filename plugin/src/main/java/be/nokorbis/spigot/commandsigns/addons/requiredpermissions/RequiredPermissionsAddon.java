@@ -1,23 +1,19 @@
-package be.nokorbis.spigot.commandsigns.addons.permissions;
+package be.nokorbis.spigot.commandsigns.addons.requiredpermissions;
 
 import be.nokorbis.spigot.commandsigns.api.addons.*;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializer;
 
-import java.util.Objects;
 
-
-public class PermissionsAddon extends AddonBase {
+public class RequiredPermissionsAddon extends AddonBase {
 
     private static final String IDENTIFIER = "ncs_required_permissions";
 
-    private final RequiredPermissionsLifecycleHooker lifecycleHooker = new RequiredPermissionsLifecycleHooker();
-    private final PermissionsConfigurationDataTransformer configurationDataTransformer = new PermissionsConfigurationDataTransformer(this);
+    private final RequiredPermissionsLifecycleHooker            lifecycleHooker              = new RequiredPermissionsLifecycleHooker();
+    private final RequiredPermissionsConfigurationDataPersister configurationDataTransformer = new RequiredPermissionsConfigurationDataPersister(this);
 
-    public PermissionsAddon() {
-        super(IDENTIFIER, "Required permissions");
+    public RequiredPermissionsAddon() {
+        super(IDENTIFIER, "Required requiredpermissions");
     }
 
     @Override
@@ -26,8 +22,8 @@ public class PermissionsAddon extends AddonBase {
     }
 
     @Override
-    public PermissionsConfigurationData createConfigurationData() {
-		return new PermissionsConfigurationData(this);
+    public RequiredPermissionsConfigurationData createConfigurationData() {
+		return new RequiredPermissionsConfigurationData(this);
     }
 
     @Override
@@ -46,12 +42,12 @@ public class PermissionsAddon extends AddonBase {
     }
 
     @Override
-    public PermissionsConfigurationDataTransformer getConfigurationDataSerializer() {
+    public RequiredPermissionsConfigurationDataPersister getConfigurationDataSerializer() {
         return configurationDataTransformer;
     }
 
     @Override
-    public PermissionsConfigurationDataTransformer getConfigurationDataDeserializer() {
+    public RequiredPermissionsConfigurationDataPersister getConfigurationDataDeserializer() {
         return configurationDataTransformer;
     }
 }
