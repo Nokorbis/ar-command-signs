@@ -12,6 +12,7 @@ public class MainMenu extends EditionNodeCore {
 
         addMenu(new CoreMenuDisable(this));
         addMenu(new CoreMenuName(this));
+        addMenu(new CoreMenuTimer(this));
     }
 
 }

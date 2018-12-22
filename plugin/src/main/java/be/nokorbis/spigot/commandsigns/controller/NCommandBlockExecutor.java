@@ -58,14 +58,17 @@ public class NCommandBlockExecutor {
 	public void execute() throws CommandSignsException {
 		final NCommandSignsAddonLifecycleHolder lifecycleHolder = manager.getLifecycleHolder();
 
-		processStart(lifecycleHolder);
-		processRequirementsCheck(lifecycleHolder);
-		processCostsWithdrawn(lifecycleHolder);
-		processPreExecution(lifecycleHolder);
-		processExecution(lifecycleHolder);
-		processPostExecution(lifecycleHolder);
-		processComplete(lifecycleHolder);
-
+		try {
+			processStart(lifecycleHolder);
+			processRequirementsCheck(lifecycleHolder);
+			processCostsWithdrawn(lifecycleHolder);
+			processPreExecution(lifecycleHolder);
+			processExecution(lifecycleHolder);
+			processPostExecution(lifecycleHolder);
+		}
+		finally {
+			processComplete(lifecycleHolder);
+		}
 	}
 
 	private void processStart(final NCommandSignsAddonLifecycleHolder lifecycleHolder) {

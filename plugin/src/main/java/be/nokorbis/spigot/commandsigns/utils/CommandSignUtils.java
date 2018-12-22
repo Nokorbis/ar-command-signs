@@ -40,16 +40,9 @@ public class CommandSignUtils {
         player.sendMessage(Messages.get("info.name_format").replace("{NAME}", ((cmdB.getName() == null)? Messages.get("info.no_name") : cmdB.getName())));
         player.sendMessage(Messages.get("info.block_format").replace("{POSITION}", cmdB.blockSummary()));
 
-        if (EconomyWrapper.getEconomy() != null) {
-            player.sendMessage(Messages.get("info.costs_format").replace("{PRICE}", EconomyWrapper.getEconomy().format(cmdB.getEconomyPrice())));
-        }
-
         player.sendMessage(Messages.get("info.needed_permissions"));
         String permFormat = Messages.get("info.permission_format");
         int cpt = 1;
-        for (String perm : cmdB.getNeededPermissions()) {
-            player.sendMessage(permFormat.replace("{NUMBER}", String.valueOf(cpt++)).replace("{PERMISSION}", perm));
-        }
 
         player.sendMessage(Messages.get("info.permissions"));
         cpt = 1;
@@ -72,12 +65,6 @@ public class CommandSignUtils {
             if (cmdB.isResetOnMove()) {
                 player.sendMessage(Messages.get("info.reset_on_move"));
             }
-        }
-        if (cmdB.getTimeBetweenUsage() > 0) {
-            player.sendMessage(Messages.get("info.time_between_usages").replace("{TIME}", String.valueOf(cmdB.getTimeBetweenUsage())));
-        }
-        if (cmdB.getTimeBetweenPlayerUsage() > 0) {
-            player.sendMessage(Messages.get("info.time_between_player_usage").replace("{TIME}", String.valueOf(cmdB.getTimeBetweenPlayerUsage())));
         }
     }
 }
