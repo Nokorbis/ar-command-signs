@@ -19,6 +19,7 @@ public class CommandSignsPlugin extends JavaPlugin {
 
 	@Override
 	public void onLoad() {
+		plugin = this;
 		Settings.loadSettings(plugin);
 
 		this.manager = new NCommandSignsManager(this);
@@ -38,7 +39,6 @@ public class CommandSignsPlugin extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
-		plugin = this;
 		Container.getContainer(); // Initialize the all stuff
 
 		CommandSignCommands commandExecutor = new CommandSignCommands(manager);
@@ -53,7 +53,6 @@ public class CommandSignsPlugin extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		plugin = null;
 		this.manager = null;
 
 		PluginCommand mainCommand = this.getCommand("commandsign");

@@ -6,9 +6,9 @@ import be.nokorbis.spigot.commandsigns.model.CoreAddonSubmenusHolder;
 
 public class MainMenu extends EditionNodeCore {
 
-    private CoreMenuRequirements requirementsMenu = null;
-    private CoreMenuCosts costsMenu = null;
-    private CoreMenuExecutions executionsMenu = null;
+    private CoreMenuRequirements requirementsMenu;
+    private CoreMenuCosts costsMenu;
+    private CoreMenuExecutions executionsMenu;
 
     public MainMenu(CoreAddonSubmenusHolder addonSubmenus) {
         super("Main");

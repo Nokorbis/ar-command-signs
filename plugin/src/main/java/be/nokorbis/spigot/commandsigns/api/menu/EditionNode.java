@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
+import be.nokorbis.spigot.commandsigns.utils.Messages;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -49,7 +50,7 @@ public abstract class EditionNode<EDITABLE extends MenuEditable> extends Edition
     }
 
     protected final void displaySubMenus(Player editor, EDITABLE data, MenuNavigationContext navigationContext) {
-        editor.sendMessage(mainMessages.getString("menu.entry.refresh"));
+        editor.sendMessage(Messages.get("menu.entry.refresh"));
 
         final int page = navigationContext.getPage();
         final int startingIndex = (page-1) * entriesToDisplay;
@@ -61,10 +62,10 @@ public abstract class EditionNode<EDITABLE extends MenuEditable> extends Edition
         }
 
         if (displayPageNavigation) {
-            editor.sendMessage(mainMessages.getString("menu.entry.previous"));
-            editor.sendMessage(mainMessages.getString("menu.entry.next"));
+            editor.sendMessage(Messages.get("menu.entry.previous"));
+            editor.sendMessage(Messages.get("menu.entry.next"));
         }
-        editor.sendMessage(mainMessages.getString("menu.entry.done"));
+        editor.sendMessage(Messages.get("menu.entry.done"));
     }
 
     @Override

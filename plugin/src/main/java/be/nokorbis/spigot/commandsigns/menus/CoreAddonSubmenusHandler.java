@@ -6,6 +6,7 @@ import be.nokorbis.spigot.commandsigns.api.menu.EditionLeaf;
 import be.nokorbis.spigot.commandsigns.api.menu.EditionMenu;
 import be.nokorbis.spigot.commandsigns.api.menu.MenuNavigationContext;
 import be.nokorbis.spigot.commandsigns.model.CommandBlock;
+import be.nokorbis.spigot.commandsigns.utils.Messages;
 import org.bukkit.entity.Player;
 
 import java.util.Iterator;
@@ -59,7 +60,7 @@ public abstract class CoreAddonSubmenusHandler extends EditionLeaf<CommandBlock>
 	}
 
 	protected final void displaySubMenus(Player editor, CommandBlock data, MenuNavigationContext navigationContext) {
-		editor.sendMessage(mainMessages.getString("menu.entry.refresh"));
+		editor.sendMessage(Messages.get("menu.entry.refresh"));
 
 		final int page = navigationContext.getPage();
 		final int startingIndex = (page-1) * entriesToDisplay;
@@ -82,10 +83,10 @@ public abstract class CoreAddonSubmenusHandler extends EditionLeaf<CommandBlock>
 		}
 
 		if (displayPageNavigation) {
-			editor.sendMessage(mainMessages.getString("menu.entry.previous"));
-			editor.sendMessage(mainMessages.getString("menu.entry.next"));
+			editor.sendMessage(Messages.get("menu.entry.previous"));
+			editor.sendMessage(Messages.get("menu.entry.next"));
 		}
-		editor.sendMessage(mainMessages.getString("menu.entry.done"));
+		editor.sendMessage(Messages.get("menu.entry.done"));
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package be.nokorbis.spigot.commandsigns.api.menu;
 
+import be.nokorbis.spigot.commandsigns.utils.Messages;
 import org.bukkit.entity.Player;
 
 import java.util.ResourceBundle;
@@ -7,7 +8,7 @@ import java.util.ResourceBundle;
 
 public abstract class EditionMenu<EDITABLE extends MenuEditable> {
 
-    protected static final ResourceBundle mainMessages = ResourceBundle.getBundle("messages/menu");
+    //protected static final ResourceBundle mainMessages = ResourceBundle.getBundle("messages/menu");
 
     protected final String name;
     private EditionMenu<EDITABLE> parent;
@@ -56,8 +57,8 @@ public abstract class EditionMenu<EDITABLE extends MenuEditable> {
     }
 
     protected final  void displayBreadcrumb(final Player editor) {
-        String divider = mainMessages.getString("breadcrumb.divider");
-        String nameColor = mainMessages.getString("breadcrumb.name_color");
+        String divider = Messages.get("breadcrumb.divider");
+        String nameColor = Messages.get("breadcrumb.name_color");
         StringBuilder sb = new StringBuilder();
 
         EditionMenu<EDITABLE> currentMenu = this;
