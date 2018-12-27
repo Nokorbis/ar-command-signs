@@ -1,4 +1,4 @@
-package be.nokorbis.spigot.commandsigns.menus.news;
+package be.nokorbis.spigot.commandsigns.menus;
 
 import be.nokorbis.spigot.commandsigns.api.menu.EditionLeaf;
 import be.nokorbis.spigot.commandsigns.api.menu.EditionMenu;

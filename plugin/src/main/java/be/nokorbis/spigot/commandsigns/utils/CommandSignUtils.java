@@ -3,7 +3,6 @@ package be.nokorbis.spigot.commandsigns.utils;
 import java.util.LinkedList;
 import java.util.List;
 
-import be.nokorbis.spigot.commandsigns.controller.EconomyWrapper;
 import be.nokorbis.spigot.commandsigns.model.CommandBlock;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -15,7 +14,7 @@ public class CommandSignUtils {
 
 
 	public static List<Location> getLocationsAroundPoint(Location location, int radius) {
-		List<Location> locations = new LinkedList<Location>();
+		List<Location> locations = new LinkedList<>();
 
 		int xorg = location.getBlockX();
 		int yorg = location.getBlockY();

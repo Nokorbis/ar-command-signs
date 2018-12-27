@@ -10,8 +10,6 @@ import java.util.logging.Level;
 import be.nokorbis.spigot.commandsigns.CommandSignsPlugin;
 import be.nokorbis.spigot.commandsigns.data.CommandBlockSaver;
 import be.nokorbis.spigot.commandsigns.data.json.JsonCommandBlockSaver;
-import be.nokorbis.spigot.commandsigns.menus.old.IEditionMenu;
-import be.nokorbis.spigot.commandsigns.menus.old.MainMenu;
 import be.nokorbis.spigot.commandsigns.model.CommandBlock;
 import be.nokorbis.spigot.commandsigns.api.exceptions.CommandSignsException;
 import be.nokorbis.spigot.commandsigns.tasks.ExecuteTask;
@@ -32,8 +30,6 @@ public class Container {
 
 	private Map<Player, PermissionAttachment> playerPerms;
 	private Map<Location, CommandBlock> commandBlocks;
-	private Map<Player, EditingConfiguration<CommandBlock>> creatingConfigurations;
-	private Map<Player, EditingConfiguration<CommandBlock>> editingConfigurations;
 	private Map<Player, CommandBlock> copyingConfigurations;
 	private Map<Player, Location> deletingBlocks;
 	private final Map<UUID, ExecuteTask> executingTasks = new HashMap<>();
@@ -58,8 +54,6 @@ public class Container {
 	private void initializeDataStructures() {
 		this.playerPerms = new HashMap<>();
 		this.commandBlocks = new HashMap<>();
-		this.creatingConfigurations = new HashMap<>();
-		this.editingConfigurations = new HashMap<>();
 		this.copyingConfigurations = new HashMap<>();
 		this.deletingBlocks = new HashMap<>();
 		this.infoPlayers = new LinkedList<>();
@@ -109,14 +103,6 @@ public class Container {
 
 	public Map<Location, CommandBlock> getCommandBlocks() {
 		return this.commandBlocks;
-	}
-
-	public Map<Player, EditingConfiguration<CommandBlock>> getCreatingConfigurations() {
-		return this.creatingConfigurations;
-	}
-
-	public Map<Player, EditingConfiguration<CommandBlock>> getEditingConfigurations() {
-		return this.editingConfigurations;
 	}
 
 	public Map<Player, CommandBlock> getCopyingConfigurations() {

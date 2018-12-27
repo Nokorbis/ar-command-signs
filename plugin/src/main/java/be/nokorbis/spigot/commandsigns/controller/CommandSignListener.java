@@ -86,7 +86,7 @@ public class CommandSignListener implements Listener {
 		}
 
 		/* Do we have to edit the command block configuration ? */
-		else if (Container.getContainer().getEditingConfigurations().containsKey(player)) {
+		/*else if (Container.getContainer().getEditingConfigurations().containsKey(player)) {
 			if (!CommandBlockValidator.isValidBlock(block)) {
 				return;
 			}
@@ -111,15 +111,15 @@ public class CommandSignListener implements Listener {
 			else {
 				// Nothing to do, I think
 			}
-		}
+		}*/
 
 		/* Do we have to create the command block configuration ? */
-		else if (Container.getContainer().getCreatingConfigurations().containsKey(player)) {
+		/*else if (Container.getContainer().getCreatingConfigurations().containsKey(player)) {
 			if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
 				return;
 			}
 			createCommandBlock(player, block);
-		}
+		}*/
 
 		/* Do we have to copy the command block configuration ? */
 		else if (Container.getContainer().getCopyingConfigurations().containsKey(player)) {
@@ -220,7 +220,7 @@ public class CommandSignListener implements Listener {
 			return;
 		}
 
-		EditingConfiguration<CommandBlock> conf = Container.getContainer().getCreatingConfigurations().get(player);
+		/*EditingConfiguration<CommandBlock> conf = Container.getContainer().getCreatingConfigurations().get(player);
 		CommandBlock commandBlock = conf.getEditingData();
 		Location creatingBlock = commandBlock.getLocation();
 
@@ -235,7 +235,7 @@ public class CommandSignListener implements Listener {
 		}
 		else {
 			player.sendMessage(Messages.get("creation.already_command"));
-		}
+		}*/
 	}
 
 	private void copyCommandBlock(Player player, Block block) {

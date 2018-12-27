@@ -1,18 +1,22 @@
 package be.nokorbis.spigot.commandsigns.api.addons;
 
 
+import be.nokorbis.spigot.commandsigns.api.menu.AddonSubmenuHolder;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonSerializer;
+import org.bukkit.plugin.Plugin;
 
 
 public interface Addon
 {
 	String getIdentifier();
     String getName();
+    Plugin getPlugin();
 
     boolean shouldAddonBeHooked();
-
     AddonLifecycleHooker getLifecycleHooker();
+
+    AddonSubmenuHolder getSubmenus();
 
 	/**
 	 * Instantiate the base object of the configuration data or your addon. One object will be created for each command sign existing in the server.<br>

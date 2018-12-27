@@ -52,31 +52,15 @@ public class CommandBlockGsonSerializer implements JsonSerializer<CommandBlock>,
                 cmdBlock.setDisabled(disabled.getAsBoolean());
             }
 
-            cmdBlock.setEconomyPrice(root.get("price").getAsDouble());
 
             cmdBlock.setTimeBeforeExecution(root.get("time_before_execution").getAsInt());
             cmdBlock.setCancelledOnMove(root.get("move_cancel_timer").getAsBoolean());
             cmdBlock.setResetOnMove(root.get("move_reset_timer").getAsBoolean());
 
-            cmdBlock.setTimeBetweenUsage(root.get("global_time_between_usages").getAsInt());
-            cmdBlock.setTimeBetweenPlayerUsage(root.get("player_time_between_usages").getAsInt());
-
             JsonArray commands = root.get("commands").getAsJsonArray();
             for (JsonElement command : commands)
             {
                 cmdBlock.addCommand(command.getAsString());
-            }
-
-            JsonArray neededPerms = root.get("needed_permissions").getAsJsonArray();
-            for (JsonElement perm : neededPerms)
-            {
-                cmdBlock.addNeededPermission(perm.getAsString());
-            }
-
-            JsonArray permissions = root.get("temporary_permissions").getAsJsonArray();
-            for (JsonElement permission : permissions)
-            {
-                cmdBlock.addPermission(permission.getAsString());
             }
 
             return cmdBlock;
@@ -115,13 +99,6 @@ public class CommandBlockGsonSerializer implements JsonSerializer<CommandBlock>,
         }
         root.add("commands", jsonCmds);
 
-        //Save needed requiredpermissions
-        JsonArray jsonNeededPerms = new JsonArray();
-        for (String perm : commandBlock.getNeededPermissions())
-        {
-            jsonNeededPerms.add(new JsonPrimitive(perm));
-        }
-        root.add("needed_permissions", jsonNeededPerms);
 
         //Save temporary requiredpermissions
         JsonArray jsonTempPerms = new JsonArray();
@@ -131,14 +108,11 @@ public class CommandBlockGsonSerializer implements JsonSerializer<CommandBlock>,
         }
         root.add("temporary_permissions", jsonTempPerms);
 
-        root.addProperty("price", commandBlock.getEconomyPrice());
 
         root.addProperty("time_before_execution", commandBlock.getTimeBeforeExecution());
         root.addProperty("move_cancel_timer", commandBlock.isCancelledOnMove());
         root.addProperty("move_reset_timer", commandBlock.isResetOnMove());
 
-        root.addProperty("global_time_between_usages", commandBlock.getTimeBetweenUsage());
-        root.addProperty("player_time_between_usages", commandBlock.getTimeBetweenPlayerUsage());
         return root;
     }
 }

@@ -4,8 +4,9 @@ import be.nokorbis.spigot.commandsigns.CommandSignsPlugin;
 import be.nokorbis.spigot.commandsigns.api.addons.Addon;
 import be.nokorbis.spigot.commandsigns.controller.positionchecker.CommandBlockPositionChecker;
 import be.nokorbis.spigot.commandsigns.controller.positionchecker.PositionCheckerFactory;
-import be.nokorbis.spigot.commandsigns.menus.news.MainMenu;
+import be.nokorbis.spigot.commandsigns.menus.MainMenu;
 import be.nokorbis.spigot.commandsigns.model.CommandBlock;
+import be.nokorbis.spigot.commandsigns.model.CoreAddonSubmenusHolder;
 import be.nokorbis.spigot.commandsigns.utils.Settings;
 
 import com.google.common.cache.*;
@@ -24,31 +25,26 @@ import java.util.logging.Logger;
 public class NCommandSignsManager {
 	private final Logger logger;
 
-	private Set<Addon> registeredAddons = new HashSet<>();
-	private NCommandSignsAddonLifecycleHolder lifecycleHolder = new NCommandSignsAddonLifecycleHolder();
-	private Set<Addon> accessibleAddons = Collections.unmodifiableSet(registeredAddons);
+	private Set<Addon>                        registeredAddons = new HashSet<>();
+	private NCommandSignsAddonLifecycleHolder lifecycleHolder  = new NCommandSignsAddonLifecycleHolder();
+	private Set<Addon>                        accessibleAddons = Collections.unmodifiableSet(registeredAddons);
 
-	private final Map<Location, Long> locationsToIds = new HashMap<>();
+	private final Map<Location, Long>              locationsToIds = new HashMap<>();
 	private final LoadingCache<Long, CommandBlock> cache;
 
-	private Map<UUID, NCommandSignsConfigurationManager> ncsConfigurationManagers = new HashMap<>();
+	private final Map<UUID, NCommandSignsConfigurationManager> ncsConfigurationManagers = new HashMap<>();
 
-	private final MainMenu mainMenu;
+	private final CoreAddonSubmenusHolder addonSubmenus = new CoreAddonSubmenusHolder();
+	private final MainMenu                mainMenu      = new MainMenu(addonSubmenus);
 
 	public NCommandSignsManager(CommandSignsPlugin plugin) {
 		this.logger = plugin.getLogger();
 
-		this.mainMenu = new MainMenu();
-
-		this.cache = CacheBuilder.newBuilder()
-								 .maximumSize(Settings.CACHE_MAX_SIZE())
-								 .expireAfterAccess(Settings.CACHE_TIME_TO_IDLE(), TimeUnit.MINUTES)
-								 .removalListener(this::onCacheRemove)
-								 .build(new CacheLoader<Long, CommandBlock>() {
-									 public CommandBlock load(Long key) {
-										 return new CommandBlock();
-									 }
-								 });
+		this.cache = CacheBuilder.newBuilder().maximumSize(Settings.CACHE_MAX_SIZE()).expireAfterAccess(Settings.CACHE_TIME_TO_IDLE(), TimeUnit.MINUTES).removalListener(this::onCacheRemove).build(new CacheLoader<Long, CommandBlock>() {
+			public CommandBlock load(Long key) {
+				return new CommandBlock();
+			}
+		});
 	}
 
 	public void registerAddon(Addon addon) {
@@ -57,6 +53,10 @@ public class NCommandSignsManager {
 
 	public Set<Addon> getRegisteredAddons() {
 		return this.accessibleAddons;
+	}
+
+	CoreAddonSubmenusHolder getAddonSubmenus() {
+		return addonSubmenus;
 	}
 
 	public NCommandSignsAddonLifecycleHolder getLifecycleHolder() {

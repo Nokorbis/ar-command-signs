@@ -1,5 +1,6 @@
-package be.nokorbis.spigot.commandsigns.addons.requiredpermissions.menus;
+package be.nokorbis.spigot.commandsigns.addons.commands.menus;
 
+import be.nokorbis.spigot.commandsigns.addons.commands.data.CommandsConfigurationData;
 import be.nokorbis.spigot.commandsigns.addons.requiredpermissions.data.RequiredPermissionsConfigurationData;
 import be.nokorbis.spigot.commandsigns.api.addons.AddonConfigurationData;
 import be.nokorbis.spigot.commandsigns.api.menu.EditionLeaf;
@@ -9,9 +10,9 @@ import be.nokorbis.spigot.commandsigns.utils.Messages;
 import org.bukkit.entity.Player;
 
 
-public class MenuRequiredPermissionsEdit extends EditionLeaf<AddonConfigurationData> {
+public class MenuTemporaryPermissionsEdit extends EditionLeaf<AddonConfigurationData> {
 
-	public MenuRequiredPermissionsEdit(EditionMenu<AddonConfigurationData> parent) {
+	public MenuTemporaryPermissionsEdit(EditionMenu<AddonConfigurationData> parent) {
 		super(Messages.get("menu.edit"), parent);
 	}
 
@@ -22,12 +23,12 @@ public class MenuRequiredPermissionsEdit extends EditionLeaf<AddonConfigurationD
 
 	@Override
 	public void display(final Player editor, AddonConfigurationData data, MenuNavigationContext navigationContext) {
-		final RequiredPermissionsConfigurationData configurationData = (RequiredPermissionsConfigurationData) data;
-		editor.sendMessage(Messages.get("info.required_permissions"));
+		final CommandsConfigurationData configurationData = (CommandsConfigurationData) data;
+		editor.sendMessage(Messages.get("info.permissions"));
 		int cpt = 1;
 		String format = Messages.get("info.permission_format");
 		String msg;
-		for (String perm : configurationData.getRequiredPermissions()) {
+		for (String perm : configurationData.getTemporarilyGrantedPermissions()) {
 			msg = format.replace("{NUMBER}", String.valueOf(cpt++)).replace("{PERMISSION}", perm);
 			editor.sendMessage(msg);
 		}
@@ -37,10 +38,10 @@ public class MenuRequiredPermissionsEdit extends EditionLeaf<AddonConfigurationD
 	@Override
 	public void input(Player player, AddonConfigurationData data, String message, MenuNavigationContext navigationContext) {
 		try {
-			RequiredPermissionsConfigurationData configurationData = (RequiredPermissionsConfigurationData) data;
+			CommandsConfigurationData configurationData = (CommandsConfigurationData) data;
 			String[] args = message.split(" ", 2);
 			int index = Integer.parseInt(args[0]);
-			configurationData.getRequiredPermissions().set(index - 1, args[1]);
+			configurationData.getTemporarilyGrantedPermissions().set(index - 1, args[1]);
 		}
 		catch (Exception ignored) {
 		}

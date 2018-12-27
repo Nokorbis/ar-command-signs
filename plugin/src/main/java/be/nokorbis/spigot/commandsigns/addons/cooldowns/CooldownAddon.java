@@ -1,27 +1,39 @@
 package be.nokorbis.spigot.commandsigns.addons.cooldowns;
 
+import be.nokorbis.spigot.commandsigns.CommandSignsPlugin;
 import be.nokorbis.spigot.commandsigns.addons.cooldowns.data.CooldownConfigurationData;
 import be.nokorbis.spigot.commandsigns.addons.cooldowns.data.CooldownConfigurationDataPersister;
 import be.nokorbis.spigot.commandsigns.addons.cooldowns.data.CooldownExecutionData;
 import be.nokorbis.spigot.commandsigns.addons.cooldowns.data.CooldownExecutionDataPersister;
+import be.nokorbis.spigot.commandsigns.addons.cooldowns.menus.MenuCooldowns;
 import be.nokorbis.spigot.commandsigns.api.addons.*;
+import be.nokorbis.spigot.commandsigns.api.menu.AddonSubmenuHolder;
 
 
 public class CooldownAddon extends AddonBase {
 
-	private static final String IDENTIFIER    = "ncs_cooldowns";
+	private static final String IDENTIFIER = "ncs_cooldowns";
 
-	private final CooldownLifecycleHooker            lifecycleHooker              = new CooldownLifecycleHooker();
+	private final CooldownLifecycleHooker lifecycleHooker = new CooldownLifecycleHooker();
+	private final MenuCooldowns           editionMenu     = new MenuCooldowns();
+
 	private final CooldownExecutionDataPersister     executionDataTransformer     = new CooldownExecutionDataPersister(this);
 	private final CooldownConfigurationDataPersister configurationDataTransformer = new CooldownConfigurationDataPersister(this);
 
-	public CooldownAddon() {
-		super(IDENTIFIER,"Cooldowns");
+	public CooldownAddon(CommandSignsPlugin plugin) {
+		super(plugin, IDENTIFIER, "Cooldowns");
 	}
 
 	@Override
 	public AddonLifecycleHooker getLifecycleHooker() {
 		return lifecycleHooker;
+	}
+
+	@Override
+	public AddonSubmenuHolder getSubmenus() {
+		AddonSubmenuHolder holder = new AddonSubmenuHolder();
+		holder.requirementSubmenus.add(editionMenu);
+		return holder;
 	}
 
 	@Override

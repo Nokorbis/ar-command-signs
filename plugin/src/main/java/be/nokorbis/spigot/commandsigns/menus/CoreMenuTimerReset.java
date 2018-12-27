@@ -1,4 +1,4 @@
-package be.nokorbis.spigot.commandsigns.menus.news;
+package be.nokorbis.spigot.commandsigns.menus;
 
 import be.nokorbis.spigot.commandsigns.api.menu.EditionLeaf;
 import be.nokorbis.spigot.commandsigns.api.menu.EditionMenu;
@@ -8,20 +8,20 @@ import be.nokorbis.spigot.commandsigns.utils.Messages;
 import org.bukkit.entity.Player;
 
 
-public class CoreMenuTimerCancel extends EditionLeaf<CommandBlock> {
+public class CoreMenuTimerReset extends EditionLeaf<CommandBlock> {
 
-	public CoreMenuTimerCancel(EditionMenu<CommandBlock> parent) {
-		super(Messages.get("menu.cancel_title"), parent);
+	public CoreMenuTimerReset(EditionMenu<CommandBlock> parent) {
+		super(Messages.get("menu.reset_title"), parent);
 	}
 
 	@Override
 	public String getDataString(CommandBlock data) {
-		return name.replace("{BOOLEAN}", data.isCancelledOnMove() ? Messages.get("menu.yes") : Messages.get("menu.no"));
+		return name.replace("{BOOLEAN}", data.isResetOnMove() ? Messages.get("menu.yes") : Messages.get("menu.no"));
 	}
 
 	@Override
 	public void display(Player editor, CommandBlock data, MenuNavigationContext navigationContext) {
-		editor.sendMessage(Messages.get("menu.cancel_edit"));
+		editor.sendMessage(Messages.get("menu.reset_edit"));
 	}
 
 	@Override
@@ -29,11 +29,11 @@ public class CoreMenuTimerCancel extends EditionLeaf<CommandBlock> {
 		String[] args = message.split(" ");
 		String arg = args[0].toUpperCase();
 		if (arg.equals("YES") || arg.equals("Y") || arg.equals("TRUE")) {
-			data.setCancelledOnMove(true);
+			data.setResetOnMove(true);
 		}
 		else {
 			if (!args[0].equals("CANCEL")) {
-				data.setCancelledOnMove(false);
+				data.setResetOnMove(false);
 			}
 		}
 		navigationContext.setCoreMenu(getParent());

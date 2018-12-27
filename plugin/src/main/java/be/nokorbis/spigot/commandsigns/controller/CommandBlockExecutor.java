@@ -90,16 +90,14 @@ public class CommandBlockExecutor
 			char special = cmd.charAt(0);
 			if (special == Settings.DELAY_CHAR())
 			{
-				try
-				{
+				try {
 					int sec = Integer.parseInt(cmd.substring(1).trim());
 					Thread.sleep(sec * 1000);
 				}
-				catch (NumberFormatException e)
-				{
+				catch (NumberFormatException e) {
 					plugin.getLogger().warning("A command sign is using a delay that isn't a number.");
-				} catch (InterruptedException e)
-				{
+				}
+				catch (InterruptedException e) {
 					plugin.getLogger().warning("Interrupted exception while delaying a command");
 				}
 			}

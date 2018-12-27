@@ -4,21 +4,24 @@ import be.nokorbis.spigot.commandsigns.addons.economy.data.EconomyConfigurationD
 import be.nokorbis.spigot.commandsigns.api.addons.AddonConfigurationData;
 import be.nokorbis.spigot.commandsigns.api.menu.EditionLeaf;
 import be.nokorbis.spigot.commandsigns.api.menu.MenuNavigationContext;
-import be.nokorbis.spigot.commandsigns.controller.EconomyWrapper;
 import be.nokorbis.spigot.commandsigns.utils.Messages;
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.entity.Player;
 
 
 public class MenuEconomy extends EditionLeaf<AddonConfigurationData> {
 
-	public MenuEconomy() {
+	private Economy economy;
+
+	public MenuEconomy(Economy economy) {
 		super(Messages.get("menu.economy"), null);
+		this.economy = economy;
 	}
 
 	@Override
 	public String getDataString(AddonConfigurationData data) {
 		EconomyConfigurationData configurationData = (EconomyConfigurationData) data;
-		return name.replace("{PRICE}", EconomyWrapper.getEconomy().format(configurationData.getPrice()));
+		return name.replace("{PRICE}", economy.format(configurationData.getPrice()));
 	}
 
 	@Override

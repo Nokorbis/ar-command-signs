@@ -1,17 +1,21 @@
 package be.nokorbis.spigot.commandsigns.api.addons;
 
+import be.nokorbis.spigot.commandsigns.api.menu.AddonSubmenuHolder;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonSerializer;
+import org.bukkit.plugin.Plugin;
 
 import java.util.Objects;
 
 
 public abstract class AddonBase implements Addon {
 
-	protected final String identifier;
+	protected final Plugin plugin;
+	private final   String identifier;
 	protected final String name;
 
-	public AddonBase(String identifier, String name) {
+	public AddonBase(Plugin plugin, String identifier, String name) {
+		this.plugin = plugin;
 		this.identifier = identifier;
 		this.name = name;
 	}
@@ -27,8 +31,23 @@ public abstract class AddonBase implements Addon {
 	}
 
 	@Override
+	public Plugin getPlugin() {
+		return plugin;
+	}
+
+	@Override
 	public boolean shouldAddonBeHooked() {
 		return true;
+	}
+
+	@Override
+	public AddonLifecycleHooker getLifecycleHooker() {
+		return null;
+	}
+
+	@Override
+	public AddonSubmenuHolder getSubmenus() {
+		return null;
 	}
 
 	@Override

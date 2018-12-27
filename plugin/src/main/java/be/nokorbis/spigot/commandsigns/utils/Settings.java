@@ -11,6 +11,9 @@ public final class Settings {
 	private static char SERVER_CHAR;
 	public static char SERVER_CHAR() { return SERVER_CHAR; }
 
+	private static char COMMAND_CHAR = '/';
+	public static char COMMAND_CHAR() { return COMMAND_CHAR; }
+
 	private static char DELAY_CHAR;
 	public static char DELAY_CHAR() { return DELAY_CHAR; }
 
