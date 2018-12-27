@@ -8,7 +8,7 @@ public class MenuNavigationContext implements Cloneable {
 
 	private EditionMenu<CommandBlock> coreMenu;
 	private EditionMenu<AddonConfigurationData> addonMenu;
-	private int                       page;
+	private int                       page = 1;
 
 	public MenuNavigationContext() {
 	}

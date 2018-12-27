@@ -13,18 +13,15 @@ public abstract class Messages
 	private static Properties defaultMessages = null;
 	private static Properties messages = null;
 
-	public static String get(String key)
-	{
-		if (defaultMessages == null && messages == null)
-		{
+	public static String get(String key) {
+		if (defaultMessages == null && messages == null) {
 			loadMessages();
 		}
-		try
-		{
-			return parseColor(messages.getProperty(key));
+		try {
+			String msg = messages.getProperty(key);
+			return parseColor(msg);
 		}
-		catch (NullPointerException ex)
-		{
+		catch (NullPointerException ex) {
 			CommandSignsPlugin.getPlugin().getLogger().severe("A null pointer exception occurred while parsing color on key : " + key);
 			return key;
 		}

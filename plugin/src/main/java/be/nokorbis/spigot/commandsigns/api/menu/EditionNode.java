@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.ListIterator;
 
 import be.nokorbis.spigot.commandsigns.utils.Messages;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 public abstract class EditionNode<EDITABLE extends MenuEditable> extends EditionMenu<EDITABLE> {
@@ -58,7 +57,8 @@ public abstract class EditionNode<EDITABLE extends MenuEditable> extends Edition
         ListIterator<EditionMenu<EDITABLE>> menuIterator = menus.listIterator(startingIndex);
         for (int i = 1; i <= entriesToDisplay && menuIterator.hasNext(); i++) {
             EditionMenu<EDITABLE> menu = menuIterator.next();
-            editor.sendMessage(menu.getDisplayString(data));
+            ClickableMessage message = new ClickableMessage(menu.getDisplayString(data), String.valueOf(i));
+            editor.spigot().sendMessage(message.asTextComponent());
         }
 
         if (displayPageNavigation) {

@@ -37,7 +37,7 @@ public class CommandSignCommands implements CommandExecutor, TabCompleter {
 			return false;
 		}
 
-		List<String> argList = Arrays.asList(args);
+		List<String> argList = new LinkedList<>(Arrays.asList(args));
 		String sub = argList.remove(0);
 
 		for (ICommand command : this.commands) {

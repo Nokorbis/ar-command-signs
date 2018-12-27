@@ -1,40 +1,42 @@
 package be.nokorbis.spigot.commandsigns.api.menu;
 
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.entity.Player;
+
+
 public class ClickableMessage {
-	private String message;
-	private String command;
+
+	private TextComponent textComponent;
 
 	public ClickableMessage(String message, String command) {
-		this.message = message;
-		this.command = command;
+		textComponent = asTextComponent(message, command);
 	}
 
 	public ClickableMessage(String message) {
 		this(message, null);
 	}
 
-	public String toString() {
-		return getJsonMessage(message, command);
-	}
-
-	public static String getJsonMessage(String message, String command) {
-		StringBuilder json = new StringBuilder(64);
-		json.append("{\"text\": \"");
-		json.append(message);
-		json.append("\"");
-		if (command != null) {
-			command = command.trim();
-			if (!command.isEmpty()) {
-				json.append(", \"clickEvent\": {\"action\": \"run_command\", \"value\": \"");
-				json.append(command);
-				json.append("\"}");
-			}
+	public void sendToPlayer(Player player) {
+		if (player != null && player.isOnline()) {
+			player.spigot().sendMessage(textComponent);
 		}
-		json.append("}");
-		return json.toString();
 	}
 
-	public static String getJsonMessage(String message) {
-		return getJsonMessage(message, null);
+	public TextComponent asTextComponent() {
+		return textComponent;
+	}
+
+	public static TextComponent asTextComponent(String message, String command) {
+		TextComponent component = new TextComponent();
+		component.setText(message);
+		if (command != null) {
+			component.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, command));
+		}
+		return component;
+	}
+
+	public static TextComponent asTextComponent(String message) {
+		return asTextComponent(message, null);
 	}
 }
