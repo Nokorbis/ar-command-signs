@@ -1,14 +1,13 @@
 package be.nokorbis.spigot.commandsigns.api.menu;
 
+import be.nokorbis.spigot.commandsigns.api.DisplayMessages;
 import be.nokorbis.spigot.commandsigns.utils.Messages;
 import org.bukkit.entity.Player;
-
-import java.util.ResourceBundle;
 
 
 public abstract class EditionMenu<EDITABLE extends MenuEditable> {
 
-    //protected static final ResourceBundle mainMessages = ResourceBundle.getBundle("messages/menu");
+    protected static final DisplayMessages messages = DisplayMessages.getDisplayMessages("messages/menu");
 
     protected final String name;
     private EditionMenu<EDITABLE> parent;

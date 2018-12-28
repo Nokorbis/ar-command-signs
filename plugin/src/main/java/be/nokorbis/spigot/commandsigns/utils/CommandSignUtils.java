@@ -40,21 +40,11 @@ public class CommandSignUtils {
         player.sendMessage(Messages.get("info.block_format").replace("{POSITION}", cmdB.blockSummary()));
 
         player.sendMessage(Messages.get("info.needed_permissions"));
-        String permFormat = Messages.get("info.permission_format");
-        int cpt = 1;
 
         player.sendMessage(Messages.get("info.permissions"));
-        cpt = 1;
-        for (String perm :cmdB.getPermissions()) {
-            player.sendMessage(permFormat.replace("{NUMBER}", String.valueOf(cpt++)).replace("{PERMISSION}", perm));
-        }
 
         player.sendMessage(Messages.get("info.commands"));
-        cpt = 1;
-        String cmdFormat = Messages.get("info.command_format");
-        for (String cmd : cmdB.getCommands()) {
-            player.sendMessage(cmdFormat.replace("{NUMBER}", String.valueOf(cpt++)).replace("{COMMAND}", cmd));
-        }
+
 
         if ((cmdB.getTimeBeforeExecution() != null) && (cmdB.getTimeBeforeExecution() > 0)) {
             player.sendMessage(Messages.get("info.time_before_execution").replace("{TIME}", String.valueOf(cmdB.getTimeBeforeExecution())));

@@ -57,11 +57,6 @@ public class CommandBlockGsonSerializer implements JsonSerializer<CommandBlock>,
             cmdBlock.setCancelledOnMove(root.get("move_cancel_timer").getAsBoolean());
             cmdBlock.setResetOnMove(root.get("move_reset_timer").getAsBoolean());
 
-            JsonArray commands = root.get("commands").getAsJsonArray();
-            for (JsonElement command : commands)
-            {
-                cmdBlock.addCommand(command.getAsString());
-            }
 
             return cmdBlock;
         }
@@ -90,23 +85,6 @@ public class CommandBlockGsonSerializer implements JsonSerializer<CommandBlock>,
         }
 
         root.addProperty("disabled", commandBlock.isDisabled());
-
-        //Save commands
-        JsonArray jsonCmds = new JsonArray();
-        for (String cmd : commandBlock.getCommands())
-        {
-            jsonCmds.add(new JsonPrimitive(cmd));
-        }
-        root.add("commands", jsonCmds);
-
-
-        //Save temporary requiredpermissions
-        JsonArray jsonTempPerms = new JsonArray();
-        for (String perm : commandBlock.getPermissions())
-        {
-            jsonTempPerms.add(new JsonPrimitive(perm));
-        }
-        root.add("temporary_permissions", jsonTempPerms);
 
 
         root.addProperty("time_before_execution", commandBlock.getTimeBeforeExecution());

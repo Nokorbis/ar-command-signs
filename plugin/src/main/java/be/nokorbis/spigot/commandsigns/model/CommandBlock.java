@@ -29,14 +29,9 @@ public class CommandBlock implements MenuEditable
 	private Map<String, AddonConfigurationData> addonConfigurations= new HashMap<>();
 	private Map<String, AddonExecutionData> addonExecutions = new HashMap<>();
 
-	private final List<String> commands = new ArrayList<>();
-	private final List<String> permissions = new ArrayList<>();
-
-
 	private Integer timeBeforeExecution; // Value in seconds
 	private Boolean resetOnMove;
 	private Boolean cancelledOnMove;
-
 
 	public CommandBlock() {
 		this.setTimeBeforeExecution(0);
@@ -123,62 +118,6 @@ public class CommandBlock implements MenuEditable
 		this.location = loc;
 	}
 
-	/* Commands */
-	public void addCommand(String command) {
-		this.commands.add(command);
-	}
-
-	public List<String> getCommands() {
-		return this.commands;
-	}
-
-	public boolean removeCommand(int index) {
-		if (index < 0) {
-			return false;
-		}
-		if (this.commands.size() <= index) {
-			return false;
-		}
-		this.commands.remove(index);
-		return true;
-	}
-
-	public void editCommand(int index, String newCmd) {
-		if (index < 0) {
-			return;
-		}
-		removeCommand(index);
-		this.commands.add(index, newCmd);
-	}
-
-	/* Permissions */
-	public void addPermission(String permission) {
-		this.permissions.add(permission);
-	}
-
-	public List<String> getPermissions() {
-		return this.permissions;
-	}
-
-	public boolean removePermission(int index) {
-		if (index < 0) {
-			return false;
-		}
-		if (this.permissions.size() <= index) {
-			return false;
-		}
-
-		this.permissions.remove(index);
-		return true;
-	}
-
-	public void editPermission(int index, String newPerm) {
-		if (index < 0) {
-			return;
-		}
-		removePermission(index);
-		this.permissions.add(index, newPerm);
-	}
 
 	/* Timers */
 
@@ -234,14 +173,6 @@ public class CommandBlock implements MenuEditable
 
 	public CommandBlock copy() {
 		CommandBlock newBlock = new CommandBlock();
-
-		for (String perm : this.permissions) {
-			newBlock.addPermission(perm);
-		}
-
-		for (String cmd : this.commands) {
-			newBlock.addCommand(cmd);
-		}
 
 		if (this.hasTimer()) {
 			newBlock.setTimeBeforeExecution(this.timeBeforeExecution);

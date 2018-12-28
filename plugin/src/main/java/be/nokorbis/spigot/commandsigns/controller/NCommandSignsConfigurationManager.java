@@ -1,5 +1,6 @@
 package be.nokorbis.spigot.commandsigns.controller;
 
+import be.nokorbis.spigot.commandsigns.api.addons.AddonConfigurationData;
 import be.nokorbis.spigot.commandsigns.api.menu.EditionMenu;
 import be.nokorbis.spigot.commandsigns.api.menu.MenuNavigationContext;
 import be.nokorbis.spigot.commandsigns.model.CommandBlock;
@@ -66,10 +67,20 @@ public class NCommandSignsConfigurationManager {
 	}
 
 	public boolean handleCommandInput(String command) {
+		EditionMenu<CommandBlock> coreMenu = navigationContext.getCoreMenu();
+		if (coreMenu != null) {
+			coreMenu.input(editor, commandBlock, command, navigationContext);
+			return true;
+		}
 		return false;
 	}
 
 	public boolean handleChatInput(String message) {
+		EditionMenu<CommandBlock> coreMenu = navigationContext.getCoreMenu();
+		if (coreMenu != null) {
+			coreMenu.input(editor, commandBlock, message, navigationContext);
+			return true;
+		}
 		return false;
 	}
 }
