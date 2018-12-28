@@ -10,7 +10,7 @@ public abstract class EditionLeaf<EDITABLE extends MenuEditable> extends Edition
 
     @Override
     public final String getDisplayString(EDITABLE data) {
-        return super.getDisplayString(data)+" - ["+ChatColor.GOLD+getDataString(data) + "]";
+        return name + " - [" + ChatColor.GOLD + getDataString(data) + "]";
     }
 
     public abstract String getDataString(EDITABLE data);

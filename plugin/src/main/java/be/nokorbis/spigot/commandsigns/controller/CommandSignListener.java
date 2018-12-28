@@ -38,6 +38,7 @@ public class CommandSignListener implements Listener {
 			boolean treated = configurationManager.handleCommandInput(event.getMessage());
 			if (treated) {
 				event.setCancelled(true);
+				configurationManager.display();
 			}
 		}
 	}
@@ -50,6 +51,7 @@ public class CommandSignListener implements Listener {
 			if (treated) {
 				event.getRecipients().clear();
 				event.setCancelled(true);
+				configurationManager.display();
 			}
 		}
 	}

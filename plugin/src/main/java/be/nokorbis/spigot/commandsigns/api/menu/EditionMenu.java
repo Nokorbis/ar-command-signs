@@ -56,8 +56,8 @@ public abstract class EditionMenu<EDITABLE extends MenuEditable> {
     }
 
     protected final  void displayBreadcrumb(final Player editor) {
-        String divider = Messages.get("breadcrumb.divider");
-        String nameColor = Messages.get("breadcrumb.name_color");
+        final String divider = messages.get("breadcrumb.divider");
+        final String nameColor = messages.get("breadcrumb.name_color");
         StringBuilder sb = new StringBuilder();
 
         EditionMenu<EDITABLE> currentMenu = this;

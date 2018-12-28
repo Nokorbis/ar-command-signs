@@ -34,6 +34,6 @@ public class MenuTemporaryPermissions extends EditionNode<AddonConfigurationData
 			editor.sendMessage(msg);
 		}
 
-		displaySubMenus(editor, data, navigationContext);
+		displayMenus(editor, data, navigationContext);
 	}
 }

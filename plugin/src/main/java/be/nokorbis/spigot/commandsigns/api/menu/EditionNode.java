@@ -1,82 +1,115 @@
 package be.nokorbis.spigot.commandsigns.api.menu;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
-import be.nokorbis.spigot.commandsigns.utils.Messages;
 import org.bukkit.entity.Player;
 
-public abstract class EditionNode<EDITABLE extends MenuEditable> extends EditionMenu<EDITABLE> {
 
-    protected final List<EditionMenu<EDITABLE>> menus;
+public abstract class EditionNode <EDITABLE extends MenuEditable> extends EditionMenu<EDITABLE> {
 
-    private boolean displayPageNavigation = false;
-    private int entriesToDisplay = 6;
+	protected static final int REFRESH = 0;
+	protected static final int PREVIOUS = 7;
+	protected static final int NEXT = 8;
+	protected static final int DONE = 9;
 
-    public EditionNode(String name, EditionMenu<EDITABLE> parent) {
-        super(name, parent);
-        this.menus = new ArrayList<>();
-        initializeSubMenus();
-        initializeNavigation();
-    }
+	protected static final ClickableMessage clickableMessageRefresh  = new ClickableMessage(messages.get("menu.entry.refresh"), String.valueOf(REFRESH));
+	protected static final ClickableMessage clickableMessageDone     = new ClickableMessage(messages.get("menu.entry.done"), String.valueOf(DONE));
+	protected static final ClickableMessage clickableMessagePrevious = new ClickableMessage(messages.get("menu.entry.previous"), String.valueOf(PREVIOUS));
+	protected static final ClickableMessage clickableMessageNext     = new ClickableMessage(messages.get("menu.entry.next"), String.valueOf(NEXT));
 
-    public EditionNode(String name) {
-        this(name, null);
-    }
+	protected final List<EditionMenu<EDITABLE>> menus;
 
-    public void addMenu(EditionMenu<EDITABLE> menu) {
-        menus.add(menu);
-    }
+	private boolean displayPageNavigation = false;
+	private int     entriesToDisplay      = 6;
 
-    protected abstract void initializeSubMenus();
+	public EditionNode(String name, EditionMenu<EDITABLE> parent) {
+		super(name, parent);
+		this.menus = new ArrayList<>();
+		initializeSubMenus();
+		initializeNavigation();
+	}
 
-    private void initializeNavigation() {
-        if (menus.size() > 8) {
-            displayPageNavigation = true;
-            entriesToDisplay = 6;
-        }
-        else {
-            displayPageNavigation = false;
-            entriesToDisplay = menus.size();
-        }
-    }
+	public EditionNode(String name) {
+		this(name, null);
+	}
 
-    @Override
-    public void display(final Player editor, final EDITABLE data, final MenuNavigationContext navigationContext) {
-        displayBreadcrumb(editor);
+	public void addMenu(EditionMenu<EDITABLE> menu) {
+		menus.add(menu);
+	}
 
-        displaySubMenus(editor, data, navigationContext);
-    }
+	protected abstract void initializeSubMenus();
 
-    protected final void displaySubMenus(Player editor, EDITABLE data, MenuNavigationContext navigationContext) {
-        editor.sendMessage(Messages.get("menu.entry.refresh"));
+	private void initializeNavigation() {
+		if (menus.size() > 8) {
+			displayPageNavigation = true;
+			entriesToDisplay = 6;
+		}
+		else {
+			displayPageNavigation = false;
+			entriesToDisplay = menus.size();
+		}
+	}
 
-        final int page = navigationContext.getPage();
-        final int startingIndex = (page-1) * entriesToDisplay;
+	protected final int getNumberEntriesToDisplay() {
+		return entriesToDisplay;
+	}
 
-        ListIterator<EditionMenu<EDITABLE>> menuIterator = menus.listIterator(startingIndex);
-        for (int i = 1; i <= entriesToDisplay && menuIterator.hasNext(); i++) {
-            EditionMenu<EDITABLE> menu = menuIterator.next();
-            ClickableMessage message = new ClickableMessage(menu.getDisplayString(data), String.valueOf(i));
-            editor.spigot().sendMessage(message.asTextComponent());
-        }
+	protected final boolean shouldDisplayNavigation() {
+		return displayPageNavigation;
+	}
 
-        if (displayPageNavigation) {
-            editor.sendMessage(Messages.get("menu.entry.previous"));
-            editor.sendMessage(Messages.get("menu.entry.next"));
-        }
-        editor.sendMessage(Messages.get("menu.entry.done"));
-    }
+	@Override
+	public void display(final Player editor, final EDITABLE data, final MenuNavigationContext navigationContext) {
+		displayBreadcrumb(editor);
+		displayMenus(editor, data, navigationContext);
+	}
 
-    @Override
-    public void input(final Player player, final EDITABLE data, final String message, final MenuNavigationContext navigationResult) {
+	protected void displayMenus(Player editor, EDITABLE data, MenuNavigationContext navigationContext) {
+		clickableMessageRefresh.sendToPlayer(editor);
 
-    }
+		displaySubmenus(editor, data, navigationContext);
+		displayPageNavigation(editor, navigationContext.getPage());
 
-    /**
-     * Action to take when an edition is about to end
-     */
-    public boolean complete(final Player player, final EDITABLE data) {
-        return true;
-    }
+		clickableMessageDone.sendToPlayer(editor);
+	}
+
+	protected final void displaySubmenus(Player editor, EDITABLE data, MenuNavigationContext navigationContext) {
+		final int page = navigationContext.getPage();
+		final int startingIndex = (page - 1) * entriesToDisplay;
+
+		ListIterator<EditionMenu<EDITABLE>> menuIterator = menus.listIterator(startingIndex);
+		for (int i = 1 ; i <= entriesToDisplay && menuIterator.hasNext() ; i++) {
+			final EditionMenu<EDITABLE> menu = menuIterator.next();
+			final String index = String.valueOf(i);
+
+			final String message = menu.getDisplayString(data).replace("{INDEX}", index);
+			ClickableMessage display = new ClickableMessage(message, index);
+			display.sendToPlayer(editor);
+		}
+	}
+
+	protected void displayPageNavigation(final Player editor, final int page) {
+		if (displayPageNavigation) {
+			if (page > 1) {
+				clickableMessagePrevious.sendToPlayer(editor);
+			}
+			if ((page * entriesToDisplay) < menus.size()) {
+				clickableMessageNext.sendToPlayer(editor);
+			}
+		}
+	}
+
+	@Override
+	public void input(final Player player, final EDITABLE data, final String message, final MenuNavigationContext navigationResult) {
+		System.out.println("Edition node input not reimplemented in: " + getName());
+	}
+
+	/**
+	 * Action to take when an edition is about to end
+	 */
+	public boolean complete(final Player player, final EDITABLE data) {
+		return true;
+	}
 }

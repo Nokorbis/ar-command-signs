@@ -1,10 +1,6 @@
 package be.nokorbis.spigot.commandsigns.addons.commands.menus;
 
 import be.nokorbis.spigot.commandsigns.addons.commands.data.CommandsConfigurationData;
-import be.nokorbis.spigot.commandsigns.addons.requiredpermissions.data.RequiredPermissionsConfigurationData;
-import be.nokorbis.spigot.commandsigns.addons.requiredpermissions.menus.MenuRequiredPermissionsAdd;
-import be.nokorbis.spigot.commandsigns.addons.requiredpermissions.menus.MenuRequiredPermissionsEdit;
-import be.nokorbis.spigot.commandsigns.addons.requiredpermissions.menus.MenuRequiredPermissionsRemove;
 import be.nokorbis.spigot.commandsigns.api.addons.AddonConfigurationData;
 import be.nokorbis.spigot.commandsigns.api.menu.EditionNode;
 import be.nokorbis.spigot.commandsigns.api.menu.MenuNavigationContext;
@@ -38,6 +34,6 @@ public class MenuCommands extends EditionNode<AddonConfigurationData> {
 			editor.sendMessage(msg);
 		}
 
-		displaySubMenus(editor, data, navigationContext);
+		displayMenus(editor, data, navigationContext);
 	}
 }

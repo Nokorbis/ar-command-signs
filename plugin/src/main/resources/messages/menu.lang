@@ -1,6 +1,12 @@
 breadcrumb.divider          = §e > §r
 breadcrumb.name_color       = §9
 menu.entry.refresh          = §b0. Refresh
+menu.entry.display          = §b{INDEX}. {NAME}§r - [§6{VALUE}§r]
+menu.entry.display_name_only= §b{INDEX}. {NAME}
 menu.entry.previous         = §e7. Previous
 menu.entry.next             = §e8. Next
 menu.entry.done             = §a9. Done
+menu.title.main             = Main
+menu.block_selection        = §b   Block: §6{VALUE}§r
+menu.no_block               = [Set on right click]
+menu.block_format           = {X}-{Z}({Y})

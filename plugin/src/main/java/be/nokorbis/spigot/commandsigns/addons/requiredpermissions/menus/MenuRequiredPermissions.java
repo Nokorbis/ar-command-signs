@@ -34,6 +34,6 @@ public class MenuRequiredPermissions extends EditionNode<AddonConfigurationData>
 			editor.sendMessage(msg);
 		}
 
-		displaySubMenus(editor, data, navigationContext);
+		displayMenus(editor, data, navigationContext);
 	}
 }

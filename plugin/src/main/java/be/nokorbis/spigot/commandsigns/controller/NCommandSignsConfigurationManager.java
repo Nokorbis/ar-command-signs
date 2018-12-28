@@ -1,5 +1,6 @@
 package be.nokorbis.spigot.commandsigns.controller;
 
+import be.nokorbis.spigot.commandsigns.addons.commands.menus.MenuCommandsAdd;
 import be.nokorbis.spigot.commandsigns.api.addons.AddonConfigurationData;
 import be.nokorbis.spigot.commandsigns.api.menu.EditionMenu;
 import be.nokorbis.spigot.commandsigns.api.menu.MenuNavigationContext;
@@ -68,7 +69,8 @@ public class NCommandSignsConfigurationManager {
 
 	public boolean handleCommandInput(String command) {
 		EditionMenu<CommandBlock> coreMenu = navigationContext.getCoreMenu();
-		if (coreMenu != null) {
+		EditionMenu<AddonConfigurationData> addonMenu = navigationContext.getAddonMenu();
+		if (coreMenu != null && addonMenu instanceof MenuCommandsAdd) {
 			coreMenu.input(editor, commandBlock, command, navigationContext);
 			return true;
 		}
