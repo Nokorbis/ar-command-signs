@@ -9,16 +9,6 @@ import org.bukkit.entity.Player;
 
 public abstract class EditionNode <EDITABLE extends MenuEditable> extends EditionMenu<EDITABLE> {
 
-	protected static final int REFRESH = 0;
-	protected static final int PREVIOUS = 7;
-	protected static final int NEXT = 8;
-	protected static final int DONE = 9;
-
-	protected static final ClickableMessage clickableMessageRefresh  = new ClickableMessage(messages.get("menu.entry.refresh"), String.valueOf(REFRESH));
-	protected static final ClickableMessage clickableMessageDone     = new ClickableMessage(messages.get("menu.entry.done"), String.valueOf(DONE));
-	protected static final ClickableMessage clickableMessagePrevious = new ClickableMessage(messages.get("menu.entry.previous"), String.valueOf(PREVIOUS));
-	protected static final ClickableMessage clickableMessageNext     = new ClickableMessage(messages.get("menu.entry.next"), String.valueOf(NEXT));
-
 	protected final List<EditionMenu<EDITABLE>> menus;
 
 	private boolean displayPageNavigation = false;

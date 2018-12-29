@@ -1,12 +1,40 @@
-breadcrumb.divider          = §e > §r
-breadcrumb.name_color       = §9
-menu.entry.refresh          = §b0. Refresh
-menu.entry.display          = §b{INDEX}. {NAME}§r - [§6{VALUE}§r]
-menu.entry.display_name_only= §b{INDEX}. {NAME}
-menu.entry.previous         = §e7. Previous
-menu.entry.next             = §e8. Next
-menu.entry.done             = §a9. Done
-menu.title.main             = Main
-menu.block_selection        = §b   Block: §6{VALUE}§r
-menu.no_block               = [Set on right click]
-menu.block_format           = {X}-{Z}({Y})
+breadcrumb.divider      = §e > §r
+breadcrumb.name_color   = §9
+
+menu.entry.refresh              = §b0. Refresh
+menu.entry.display              = §b{INDEX}. {NAME}§r - [§6{VALUE}§r]
+menu.entry.display_name_only    = §b{INDEX}. {NAME}
+menu.entry.previous             = §e7. Previous
+menu.entry.next                 = §e8. Next
+menu.entry.done                 = §a9. Done
+menu.entry.cancel               = §3(Click here to cancel)§r
+menu.entry.number_required      = &cYou must enter a number to browse the menu.
+
+menu.value.yes  = Yes
+menu.value.no   = No
+
+menu.block_selection    = §b  Block: §6{VALUE}§r
+menu.no_block           = §r[§6Set on right click§r]
+menu.block_format       = {X}-{Z}({Y})
+
+menu.main.title                 = Main
+menu.disable.title              = Disabled
+menu.disable.edit               = §eEnter if the command block should be disabled or not. (true/yes - false/no)
+
+menu.name.title     = Name
+menu.name.no_name   = No Name
+menu.name.edit      = §eEnter the name of the command block (currently: §b{NAME}§e):
+
+menu.timer.title                = Timer
+menu.timer.time_to_wait.title   = Time
+menu.timer.time_to_wait.edit    = §eEnter the amount of time (in seconds) that the player must wait before the execution of the command:
+menu.timer.cancel.title         = Cancel on move
+menu.timer.cancel.edit          = §eShould the timer be cancelled when the player moves ? §d(Yes/No)
+menu.timer.reset.title          = Reset on move
+menu.timer.reset.edit           = §eShould the timer be reset when the player moves ? §d(Yes/No)
+
+menu.requirements.title = Requirements
+menu.costs.title        = Costs
+menu.executions.title   = Executions
+
+

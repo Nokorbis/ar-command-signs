@@ -2,11 +2,11 @@ package be.nokorbis.spigot.commandsigns.menus;
 
 import be.nokorbis.spigot.commandsigns.api.addons.Addon;
 import be.nokorbis.spigot.commandsigns.api.addons.AddonConfigurationData;
+import be.nokorbis.spigot.commandsigns.api.menu.ClickableMessage;
 import be.nokorbis.spigot.commandsigns.api.menu.EditionLeaf;
 import be.nokorbis.spigot.commandsigns.api.menu.EditionMenu;
 import be.nokorbis.spigot.commandsigns.api.menu.MenuNavigationContext;
 import be.nokorbis.spigot.commandsigns.model.CommandBlock;
-import be.nokorbis.spigot.commandsigns.utils.Messages;
 import org.bukkit.entity.Player;
 
 import java.util.Iterator;
@@ -20,14 +20,21 @@ public abstract class CoreAddonSubmenusHandler extends EditionLeaf<CommandBlock>
 
 	private boolean displayPageNavigation = false;
 	private int entriesToDisplay = 6;
+	private int totalMenuCount = 0;
 
 	public CoreAddonSubmenusHandler(String name, EditionMenu<CommandBlock> parent) {
 		super(name, parent);
 	}
 
 	@Override
-	public String getDataString(CommandBlock data) {
-		return name;
+	public String getDisplayString(CommandBlock data) {
+		return messages.get("menu.entry.display_name_only")
+					   .replace("{NAME}", name);
+	}
+
+	@Override
+	public String getDataValue(CommandBlock data) {
+		return "";
 	}
 
 	public void setSubMenusByAddon(Map<Addon, List<EditionMenu<AddonConfigurationData>>> menus) {
@@ -36,19 +43,19 @@ public abstract class CoreAddonSubmenusHandler extends EditionLeaf<CommandBlock>
 	}
 
 	private void initializeNavigation() {
-		int count = 0;
+		totalMenuCount = 0;
 		if (subMenusByAddon != null) {
 			for (List<EditionMenu<AddonConfigurationData>> list : subMenusByAddon.values()) {
-				count += list.size();
+				totalMenuCount += list.size();
 			}
 		}
-		if (count > 8) {
+		if (totalMenuCount > 8) {
 			displayPageNavigation = true;
 			entriesToDisplay = 6;
 		}
 		else {
 			displayPageNavigation = false;
-			entriesToDisplay = count;
+			entriesToDisplay = totalMenuCount;
 		}
 	}
 
@@ -60,7 +67,7 @@ public abstract class CoreAddonSubmenusHandler extends EditionLeaf<CommandBlock>
 	}
 
 	protected final void displaySubMenus(Player editor, CommandBlock data, MenuNavigationContext navigationContext) {
-		editor.sendMessage(Messages.get("menu.entry.refresh"));
+		clickableMessageRefresh.sendToPlayer(editor);
 
 		final int page = navigationContext.getPage();
 		final int startingIndex = (page-1) * entriesToDisplay;
@@ -69,6 +76,7 @@ public abstract class CoreAddonSubmenusHandler extends EditionLeaf<CommandBlock>
 		Iterator<Map.Entry<Addon, List<EditionMenu<AddonConfigurationData>>>> menuIterator = subMenusByAddon.entrySet().iterator();
 		for (int i = 0; i < endIndex && menuIterator.hasNext(); ) {
 			if (startingIndex <= i && i < endIndex) {
+				final String index = String.valueOf( i-startingIndex );
 				Map.Entry<Addon, List<EditionMenu<AddonConfigurationData>>> entry = menuIterator.next();
 				Addon addon = entry.getKey();
 				List<EditionMenu<AddonConfigurationData>> menus = entry.getValue();
@@ -76,17 +84,28 @@ public abstract class CoreAddonSubmenusHandler extends EditionLeaf<CommandBlock>
 					if (i >= endIndex) {
 						break;
 					}
-					editor.sendMessage(menu.getDisplayString(data.getAddonConfigurationData(addon)));
+					AddonConfigurationData confData = data.getAddonConfigurationData(addon);
+					final String message = menu.getDisplayString(confData).replace("{INDEX}", index);
+					ClickableMessage display = new ClickableMessage(message, index);
+					display.sendToPlayer(editor);
 					i++;
 				}
 			}
 		}
 
+		displayNavigation(editor, page);
+		clickableMessageDone.sendToPlayer(editor);
+	}
+
+	private void displayNavigation(Player editor, int page) {
 		if (displayPageNavigation) {
-			editor.sendMessage(Messages.get("menu.entry.previous"));
-			editor.sendMessage(Messages.get("menu.entry.next"));
+			if (page > 1) {
+				clickableMessagePrevious.sendToPlayer(editor);
+			}
+			if ((page * entriesToDisplay) < totalMenuCount) {
+				clickableMessageNext.sendToPlayer(editor);
+			}
 		}
-		editor.sendMessage(Messages.get("menu.entry.done"));
 	}
 
 	@Override

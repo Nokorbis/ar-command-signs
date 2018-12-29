@@ -8,7 +8,7 @@ import be.nokorbis.spigot.commandsigns.utils.Messages;
 public class CoreMenuExecutions extends CoreAddonSubmenusHandler {
 
 	public CoreMenuExecutions(EditionMenu<CommandBlock> parent) {
-		super(Messages.get("menu.executions_title"), parent);
+		super(messages.get("menu.executions.title"), parent);
 	}
 
 }

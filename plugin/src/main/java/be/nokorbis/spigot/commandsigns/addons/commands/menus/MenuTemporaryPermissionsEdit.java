@@ -17,7 +17,7 @@ public class MenuTemporaryPermissionsEdit extends EditionLeaf<AddonConfiguration
 	}
 
 	@Override
-	public String getDataString(AddonConfigurationData data) {
+	public String getDataValue(AddonConfigurationData data) {
 		return name;
 	}
 

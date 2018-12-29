@@ -19,7 +19,7 @@ public class MenuEconomy extends EditionLeaf<AddonConfigurationData> {
 	}
 
 	@Override
-	public String getDataString(AddonConfigurationData data) {
+	public String getDataValue(AddonConfigurationData data) {
 		EconomyConfigurationData configurationData = (EconomyConfigurationData) data;
 		return name.replace("{PRICE}", economy.format(configurationData.getPrice()));
 	}

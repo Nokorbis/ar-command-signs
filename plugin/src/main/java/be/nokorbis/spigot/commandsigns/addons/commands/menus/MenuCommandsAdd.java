@@ -17,7 +17,7 @@ public class MenuCommandsAdd extends EditionLeaf<AddonConfigurationData> {
 	}
 
 	@Override
-	public String getDataString(AddonConfigurationData data) {
+	public String getDataValue(AddonConfigurationData data) {
 		return name;
 	}
 

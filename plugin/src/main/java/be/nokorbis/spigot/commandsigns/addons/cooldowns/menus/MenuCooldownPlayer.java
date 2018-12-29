@@ -16,7 +16,7 @@ public class MenuCooldownPlayer extends EditionLeaf<AddonConfigurationData> {
 	}
 
 	@Override
-	public String getDataString(AddonConfigurationData data) {
+	public String getDataValue(AddonConfigurationData data) {
 		CooldownConfigurationData configurationData = (CooldownConfigurationData) data;
 		return name.replace("{TIME}", String.valueOf(configurationData.getPlayerCooldown()));
 	}

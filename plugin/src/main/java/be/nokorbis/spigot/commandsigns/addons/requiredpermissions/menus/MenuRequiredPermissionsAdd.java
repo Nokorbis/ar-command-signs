@@ -16,7 +16,7 @@ public class MenuRequiredPermissionsAdd extends EditionLeaf<AddonConfigurationDa
 	}
 
 	@Override
-	public String getDataString(AddonConfigurationData data) {
+	public String getDataValue(AddonConfigurationData data) {
 		return name;
 	}
 

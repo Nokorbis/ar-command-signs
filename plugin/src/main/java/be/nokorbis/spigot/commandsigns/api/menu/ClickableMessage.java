@@ -23,6 +23,10 @@ public class ClickableMessage {
 		}
 	}
 
+	public void add(ClickableMessage clickableMessage) {
+		textComponent.addExtra(clickableMessage.textComponent);
+	}
+
 	public TextComponent asTextComponent() {
 		return textComponent;
 	}

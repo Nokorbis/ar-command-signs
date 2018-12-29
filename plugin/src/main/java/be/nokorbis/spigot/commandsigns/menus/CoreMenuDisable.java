@@ -1,5 +1,6 @@
 package be.nokorbis.spigot.commandsigns.menus;
 
+import be.nokorbis.spigot.commandsigns.api.menu.ClickableMessage;
 import be.nokorbis.spigot.commandsigns.api.menu.EditionLeaf;
 import be.nokorbis.spigot.commandsigns.api.menu.EditionMenu;
 import be.nokorbis.spigot.commandsigns.api.menu.MenuNavigationContext;
@@ -11,35 +12,40 @@ import org.bukkit.entity.Player;
 public class CoreMenuDisable extends EditionLeaf<CommandBlock> {
 
 	public CoreMenuDisable(EditionMenu<CommandBlock> parent) {
-		super(Messages.get("menu.disabled"), parent);
+		super(messages.get("menu.disable.title"), parent);
 	}
 
 	@Override
-	public String getDataString(CommandBlock data) {
-		return name.replace("{VALUE}", String.valueOf(data.isDisabled()));
+	public String getDataValue(CommandBlock data) {
+		if (data.isDisabled()) {
+			return messages.get("menu.value.yes");
+		}
+		return messages.get("menu.value.no");
 	}
 
 	@Override
 	public void display(Player editor, CommandBlock data, MenuNavigationContext navigationResult) {
-		String msg = Messages.get("menu.disabled_edit");
-		editor.sendMessage(msg);
+		String msg = messages.get("menu.disable.edit");
+		ClickableMessage clickableMessage = new ClickableMessage(msg, null);
+		clickableMessage.add(CLICKABLE_CANCEL);
+		clickableMessage.sendToPlayer(editor);
 	}
 
 	@Override
 	public void input(final Player player, final CommandBlock data, final String message, final MenuNavigationContext navigationResult) {
-		try
-		{
-			String[] args = message.split(" ");
-			String val = args[0].toLowerCase();
-			if (val.equals("yes") || val.equals("true")) {
-				data.setDisabled(true);
-			}
-			else {
-				data.setDisabled(false);
+		try {
+			if (!CANCEL_STRING.equals(message)) {
+				String[] args = message.split(" ");
+				String val = args[0].toUpperCase();
+				if ("Y".equals(val) || "YES".equals(val) || "TRUE".equals(val)) {
+					data.setDisabled(true);
+				}
+				else {
+					data.setDisabled(false);
+				}
 			}
 		}
-		catch (Exception ignored)
-		{
+		catch (Exception ignored) {
 		}
 		finally {
 			navigationResult.setCoreMenu(getParent());
