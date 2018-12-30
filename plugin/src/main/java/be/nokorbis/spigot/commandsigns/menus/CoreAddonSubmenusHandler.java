@@ -2,10 +2,7 @@ package be.nokorbis.spigot.commandsigns.menus;
 
 import be.nokorbis.spigot.commandsigns.api.addons.Addon;
 import be.nokorbis.spigot.commandsigns.api.addons.AddonConfigurationData;
-import be.nokorbis.spigot.commandsigns.api.menu.ClickableMessage;
-import be.nokorbis.spigot.commandsigns.api.menu.EditionLeaf;
-import be.nokorbis.spigot.commandsigns.api.menu.EditionMenu;
-import be.nokorbis.spigot.commandsigns.api.menu.MenuNavigationContext;
+import be.nokorbis.spigot.commandsigns.api.menu.*;
 import be.nokorbis.spigot.commandsigns.model.CommandBlock;
 import org.bukkit.entity.Player;
 
@@ -16,7 +13,7 @@ import java.util.Map;
 
 public abstract class CoreAddonSubmenusHandler extends EditionLeaf<CommandBlock> {
 
-	protected Map<Addon, List<EditionMenu<AddonConfigurationData>>> subMenusByAddon = null;
+	protected Map<Addon, List<AddonEditionMenu>> subMenusByAddon = null;
 
 	private boolean displayPageNavigation = false;
 	private int entriesToDisplay = 6;
@@ -37,7 +34,7 @@ public abstract class CoreAddonSubmenusHandler extends EditionLeaf<CommandBlock>
 		return "";
 	}
 
-	public void setSubMenusByAddon(Map<Addon, List<EditionMenu<AddonConfigurationData>>> menus) {
+	public void setSubMenusByAddon(Map<Addon, List<AddonEditionMenu>> menus) {
 		this.subMenusByAddon = menus;
 		initializeNavigation();
 	}
@@ -45,7 +42,7 @@ public abstract class CoreAddonSubmenusHandler extends EditionLeaf<CommandBlock>
 	private void initializeNavigation() {
 		totalMenuCount = 0;
 		if (subMenusByAddon != null) {
-			for (List<EditionMenu<AddonConfigurationData>> list : subMenusByAddon.values()) {
+			for (List<AddonEditionMenu> list : subMenusByAddon.values()) {
 				totalMenuCount += list.size();
 			}
 		}
@@ -61,9 +58,14 @@ public abstract class CoreAddonSubmenusHandler extends EditionLeaf<CommandBlock>
 
 	@Override
 	public void display(Player editor, CommandBlock data, MenuNavigationContext navigationContext) {
-		displayBreadcrumb(editor);
-
-		displaySubMenus(editor, data, navigationContext);
+		AddonEditionMenu addonMenu = navigationContext.getAddonMenu();
+		if (addonMenu == null) {
+			displayBreadcrumb(editor);
+			displaySubMenus(editor, data, navigationContext);
+		}
+		else {
+			addonMenu.display(editor, data.getAddonConfigurationData(addonMenu.getAddon()), navigationContext);
+		}
 	}
 
 	protected final void displaySubMenus(Player editor, CommandBlock data, MenuNavigationContext navigationContext) {
@@ -73,13 +75,13 @@ public abstract class CoreAddonSubmenusHandler extends EditionLeaf<CommandBlock>
 		final int startingIndex = (page-1) * entriesToDisplay;
 		final int endIndex = startingIndex + entriesToDisplay;
 
-		Iterator<Map.Entry<Addon, List<EditionMenu<AddonConfigurationData>>>> menuIterator = subMenusByAddon.entrySet().iterator();
+		Iterator<Map.Entry<Addon, List<AddonEditionMenu>>> menuIterator = subMenusByAddon.entrySet().iterator();
 		for (int i = 0; i < endIndex && menuIterator.hasNext(); ) {
 			if (startingIndex <= i && i < endIndex) {
-				final String index = String.valueOf( i-startingIndex );
-				Map.Entry<Addon, List<EditionMenu<AddonConfigurationData>>> entry = menuIterator.next();
+				final String index = String.valueOf( i-startingIndex+1 );
+				Map.Entry<Addon, List<AddonEditionMenu>> entry = menuIterator.next();
 				Addon addon = entry.getKey();
-				List<EditionMenu<AddonConfigurationData>> menus = entry.getValue();
+				List<AddonEditionMenu> menus = entry.getValue();
 				for (EditionMenu<AddonConfigurationData> menu : menus) {
 					if (i >= endIndex) {
 						break;
@@ -110,6 +112,51 @@ public abstract class CoreAddonSubmenusHandler extends EditionLeaf<CommandBlock>
 
 	@Override
 	public void input(Player player, CommandBlock data, String message, MenuNavigationContext navigationContext) {
+		try {
+			final int choice = Integer.parseInt(message);
+			final int page = navigationContext.getPage();
+			AddonEditionMenu menu = navigationContext.getAddonMenu();
+			if (menu == null) {
+				if(0 < choice && choice <= entriesToDisplay) {
+					navigationContext.setPage(1);
+					AddonEditionMenu submenu = getSubmenus(page, choice);
+					if (submenu != null) {
+						navigationContext.setAddonMenu(submenu);
+					}
+				}
+				else if (choice == DONE) {
+					navigationContext.setPage(1);
+					navigationContext.setCoreMenu(getParent());
+				}
+				else if (displayPageNavigation) {
+					if (choice == NEXT && totalMenuCount > ((page) * entriesToDisplay)) {
+						navigationContext.setPage(page+1);
+					}
+					else if (choice == PREVIOUS && page > 1) {
+						navigationContext.setPage(page-1);
+					}
+				}
+			}
+			else {
+				menu.input(player, data.getAddonConfigurationData(menu.getAddon()), message, navigationContext);
+			}
+		}
+		catch(NumberFormatException e) {
+			player.sendMessage(messages.get("menu.entry.number_required"));
+		}
+	}
 
+	private AddonEditionMenu getSubmenus(final int page, final int index) {
+		final int actualIndex = (page-1) * entriesToDisplay + (index-1);
+		int i = 0;
+		for (Map.Entry<Addon, List<AddonEditionMenu>> addonMenus : subMenusByAddon.entrySet()) {
+			List<AddonEditionMenu> menus = addonMenus.getValue();
+			if (i + menus.size() <= actualIndex) {
+				i+= menus.size();
+				continue;
+			}
+			return menus.get(actualIndex - i);
+		}
+		return null;
 	}
 }

@@ -6,6 +6,17 @@ import org.bukkit.entity.Player;
 
 public class AddonLifecycleHookerBase implements AddonLifecycleHooker {
 
+	protected Addon addon;
+
+	public AddonLifecycleHookerBase(Addon addon) {
+		this.addon = addon;
+	}
+
+	@Override
+	public Addon getAddon() {
+		return addon;
+	}
+
 	@Override
 	public void onStarted(Player player, AddonConfigurationData configurationData, AddonExecutionData executionData) {
 

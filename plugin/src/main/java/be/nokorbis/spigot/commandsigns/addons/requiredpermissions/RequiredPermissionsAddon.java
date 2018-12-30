@@ -14,13 +14,13 @@ public class RequiredPermissionsAddon extends AddonBase {
 
 	private static final String IDENTIFIER = "ncs_required_permissions";
 
-	private final RequiredPermissionsLifecycleHooker lifecycleHooker = new RequiredPermissionsLifecycleHooker();
-	private final MenuRequiredPermissions            editionMenu     = new MenuRequiredPermissions();
+	private final RequiredPermissionsLifecycleHooker lifecycleHooker = new RequiredPermissionsLifecycleHooker(this);
+	private final MenuRequiredPermissions            editionMenu     = new MenuRequiredPermissions(this);
 
 	private final RequiredPermissionsConfigurationDataPersister configurationDataTransformer = new RequiredPermissionsConfigurationDataPersister(this);
 
 	public RequiredPermissionsAddon(CommandSignsPlugin plugin) {
-		super(plugin, IDENTIFIER, "Required requiredpermissions");
+		super(plugin, IDENTIFIER, "Required permissions");
 	}
 
 	@Override

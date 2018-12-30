@@ -24,6 +24,10 @@ public class CooldownLifecycleHooker extends AddonLifecycleHookerBase {
 		decimalFormat.setMaximumFractionDigits(2);
 	}
 
+	public CooldownLifecycleHooker(CooldownAddon addon) {
+		super(addon);
+	}
+
 	@Override
 	@NCSLifecycleHook
 	public final void onRequirementCheck(final Player player, final AddonConfigurationData configurationData, final AddonExecutionData executionData) throws CommandSignsRequirementException {

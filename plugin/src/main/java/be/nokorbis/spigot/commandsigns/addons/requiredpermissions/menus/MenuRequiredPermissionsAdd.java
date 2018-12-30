@@ -1,34 +1,37 @@
 package be.nokorbis.spigot.commandsigns.addons.requiredpermissions.menus;
 
+import be.nokorbis.spigot.commandsigns.addons.requiredpermissions.RequiredPermissionsAddon;
 import be.nokorbis.spigot.commandsigns.addons.requiredpermissions.data.RequiredPermissionsConfigurationData;
 import be.nokorbis.spigot.commandsigns.api.addons.AddonConfigurationData;
-import be.nokorbis.spigot.commandsigns.api.menu.EditionLeaf;
-import be.nokorbis.spigot.commandsigns.api.menu.EditionMenu;
-import be.nokorbis.spigot.commandsigns.api.menu.MenuNavigationContext;
-import be.nokorbis.spigot.commandsigns.utils.Messages;
+import be.nokorbis.spigot.commandsigns.api.menu.*;
 import org.bukkit.entity.Player;
 
 
-public class MenuRequiredPermissionsAdd extends EditionLeaf<AddonConfigurationData> {
+public class MenuRequiredPermissionsAdd extends AddonEditionLeaf {
 
-	public MenuRequiredPermissionsAdd(EditionMenu<AddonConfigurationData> parent) {
-		super(Messages.get("menu.add"), parent);
+	public MenuRequiredPermissionsAdd(RequiredPermissionsAddon addon, AddonEditionMenu parent) {
+		super(addon, messages.get("menu.required_permissions.add.title"), parent);
 	}
 
 	@Override
 	public String getDataValue(AddonConfigurationData data) {
-		return name;
+		return "";
 	}
 
 	@Override
 	public void display(Player editor, AddonConfigurationData data, MenuNavigationContext navigationContext) {
-		editor.sendMessage(Messages.get("menu.enter_permission"));
+		String msg = messages.get("menu.required_permissions.add.edit");
+		ClickableMessage clickableMessage = new ClickableMessage(msg);
+		clickableMessage.add(CLICKABLE_CANCEL);
+		clickableMessage.sendToPlayer(editor);
 	}
 
 	@Override
 	public void input(Player player, AddonConfigurationData data, String message, MenuNavigationContext navigationContext) {
-		final RequiredPermissionsConfigurationData configurationData = (RequiredPermissionsConfigurationData) data;
-		configurationData.getRequiredPermissions().add(message);
+		if (!CANCEL_STRING.equals(message)) {
+			final RequiredPermissionsConfigurationData configurationData = (RequiredPermissionsConfigurationData) data;
+			configurationData.getRequiredPermissions().add(message);
+		}
 		navigationContext.setAddonMenu(getParent());
 	}
 }

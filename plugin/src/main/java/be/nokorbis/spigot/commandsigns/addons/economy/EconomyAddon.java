@@ -29,8 +29,8 @@ public class EconomyAddon extends AddonBase {
 			this.economy = plugin.getServer().getServicesManager().load(net.milkbowl.vault.economy.Economy.class);
 
 			if (this.economy != null) {
-				this.lifecycleHooker = new EconomyLifecycleHooker(economy);
-				this.editionMenu = new MenuEconomy(economy);
+				this.lifecycleHooker = new EconomyLifecycleHooker(this, economy);
+				this.editionMenu = new MenuEconomy(this, economy);
 				plugin.getLogger().info("Vault economy linked with command signs ! ");
 			}
 			else {

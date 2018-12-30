@@ -15,7 +15,8 @@ public class EconomyLifecycleHooker extends AddonLifecycleHookerBase {
 
 	private Economy economy;
 
-	public EconomyLifecycleHooker(Economy economy) {
+	public EconomyLifecycleHooker(EconomyAddon addon, Economy economy) {
+		super(addon);
 		this.economy = economy;
 	}
 

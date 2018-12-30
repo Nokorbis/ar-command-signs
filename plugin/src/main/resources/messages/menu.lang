@@ -7,8 +7,8 @@ menu.entry.display_name_only    = §b{INDEX}. {NAME}
 menu.entry.previous             = §e7. Previous
 menu.entry.next                 = §e8. Next
 menu.entry.done                 = §a9. Done
-menu.entry.cancel               = §3(Click here to cancel)§r
-menu.entry.number_required      = &cYou must enter a number to browse the menu.
+menu.entry.cancel               = §c(Click here to cancel)§r
+menu.entry.number_required      = §cYou must enter a number to browse the menu.
 
 menu.value.yes  = Yes
 menu.value.no   = No
@@ -36,5 +36,44 @@ menu.timer.reset.edit           = §eShould the timer be reset when the player m
 menu.requirements.title = Requirements
 menu.costs.title        = Costs
 menu.executions.title   = Executions
+
+menu.cooldowns.title        = Cooldowns
+menu.cooldowns.global.title = Global cooldown
+menu.cooldowns.player.title = Player cooldown
+menu.cooldowns.global.edit  = Enter the amount of time (in seconds) that players must wait between each usage:
+menu.cooldowns.player.edit  = Enter the amount of time (in seconds) that the player must wait between each usage:
+
+menu.economy.title  = Economy
+menu.economy.edit   = §eEnter the new economy needed for this command block (currently: §d{PRICE}§e):
+
+menu.required_permissions.title         = Required Permissions
+menu.required_permissions.display       = §eRequired permissions:
+menu.required_permissions.format        = §7---{NUMBER}. {PERMISSION}
+menu.required_permissions.add.title     = Add
+menu.required_permissions.add.edit      = §eEnter the permission string:
+menu.required_permissions.edit.title    = Edit
+menu.required_permissions.edit.edit     = §eEnter the §dindex of the permission §eyou want to edit §dfollowed by the new permission string§e:
+menu.required_permissions.remove.title  = Remove
+menu.required_permissions.remove.edit   = §eEnter the index of the permission you want to remove:
+
+menu.temporary_permissions.title         = Temporarily Granted Permissions
+menu.temporary_permissions.display       = §eTemporarily granted permissions:
+menu.temporary_permissions.format        = §7---{NUMBER}. {PERMISSION}
+menu.temporary_permissions.add.title     = Add
+menu.temporary_permissions.add.edit      = §eEnter the permission string:
+menu.temporary_permissions.edit.title    = Edit
+menu.temporary_permissions.edit.edit     = §eEnter the §dindex of the permission §eyou want to edit §dfollowed by the new permission string§e:
+menu.temporary_permissions.remove.title  = Remove
+menu.temporary_permissions.remove.edit   = §eEnter the index of the permission you want to remove:
+
+menu.commands.title         = Commands
+menu.commands.display       = §eCommands:
+menu.commands.format        = §7---{NUMBER}. {COMMAND}
+menu.commands.add.title     = Add
+menu.commands.add.edit      = §eEnter the command string:
+menu.commands.edit.title    = Edit
+menu.commands.edit.edit     = §eEnter the §dindex of the command §eyou want to edit §dfollowed by the new command string§e:
+menu.commands.remove.title  = Remove
+menu.commands.remove.edit   = §eEnter the index of the command you want to remove:
 
 

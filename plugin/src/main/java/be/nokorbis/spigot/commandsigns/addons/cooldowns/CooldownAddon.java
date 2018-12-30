@@ -14,8 +14,8 @@ public class CooldownAddon extends AddonBase {
 
 	private static final String IDENTIFIER = "ncs_cooldowns";
 
-	private final CooldownLifecycleHooker lifecycleHooker = new CooldownLifecycleHooker();
-	private final MenuCooldowns           editionMenu     = new MenuCooldowns();
+	private final CooldownLifecycleHooker lifecycleHooker = new CooldownLifecycleHooker(this);
+	private final MenuCooldowns           editionMenu     = new MenuCooldowns(this);
 
 	private final CooldownExecutionDataPersister     executionDataTransformer     = new CooldownExecutionDataPersister(this);
 	private final CooldownConfigurationDataPersister configurationDataTransformer = new CooldownConfigurationDataPersister(this);

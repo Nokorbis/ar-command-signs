@@ -1,6 +1,6 @@
 package be.nokorbis.spigot.commandsigns.api.addons;
 
-public abstract class AddonData {
+public abstract class AddonData implements AddonRelated {
 
 	protected final Addon addon;
 
@@ -8,6 +8,7 @@ public abstract class AddonData {
 		this.addon = addon;
 	}
 
+	@Override
 	public final Addon getAddon() {
 		return addon;
 	}

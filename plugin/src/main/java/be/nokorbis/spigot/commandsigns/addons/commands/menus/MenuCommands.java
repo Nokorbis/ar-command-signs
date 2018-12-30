@@ -1,24 +1,24 @@
 package be.nokorbis.spigot.commandsigns.addons.commands.menus;
 
+import be.nokorbis.spigot.commandsigns.addons.commands.CommandsAddon;
 import be.nokorbis.spigot.commandsigns.addons.commands.data.CommandsConfigurationData;
 import be.nokorbis.spigot.commandsigns.api.addons.AddonConfigurationData;
-import be.nokorbis.spigot.commandsigns.api.menu.EditionNode;
+import be.nokorbis.spigot.commandsigns.api.menu.AddonEditionNode;
 import be.nokorbis.spigot.commandsigns.api.menu.MenuNavigationContext;
-import be.nokorbis.spigot.commandsigns.utils.Messages;
 import org.bukkit.entity.Player;
 
 
-public class MenuCommands extends EditionNode<AddonConfigurationData> {
+public class MenuCommands extends AddonEditionNode {
 
-	public MenuCommands() {
-		super(Messages.get("menu.commands_title"));
+	public MenuCommands(CommandsAddon addon) {
+		super(addon, messages.get("menu.commands.title"));
 	}
 
 	@Override
 	protected void initializeSubMenus() {
-		addMenu(new MenuCommandsAdd(this));
-		addMenu(new MenuCommandsEdit(this));
-		addMenu(new MenuCommandsRemove(this));
+		addMenu(new MenuCommandsAdd((CommandsAddon) addon, this));
+		addMenu(new MenuCommandsEdit((CommandsAddon) addon, this));
+		addMenu(new MenuCommandsRemove((CommandsAddon) addon, this));
 	}
 
 	@Override
@@ -27,7 +27,7 @@ public class MenuCommands extends EditionNode<AddonConfigurationData> {
 
 		displayBreadcrumb(editor);
 
-		final String format = Messages.get("info.command_format");
+		final String format = messages.get("menu.commands.format");
 		int cpt = 1;
 		for (String perm : configurationData.getCommands()) {
 			String msg = format.replace("{NUMBER}", String.valueOf(cpt++)).replace("{COMMAND}", perm);

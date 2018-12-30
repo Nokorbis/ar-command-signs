@@ -22,6 +22,7 @@ public class CommandsLifecycleHooker extends AddonLifecycleHookerBase {
 	private final Map<UUID, PermissionAttachment> playersPermissions = new HashMap<>();
 
 	public CommandsLifecycleHooker(CommandsAddon addon) {
+		super(addon);
 		this.addon = addon;
 	}
 

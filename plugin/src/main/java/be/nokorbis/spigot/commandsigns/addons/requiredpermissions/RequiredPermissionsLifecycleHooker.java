@@ -1,10 +1,7 @@
 package be.nokorbis.spigot.commandsigns.addons.requiredpermissions;
 
 import be.nokorbis.spigot.commandsigns.addons.requiredpermissions.data.RequiredPermissionsConfigurationData;
-import be.nokorbis.spigot.commandsigns.api.addons.AddonConfigurationData;
-import be.nokorbis.spigot.commandsigns.api.addons.AddonExecutionData;
-import be.nokorbis.spigot.commandsigns.api.addons.AddonLifecycleHookerBase;
-import be.nokorbis.spigot.commandsigns.api.addons.NCSLifecycleHook;
+import be.nokorbis.spigot.commandsigns.api.addons.*;
 import be.nokorbis.spigot.commandsigns.api.exceptions.CommandSignsRequirementException;
 import be.nokorbis.spigot.commandsigns.utils.Messages;
 import org.bukkit.entity.Player;
@@ -13,6 +10,10 @@ import java.util.List;
 
 
 public class RequiredPermissionsLifecycleHooker extends AddonLifecycleHookerBase {
+
+	public RequiredPermissionsLifecycleHooker(RequiredPermissionsAddon addon) {
+		super(addon);
+	}
 
 	@Override
 	@NCSLifecycleHook

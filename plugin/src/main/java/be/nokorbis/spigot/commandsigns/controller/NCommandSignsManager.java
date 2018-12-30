@@ -35,7 +35,7 @@ public class NCommandSignsManager {
 	private final Map<UUID, NCommandSignsConfigurationManager> ncsConfigurationManagers = new HashMap<>();
 
 	private final CoreAddonSubmenusHolder addonSubmenus = new CoreAddonSubmenusHolder();
-	private final MainMenu                mainMenu      = new MainMenu(addonSubmenus);
+	private       MainMenu                mainMenu;
 
 	public NCommandSignsManager(CommandSignsPlugin plugin) {
 		this.logger = plugin.getLogger();
@@ -49,6 +49,10 @@ public class NCommandSignsManager {
 
 	public void registerAddon(Addon addon) {
 		this.registeredAddons.add(addon);
+	}
+
+	public void initializeMenus() {
+		mainMenu = new MainMenu(addonSubmenus);
 	}
 
 	public Set<Addon> getRegisteredAddons() {

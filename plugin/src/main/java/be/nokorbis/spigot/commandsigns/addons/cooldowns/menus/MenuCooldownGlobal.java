@@ -1,38 +1,41 @@
 package be.nokorbis.spigot.commandsigns.addons.cooldowns.menus;
 
 import be.nokorbis.spigot.commandsigns.addons.cooldowns.data.CooldownConfigurationData;
+import be.nokorbis.spigot.commandsigns.api.addons.Addon;
 import be.nokorbis.spigot.commandsigns.api.addons.AddonConfigurationData;
-import be.nokorbis.spigot.commandsigns.api.menu.EditionLeaf;
-import be.nokorbis.spigot.commandsigns.api.menu.EditionMenu;
-import be.nokorbis.spigot.commandsigns.api.menu.MenuNavigationContext;
-import be.nokorbis.spigot.commandsigns.utils.Messages;
+import be.nokorbis.spigot.commandsigns.api.menu.*;
 import org.bukkit.entity.Player;
 
 
-public class MenuCooldownGlobal extends EditionLeaf<AddonConfigurationData> {
+public class MenuCooldownGlobal extends AddonEditionLeaf {
 
-	public MenuCooldownGlobal(EditionMenu<AddonConfigurationData> parent) {
-		super(Messages.get("menu.cooldowns_global_title"), parent);
+	public MenuCooldownGlobal(final Addon addon, AddonEditionMenu parent) {
+		super(addon, messages.get("menu.cooldowns.global.title"), parent);
 	}
 
 	@Override
 	public String getDataValue(AddonConfigurationData data) {
 		CooldownConfigurationData configurationData = (CooldownConfigurationData) data;
-		return name.replace("{TIME}", String.valueOf(configurationData.getGlobalCooldown()));
+		return String.valueOf(configurationData.getGlobalCooldown());
 	}
 
 	@Override
 	public void display(Player editor, AddonConfigurationData data, MenuNavigationContext navigationContext) {
-		editor.sendMessage(Messages.get("menu.cooldown_global_time"));
+		final String msg = messages.get("menu.cooldowns.global.edit");
+		ClickableMessage clickableMessage = new ClickableMessage(msg);
+		clickableMessage.add(CLICKABLE_CANCEL);
+		clickableMessage.sendToPlayer(editor);
 	}
 
 	@Override
 	public void input(Player player, AddonConfigurationData data, String message, MenuNavigationContext navigationContext) {
 		try {
-			CooldownConfigurationData configurationData = (CooldownConfigurationData) data;
-			String[] args = message.split(" ", 2);
-			long duration = Long.parseLong(args[0]);
-			configurationData.setGlobalCooldown(duration);
+			if (!CANCEL_STRING.equals(message)) {
+				CooldownConfigurationData configurationData = (CooldownConfigurationData) data;
+				String[] args = message.split(" ", 2);
+				long duration = Long.parseLong(args[0]);
+				configurationData.setGlobalCooldown(duration);
+			}
 		}
 		catch (Exception ignored) {
 		}

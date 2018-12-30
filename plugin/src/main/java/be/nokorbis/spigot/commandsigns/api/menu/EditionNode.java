@@ -90,16 +90,4 @@ public abstract class EditionNode <EDITABLE extends MenuEditable> extends Editio
 			}
 		}
 	}
-
-	@Override
-	public void input(final Player player, final EDITABLE data, final String message, final MenuNavigationContext navigationResult) {
-		System.out.println("Edition node input not reimplemented in: " + getName());
-	}
-
-	/**
-	 * Action to take when an edition is about to end
-	 */
-	public boolean complete(final Player player, final EDITABLE data) {
-		return true;
-	}
 }

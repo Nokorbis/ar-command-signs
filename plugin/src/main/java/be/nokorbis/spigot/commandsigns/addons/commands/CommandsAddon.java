@@ -3,6 +3,8 @@ package be.nokorbis.spigot.commandsigns.addons.commands;
 import be.nokorbis.spigot.commandsigns.CommandSignsPlugin;
 import be.nokorbis.spigot.commandsigns.addons.commands.data.CommandsConfigurationData;
 import be.nokorbis.spigot.commandsigns.addons.commands.data.CommandsConfigurationDataPersister;
+import be.nokorbis.spigot.commandsigns.addons.commands.menus.MenuCommands;
+import be.nokorbis.spigot.commandsigns.addons.commands.menus.MenuTemporaryPermissions;
 import be.nokorbis.spigot.commandsigns.api.addons.AddonBase;
 import be.nokorbis.spigot.commandsigns.api.addons.AddonLifecycleHooker;
 import be.nokorbis.spigot.commandsigns.api.menu.AddonSubmenuHolder;
@@ -17,6 +19,9 @@ public class CommandsAddon extends AddonBase {
 	private final CommandsConfigurationDataPersister dataPersister = new CommandsConfigurationDataPersister(this);
 	private final CommandsLifecycleHooker lifecycleHooker = new CommandsLifecycleHooker(this);
 
+	private final MenuCommands menuCommands = new MenuCommands(this);
+	private final MenuTemporaryPermissions menuTemporaryPermissions = new MenuTemporaryPermissions(this);
+
 	public CommandsAddon(CommandSignsPlugin plugin) {
 		super(plugin, IDENTIFIER, "Commands");
 	}
@@ -28,7 +33,10 @@ public class CommandsAddon extends AddonBase {
 
 	@Override
 	public AddonSubmenuHolder getSubmenus() {
-		return super.getSubmenus();
+		AddonSubmenuHolder holder = new AddonSubmenuHolder();
+		holder.executionSubmenus.add(menuTemporaryPermissions);
+		holder.executionSubmenus.add(menuCommands);
+		return holder;
 	}
 
 	@Override

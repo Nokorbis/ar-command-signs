@@ -4,7 +4,7 @@ import be.nokorbis.spigot.commandsigns.api.exceptions.CommandSignsRequirementExc
 import org.bukkit.entity.Player;
 
 
-public interface AddonLifecycleHooker {
+public interface AddonLifecycleHooker extends AddonRelated {
 	void onStarted			(final Player player, final AddonConfigurationData configurationData, final AddonExecutionData executionData);
 	void onRequirementCheck	(final Player player, final AddonConfigurationData configurationData, final AddonExecutionData executionData) throws CommandSignsRequirementException;
 	void onCostWithdraw		(final Player player, final AddonConfigurationData configurationData, final AddonExecutionData executionData);

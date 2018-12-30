@@ -2,6 +2,7 @@ package be.nokorbis.spigot.commandsigns.controller;
 
 import be.nokorbis.spigot.commandsigns.api.AddonRegister;
 import be.nokorbis.spigot.commandsigns.api.addons.*;
+import be.nokorbis.spigot.commandsigns.api.menu.AddonEditionMenu;
 import be.nokorbis.spigot.commandsigns.api.menu.AddonSubmenuHolder;
 import be.nokorbis.spigot.commandsigns.api.menu.EditionMenu;
 import be.nokorbis.spigot.commandsigns.model.CoreAddonSubmenusHolder;
@@ -33,14 +34,20 @@ public class NCommandSignsAddonRegister implements AddonRegister {
 		if (addonSubmenus!= null) {
 			CoreAddonSubmenusHolder registeredSubmenus = this.manager.getAddonSubmenus();
 
-			List<EditionMenu<AddonConfigurationData>> menus = registeredSubmenus.requirementSubmenus.computeIfAbsent(addon, (a) -> new LinkedList<>());
-			menus.addAll(addonSubmenus.requirementSubmenus);
+			if (!addonSubmenus.requirementSubmenus.isEmpty()) {
+				List<AddonEditionMenu> menus = registeredSubmenus.requirementSubmenus.computeIfAbsent(addon, (a) -> new LinkedList<>());
+				menus.addAll(addonSubmenus.requirementSubmenus);
+			}
 
-			menus = registeredSubmenus.costSubmenus.computeIfAbsent(addon, (a) -> new LinkedList<>());
-			menus.addAll(addonSubmenus.costSubmenus);
+			if (!addonSubmenus.costSubmenus.isEmpty()) {
+				List<AddonEditionMenu> menus = registeredSubmenus.costSubmenus.computeIfAbsent(addon, (a) -> new LinkedList<>());
+				menus.addAll(addonSubmenus.costSubmenus);
+			}
 
-			menus = registeredSubmenus.executionSubmenus.computeIfAbsent(addon, (a) -> new LinkedList<>());
-			menus.addAll(addonSubmenus.executionSubmenus);
+			if (!addonSubmenus.executionSubmenus.isEmpty()) {
+				List<AddonEditionMenu> menus = registeredSubmenus.executionSubmenus.computeIfAbsent(addon, (a) -> new LinkedList<>());
+				menus.addAll(addonSubmenus.executionSubmenus);
+			}
 		}
 	}
 

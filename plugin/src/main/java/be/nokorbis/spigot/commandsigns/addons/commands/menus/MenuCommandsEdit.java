@@ -1,46 +1,48 @@
 package be.nokorbis.spigot.commandsigns.addons.commands.menus;
 
+import be.nokorbis.spigot.commandsigns.addons.commands.CommandsAddon;
 import be.nokorbis.spigot.commandsigns.addons.commands.data.CommandsConfigurationData;
 import be.nokorbis.spigot.commandsigns.api.addons.AddonConfigurationData;
-import be.nokorbis.spigot.commandsigns.api.menu.EditionLeaf;
-import be.nokorbis.spigot.commandsigns.api.menu.EditionMenu;
-import be.nokorbis.spigot.commandsigns.api.menu.MenuNavigationContext;
-import be.nokorbis.spigot.commandsigns.utils.Messages;
+import be.nokorbis.spigot.commandsigns.api.menu.*;
 import org.bukkit.entity.Player;
 
 
-public class MenuCommandsEdit extends EditionLeaf<AddonConfigurationData> {
+public class MenuCommandsEdit extends AddonEditionLeaf {
 
-	public MenuCommandsEdit(EditionMenu<AddonConfigurationData> parent) {
-		super(Messages.get("menu.edit"), parent);
+	public MenuCommandsEdit(CommandsAddon addon, AddonEditionMenu parent) {
+		super(addon, messages.get("menu.commands.edit.title"), parent);
 	}
 
 	@Override
 	public String getDataValue(AddonConfigurationData data) {
-		return name;
+		return "";
 	}
 
 	@Override
 	public void display(final Player editor, AddonConfigurationData data, MenuNavigationContext navigationContext) {
 		final CommandsConfigurationData configurationData = (CommandsConfigurationData) data;
-		editor.sendMessage(Messages.get("info.commands"));
+		editor.sendMessage(messages.get("menu.commands.display"));
 		int cpt = 1;
-		String format = Messages.get("info.command_format");
-		String msg;
+		String format = messages.get("menu.commands.format");
 		for (String perm : configurationData.getCommands()) {
-			msg = format.replace("{NUMBER}", String.valueOf(cpt++)).replace("{COMMAND}", perm);
+			String msg = format.replace("{NUMBER}", String.valueOf(cpt++)).replace("{COMMAND}", perm);
 			editor.sendMessage(msg);
 		}
-		editor.sendMessage(Messages.get("menu.edit_command"));
+		String msg = messages.get("menu.commands.edit.edit");
+		ClickableMessage clickableMessage = new ClickableMessage(msg);
+		clickableMessage.add(CLICKABLE_CANCEL);
+		clickableMessage.sendToPlayer(editor);
 	}
 
 	@Override
 	public void input(Player player, AddonConfigurationData data, String message, MenuNavigationContext navigationContext) {
 		try {
-			CommandsConfigurationData configurationData = (CommandsConfigurationData) data;
-			String[] args = message.split(" ", 2);
-			int index = Integer.parseInt(args[0]);
-			configurationData.getCommands().set(index - 1, args[1]);
+			if (!CANCEL_STRING.equals(message)) {
+				CommandsConfigurationData configurationData = (CommandsConfigurationData) data;
+				String[] args = message.split(" ", 2);
+				int index = Integer.parseInt(args[0]);
+				configurationData.getCommands().set(index - 1, args[1]);
+			}
 		}
 		catch (Exception ignored) {
 		}

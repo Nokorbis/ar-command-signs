@@ -39,6 +39,7 @@ public class CommandSignsPlugin extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
+		manager.initializeMenus();
 		Container.getContainer(); // Initialize the all stuff
 
 		CommandSignCommands commandExecutor = new CommandSignCommands(manager);

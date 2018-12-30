@@ -6,8 +6,8 @@ import be.nokorbis.spigot.commandsigns.model.CommandBlock;
 
 public class MenuNavigationContext implements Cloneable {
 
-	private EditionMenu<CommandBlock>           coreMenu;
-	private EditionMenu<AddonConfigurationData> addonMenu;
+	private EditionMenu<CommandBlock> coreMenu;
+	private AddonEditionMenu addonMenu;
 
 	private int page = 1;
 
@@ -27,11 +27,11 @@ public class MenuNavigationContext implements Cloneable {
 		this.coreMenu = menu;
 	}
 
-	public EditionMenu<AddonConfigurationData> getAddonMenu() {
+	public AddonEditionMenu getAddonMenu() {
 		return addonMenu;
 	}
 
-	public void setAddonMenu(EditionMenu<AddonConfigurationData> addonMenu) {
+	public void setAddonMenu(AddonEditionMenu addonMenu) {
 		this.addonMenu = addonMenu;
 	}
 

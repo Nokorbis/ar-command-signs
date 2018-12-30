@@ -48,7 +48,7 @@ public abstract class EditionMenu<EDITABLE extends MenuEditable> {
      * @return <code>null</code> if this is the main menu
      *         <code>An EditionMenu</code> otherwise
      */
-    public final EditionMenu<EDITABLE> getParent() {
+    public EditionMenu<EDITABLE> getParent() {
         return this.parent;
     }
 

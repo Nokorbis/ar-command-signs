@@ -1,46 +1,49 @@
 package be.nokorbis.spigot.commandsigns.addons.commands.menus;
 
+import be.nokorbis.spigot.commandsigns.addons.commands.CommandsAddon;
 import be.nokorbis.spigot.commandsigns.addons.commands.data.CommandsConfigurationData;
 import be.nokorbis.spigot.commandsigns.api.addons.AddonConfigurationData;
-import be.nokorbis.spigot.commandsigns.api.menu.EditionLeaf;
-import be.nokorbis.spigot.commandsigns.api.menu.EditionMenu;
-import be.nokorbis.spigot.commandsigns.api.menu.MenuNavigationContext;
-import be.nokorbis.spigot.commandsigns.utils.Messages;
+import be.nokorbis.spigot.commandsigns.api.menu.*;
 import org.bukkit.entity.Player;
 
 
-public class MenuCommandsRemove extends EditionLeaf<AddonConfigurationData> {
+public class MenuCommandsRemove extends AddonEditionLeaf {
 
-	public MenuCommandsRemove(EditionMenu<AddonConfigurationData> parent) {
-		super(Messages.get("menu.remove"), parent);
+	public MenuCommandsRemove(CommandsAddon addon, AddonEditionMenu parent) {
+		super(addon, messages.get("menu.commands.remove.title"), parent);
 	}
 
 	@Override
 	public String getDataValue(AddonConfigurationData data) {
-		return name;
+		return "";
 	}
 
 	@Override
 	public void display(Player editor, AddonConfigurationData data, MenuNavigationContext navigationContext) {
 		final CommandsConfigurationData configurationData = (CommandsConfigurationData) data;
-		editor.sendMessage(Messages.get("info.commands"));
+		editor.sendMessage(messages.get("menu.commands.display"));
 		int cpt = 1;
-		String format = Messages.get("info.command_format");
-
+		final String format = messages.get("menu.commands.format");
 		for (String perm : configurationData.getCommands()) {
 			String msg = format.replace("{NUMBER}", String.valueOf(cpt++)).replace("{COMMAND}", perm);
 			editor.sendMessage(msg);
 		}
-		editor.sendMessage(Messages.get("menu.delete_command"));
+
+		String msg = messages.get("menu.commands.remove.edit");
+		ClickableMessage clickableMessage = new ClickableMessage(msg);
+		clickableMessage.add(CLICKABLE_CANCEL);
+		clickableMessage.sendToPlayer(editor);
 	}
 
 	@Override
 	public void input(Player player, AddonConfigurationData data, String message, MenuNavigationContext navigationContext) {
 		try {
-			final CommandsConfigurationData configurationData = (CommandsConfigurationData) data;
-			String[] args = message.split(" ", 2);
-			int index = Integer.parseInt(args[0]);
-			configurationData.getCommands().remove(index-1);
+			if (!CANCEL_STRING.equals(message)) {
+				final CommandsConfigurationData configurationData = (CommandsConfigurationData) data;
+				String[] args = message.split(" ", 2);
+				int index = Integer.parseInt(args[0]);
+				configurationData.getCommands().remove(index-1);
+			}
 		}
 		catch (Exception ignored) {
 		}
