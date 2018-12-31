@@ -1,5 +1,6 @@
 package be.nokorbis.spigot.commandsigns.api.menu;
 
+import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.entity.Player;
@@ -32,8 +33,8 @@ public class ClickableMessage {
 	}
 
 	public static TextComponent asTextComponent(String message, String command) {
-		TextComponent component = new TextComponent();
-		component.setText(message);
+		BaseComponent[] baseComponents = TextComponent.fromLegacyText(message);
+		TextComponent component = new TextComponent(baseComponents);
 		if (command != null) {
 			component.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, command));
 		}

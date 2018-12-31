@@ -19,6 +19,11 @@ public class MenuCommandsRemove extends AddonEditionLeaf {
 	}
 
 	@Override
+	public String getDisplayString(AddonConfigurationData data) {
+		return messages.get("menu.entry.display_name_only").replace("{NAME}", name);
+	}
+
+	@Override
 	public void display(Player editor, AddonConfigurationData data, MenuNavigationContext navigationContext) {
 		final CommandsConfigurationData configurationData = (CommandsConfigurationData) data;
 		editor.sendMessage(messages.get("menu.commands.display"));

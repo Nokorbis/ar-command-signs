@@ -14,6 +14,11 @@ public class MenuCommandsAdd extends AddonEditionLeaf {
 	}
 
 	@Override
+	public String getDisplayString(AddonConfigurationData data) {
+		return messages.get("menu.entry.display_name_only").replace("{NAME}", name);
+	}
+
+	@Override
 	public String getDataValue(AddonConfigurationData data) {
 		return "";
 	}

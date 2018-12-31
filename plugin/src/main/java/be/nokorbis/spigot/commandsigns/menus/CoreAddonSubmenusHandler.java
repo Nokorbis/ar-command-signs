@@ -78,7 +78,6 @@ public abstract class CoreAddonSubmenusHandler extends EditionLeaf<CommandBlock>
 		Iterator<Map.Entry<Addon, List<AddonEditionMenu>>> menuIterator = subMenusByAddon.entrySet().iterator();
 		for (int i = 0; i < endIndex && menuIterator.hasNext(); ) {
 			if (startingIndex <= i && i < endIndex) {
-				final String index = String.valueOf( i-startingIndex+1 );
 				Map.Entry<Addon, List<AddonEditionMenu>> entry = menuIterator.next();
 				Addon addon = entry.getKey();
 				List<AddonEditionMenu> menus = entry.getValue();
@@ -86,6 +85,7 @@ public abstract class CoreAddonSubmenusHandler extends EditionLeaf<CommandBlock>
 					if (i >= endIndex) {
 						break;
 					}
+					final String index = String.valueOf( i-startingIndex+1 );
 					AddonConfigurationData confData = data.getAddonConfigurationData(addon);
 					final String message = menu.getDisplayString(confData).replace("{INDEX}", index);
 					ClickableMessage display = new ClickableMessage(message, index);
