@@ -1,0 +1,20 @@
+#errors
+error.break_attempt_failed             = §4This block is a command block. You must remove the commands before deleting it.
+error.command.number_requirement       = §4 The argument has to be a number.
+error.command.player_requirement       = §4You have to be a player to execute this command.
+error.command.radius_requirement       = §4You have to specify the radius to use this command.
+error.command_needs_arguments          = §4You must specify at least one argument to use this command.
+error.invalid_block_abort              = §4The selected block is NOT valid, aborting...
+error.invalid_command_id               = §4No command block was found with for this ID.
+error.no_block_selected                = §4You haven't selected any command block yet.
+error.no_permission                    = §4You do NOT have the permission to use this command.
+error.number_argument                  = §4The argument must be a number.
+error.reload_location_used             = §4The initialLocation of the loaded block is already used by another command block. Please delete it before if you're sure. Location is : {WORLD}: {X}-({Y})-{Z}
+error.reload_null                      = §4The plugin has not been able to reload this command block.
+error.requirements_check               = §4An error occurred while checking requirements.
+#warnings
+warning.already_copying_configuration  = §4You are already copying a configuration.
+warning.already_creating_configuration = §4You are already creating a configuration.
+warning.already_deleting_configuration = §4You are already deleting a configuration.
+warning.already_editing_configuration  = §4You are already editing a configuration.
+warning.already_info_configuration     = §4You are already getting information about a configuration.

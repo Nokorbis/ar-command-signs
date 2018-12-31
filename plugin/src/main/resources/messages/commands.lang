@@ -1,0 +1,1 @@
+commands.near.format = §6{NAME}§7[§5{ID}§7] at {BLOCK_TYPE} #{X}:{Z}({Y})

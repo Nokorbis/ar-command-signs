@@ -54,12 +54,11 @@ CommandSign v1.5.1
 
 CommandSign v1.5.0
     No more support for savefiles before 1.4.0
-    Fix spelling mistake
+    Fix spelling mistakes
     Reload command
 
 CommandSign v1.4.2
-    Fix spelling mistake
-    Next to come : Factions requirement ?
+    Fix spelling mistakes
 
 CommangSign v1.4.1
     Fix command block per-player cooldown.

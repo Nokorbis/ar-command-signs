@@ -7,8 +7,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 
-public final class CommandBlockValidator
-{
+public final class CommandBlockValidator {
 	private static final Collection<Material> PLATES_MATERIAL;
 	private static final Collection<Material> SIGNS_MATERIAL;
 	private static final Collection<Material> BUTTONS_MATERIAL;
@@ -26,8 +25,7 @@ public final class CommandBlockValidator
 		return isPlate(block.getType());
 	}
 
-	public static boolean isPlate(Material material)
-	{
+	public static boolean isPlate(Material material) {
 		return PLATES_MATERIAL.contains(material);
 	}
 
@@ -39,8 +37,7 @@ public final class CommandBlockValidator
 		return isButton(block.getType());
 	}
 
-	public static boolean isButton(Material material)
-	{
+	public static boolean isButton(Material material) {
 		return BUTTONS_MATERIAL.contains(material);
 	}
 
@@ -52,51 +49,45 @@ public final class CommandBlockValidator
 		return isSign(block.getType());
 	}
 
-	public static boolean isSign(Material material)
-	{
+	public static boolean isSign(Material material) {
 		return SIGNS_MATERIAL.contains(material);
 	}
 
 
-	private CommandBlockValidator()
-	{
+	private CommandBlockValidator() {
 	}
 
 	//TODO: Add tripwire and trapped chest
 
-	static
-	{
-		Material[] plates =
-			{
-				Material.STONE_PRESSURE_PLATE,
-				Material.ACACIA_PRESSURE_PLATE,
-				Material.BIRCH_PRESSURE_PLATE,
-				Material.DARK_OAK_PRESSURE_PLATE,
-				Material.JUNGLE_PRESSURE_PLATE,
-				Material.OAK_PRESSURE_PLATE,
-				Material.SPRUCE_PRESSURE_PLATE,
-				Material.HEAVY_WEIGHTED_PRESSURE_PLATE,
-				Material.LIGHT_WEIGHTED_PRESSURE_PLATE,
-			};
+	static {
+		Material[] plates = {
+			Material.STONE_PRESSURE_PLATE,
+			Material.ACACIA_PRESSURE_PLATE,
+			Material.BIRCH_PRESSURE_PLATE,
+			Material.DARK_OAK_PRESSURE_PLATE,
+			Material.JUNGLE_PRESSURE_PLATE,
+			Material.OAK_PRESSURE_PLATE,
+			Material.SPRUCE_PRESSURE_PLATE,
+			Material.HEAVY_WEIGHTED_PRESSURE_PLATE,
+			Material.LIGHT_WEIGHTED_PRESSURE_PLATE,
+		};
 		PLATES_MATERIAL = Arrays.asList(plates);
 
-		Material[] signs =
-			{
-				Material.SIGN,
-				Material.WALL_SIGN
-			};
+		Material[] signs = {
+			Material.SIGN,
+			Material.WALL_SIGN
+		};
 		SIGNS_MATERIAL = Arrays.asList(signs);
 
-		Material[] buttons =
-			{
-				Material.ACACIA_BUTTON,
-				Material.BIRCH_BUTTON,
-				Material.DARK_OAK_BUTTON,
-				Material.JUNGLE_BUTTON,
-				Material.OAK_BUTTON,
-				Material.SPRUCE_BUTTON,
-				Material.STONE_BUTTON,
-			};
+		Material[] buttons = {
+			Material.ACACIA_BUTTON,
+			Material.BIRCH_BUTTON,
+			Material.DARK_OAK_BUTTON,
+			Material.JUNGLE_BUTTON,
+			Material.OAK_BUTTON,
+			Material.SPRUCE_BUTTON,
+			Material.STONE_BUTTON,
+		};
 		BUTTONS_MATERIAL = Arrays.asList(buttons);
 	}
 }
