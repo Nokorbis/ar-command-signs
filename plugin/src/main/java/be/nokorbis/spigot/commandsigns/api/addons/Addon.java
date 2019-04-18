@@ -7,8 +7,7 @@ import com.google.gson.JsonSerializer;
 import org.bukkit.plugin.Plugin;
 
 
-public interface Addon
-{
+public interface Addon {
 	String getIdentifier();
     String getName();
     Plugin getPlugin();
@@ -32,9 +31,11 @@ public interface Addon
 	 */
     AddonExecutionData createExecutionData();
 
+    Class<? extends AddonExecutionData> getExecutionDataClass();
     JsonSerializer<? extends AddonExecutionData> getExecutionDataSerializer();
     JsonDeserializer<? extends AddonExecutionData> getExecutionDataDeserializer();
 
+    Class<? extends AddonConfigurationData> getConfigurationDataClass();
 	JsonSerializer<? extends AddonConfigurationData> getConfigurationDataSerializer();
 	JsonDeserializer<? extends AddonConfigurationData> getConfigurationDataDeserializer();
 }

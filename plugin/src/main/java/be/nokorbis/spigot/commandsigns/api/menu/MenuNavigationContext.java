@@ -1,6 +1,5 @@
 package be.nokorbis.spigot.commandsigns.api.menu;
 
-import be.nokorbis.spigot.commandsigns.api.addons.AddonConfigurationData;
 import be.nokorbis.spigot.commandsigns.model.CommandBlock;
 
 

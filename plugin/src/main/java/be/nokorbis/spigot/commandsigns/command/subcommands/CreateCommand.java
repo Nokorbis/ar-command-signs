@@ -5,7 +5,6 @@ import be.nokorbis.spigot.commandsigns.controller.NCommandSignsConfigurationMana
 import be.nokorbis.spigot.commandsigns.controller.NCommandSignsManager;
 import be.nokorbis.spigot.commandsigns.model.CommandBlock;
 import be.nokorbis.spigot.commandsigns.model.CommandSignsCommandException;
-import be.nokorbis.spigot.commandsigns.utils.Messages;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -24,13 +23,13 @@ public class CreateCommand extends CommandRequiringManager {
     @Override
     public boolean execute(CommandSender sender, List<String> args) throws CommandSignsCommandException {
         if (!(sender instanceof Player)) {
-            throw new CommandSignsCommandException(Messages.get("error.player_command"));
+            throw new CommandSignsCommandException(errorMessages.get("error.command.player_requirement"));
         }
         Player player = (Player) sender;
 
         if (isPlayerAvailable(player)) {
             CommandBlock cmdBlock = new CommandBlock();
-            NCommandSignsConfigurationManager configurationManager = new NCommandSignsConfigurationManager(player);
+            NCommandSignsConfigurationManager configurationManager = new NCommandSignsConfigurationManager(player, manager);
             configurationManager.setCommandBlock(cmdBlock);
             configurationManager.setCreating(true);
 

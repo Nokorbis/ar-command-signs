@@ -1,6 +1,7 @@
 package be.nokorbis.spigot.commandsigns.controller;
 
 import be.nokorbis.spigot.commandsigns.CommandSignsPlugin;
+import be.nokorbis.spigot.commandsigns.api.DisplayMessages;
 import be.nokorbis.spigot.commandsigns.model.CommandBlock;
 import be.nokorbis.spigot.commandsigns.tasks.ExecuteTask;
 import be.nokorbis.spigot.commandsigns.utils.CommandBlockValidator;
@@ -25,6 +26,9 @@ import org.bukkit.scheduler.BukkitTask;
 
 
 public class CommandSignListener implements Listener {
+
+	private static final DisplayMessages messages = DisplayMessages.getDisplayMessages("messages/events");
+
 	private NCommandSignsManager manager;
 
 	public CommandSignListener(NCommandSignsManager manager) {
@@ -72,10 +76,10 @@ public class CommandSignListener implements Listener {
 	@EventHandler( ignoreCancelled = true )
 	public void onInteractEvent(PlayerInteractEvent event) {
 
-		Block block = event.getClickedBlock();
+		Block touchedBlock = event.getClickedBlock();
 		Player player = event.getPlayer();
 
-		if (block == null || block.getLocation() == null) {
+		if (touchedBlock == null || touchedBlock.getLocation() == null) {
 			return;
 		}
 
@@ -84,66 +88,65 @@ public class CommandSignListener implements Listener {
 			if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
 				return;
 			}
-			deleteCommandBlock(player, block);
+			deleteCommandBlock(player, touchedBlock);
 		}
 
-		/* Do we have to edit the command block configuration ? */
-		/*else if (Container.getContainer().getEditingConfigurations().containsKey(player)) {
-			if (!CommandBlockValidator.isValidBlock(block)) {
-				return;
-			}
-
-			EditingConfiguration<CommandBlock> conf = Container.getContainer().getEditingConfigurations().get(player);
-			CommandBlock commandBlock = conf.getEditingData();
-
-			// We want to select the block to edit.
-			if (commandBlock == null) {
-				// The block we hit is a valid block
-				if (Container.getContainer().getCommandBlocks().containsKey(block.getLocation())) {
-					CommandBlock editingBlock = Container.getContainer().getCommandBlocks().get(block.getLocation());
-					conf.setEditingData(editingBlock);
-					conf.display();
+		NCommandSignsConfigurationManager configurationManager = manager.getPlayerConfigurationManager(player);
+		if (configurationManager != null) {
+			if (CommandBlockValidator.isValidBlock(touchedBlock)) {
+				if (configurationManager.isEditing()) {
+					if (configurationManager.getCommandBlock() == null) {
+						CommandBlock commandBlock = manager.getCommandBlock(touchedBlock.getLocation());
+						if (commandBlock == null) {
+							player.sendMessage(messages.get("error.invalid_block_abort"));
+							manager.removeConfigurationManager(player);
+						}
+						else {
+							configurationManager.setCommandBlock(commandBlock);
+							configurationManager.display();
+						}
+					}
 				}
 				else {
-					player.sendMessage(ChatColor.DARK_RED + Messages.get("error.invalid_block_abort"));
-					Container.getContainer().getEditingConfigurations().remove(player);
+					CommandBlock commandBlock = configurationManager.getCommandBlock();
+					Location location = commandBlock.getLocation();
+					if (location == null) {
+						if (manager.isCommandBlock(touchedBlock)) {
+							player.sendMessage(messages.get("creation.already_configured"));
+						}
+						else {
+							commandBlock.setLocation(touchedBlock.getLocation());
+							player.sendMessage(messages.get("creation.block_set"));
+						}
+					}
+					else {
+						player.sendMessage(messages.get("creation.already_positioned"));
+					}
 				}
 			}
-			// We've already selected the block we want to edit
-			else {
-				// Nothing to do, I think
-			}
-		}*/
-
-		/* Do we have to create the command block configuration ? */
-		/*else if (Container.getContainer().getCreatingConfigurations().containsKey(player)) {
-			if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
-				return;
-			}
-			createCommandBlock(player, block);
-		}*/
+		}
 
 		/* Do we have to copy the command block configuration ? */
 		else if (Container.getContainer().getCopyingConfigurations().containsKey(player)) {
 			if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
 				return;
 			}
-			copyCommandBlock(player, block);
+			copyCommandBlock(player, touchedBlock);
 		}
 
 		else if (Container.getContainer().getInfoPlayers().contains(player)) {
 			if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
 				return;
 			}
-			info(player, block);
+			info(player, touchedBlock);
 		}
 
 		/* Is that a block that we can execute ? */
-		else if (Container.getContainer().getCommandBlocks().containsKey(block.getLocation())) {
-			if (CommandBlockValidator.isPlate(block) && (!event.getAction().equals(Action.PHYSICAL))) {
+		else if (Container.getContainer().getCommandBlocks().containsKey(touchedBlock.getLocation())) {
+			if (CommandBlockValidator.isPlate(touchedBlock) && (!event.getAction().equals(Action.PHYSICAL))) {
 				return;
 			}
-			executeCommandBlock(player, block);
+			executeCommandBlock(player, touchedBlock);
 		}
 	}
 
@@ -215,29 +218,6 @@ public class CommandSignListener implements Listener {
 			player.sendMessage(Messages.get("error.invalid_block_abort"));
 			Container.getContainer().getInfoPlayers().remove(player);
 		}
-	}
-
-	private void createCommandBlock(Player player, Block block) {
-		if (!CommandBlockValidator.isValidBlock(block)) {
-			return;
-		}
-
-		/*EditingConfiguration<CommandBlock> conf = Container.getContainer().getCreatingConfigurations().get(player);
-		CommandBlock commandBlock = conf.getEditingData();
-		Location creatingBlock = commandBlock.getLocation();
-
-		if (creatingBlock == null) {
-			if (Container.getContainer().getCommandBlocks().containsKey(block.getLocation())) {
-				player.sendMessage(Messages.get("creation.already_command"));
-			}
-			else {
-				commandBlock.setLocation(block.getLocation());
-				player.sendMessage(Messages.get("creation.block_set"));
-			}
-		}
-		else {
-			player.sendMessage(Messages.get("creation.already_command"));
-		}*/
 	}
 
 	private void copyCommandBlock(Player player, Block block) {

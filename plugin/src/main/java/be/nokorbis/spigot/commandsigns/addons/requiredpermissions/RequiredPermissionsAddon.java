@@ -41,18 +41,8 @@ public class RequiredPermissionsAddon extends AddonBase {
 	}
 
 	@Override
-	public AddonExecutionData createExecutionData() {
-		return null;
-	}
-
-	@Override
-	public JsonSerializer<? extends AddonExecutionData> getExecutionDataSerializer() {
-		return null;
-	}
-
-	@Override
-	public JsonDeserializer<? extends AddonExecutionData> getExecutionDataDeserializer() {
-		return null;
+	public Class<? extends AddonConfigurationData> getConfigurationDataClass() {
+		return RequiredPermissionsConfigurationData.class;
 	}
 
 	@Override

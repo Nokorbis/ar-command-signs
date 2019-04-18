@@ -39,7 +39,9 @@ public class CommandSignsPlugin extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
+		manager.loadIdsPerLocations(plugin);
 		manager.initializeMenus();
+		manager.initializeSerializers();
 		Container.getContainer(); // Initialize the all stuff
 
 		CommandSignCommands commandExecutor = new CommandSignCommands(manager);

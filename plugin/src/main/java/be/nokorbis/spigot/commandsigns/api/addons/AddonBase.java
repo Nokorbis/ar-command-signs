@@ -92,4 +92,14 @@ public abstract class AddonBase implements Addon {
 	public JsonDeserializer<? extends AddonConfigurationData> getConfigurationDataDeserializer() {
 		return null;
 	}
+
+	@Override
+	public Class<? extends AddonExecutionData> getExecutionDataClass() {
+		return null;
+	}
+
+	@Override
+	public Class<? extends AddonConfigurationData> getConfigurationDataClass() {
+		return null;
+	}
 }

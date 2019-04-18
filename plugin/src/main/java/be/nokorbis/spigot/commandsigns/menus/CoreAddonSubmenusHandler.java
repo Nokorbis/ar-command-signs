@@ -113,10 +113,10 @@ public abstract class CoreAddonSubmenusHandler extends EditionLeaf<CommandBlock>
 	@Override
 	public void input(Player player, CommandBlock data, String message, MenuNavigationContext navigationContext) {
 		try {
-			final int choice = Integer.parseInt(message);
-			final int page = navigationContext.getPage();
 			AddonEditionMenu menu = navigationContext.getAddonMenu();
 			if (menu == null) {
+				final int choice = Integer.parseInt(message);
+				final int page = navigationContext.getPage();
 				if(0 < choice && choice <= entriesToDisplay) {
 					navigationContext.setPage(1);
 					AddonEditionMenu submenu = getSubmenus(page, choice);

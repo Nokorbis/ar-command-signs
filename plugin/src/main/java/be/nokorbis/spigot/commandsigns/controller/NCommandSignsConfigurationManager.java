@@ -1,6 +1,7 @@
 package be.nokorbis.spigot.commandsigns.controller;
 
 import be.nokorbis.spigot.commandsigns.addons.commands.menus.MenuCommandsAdd;
+import be.nokorbis.spigot.commandsigns.api.DisplayMessages;
 import be.nokorbis.spigot.commandsigns.api.addons.AddonConfigurationData;
 import be.nokorbis.spigot.commandsigns.api.menu.EditionMenu;
 import be.nokorbis.spigot.commandsigns.api.menu.MenuNavigationContext;
@@ -10,13 +11,16 @@ import org.bukkit.entity.Player;
 
 
 public class NCommandSignsConfigurationManager {
-	private final Player editor;
-	private CommandBlock commandBlock;
-	private boolean isCreating;
-	private MenuNavigationContext navigationContext;
+	private static final DisplayMessages messages = DisplayMessages.getDisplayMessages("messages/menu");
+	private final NCommandSignsManager 	manager;
+	private final Player                editor;
+	private       CommandBlock          commandBlock;
+	private       boolean               isCreating;
+	private       MenuNavigationContext navigationContext;
 
-	public NCommandSignsConfigurationManager(final Player player) {
+	public NCommandSignsConfigurationManager(final Player player, final NCommandSignsManager manager) {
 		this.editor = player;
+		this.manager = manager;
 		this.navigationContext = new MenuNavigationContext();
 	}
 
@@ -58,12 +62,14 @@ public class NCommandSignsConfigurationManager {
 			coreMenu.display(editor, commandBlock, this.navigationContext);
 		}
 		else {
+			this.manager.saveCommandBlock(commandBlock);
 			if (this.isCreating) {
-				this.editor.sendMessage(ChatColor.GREEN + "Creation complete!");
+				this.editor.sendMessage(messages.get("menu.creation_completed"));
 			}
 			else {
-				this.editor.sendMessage(ChatColor.GREEN + "Edition complete!");
+				this.editor.sendMessage(messages.get("menu.edition_completed"));
 			}
+			this.manager.removeConfigurationManager(this.editor);
 		}
 	}
 

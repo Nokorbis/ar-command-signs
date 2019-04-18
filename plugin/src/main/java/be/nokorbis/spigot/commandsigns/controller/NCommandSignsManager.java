@@ -4,6 +4,10 @@ import be.nokorbis.spigot.commandsigns.CommandSignsPlugin;
 import be.nokorbis.spigot.commandsigns.api.addons.Addon;
 import be.nokorbis.spigot.commandsigns.controller.positionchecker.CommandBlockPositionChecker;
 import be.nokorbis.spigot.commandsigns.controller.positionchecker.PositionCheckerFactory;
+import be.nokorbis.spigot.commandsigns.data.CommandBlockConfigurationDataPersister;
+import be.nokorbis.spigot.commandsigns.data.CommandBlockIDLoader;
+import be.nokorbis.spigot.commandsigns.data.json.JsonCommandBlockConfigurationDataPersister;
+import be.nokorbis.spigot.commandsigns.data.json.JsonCommandBlockIDLoader;
 import be.nokorbis.spigot.commandsigns.menus.MainMenu;
 import be.nokorbis.spigot.commandsigns.model.CommandBlock;
 import be.nokorbis.spigot.commandsigns.model.CoreAddonSubmenusHolder;
@@ -16,6 +20,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -29,22 +34,37 @@ public class NCommandSignsManager {
 	private NCommandSignsAddonLifecycleHolder lifecycleHolder  = new NCommandSignsAddonLifecycleHolder();
 	private Set<Addon>                        accessibleAddons = Collections.unmodifiableSet(registeredAddons);
 
-	private final Map<Location, Long>              locationsToIds = new HashMap<>();
-	private final LoadingCache<Long, CommandBlock> cache;
+	private final Map<Location, Long>           	locationsToIds = new HashMap<>();
+	private final LoadingCache<Long, CommandBlock>	cache;
 
 	private final Map<UUID, NCommandSignsConfigurationManager> ncsConfigurationManagers = new HashMap<>();
 
 	private final CoreAddonSubmenusHolder addonSubmenus = new CoreAddonSubmenusHolder();
 	private       MainMenu                mainMenu;
 
+	private CommandBlockConfigurationDataPersister commandBlockPersister;
+
+
 	public NCommandSignsManager(CommandSignsPlugin plugin) {
 		this.logger = plugin.getLogger();
 
-		this.cache = CacheBuilder.newBuilder().maximumSize(Settings.CACHE_MAX_SIZE()).expireAfterAccess(Settings.CACHE_TIME_TO_IDLE(), TimeUnit.MINUTES).removalListener(this::onCacheRemove).build(new CacheLoader<Long, CommandBlock>() {
-			public CommandBlock load(Long key) {
-				return new CommandBlock();
-			}
-		});
+		this.cache = CacheBuilder.newBuilder()
+								 .maximumSize(Settings.CACHE_MAX_SIZE())
+								 .expireAfterAccess(Settings.CACHE_TIME_TO_IDLE(), TimeUnit.MINUTES)
+								 .removalListener(this::onCacheRemove)
+								 .build(new CacheLoader<Long, CommandBlock>() {
+									 @Override
+									 public CommandBlock load(Long key) {
+										 return commandBlockPersister.load(key);
+									 }
+								 });
+
+		commandBlockPersister = new JsonCommandBlockConfigurationDataPersister(plugin.getDataFolder());
+	}
+
+	public void loadIdsPerLocations(Plugin plugin) {
+		CommandBlockIDLoader loader = new JsonCommandBlockIDLoader(plugin.getDataFolder());
+		locationsToIds.putAll(loader.loadAllIdsPerLocations());
 	}
 
 	public void registerAddon(Addon addon) {
@@ -53,6 +73,10 @@ public class NCommandSignsManager {
 
 	public void initializeMenus() {
 		mainMenu = new MainMenu(addonSubmenus);
+	}
+
+	public void initializeSerializers() {
+		commandBlockPersister.setAddons(accessibleAddons);
 	}
 
 	public Set<Addon> getRegisteredAddons() {
@@ -67,8 +91,8 @@ public class NCommandSignsManager {
 		return lifecycleHolder;
 	}
 
-	public CommandBlock getCommandBlock(Long id) {
-		if (id == null) {
+	public CommandBlock getCommandBlock(final long id) {
+		if (id == -1) {
 			return null;
 		}
 		return this.cache.getUnchecked(id);
@@ -78,8 +102,45 @@ public class NCommandSignsManager {
 		if (location == null) {
 			return null;
 		}
-		Long id = this.locationsToIds.get(location);
+		long id = this.locationsToIds.getOrDefault(location, -1L);
 		return this.getCommandBlock(id);
+	}
+
+	public void saveCommandBlock(CommandBlock commandBlock) {
+		Location location = findLocationByID(commandBlock.getId());
+		if (location != null) {
+			locationsToIds.remove(location);
+		}
+
+		commandBlockPersister.saveConfiguration(commandBlock);
+		locationsToIds.put(commandBlock.getLocation(), commandBlock.getId());
+
+		cache.put(commandBlock.getId(), commandBlock);
+	}
+
+	public boolean isCommandBlock(Block block) {
+		if (block == null) {
+			return false;
+		}
+
+		return isCommandBlock(block.getLocation());
+	}
+
+	public boolean isCommandBlock(Location location) {
+		if (location == null) {
+			return false;
+		}
+
+		return locationsToIds.containsKey(location);
+	}
+
+	public Location findLocationByID(long id) {
+		for (Map.Entry<Location, Long> entry : locationsToIds.entrySet()) {
+			if (entry.getValue() == id) {
+				return entry.getKey();
+			}
+		}
+		return null;
 	}
 
 	public boolean doesPlayerHaveAConfigurationManagerRunning(Player player) {
@@ -88,6 +149,10 @@ public class NCommandSignsManager {
 
 	public NCommandSignsConfigurationManager getPlayerConfigurationManager(Player player) {
 		return this.ncsConfigurationManagers.get(player.getUniqueId());
+	}
+
+	public void removeConfigurationManager(Player player) {
+		this.ncsConfigurationManagers.remove(player.getUniqueId());
 	}
 
 	public void addConfigurationManager(NCommandSignsConfigurationManager manager) {

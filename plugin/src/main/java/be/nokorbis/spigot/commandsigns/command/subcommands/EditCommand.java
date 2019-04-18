@@ -32,7 +32,7 @@ public class EditCommand extends CommandRequiringManager {
 		if (isPlayerAvailable(player)) {
 			NCommandSignsConfigurationManager conf;
 			if (args.isEmpty()) {
-				conf = new NCommandSignsConfigurationManager(player);
+				conf = new NCommandSignsConfigurationManager(player, manager);
 				player.sendMessage(Messages.get("howto.click_to_edit"));
 			}
 			else {
@@ -42,7 +42,7 @@ public class EditCommand extends CommandRequiringManager {
 					if (commandBlock == null) {
 						throw new CommandSignsCommandException(Messages.get("error.invalid_command_id"));
 					}
-					conf = new NCommandSignsConfigurationManager(player);
+					conf = new NCommandSignsConfigurationManager(player, manager);
 					conf.setCommandBlock(commandBlock);
 				}
 				catch (NumberFormatException ex) {

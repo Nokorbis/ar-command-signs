@@ -47,6 +47,11 @@ public class CooldownAddon extends AddonBase {
 	}
 
 	@Override
+	public Class<? extends AddonExecutionData> getExecutionDataClass() {
+		return CooldownExecutionData.class;
+	}
+
+	@Override
 	public CooldownExecutionDataPersister getExecutionDataSerializer() {
 		return executionDataTransformer;
 	}
@@ -54,6 +59,11 @@ public class CooldownAddon extends AddonBase {
 	@Override
 	public CooldownExecutionDataPersister getExecutionDataDeserializer() {
 		return executionDataTransformer;
+	}
+
+	@Override
+	public Class<? extends AddonConfigurationData> getConfigurationDataClass() {
+		return CooldownConfigurationData.class;
 	}
 
 	@Override

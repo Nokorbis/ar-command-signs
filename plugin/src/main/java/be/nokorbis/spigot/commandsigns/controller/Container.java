@@ -28,7 +28,6 @@ public class Container {
 		return instance;
 	}
 
-	private Map<Player, PermissionAttachment> playerPerms;
 	private Map<Location, CommandBlock> commandBlocks;
 	private Map<Player, CommandBlock> copyingConfigurations;
 	private Map<Player, Location> deletingBlocks;
@@ -46,13 +45,12 @@ public class Container {
 			plugin.getLogger().info("CommandSigns properly enabled !");
 		}
 		catch (Exception e) {
-			plugin.getLogger().severe("Was not able to create the save file for command sign plugin");
+			plugin.getLogger().severe("Was not able to create the saveConfiguration file for command sign plugin");
 			e.printStackTrace();
 		}
 	}
 
 	private void initializeDataStructures() {
-		this.playerPerms = new HashMap<>();
 		this.commandBlocks = new HashMap<>();
 		this.copyingConfigurations = new HashMap<>();
 		this.deletingBlocks = new HashMap<>();
@@ -88,17 +86,6 @@ public class Container {
 			}
 		}
 		return errorCount;
-	}
-
-	public PermissionAttachment getPlayerPermissions(Player player) {
-		if (this.playerPerms.containsKey(player)) {
-			return this.playerPerms.get(player);
-		}
-
-		PermissionAttachment perms = player.addAttachment(CommandSignsPlugin.getPlugin());
-		this.playerPerms.put(player, perms);
-
-		return perms;
 	}
 
 	public Map<Location, CommandBlock> getCommandBlocks() {

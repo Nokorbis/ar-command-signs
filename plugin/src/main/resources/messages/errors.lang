@@ -4,7 +4,6 @@ error.command.number_requirement       = §4 The argument has to be a number.
 error.command.player_requirement       = §4You have to be a player to execute this command.
 error.command.radius_requirement       = §4You have to specify the radius to use this command.
 error.command_needs_arguments          = §4You must specify at least one argument to use this command.
-error.invalid_block_abort              = §4The selected block is NOT valid, aborting...
 error.invalid_command_id               = §4No command block was found with for this ID.
 error.no_block_selected                = §4You haven't selected any command block yet.
 error.no_permission                    = §4You do NOT have the permission to use this command.

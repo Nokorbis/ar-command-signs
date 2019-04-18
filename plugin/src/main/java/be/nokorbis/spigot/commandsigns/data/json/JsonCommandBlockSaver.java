@@ -29,11 +29,10 @@ public class JsonCommandBlockSaver implements CommandBlockSaver
     {
         GsonBuilder builder = new GsonBuilder();
         gson = builder.setPrettyPrinting()
-                .registerTypeAdapter(CommandBlock.class, new CommandBlockGsonSerializer())
+                .registerTypeAdapter(CommandBlock.class, new CommandBlockGsonSerializer(null))
                 .create();
 
-        if (!baseFolder.exists())
-        {
+        if (!baseFolder.exists()) {
             baseFolder.mkdirs();
         }
 
@@ -98,16 +97,6 @@ public class JsonCommandBlockSaver implements CommandBlockSaver
             CommandSignsPlugin.getPlugin().getLogger().severe(e.getMessage());
         }
         return null;
-    }
-
-    @Override
-    public boolean saveAll(Collection<CommandBlock> cmdBlocks)
-    {
-        for (CommandBlock cmdBlock : cmdBlocks)
-        {
-            save(cmdBlock);
-        }
-        return true;
     }
 
     @Override

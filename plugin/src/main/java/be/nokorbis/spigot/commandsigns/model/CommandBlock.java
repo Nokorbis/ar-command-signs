@@ -26,8 +26,8 @@ public class CommandBlock implements MenuEditable
 
 	private boolean disabled;
 
-	private Map<String, AddonConfigurationData> addonConfigurations= new HashMap<>();
-	private Map<String, AddonExecutionData> addonExecutions = new HashMap<>();
+	private Map<Addon, AddonConfigurationData> addonConfigurations= new HashMap<>();
+	private Map<Addon, AddonExecutionData> addonExecutions = new HashMap<>();
 
 	private Integer timeBeforeExecution; // Value in seconds
 	private Boolean resetOnMove;
@@ -89,14 +89,14 @@ public class CommandBlock implements MenuEditable
 		if (addon == null) {
 			return null;
 		}
-		return this.addonConfigurations.computeIfAbsent(addon.getIdentifier(), (identifier) -> addon.createConfigurationData());
+		return this.addonConfigurations.computeIfAbsent(addon, Addon::createConfigurationData);
 	}
 
 	public AddonExecutionData getAddonExecutionData(final Addon addon) {
 		if (addon == null) {
 			return null;
 		}
-		return this.addonExecutions.computeIfAbsent(addon.getIdentifier(), (identifier) -> addon.createExecutionData());
+		return this.addonExecutions.computeIfAbsent(addon, Addon::createExecutionData);
 	}
 
 	/* Name */
@@ -213,5 +213,15 @@ public class CommandBlock implements MenuEditable
 
 	public static void reloadUsedID(long id) {
 		usedIds.remove(id);
+	}
+
+	public void forEachAddonConfiguration(AddonConfigurationConsumer consumer) {
+		for (Map.Entry<Addon, AddonConfigurationData> entry : addonConfigurations.entrySet()) {
+			consumer.consume(entry.getKey(), entry.getValue());
+		}
+	}
+
+	public interface AddonConfigurationConsumer {
+		void consume(Addon addon, AddonConfigurationData configuration);
 	}
 }

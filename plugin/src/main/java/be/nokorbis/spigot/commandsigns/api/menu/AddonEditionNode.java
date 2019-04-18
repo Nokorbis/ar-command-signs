@@ -101,7 +101,8 @@ public abstract class AddonEditionNode extends AddonEditionMenu {
 
 			if(0 < choice && choice <= numberEntriesToDisplay) {
 				navigationResult.setPage(1);
-				navigationResult.setAddonMenu(menus.get((page-1) * numberEntriesToDisplay + (choice-1)));
+				AddonEditionMenu newAddonMenu = menus.get((page - 1) * numberEntriesToDisplay + (choice - 1));
+				navigationResult.setAddonMenu(newAddonMenu);
 			}
 			else if (choice == DONE) {
 				navigationResult.setPage(1);

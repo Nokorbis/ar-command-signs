@@ -55,7 +55,7 @@ public class MainMenu extends EditionNodeCore {
     public String getCommandBlockLocation(CommandBlock data) {
         Location loc = data.getLocation();
         if (loc == null) {
-            return messages.get("menu.no_block");
+            return messages.get("menu.block.no_block");
         }
 
         String format = messages.get("menu.block_format");

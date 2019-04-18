@@ -1,5 +1,6 @@
 package be.nokorbis.spigot.commandsigns.data.json;
 
+import be.nokorbis.spigot.commandsigns.api.addons.Addon;
 import be.nokorbis.spigot.commandsigns.model.CommandBlock;
 import com.google.gson.*;
 import org.bukkit.Bukkit;
@@ -7,89 +8,87 @@ import org.bukkit.Location;
 import org.bukkit.World;
 
 import java.lang.reflect.Type;
+import java.util.Set;
 import java.util.UUID;
 
 /**
  * Created by Nokorbis on 22/01/2016.
  */
-public class CommandBlockGsonSerializer implements JsonSerializer<CommandBlock>, JsonDeserializer<CommandBlock>{
+public class CommandBlockGsonSerializer implements JsonSerializer<CommandBlock>, JsonDeserializer<CommandBlock> {
 
+    private Set<Addon> addons;
+
+    public CommandBlockGsonSerializer(Set<Addon> addons) {
+        this.addons = addons;
+    }
 
     @Override
-    public CommandBlock deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException
-    {
+    public CommandBlock deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonContext) throws JsonParseException {
         JsonObject root = jsonElement.getAsJsonObject();
 
-        try
-        {
+        try {
             long id = root.get("id").getAsLong();
             CommandBlock cmdBlock = new CommandBlock(id);
             JsonElement name = root.get("name");
-            if (name != null)
-            {
+            if (name != null) {
                 cmdBlock.setName(name.getAsString());
             }
 
-            JsonElement loc = root.get("world");
-            if (loc != null)
-            {
-                World world = Bukkit.getWorld(loc.getAsString());
-                if (world == null)
-                {
-                    UUID worldUuid = UUID.fromString(loc.getAsString());
-                    world = Bukkit.getWorld(worldUuid);
-                }
-                int x = root.get("x").getAsInt();
-                int y = root.get("y").getAsInt();
-                int z = root.get("z").getAsInt();
-                Location location = new Location(world, x, y, z);
-                cmdBlock.setLocation(location);
-            }
-
             JsonElement disabled = root.get("disabled");
-            if (disabled != null)
-            {
+            if (disabled != null) {
                 cmdBlock.setDisabled(disabled.getAsBoolean());
             }
 
+            Location loc = jsonContext.deserialize(root.get("location"), Location.class);
+            if (loc != null) {
+                cmdBlock.setLocation(loc);
+            }
 
-            cmdBlock.setTimeBeforeExecution(root.get("time_before_execution").getAsInt());
-            cmdBlock.setCancelledOnMove(root.get("move_cancel_timer").getAsBoolean());
-            cmdBlock.setResetOnMove(root.get("move_reset_timer").getAsBoolean());
-
+            JsonObject timer = root.getAsJsonObject("timer");
+            int duration = timer.getAsJsonPrimitive("duration").getAsInt();
+            boolean cancelled = timer.getAsJsonPrimitive("cancelled_on_move").getAsBoolean();
+            boolean reset = timer.getAsJsonPrimitive("reset_on_move").getAsBoolean();
+            cmdBlock.setTimeBeforeExecution(duration);
+            cmdBlock.setCancelledOnMove(cancelled);
+            cmdBlock.setResetOnMove(reset);
 
             return cmdBlock;
         }
-        catch (Exception ex)
-        {
+        catch (Exception ex) {
             return null;
         }
     }
 
     @Override
-    public JsonElement serialize(CommandBlock commandBlock, Type type, JsonSerializationContext jsonSerializationContext) {
+    public JsonElement serialize(CommandBlock commandBlock, Type type, final JsonSerializationContext jsonContext) {
         JsonObject root = new JsonObject();
-        root.add("id", new JsonPrimitive(commandBlock.getId()));
-        if (commandBlock.getName() != null)
-        {
+
+        root.addProperty("id", commandBlock.getId());
+        if (commandBlock.getName() != null) {
             root.addProperty("name", commandBlock.getName());
         }
-
-        //Save location
-        if (commandBlock.getLocation() != null)
-        {
-            root.addProperty("world", commandBlock.getLocation().getWorld().getName());
-            root.addProperty("x", commandBlock.getLocation().getBlockX());
-            root.addProperty("y", commandBlock.getLocation().getBlockY());
-            root.addProperty("z", commandBlock.getLocation().getBlockZ());
-        }
-
         root.addProperty("disabled", commandBlock.isDisabled());
 
+        Location location = commandBlock.getLocation();
+        if (location != null) {
+            root.add("location", jsonContext.serialize(location));
+        }
 
-        root.addProperty("time_before_execution", commandBlock.getTimeBeforeExecution());
-        root.addProperty("move_cancel_timer", commandBlock.isCancelledOnMove());
-        root.addProperty("move_reset_timer", commandBlock.isResetOnMove());
+
+        JsonObject timer = new JsonObject();
+        timer.addProperty("duration", commandBlock.getTimeBeforeExecution());
+        timer.addProperty("cancelled_on_move", commandBlock.isCancelledOnMove());
+        timer.addProperty("reset_on_move", commandBlock.isResetOnMove());
+        root.add("timer", timer);
+
+        final JsonObject addonData = new JsonObject();
+        commandBlock.forEachAddonConfiguration((addon, configuration) -> {
+            if (addon.getConfigurationDataSerializer() != null && addon.getConfigurationDataDeserializer() != null) {
+                addonData.add(addon.getIdentifier(), jsonContext.serialize(configuration));
+            }
+        });
+
+        root.add("addons", addonData);
 
         return root;
     }

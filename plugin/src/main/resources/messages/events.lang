@@ -1,0 +1,4 @@
+creation.already_configured = §cThis block already has a configuration.
+creation.already_positioned = §cThis command block already has a position.
+creation.block_set          = §aBlock set to command block configuration.
+error.invalid_block_abort   = §4The selected block is NOT valid, aborting...

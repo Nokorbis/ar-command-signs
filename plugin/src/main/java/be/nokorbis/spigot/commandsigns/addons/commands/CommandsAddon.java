@@ -6,6 +6,8 @@ import be.nokorbis.spigot.commandsigns.addons.commands.data.CommandsConfiguratio
 import be.nokorbis.spigot.commandsigns.addons.commands.menus.MenuCommands;
 import be.nokorbis.spigot.commandsigns.addons.commands.menus.MenuTemporaryPermissions;
 import be.nokorbis.spigot.commandsigns.api.addons.AddonBase;
+import be.nokorbis.spigot.commandsigns.api.addons.AddonConfigurationData;
+import be.nokorbis.spigot.commandsigns.api.addons.AddonExecutionData;
 import be.nokorbis.spigot.commandsigns.api.addons.AddonLifecycleHooker;
 import be.nokorbis.spigot.commandsigns.api.menu.AddonSubmenuHolder;
 import com.google.gson.JsonDeserializer;
@@ -42,6 +44,11 @@ public class CommandsAddon extends AddonBase {
 	@Override
 	public CommandsConfigurationData createConfigurationData() {
 		return new CommandsConfigurationData(this);
+	}
+
+	@Override
+	public Class<? extends AddonConfigurationData> getConfigurationDataClass() {
+		return CommandsConfigurationData.class;
 	}
 
 	@Override

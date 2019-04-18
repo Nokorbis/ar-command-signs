@@ -4,20 +4,18 @@ import be.nokorbis.spigot.commandsigns.model.CommandBlock;
 
 import java.util.Collection;
 
+
 /**
  * Created by Nokorbis on 22/01/2016.
  */
-public interface CommandBlockSaver
-{
+public interface CommandBlockSaver {
 
-    boolean save(CommandBlock cmdB);
+	boolean save(CommandBlock cmdB);
 
-    CommandBlock load(long id);
+	CommandBlock load(long id);
 
-    boolean saveAll(Collection<CommandBlock> cmdBlocks);
+	Collection<CommandBlock> loadAll();
 
-    Collection<CommandBlock> loadAll();
-
-    boolean delete (long id);
+	boolean delete(long id);
 
 }
