@@ -1,11 +1,12 @@
-package be.nokorbis.spigot.commandsigns.addons.commands;
+package be.nokorbis.spigot.commandsigns.controller.executions;
 
 import org.bukkit.permissions.PermissionAttachment;
 
 import java.util.List;
+import java.util.concurrent.Callable;
 
 
-public class TemporaryPermissionsRemover implements Runnable {
+public class TemporaryPermissionsRemover implements Callable<Void> {
 
 	private final PermissionAttachment permissionAttachment;
 	private final List<String>         permissions;
@@ -16,11 +17,13 @@ public class TemporaryPermissionsRemover implements Runnable {
 	}
 
 	@Override
-	public void run() {
+	public Void call() {
 		if (permissionAttachment != null) {
 			for (String permission : permissions) {
 				permissionAttachment.unsetPermission(permission);
 			}
+			permissionAttachment.remove();
 		}
+		return null;
 	}
 }

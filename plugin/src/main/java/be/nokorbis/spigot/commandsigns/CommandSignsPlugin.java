@@ -1,6 +1,5 @@
 package be.nokorbis.spigot.commandsigns;
 
-import be.nokorbis.spigot.commandsigns.addons.commands.CommandsAddon;
 import be.nokorbis.spigot.commandsigns.addons.cooldowns.CooldownAddon;
 import be.nokorbis.spigot.commandsigns.addons.economy.EconomyAddon;
 import be.nokorbis.spigot.commandsigns.addons.requiredpermissions.RequiredPermissionsAddon;
@@ -30,7 +29,6 @@ public class CommandSignsPlugin extends JavaPlugin {
 
 		addonRegister.registerAddon(new RequiredPermissionsAddon(this));
 		addonRegister.registerAddon(new CooldownAddon(this));
-		addonRegister.registerAddon(new CommandsAddon(this));
 		EconomyAddon economyAddon = new EconomyAddon(this);
 		if (economyAddon.isEconomyLinked()) {
 			addonRegister.registerAddon(economyAddon);
@@ -39,7 +37,7 @@ public class CommandSignsPlugin extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
-		manager.loadIdsPerLocations(plugin);
+		manager.loadIdsPerLocations();
 		manager.initializeMenus();
 		manager.initializeSerializers();
 		Container.getContainer(); // Initialize the all stuff

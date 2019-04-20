@@ -1,53 +1,45 @@
-package be.nokorbis.spigot.commandsigns.addons.commands;
+package be.nokorbis.spigot.commandsigns.controller.executions;
 
 import be.nokorbis.spigot.commandsigns.utils.Settings;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.concurrent.Callable;
 
 
-public class CommandsRunner extends BukkitRunnable {
+public class CommandsRunner implements Callable<CommandsRunner.Result> {
 
-
-	private final CommandsAddon addon;
 	private final Player        player;
 	private final Queue<String> commands;
 
-	private long nextTimeToRun;
+	private final Result result = new Result();
 
-	public CommandsRunner(CommandsAddon addon, Player player, List<String> commands) {
-		this.addon = addon;
+	public CommandsRunner(Player player, List<String> commands) {
 		this.player = player;
 		this.commands = new LinkedList<>(commands);
-		this.nextTimeToRun = System.currentTimeMillis();
 	}
 
 	@Override
-	public void run() {
-		final long now = System.currentTimeMillis();
-
-		while (!commands.isEmpty() && nextTimeToRun <= now) {
+	public Result call() {
+		long commandTime = -1;
+		while (commandTime < 1 && !commands.isEmpty()) {
 			String command = commands.poll();
-
-			interpretCommand(now, command);
+			commandTime = interpretCommand(command);
 		}
-
-		if (commands.isEmpty()) {
-			cancel();
-		}
+		result.isToRunAgain = !commands.isEmpty();
+		result.timeToWait = commandTime;
+		return result;
 	}
 
-	private void interpretCommand(final long now, final String command) {
+	private long interpretCommand(final String command) {
 		if (!command.isEmpty()) {
 			final char prefix = command.charAt(0);
 
 			if(Settings.DELAY_CHAR() == prefix) {
-				interpretDelay(now, command);
+				return interpretDelay(command);
 			}
 			else if (Settings.SERVER_CHAR() == prefix) {
 				interpretServerCommand(command);
@@ -62,6 +54,7 @@ public class CommandsRunner extends BukkitRunnable {
 				interpretChat(command);
 			}
 		}
+		return 0L;
 	}
 
 	private void interpretChat(String command) {
@@ -88,13 +81,18 @@ public class CommandsRunner extends BukkitRunnable {
 		Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command.substring(1));
 	}
 
-	private void interpretDelay(long now, String command) {
+	private long interpretDelay(String command) {
 		try {
 			int delay = Integer.parseInt(command.substring(1).trim());
-			this.nextTimeToRun = now + (delay*1000);
+			return (delay*1000L);
 		}
 		catch (NumberFormatException ex) {
-			addon.getPlugin().getLogger().warning("Invalid delay configuration");
 		}
+		return -1L;
+	}
+
+	public static class Result {
+		public boolean isToRunAgain;
+		public long timeToWait;
 	}
 }

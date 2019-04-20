@@ -20,7 +20,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
+import org.bukkit.permissions.PermissionAttachment;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -28,6 +28,7 @@ import java.util.logging.Logger;
 
 
 public class NCommandSignsManager {
+	private final CommandSignsPlugin plugin;
 	private final Logger logger;
 
 	private Set<Addon>                        registeredAddons = new HashSet<>();
@@ -44,8 +45,11 @@ public class NCommandSignsManager {
 
 	private CommandBlockConfigurationDataPersister commandBlockPersister;
 
+	private final Map<UUID, PermissionAttachment> playersPermissions = new HashMap<>();
+
 
 	public NCommandSignsManager(CommandSignsPlugin plugin) {
+		this.plugin = plugin;
 		this.logger = plugin.getLogger();
 
 		this.cache = CacheBuilder.newBuilder()
@@ -62,9 +66,13 @@ public class NCommandSignsManager {
 		commandBlockPersister = new JsonCommandBlockConfigurationDataPersister(plugin.getDataFolder());
 	}
 
-	public void loadIdsPerLocations(Plugin plugin) {
-		CommandBlockIDLoader loader = new JsonCommandBlockIDLoader(plugin.getDataFolder());
+	public void loadIdsPerLocations() {
+		CommandBlockIDLoader loader = new JsonCommandBlockIDLoader(this.plugin.getDataFolder());
 		locationsToIds.putAll(loader.loadAllIdsPerLocations());
+	}
+
+	public final CommandSignsPlugin getPlugin() {
+		return this.plugin;
 	}
 
 	public void registerAddon(Addon addon) {
@@ -157,6 +165,10 @@ public class NCommandSignsManager {
 
 	public void addConfigurationManager(NCommandSignsConfigurationManager manager) {
 		this.ncsConfigurationManagers.put(manager.getEditor().getUniqueId(), manager);
+	}
+
+	public PermissionAttachment getPlayerPermissions(final Player player) {
+		return playersPermissions.computeIfAbsent(player.getUniqueId(), (uuid) -> player.addAttachment(plugin));
 	}
 
 	public void handlePlayerExit(Player player) {

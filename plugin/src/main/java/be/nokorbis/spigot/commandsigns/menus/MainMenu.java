@@ -19,7 +19,7 @@ public class MainMenu extends EditionNodeCore {
 
         this.requirementsMenu.setSubMenusByAddon(addonSubmenus.requirementSubmenus);
         this.costsMenu.setSubMenusByAddon(addonSubmenus.costSubmenus);
-        this.executionsMenu.setSubMenusByAddon(addonSubmenus.executionSubmenus);
+        //this.executionsMenu.setSubMenusByAddon(addonSubmenus.executionSubmenus);
     }
 
     @Override

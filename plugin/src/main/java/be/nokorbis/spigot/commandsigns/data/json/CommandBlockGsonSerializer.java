@@ -1,15 +1,13 @@
 package be.nokorbis.spigot.commandsigns.data.json;
 
 import be.nokorbis.spigot.commandsigns.api.addons.Addon;
+import be.nokorbis.spigot.commandsigns.api.addons.AddonConfigurationData;
 import be.nokorbis.spigot.commandsigns.model.CommandBlock;
 import com.google.gson.*;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.World;
 
 import java.lang.reflect.Type;
 import java.util.Set;
-import java.util.UUID;
 
 /**
  * Created by Nokorbis on 22/01/2016.
@@ -52,6 +50,25 @@ public class CommandBlockGsonSerializer implements JsonSerializer<CommandBlock>,
             cmdBlock.setCancelledOnMove(cancelled);
             cmdBlock.setResetOnMove(reset);
 
+            JsonArray commands = root.getAsJsonArray("commands");
+            for (JsonElement element : commands) {
+                cmdBlock.getCommands().add(element.getAsString());
+            }
+
+            JsonArray permissions = root.getAsJsonArray("temporarily_granted_permissions");
+            for (JsonElement permission : permissions) {
+                cmdBlock.getTemporarilyGrantedPermissions().add(permission.getAsString());
+            }
+
+            JsonObject jsonAddons = root.getAsJsonObject("addons");
+            for (Addon addon : addons) {
+                JsonElement addonData = jsonAddons.get(addon.getIdentifier());
+                if (!addonData.isJsonNull()) {
+                    AddonConfigurationData parsedAddonData = jsonContext.deserialize(addonData, addon.getConfigurationDataClass());
+                    cmdBlock.setAddonConfigurationData(addon, parsedAddonData);
+                }
+            }
+
             return cmdBlock;
         }
         catch (Exception ex) {
@@ -74,19 +91,31 @@ public class CommandBlockGsonSerializer implements JsonSerializer<CommandBlock>,
             root.add("location", jsonContext.serialize(location));
         }
 
-
         JsonObject timer = new JsonObject();
         timer.addProperty("duration", commandBlock.getTimeBeforeExecution());
         timer.addProperty("cancelled_on_move", commandBlock.isCancelledOnMove());
         timer.addProperty("reset_on_move", commandBlock.isResetOnMove());
         root.add("timer", timer);
 
+        JsonArray commands = new JsonArray();
+        for (String command : commandBlock.getCommands()) {
+            commands.add(command);
+        }
+        root.add("commands", commands);
+
+        JsonArray permissions = new JsonArray();
+        for (String permission : commandBlock.getTemporarilyGrantedPermissions()) {
+            permissions.add(permission);
+        }
+        root.add("temporarily_granted_permissions", permissions);
+
         final JsonObject addonData = new JsonObject();
-        commandBlock.forEachAddonConfiguration((addon, configuration) -> {
-            if (addon.getConfigurationDataSerializer() != null && addon.getConfigurationDataDeserializer() != null) {
-                addonData.add(addon.getIdentifier(), jsonContext.serialize(configuration));
+        for (Addon addon : addons) {
+            if (addon.getConfigurationDataClass() != null && addon.getConfigurationDataSerializer() != null && addon.getConfigurationDataDeserializer() != null) {
+                AddonConfigurationData addonConfigurationData = commandBlock.getAddonConfigurationData(addon);
+                addonData.add(addon.getIdentifier(), jsonContext.serialize(addonConfigurationData));
             }
-        });
+        }
 
         root.add("addons", addonData);
 

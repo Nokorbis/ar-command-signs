@@ -8,10 +8,7 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
-//@SuppressWarnings("WeakerAccess")
 public class CommandSignUtils {
-
-
 
 	public static List<Location> getLocationsAroundPoint(Location location, int radius) {
 		List<Location> locations = new LinkedList<>();

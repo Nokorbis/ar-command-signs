@@ -1,12 +1,10 @@
 package be.nokorbis.spigot.commandsigns.controller;
 
-import be.nokorbis.spigot.commandsigns.addons.commands.menus.MenuCommandsAdd;
+import be.nokorbis.spigot.commandsigns.menus.CoreMenuCommandsAdd;
 import be.nokorbis.spigot.commandsigns.api.DisplayMessages;
-import be.nokorbis.spigot.commandsigns.api.addons.AddonConfigurationData;
 import be.nokorbis.spigot.commandsigns.api.menu.EditionMenu;
 import be.nokorbis.spigot.commandsigns.api.menu.MenuNavigationContext;
 import be.nokorbis.spigot.commandsigns.model.CommandBlock;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 
@@ -75,8 +73,7 @@ public class NCommandSignsConfigurationManager {
 
 	public boolean handleCommandInput(String command) {
 		EditionMenu<CommandBlock> coreMenu = navigationContext.getCoreMenu();
-		EditionMenu<AddonConfigurationData> addonMenu = navigationContext.getAddonMenu();
-		if (coreMenu != null && addonMenu instanceof MenuCommandsAdd) {
+		if (coreMenu instanceof CoreMenuCommandsAdd) {
 			coreMenu.input(editor, commandBlock, command, navigationContext);
 			return true;
 		}

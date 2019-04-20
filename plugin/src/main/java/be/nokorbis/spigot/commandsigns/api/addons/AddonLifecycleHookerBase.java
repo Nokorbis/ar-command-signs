@@ -38,11 +38,6 @@ public class AddonLifecycleHookerBase implements AddonLifecycleHooker {
 	}
 
 	@Override
-	public void onExecution(Player player, AddonConfigurationData configurationData, AddonExecutionData executionData) {
-
-	}
-
-	@Override
 	public void onPostExecution(Player player, AddonConfigurationData configurationData, AddonExecutionData executionData) {
 
 	}

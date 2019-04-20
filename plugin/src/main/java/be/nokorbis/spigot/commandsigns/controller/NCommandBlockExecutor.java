@@ -7,13 +7,20 @@ import be.nokorbis.spigot.commandsigns.api.addons.AddonExecutionData;
 import be.nokorbis.spigot.commandsigns.api.addons.AddonLifecycleHooker;
 import be.nokorbis.spigot.commandsigns.api.exceptions.CommandSignsException;
 import be.nokorbis.spigot.commandsigns.api.exceptions.CommandSignsRequirementException;
+import be.nokorbis.spigot.commandsigns.controller.executions.CommandsRunner;
+import be.nokorbis.spigot.commandsigns.controller.executions.TemporaryPermissionsGranter;
+import be.nokorbis.spigot.commandsigns.controller.executions.TemporaryPermissionsRemover;
 import be.nokorbis.spigot.commandsigns.model.CommandBlock;
 import be.nokorbis.spigot.commandsigns.tasks.ExecuteTask;
 import be.nokorbis.spigot.commandsigns.utils.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
+
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 
 public class NCommandBlockExecutor {
@@ -63,7 +70,7 @@ public class NCommandBlockExecutor {
 			processRequirementsCheck(lifecycleHolder);
 			processCostsWithdrawn(lifecycleHolder);
 			processPreExecution(lifecycleHolder);
-			processExecution(lifecycleHolder);
+			processExecution();
 			processPostExecution(lifecycleHolder);
 		}
 		finally {
@@ -91,7 +98,6 @@ public class NCommandBlockExecutor {
 		}
 	}
 
-
 	private void processCostsWithdrawn(final NCommandSignsAddonLifecycleHolder lifecycleHolder) {
 		for (final Addon addon : lifecycleHolder.onCostWithdrawHandlers) {
 			final AddonLifecycleHooker hook = addon.getLifecycleHooker();
@@ -112,13 +118,44 @@ public class NCommandBlockExecutor {
 		}
 	}
 
-	private void processExecution(final NCommandSignsAddonLifecycleHolder lifecycleHolder) {
-		for (final Addon addon : lifecycleHolder.onExecutionHandlers) {
-			final AddonLifecycleHooker hook = addon.getLifecycleHooker();
-			final AddonConfigurationData configuration = commandBlock.getAddonConfigurationData(addon);
-			final AddonExecutionData data = commandBlock.getAddonExecutionData(addon);
+	private void processExecution() {
 
-			hook.onExecution(player, configuration, data);
+		final BukkitScheduler scheduler = Bukkit.getScheduler();
+		final CommandSignsPlugin plugin = manager.getPlugin();
+
+		PermissionAttachment playerPermissions= null;
+		try {
+			TemporaryPermissionsGranter granter = new TemporaryPermissionsGranter(plugin, this.player, commandBlock.getTemporarilyGrantedPermissions());
+			Future<PermissionAttachment> future = scheduler.callSyncMethod(plugin, granter);
+			playerPermissions = future.get();
+		}
+		catch (InterruptedException | ExecutionException e) {
+			plugin.getLogger().severe(e.getMessage());
+		}
+
+		try {
+			CommandsRunner runner = new CommandsRunner(this.player, commandBlock.getCommands());
+			Future<CommandsRunner.Result> future = scheduler.callSyncMethod(plugin, runner);
+			CommandsRunner.Result result = future.get();
+			while(result.isToRunAgain) {
+				Thread.sleep(result.timeToWait);
+				future = scheduler.callSyncMethod(plugin, runner);
+				result = future.get();
+			}
+		}
+		catch (ExecutionException | InterruptedException e) {
+			plugin.getLogger().warning(e.getMessage());
+		}
+
+		try {
+			if (playerPermissions != null) {
+				TemporaryPermissionsRemover remover = new TemporaryPermissionsRemover(playerPermissions, commandBlock.getTemporarilyGrantedPermissions());
+				Future<Void> future = scheduler.callSyncMethod(plugin, remover);
+				future.get();
+			}
+		}
+		catch (InterruptedException | ExecutionException e) {
+			plugin.getLogger().warning(e.getMessage());
 		}
 	}
 

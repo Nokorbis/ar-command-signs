@@ -8,7 +8,6 @@ import be.nokorbis.spigot.commandsigns.api.addons.AddonExecutionData;
 import be.nokorbis.spigot.commandsigns.api.exceptions.CommandSignsException;
 import be.nokorbis.spigot.commandsigns.api.menu.MenuEditable;
 import be.nokorbis.spigot.commandsigns.utils.CommandBlockValidator;
-import com.google.gson.JsonObject;
 import org.bukkit.Location;
 
 import be.nokorbis.spigot.commandsigns.CommandSignsPlugin;
@@ -28,6 +27,9 @@ public class CommandBlock implements MenuEditable
 
 	private Map<Addon, AddonConfigurationData> addonConfigurations= new HashMap<>();
 	private Map<Addon, AddonExecutionData> addonExecutions = new HashMap<>();
+
+	private ArrayList<String> commands = new ArrayList<>();
+	private ArrayList<String> temporarilyGrantedPermissions = new ArrayList<>();
 
 	private Integer timeBeforeExecution; // Value in seconds
 	private Boolean resetOnMove;
@@ -84,6 +86,14 @@ public class CommandBlock implements MenuEditable
 	}
 
 	/* Configuration data */
+
+	public void setAddonConfigurationData(final Addon addon, final AddonConfigurationData configurationData) {
+		this.addonConfigurations.put(addon, configurationData);
+	}
+
+	public void setAddonExecutionData(final Addon addon, final AddonExecutionData executionData) {
+		this.addonExecutions.put(addon, executionData);
+	}
 
 	public AddonConfigurationData getAddonConfigurationData(final Addon addon) {
 		if (addon == null) {
@@ -169,6 +179,16 @@ public class CommandBlock implements MenuEditable
 		this.disabled = disabled;
 	}
 
+	/* Commands */
+
+	public ArrayList<String> getCommands() {
+		return commands;
+	}
+
+	public ArrayList<String> getTemporarilyGrantedPermissions() {
+		return temporarilyGrantedPermissions;
+	}
+
 	/* Business */
 
 	public CommandBlock copy() {
@@ -213,15 +233,5 @@ public class CommandBlock implements MenuEditable
 
 	public static void reloadUsedID(long id) {
 		usedIds.remove(id);
-	}
-
-	public void forEachAddonConfiguration(AddonConfigurationConsumer consumer) {
-		for (Map.Entry<Addon, AddonConfigurationData> entry : addonConfigurations.entrySet()) {
-			consumer.consume(entry.getKey(), entry.getValue());
-		}
-	}
-
-	public interface AddonConfigurationConsumer {
-		void consume(Addon addon, AddonConfigurationData configuration);
 	}
 }

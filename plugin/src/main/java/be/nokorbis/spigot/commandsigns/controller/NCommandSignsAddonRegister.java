@@ -73,9 +73,6 @@ public class NCommandSignsAddonRegister implements AddonRegister {
 					else if ("onPreExecution".equals(name)) {
 						lifecycleHolder.onPreExecutionHandlers.add(addon);
 					}
-					else if ("onExecution".equals(name)) {
-						lifecycleHolder.onExecutionHandlers.add(addon);
-					}
 					else if ("onPostExecution".equals(name)) {
 						lifecycleHolder.onPostExecutionHandlers.add(addon);
 					}

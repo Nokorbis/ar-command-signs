@@ -12,7 +12,6 @@ class NCommandSignsAddonLifecycleHolder {
 	final List<Addon> onRequirementCheckHandlers = new LinkedList<>();
 	final List<Addon> onCostWithdrawHandlers     = new LinkedList<>();
 	final List<Addon> onPreExecutionHandlers     = new LinkedList<>();
-	final List<Addon> onExecutionHandlers        = new LinkedList<>();
 	final List<Addon> onPostExecutionHandlers    = new LinkedList<>();
 	final List<Addon> onCompletedHandlers        = new LinkedList<>();
 
