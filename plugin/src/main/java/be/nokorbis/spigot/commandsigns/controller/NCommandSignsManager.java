@@ -73,6 +73,7 @@ public class NCommandSignsManager {
 	public void loadIdsPerLocations() {
 		CommandBlockIDLoader loader = new JsonCommandBlockIDLoader(this.plugin.getDataFolder());
 		locationsToIds.putAll(loader.loadAllIdsPerLocations());
+		CommandBlock.addUsedIDS(this.locationsToIds.values());
 	}
 
 	public void reloadConfigurations() {

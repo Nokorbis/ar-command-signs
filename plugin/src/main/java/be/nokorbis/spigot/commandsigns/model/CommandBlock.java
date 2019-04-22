@@ -68,6 +68,11 @@ public class CommandBlock implements MenuEditable
 		return ++biggerUsedId;
 	}
 
+	public static void addUsedIDS(Collection<Long> values) {
+		usedIds.addAll(values);
+		biggerUsedId = usedIds.stream().max(Long::compareTo).orElse(0L);
+	}
+
 	/* Getters and setters */
 
 	/* Id */
