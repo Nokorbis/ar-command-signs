@@ -69,7 +69,7 @@ public class NearCommand extends CommandRequiringManager {
 	 */
 	private String formatCommand(final String format, CommandBlock cmd) {
 		final Location location = cmd.getLocation();
-		return format.replace("{NAME}", cmd.getName())
+		return format.replace("{NAME}", CommandSignUtils.formatName(cmd.getName()))
 					 .replace("{ID}", String.valueOf(cmd.getId()))
 					 .replace("{BLOCK_TYPE}", String.valueOf(location.getBlock().getType()))
 					 .replace("{X}", String.valueOf(location.getX()))

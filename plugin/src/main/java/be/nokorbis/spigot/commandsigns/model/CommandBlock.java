@@ -238,16 +238,6 @@ public class CommandBlock implements MenuEditable
 		return newBlock;
 	}
 
-	public boolean validate() throws CommandSignsException {
-		if (this.location == null) {
-			throw new CommandSignsException("A command block is invalid due to null location. You may think about deleting it, its id : " + this.id);
-		}
-		if (!CommandBlockValidator.isValidBlock(this.location.getBlock())) {
-			throw new CommandSignsException("A command block is invalid due to an invalid type (must be sign, plate or button). You may think about deleting it, its id : " + this.id);
-		}
-		return true;
-	}
-
 	public static void deleteUsedID(long id) {
 		usedIds.remove(id);
 	}

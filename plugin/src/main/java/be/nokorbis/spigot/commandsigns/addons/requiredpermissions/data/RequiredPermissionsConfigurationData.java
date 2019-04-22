@@ -34,7 +34,7 @@ public class RequiredPermissionsConfigurationData extends AddonConfigurationData
 			player.sendMessage(addonMessages.get("info.required_permissions"));
 			int i = 1;
 			for (String permission : requiredPermissions) {
-				player.sendMessage(format.replace("{NUMBER}", String.valueOf(i++).replace("{PERMISSION}", permission)));
+				player.sendMessage(format.replace("{NUMBER}", String.valueOf(i++)).replace("{PERMISSION}", permission));
 			}
 		}
 	}

@@ -51,10 +51,14 @@ public class CommandSignUtils {
 	}
 
 	public static String formatName(String messageWithName, String name) {
+		return messageWithName.replace("{NAME}",formatName(name));
+	}
+
+	public static String formatName(String name) {
 		if (name == null) {
-			return messageWithName.replace("{NAME}", commandsMessages.get("info.no_name"));
+			return commandsMessages.get("info.no_name");
 		}
-		return messageWithName.replace("{NAME}", name);
+		return name;
 	}
 
 	public static String formatTime(long seconds) {
@@ -101,7 +105,7 @@ public class CommandSignUtils {
 			player.sendMessage(commandsMessages.get("info.granted_permissions"));
 			int i = 1;
 			for (String permission : cmdB.getTemporarilyGrantedPermissions()) {
-				player.sendMessage(format.replace("{NUMBER}", String.valueOf(i++).replace("{PERMISSION}", permission)));
+				player.sendMessage(format.replace("{NUMBER}", String.valueOf(i++)).replace("{PERMISSION}", permission));
 			}
 		}
 
@@ -110,7 +114,7 @@ public class CommandSignUtils {
 			player.sendMessage(commandsMessages.get("info.commands"));
 			int i = 1;
 			for (String command : cmdB.getCommands()) {
-				player.sendMessage(format.replace("{NUMBER}", String.valueOf(i++).replace("{COMMAND}", command)));
+				player.sendMessage(format.replace("{NUMBER}", String.valueOf(i++)).replace("{COMMAND}", command));
 			}
 		}
 
