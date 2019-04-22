@@ -6,7 +6,6 @@ import be.nokorbis.spigot.commandsigns.api.addons.AddonExecutionData;
 import be.nokorbis.spigot.commandsigns.api.addons.AddonLifecycleHookerBase;
 import be.nokorbis.spigot.commandsigns.api.addons.NCSLifecycleHook;
 import be.nokorbis.spigot.commandsigns.api.exceptions.CommandSignsRequirementException;
-import be.nokorbis.spigot.commandsigns.utils.Messages;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.entity.Player;
 
@@ -28,7 +27,7 @@ public class EconomyLifecycleHooker extends AddonLifecycleHookerBase {
 			double price = configuration.getPrice();
 			if (price > 0.0) {
 				if (!economy.has(player, player.getWorld().getName(), price) && !player.hasPermission("commandsign.costs.bypass")) {
-					String err = Messages.get("usage.not_enough_money");
+					String err = messages.get("usage.not_enough_money");
 					err = err.replace("{PRICE}", economy.format(price));
 					throw new CommandSignsRequirementException(err);
 				}
@@ -44,6 +43,7 @@ public class EconomyLifecycleHooker extends AddonLifecycleHookerBase {
 			double price = configuration.getPrice();
 			if (price > 0.0) {
 				economy.withdrawPlayer(player, player.getWorld().getName(), price);
+				player.sendMessage(messages.get("usage.you_paied").replace("{PRICE}", economy.format(price)));
 			}
 		}
 	}

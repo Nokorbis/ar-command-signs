@@ -10,7 +10,10 @@ import be.nokorbis.spigot.commandsigns.data.json.JsonCommandBlockConfigurationDa
 import be.nokorbis.spigot.commandsigns.data.json.JsonCommandBlockIDLoader;
 import be.nokorbis.spigot.commandsigns.menus.MainMenu;
 import be.nokorbis.spigot.commandsigns.model.CommandBlock;
+import be.nokorbis.spigot.commandsigns.model.CommandBlockPendingInteraction;
 import be.nokorbis.spigot.commandsigns.model.CoreAddonSubmenusHolder;
+import be.nokorbis.spigot.commandsigns.tasks.ExecuteTask;
+import be.nokorbis.spigot.commandsigns.utils.CommandBlockValidator;
 import be.nokorbis.spigot.commandsigns.utils.Settings;
 
 import com.google.common.cache.*;
@@ -20,11 +23,12 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
-import org.bukkit.permissions.PermissionAttachment;
 
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
+import java.util.stream.Stream;
 
 
 public class NCommandSignsManager {
@@ -39,13 +43,13 @@ public class NCommandSignsManager {
 	private final LoadingCache<Long, CommandBlock>	cache;
 
 	private final Map<UUID, NCommandSignsConfigurationManager> ncsConfigurationManagers = new HashMap<>();
+	private final Map<UUID, CommandBlockPendingInteraction>    ncsPendingInteractions   = new HashMap<>();
+	private final Map<UUID, ExecuteTask>                       ncsRunningExecutors      = new HashMap<>();
 
 	private final CoreAddonSubmenusHolder addonSubmenus = new CoreAddonSubmenusHolder();
 	private       MainMenu                mainMenu;
 
 	private CommandBlockConfigurationDataPersister commandBlockPersister;
-
-	private final Map<UUID, PermissionAttachment> playersPermissions = new HashMap<>();
 
 
 	public NCommandSignsManager(CommandSignsPlugin plugin) {
@@ -71,12 +75,23 @@ public class NCommandSignsManager {
 		locationsToIds.putAll(loader.loadAllIdsPerLocations());
 	}
 
+	public void reloadConfigurations() {
+		CommandBlock.reloadUsedIDs();
+		this.cache.invalidateAll();
+		this.locationsToIds.clear();
+		loadIdsPerLocations();
+	}
+
 	public final CommandSignsPlugin getPlugin() {
 		return this.plugin;
 	}
 
 	public void registerAddon(Addon addon) {
 		this.registeredAddons.add(addon);
+	}
+
+	public Set<Addon> getAddons() {
+		return this.accessibleAddons;
 	}
 
 	public void initializeMenus() {
@@ -87,10 +102,6 @@ public class NCommandSignsManager {
 		commandBlockPersister.setAddons(accessibleAddons);
 	}
 
-	public Set<Addon> getRegisteredAddons() {
-		return this.accessibleAddons;
-	}
-
 	CoreAddonSubmenusHolder getAddonSubmenus() {
 		return addonSubmenus;
 	}
@@ -99,11 +110,48 @@ public class NCommandSignsManager {
 		return lifecycleHolder;
 	}
 
+	public CommandBlockPendingInteraction getPendingInteraction(Player player) {
+		return ncsPendingInteractions.get(player.getUniqueId());
+	}
+
+	public void addPendingInteraction(CommandBlockPendingInteraction interaction) {
+		ncsPendingInteractions.put(interaction.player.getUniqueId(), interaction);
+	}
+
+	public void removePendingInteraction(Player player) {
+		ncsPendingInteractions.remove(player.getUniqueId());
+	}
+
+	public ExecuteTask getRunningExecutor(Player player) {
+		return ncsRunningExecutors.get(player.getUniqueId());
+	}
+
+	public void addRunnnigExecutor(Player player, ExecuteTask task) {
+		synchronized (ncsRunningExecutors) {
+			ncsRunningExecutors.put(player.getUniqueId(), task);
+		}
+	}
+
+	public void removeRunningExecutor(Player player) {
+		synchronized (ncsRunningExecutors) {
+			ncsRunningExecutors.remove(player.getUniqueId());
+		}
+	}
+
+	public Stream<Long> getCommandBlockIDs() {
+		return this.locationsToIds.values().stream();
+	}
+
 	public CommandBlock getCommandBlock(final long id) {
 		if (id == -1) {
 			return null;
 		}
-		return this.cache.getUnchecked(id);
+		try {
+			return this.cache.get(id);
+		}
+		catch (ExecutionException e) {
+			return null;
+		}
 	}
 
 	public CommandBlock getCommandBlock(Location location) {
@@ -124,6 +172,27 @@ public class NCommandSignsManager {
 		locationsToIds.put(commandBlock.getLocation(), commandBlock.getId());
 
 		cache.put(commandBlock.getId(), commandBlock);
+	}
+
+	public void deleteCommandBlock(CommandBlock commandBlock) {
+		this.commandBlockPersister.delete(commandBlock.getId());
+		this.locationsToIds.remove(commandBlock.getLocation());
+		CommandBlock.deleteUsedID(commandBlock.getId());
+		this.cache.invalidate(commandBlock.getId());
+	}
+
+	public int purgeCommandBlocks() {
+		int cpt = 0;
+
+		List<CommandBlock> commandBlocks = commandBlockPersister.loadAllConfigurations();
+		for (CommandBlock commandBlock : commandBlocks) {
+			if (!CommandBlockValidator.isValidBlock(commandBlock.getLocation().getBlock())) {
+				cpt++;
+				deleteCommandBlock(commandBlock);
+			}
+		}
+
+		return cpt;
 	}
 
 	public boolean isCommandBlock(Block block) {
@@ -167,14 +236,9 @@ public class NCommandSignsManager {
 		this.ncsConfigurationManagers.put(manager.getEditor().getUniqueId(), manager);
 	}
 
-	public PermissionAttachment getPlayerPermissions(final Player player) {
-		return playersPermissions.computeIfAbsent(player.getUniqueId(), (uuid) -> player.addAttachment(plugin));
-	}
-
 	public void handlePlayerExit(Player player) {
-		Container.getContainer().getCopyingConfigurations().remove(player);
+		ncsPendingInteractions.remove(player.getUniqueId());
 		ncsConfigurationManagers.remove(player.getUniqueId());
-		Container.getContainer().getInfoPlayers().remove(player);
 	}
 
 	public boolean hasCommandSignsAdjacentToBlock(Block block) {
@@ -211,6 +275,4 @@ public class NCommandSignsManager {
 		RemovalCause cause = removalNotification.getCause();
 		this.logger.info(String.format("The command block : %s (%d) was removed from the cache because : %s.", cmdBlock.getName(), id, cause.name()));
 	}
-
-
 }

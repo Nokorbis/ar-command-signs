@@ -1,13 +1,11 @@
 package be.nokorbis.spigot.commandsigns.command.subcommands;
 
 import be.nokorbis.spigot.commandsigns.command.CommandRequiringManager;
-import be.nokorbis.spigot.commandsigns.controller.Container;
 import be.nokorbis.spigot.commandsigns.controller.NCommandSignsManager;
 import be.nokorbis.spigot.commandsigns.model.CommandBlock;
+import be.nokorbis.spigot.commandsigns.model.CommandBlockPendingInteraction;
 import be.nokorbis.spigot.commandsigns.model.CommandSignsCommandException;
 import be.nokorbis.spigot.commandsigns.utils.CommandSignUtils;
-import be.nokorbis.spigot.commandsigns.utils.Messages;
-import be.nokorbis.spigot.commandsigns.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -27,28 +25,30 @@ public class InfoCommand extends CommandRequiringManager {
 	@Override
 	public boolean execute(CommandSender sender, List<String> args) throws CommandSignsCommandException {
 		if (!(sender instanceof Player)) {
-			throw new CommandSignsCommandException(Messages.get("error.player_command"));
+			throw new CommandSignsCommandException(commandMessages.get("error.command.player_requirement"));
 		}
 		Player player = (Player) sender;
 
 		if (args.isEmpty()) {
-			if (!isPlayerAvailable(player)) {
-				return false;
+			if (isPlayerAvailable(player)) {
+				CommandBlockPendingInteraction interaction = new CommandBlockPendingInteraction();
+				interaction.type = CommandBlockPendingInteraction.Type.INFO;
+				interaction.player = player;
+				manager.addPendingInteraction(interaction);
+				player.sendMessage(commandMessages.get("howto.click_for_info"));
 			}
-			Container.getContainer().getInfoPlayers().add(player);
-			player.sendMessage(Messages.get("howto.click_for_info"));
 		}
 		else {
 			try {
 				long id = Long.parseLong(args.get(1));
-				CommandBlock cmd = Container.getContainer().getCommandBlockById(id);
+				CommandBlock cmd = manager.getCommandBlock(id);
 				if (cmd == null) {
-					throw new CommandSignsCommandException(Messages.get("error.invalid_command_id"));
+					throw new CommandSignsCommandException(commandMessages.get("error.invalid_command_id"));
 				}
-				CommandSignUtils.info(player, cmd);
+				CommandSignUtils.info(player, cmd, manager.getAddons());
 			}
 			catch (NumberFormatException ex) {
-				throw new CommandSignsCommandException(Messages.get("error.number_argument"));
+				throw new CommandSignsCommandException(commandMessages.get("error.command.number_requirement"));
 			}
 		}
 		return true;

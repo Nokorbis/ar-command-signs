@@ -194,6 +194,15 @@ public class CommandBlock implements MenuEditable
 	public CommandBlock copy() {
 		CommandBlock newBlock = new CommandBlock();
 
+		if (this.name != null) {
+			newBlock.name = this.name + " (copy)";
+		}
+
+		newBlock.disabled = this.disabled;
+
+		newBlock.commands.addAll(this.commands);
+		newBlock.temporarilyGrantedPermissions.addAll(this.temporarilyGrantedPermissions);
+
 		if (this.hasTimer()) {
 			newBlock.setTimeBeforeExecution(this.timeBeforeExecution);
 		}
@@ -204,6 +213,26 @@ public class CommandBlock implements MenuEditable
 
 		if (this.resetOnMove != null && this.resetOnMove) {
 			newBlock.setResetOnMove(true);
+		}
+
+		for (Map.Entry<Addon, AddonConfigurationData> dataEntry : this.addonConfigurations.entrySet()) {
+			AddonConfigurationData data = dataEntry.getValue();
+			if (data != null) {
+				AddonConfigurationData copiedData = data.copy();
+				if (copiedData != null) {
+					newBlock.addonConfigurations.put(dataEntry.getKey(), copiedData);
+				}
+			}
+		}
+
+		for (Map.Entry<Addon, AddonExecutionData> dataEntry : this.addonExecutions.entrySet()) {
+			AddonExecutionData data = dataEntry.getValue();
+			if (data != null) {
+				AddonExecutionData copiedData = data.copy();
+				if (copiedData != null) {
+					newBlock.addonExecutions.put(dataEntry.getKey(), copiedData);
+				}
+			}
 		}
 
 		return newBlock;
@@ -219,19 +248,12 @@ public class CommandBlock implements MenuEditable
 		return true;
 	}
 
-	public String blockSummary() {
-		if (this.location == null) {
-			return "";
-		}
-		return this.location.getBlock().getType() + " #" + this.location.getX() + ":" + this.location.getZ() + "(" + this.location.getY() + ")";
+	public static void deleteUsedID(long id) {
+		usedIds.remove(id);
 	}
 
 	public static void reloadUsedIDs() {
 		usedIds = new HashSet<>();
 		biggerUsedId = 0L;
-	}
-
-	public static void reloadUsedID(long id) {
-		usedIds.remove(id);
 	}
 }

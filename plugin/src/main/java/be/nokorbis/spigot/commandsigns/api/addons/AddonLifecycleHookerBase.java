@@ -1,10 +1,13 @@
 package be.nokorbis.spigot.commandsigns.api.addons;
 
+import be.nokorbis.spigot.commandsigns.api.DisplayMessages;
 import be.nokorbis.spigot.commandsigns.api.exceptions.CommandSignsRequirementException;
 import org.bukkit.entity.Player;
 
 
 public class AddonLifecycleHookerBase implements AddonLifecycleHooker {
+
+	protected static final DisplayMessages messages = DisplayMessages.getDisplayMessages("messages/addons");
 
 	protected Addon addon;
 

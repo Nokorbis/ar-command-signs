@@ -7,7 +7,6 @@ import be.nokorbis.spigot.commandsigns.api.addons.AddonExecutionData;
 import be.nokorbis.spigot.commandsigns.api.addons.AddonLifecycleHookerBase;
 import be.nokorbis.spigot.commandsigns.api.addons.NCSLifecycleHook;
 import be.nokorbis.spigot.commandsigns.api.exceptions.CommandSignsRequirementException;
-import be.nokorbis.spigot.commandsigns.utils.Messages;
 import org.bukkit.entity.Player;
 
 import java.text.DecimalFormat;
@@ -51,7 +50,7 @@ public class CooldownLifecycleHooker extends AddonLifecycleHookerBase {
 			final long now = System.currentTimeMillis();
 			long timeToWait = lastTimeSomeoneUsed + globalCooldown - now;
 			if (timeToWait > 0) {
-				String msg = Messages.get("usage.general_cooldown");
+				String msg = messages.get("usage.general_cooldown");
 				msg = msg.replace("{TIME}", decimalFormat.format((globalCooldown- timeToWait) / 1000.0));
 				msg = msg.replace("{REMAINING}", decimalFormat.format(timeToWait / 1000.0));
 				throw new CommandSignsRequirementException(msg);
@@ -64,7 +63,7 @@ public class CooldownLifecycleHooker extends AddonLifecycleHookerBase {
 			final long now = System.currentTimeMillis();
 			long timeToWait = lastTimePlayerUsed + playerCooldown - now;
 			if (timeToWait > 0) {
-				String msg = Messages.get("usage.player_cooldown");
+				String msg = messages.get("usage.player_cooldown");
 				msg = msg.replace("{TIME}", decimalFormat.format((now - lastTimePlayerUsed) / 1000.0));
 				msg = msg.replace("{REMAINING}", decimalFormat.format(timeToWait / 1000.0));
 				throw new CommandSignsRequirementException(msg);

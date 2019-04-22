@@ -1,13 +1,10 @@
 package be.nokorbis.spigot.commandsigns.command.subcommands;
 
 import be.nokorbis.spigot.commandsigns.command.CommandRequiringManager;
-import be.nokorbis.spigot.commandsigns.controller.Container;
 import be.nokorbis.spigot.commandsigns.controller.NCommandSignsManager;
 import be.nokorbis.spigot.commandsigns.model.CommandBlock;
+import be.nokorbis.spigot.commandsigns.model.CommandBlockPendingInteraction;
 import be.nokorbis.spigot.commandsigns.model.CommandSignsCommandException;
-import be.nokorbis.spigot.commandsigns.utils.Messages;
-import be.nokorbis.spigot.commandsigns.command.Command;
-import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -27,46 +24,55 @@ public class DeleteCommand extends CommandRequiringManager {
 		@Override
 		public boolean execute(CommandSender sender, List<String> args) throws CommandSignsCommandException {
 			if (!(sender instanceof Player)) {
-				throw new CommandSignsCommandException(Messages.get("error.player_command"));
+				throw new CommandSignsCommandException(commandMessages.get("error.command.player_requirement"));
 			}
 			Player player = (Player) sender;
 
 			if (args.isEmpty()) {
 				if (isPlayerAvailable(player)) {
-					Container.getContainer().getDeletingBlocks().put(player, null);
-					player.sendMessage(Messages.get("howto.click_to_delete"));
+					addPendingDelete(player, null);
+					player.sendMessage(commandMessages.get("howto.click_to_delete"));
 					return true;
 				}
 			}
 			else {
 				try {
 					long id = Long.parseLong(args.get(0));
-					if (Container.getContainer().getDeletingBlocks().containsKey(player)) {
-						Location loc = Container.getContainer().getDeletingBlocks().get(player);
-						CommandBlock cmd = Container.getContainer().getCommandBlocks().get(loc);
+					CommandBlockPendingInteraction interaction = manager.getPendingInteraction(player);
+					if (interaction != null && CommandBlockPendingInteraction.Type.DELETE == interaction.type) {
+						CommandBlock cmd = interaction.commandBlock;
 						if (cmd != null && cmd.getId() == id) {
-							Container.getContainer().getCommandBlocks().remove(loc);
-							Container.getContainer().getDeletingBlocks().remove(player);
-							Container.getContainer().getSaver().delete(cmd.getId());
-							player.sendMessage(Messages.get("info.command_deleted"));
+							manager.deleteCommandBlock(cmd);
+							manager.removePendingInteraction(player);
+							player.sendMessage(commandMessages.get("success.command_deleted"));
 							return true;
 						}
 					}
 					else if (isPlayerAvailable(player)) {
-						CommandBlock cmd = Container.getContainer().getCommandBlockById(id);
-						Container.getContainer().getDeletingBlocks().put(player, cmd.getLocation());
-						player.sendMessage(Messages.get("howto.confirm_deletion"));
+						CommandBlock commandBlock = manager.getCommandBlock(id);
+						addPendingDelete(player, commandBlock);
+						player.sendMessage(commandMessages.get("howto.confirm_deletion"));
 						return true;
 					}
 				}
 				catch (NumberFormatException ex) {
-					throw new CommandSignsCommandException(Messages.get("error.number_argument"));
+					throw new CommandSignsCommandException(commandMessages.get("error.command.number_requirement"));
 				}
 			}
 			return false;
 		}
 
-		@Override
+	private void addPendingDelete(Player player, CommandBlock commandBlock) {
+		CommandBlockPendingInteraction interaction = new CommandBlockPendingInteraction();
+		interaction.type = CommandBlockPendingInteraction.Type.DELETE;
+		interaction.player = player;
+		if (commandBlock != null) {
+			interaction.commandBlock = commandBlock;
+		}
+		manager.addPendingInteraction(interaction);
+	}
+
+	@Override
 		public void printUsage(CommandSender sender) {
 			sender.sendMessage("/commandsign delete [ID]");
 		}

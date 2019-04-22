@@ -23,7 +23,7 @@ public class CreateCommand extends CommandRequiringManager {
     @Override
     public boolean execute(CommandSender sender, List<String> args) throws CommandSignsCommandException {
         if (!(sender instanceof Player)) {
-            throw new CommandSignsCommandException(errorMessages.get("error.command.player_requirement"));
+            throw new CommandSignsCommandException(commandMessages.get("error.command.player_requirement"));
         }
         Player player = (Player) sender;
 

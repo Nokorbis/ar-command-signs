@@ -1,6 +1,7 @@
 package be.nokorbis.spigot.commandsigns.controller;
 
 import be.nokorbis.spigot.commandsigns.CommandSignsPlugin;
+import be.nokorbis.spigot.commandsigns.api.DisplayMessages;
 import be.nokorbis.spigot.commandsigns.api.addons.Addon;
 import be.nokorbis.spigot.commandsigns.api.addons.AddonConfigurationData;
 import be.nokorbis.spigot.commandsigns.api.addons.AddonExecutionData;
@@ -12,7 +13,6 @@ import be.nokorbis.spigot.commandsigns.controller.executions.TemporaryPermission
 import be.nokorbis.spigot.commandsigns.controller.executions.TemporaryPermissionsRemover;
 import be.nokorbis.spigot.commandsigns.model.CommandBlock;
 import be.nokorbis.spigot.commandsigns.tasks.ExecuteTask;
-import be.nokorbis.spigot.commandsigns.utils.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachment;
@@ -24,6 +24,8 @@ import java.util.concurrent.Future;
 
 
 public class NCommandBlockExecutor {
+
+	private static final DisplayMessages messages = DisplayMessages.getDisplayMessages("messages/events");
 
 	private static NCommandSignsManager manager;
 
@@ -47,14 +49,14 @@ public class NCommandBlockExecutor {
 		long time = 0;
 		if (commandBlock.hasTimer() && !player.hasPermission("commandsign.timer.bypass")) {
 			time = commandBlock.getTimeBeforeExecution();
-			String msg = Messages.get("info.timer_delayed");
+			String msg = messages.get("usage.timer_delayed");
 			msg = msg.replace("{TIME}", String.valueOf(time));
 			player.sendMessage(msg);
 		}
 
 		ExecuteTask exe = new ExecuteTask(this);
 		exe.setInitialLocation(player.getLocation().getBlock().getLocation());
-		Container.getContainer().getExecutingTasks().put(player.getUniqueId(), exe);
+		manager.addRunnnigExecutor(player, exe);
 
 		BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
 
@@ -75,6 +77,7 @@ public class NCommandBlockExecutor {
 		}
 		finally {
 			processComplete(lifecycleHolder);
+			manager.removeRunningExecutor(player);
 		}
 	}
 

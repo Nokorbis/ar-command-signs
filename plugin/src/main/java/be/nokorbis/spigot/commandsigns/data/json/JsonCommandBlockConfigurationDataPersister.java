@@ -9,6 +9,8 @@ import org.bukkit.Location;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 
@@ -81,5 +83,33 @@ public class JsonCommandBlockConfigurationDataPersister extends JsonCommandBlock
 		}
 
 		return configFile.delete();
+	}
+
+	@Override
+	public List<CommandBlock> loadAllConfigurations() {
+		List<CommandBlock> commandBlocks = new ArrayList<>();
+
+		if (!dataFolder.exists()) {
+			dataFolder.mkdirs();
+		}
+		else {
+			File[] files = dataFolder.listFiles(filter);
+
+			if (files != null && files.length > 0) {
+				Gson gson = getGson();
+				for (File file : files) {
+					try (InputStream is = new FileInputStream(file);
+						 InputStreamReader reader = new InputStreamReader(is, StandardCharsets.UTF_8)) {
+						commandBlocks.add(gson.fromJson(reader, CommandBlock.class));
+					}
+					catch (IOException e) {
+						CommandSignsPlugin.getPlugin().getLogger().severe(e.getMessage());
+					}
+				}
+			}
+
+		}
+
+		return commandBlocks;
 	}
 }

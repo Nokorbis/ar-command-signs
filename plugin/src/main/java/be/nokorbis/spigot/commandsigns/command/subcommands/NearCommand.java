@@ -26,11 +26,11 @@ public class NearCommand extends CommandRequiringManager {
 	@Override
 	public boolean execute(CommandSender sender, List<String> args) throws CommandSignsCommandException {
 		if (!(sender instanceof Player)) {
-			throw new CommandSignsCommandException(errorMessages.get("error.command.player_requirement"));
+			throw new CommandSignsCommandException(commandMessages.get("error.command.player_requirement"));
 		}
 
 		if (args.isEmpty()) {
-			throw new CommandSignsCommandException(errorMessages.get("error.command.radius_requirement"));
+			throw new CommandSignsCommandException(commandMessages.get("error.command.radius_requirement"));
 		}
 
 		Player player = (Player) sender;
@@ -54,7 +54,7 @@ public class NearCommand extends CommandRequiringManager {
 			}
 		}
 		catch (NumberFormatException ex) {
-			throw new CommandSignsCommandException(errorMessages.get("error.command.number_requirement"));
+			throw new CommandSignsCommandException(commandMessages.get("error.command.number_requirement"));
 		}
 
 		return true;

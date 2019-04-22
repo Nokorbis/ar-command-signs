@@ -2,13 +2,10 @@ package be.nokorbis.spigot.commandsigns.command.subcommands;
 
 import be.nokorbis.spigot.commandsigns.command.ICommand;
 import be.nokorbis.spigot.commandsigns.model.CommandSignsCommandException;
-import be.nokorbis.spigot.commandsigns.utils.Messages;
 import be.nokorbis.spigot.commandsigns.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -31,7 +28,7 @@ public class HelpCommand extends Command {
 	public boolean execute(CommandSender sender, List<String> args) throws CommandSignsCommandException {
 		if (args.isEmpty()) {
 			if (!(sender instanceof Player)) {
-				throw new CommandSignsCommandException(Messages.get("error.player_command"));
+				throw new CommandSignsCommandException(commandMessages.get("error.command.player_requirement"));
 			}
 			for (ICommand cmd : this.commands) {
 				cmd.printUsage(sender, false);

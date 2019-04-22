@@ -3,10 +3,10 @@ package be.nokorbis.spigot.commandsigns.controller;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import be.nokorbis.spigot.commandsigns.api.DisplayMessages;
 import be.nokorbis.spigot.commandsigns.command.ICommand;
 import be.nokorbis.spigot.commandsigns.command.subcommands.*;
 import be.nokorbis.spigot.commandsigns.model.CommandSignsCommandException;
-import be.nokorbis.spigot.commandsigns.utils.Messages;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -14,6 +14,7 @@ import org.bukkit.command.TabCompleter;
 
 public class CommandSignCommands implements CommandExecutor, TabCompleter {
 	private final List<ICommand> commands;
+	private final DisplayMessages commandsMessages = DisplayMessages.getDisplayMessages("messages/commands");
 
 	public CommandSignCommands (NCommandSignsManager manager) {
 		commands = new LinkedList<>();
@@ -52,7 +53,7 @@ public class CommandSignCommands implements CommandExecutor, TabCompleter {
 					}
 				}
 				else {
-					sender.sendMessage(Messages.get("error.no_permission"));
+					sender.sendMessage(commandsMessages.get("error.no_permission"));
 				}
 				return true;
 			}
@@ -74,7 +75,7 @@ public class CommandSignCommands implements CommandExecutor, TabCompleter {
 					.collect(Collectors.toList());
 		}
 		else {
-			List<String> argList = Arrays.asList(args);
+			List<String> argList =new ArrayList<>(Arrays.asList(args));
 			String sub = argList.remove(0);
 			for (ICommand command : this.commands) {
 				if (command.isCommand(sub)) {

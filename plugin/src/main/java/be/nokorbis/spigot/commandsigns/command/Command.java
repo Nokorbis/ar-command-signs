@@ -2,7 +2,6 @@ package be.nokorbis.spigot.commandsigns.command;
 
 import be.nokorbis.spigot.commandsigns.api.DisplayMessages;
 import be.nokorbis.spigot.commandsigns.model.CommandSignsCommandException;
-import be.nokorbis.spigot.commandsigns.utils.Messages;
 import org.bukkit.command.CommandSender;
 
 import java.util.Collections;
@@ -13,7 +12,6 @@ import java.util.List;
  * Created by Nokorbis on 1/20/16.
  */
 public abstract class Command implements ICommand {
-	protected final static DisplayMessages errorMessages   = DisplayMessages.getDisplayMessages("messages/errors");
 	protected final static DisplayMessages commandMessages = DisplayMessages.getDisplayMessages("messages/commands");
 
 	protected final String   command;
@@ -47,7 +45,7 @@ public abstract class Command implements ICommand {
 			printUsage(sender);
 		}
 		else if (permission) {
-			throw new CommandSignsCommandException(Messages.get("error.no_permission"));
+			throw new CommandSignsCommandException(commandMessages.get("error.no_permission"));
 		}
 	}
 

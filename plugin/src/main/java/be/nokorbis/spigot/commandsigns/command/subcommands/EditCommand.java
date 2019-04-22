@@ -5,7 +5,6 @@ import be.nokorbis.spigot.commandsigns.controller.NCommandSignsConfigurationMana
 import be.nokorbis.spigot.commandsigns.controller.NCommandSignsManager;
 import be.nokorbis.spigot.commandsigns.model.CommandBlock;
 import be.nokorbis.spigot.commandsigns.model.CommandSignsCommandException;
-import be.nokorbis.spigot.commandsigns.utils.Messages;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -25,41 +24,44 @@ public class EditCommand extends CommandRequiringManager {
 	@Override
 	public boolean execute(CommandSender sender, List<String> args) throws CommandSignsCommandException {
 		if (!(sender instanceof Player)) {
-			throw new CommandSignsCommandException(Messages.get("error.player_command"));
+			throw new CommandSignsCommandException(commandMessages.get("error.command.player_requirement"));
 		}
 		Player player = (Player) sender;
 
 		if (isPlayerAvailable(player)) {
-			NCommandSignsConfigurationManager conf;
 			if (args.isEmpty()) {
-				conf = new NCommandSignsConfigurationManager(player, manager);
-				player.sendMessage(Messages.get("howto.click_to_edit"));
+				addNewEditionManager(player, null);
+				player.sendMessage(commandMessages.get("howto.click_to_edit"));
 			}
 			else {
 				try {
 					long id = Long.parseLong(args.get(1));
 					CommandBlock commandBlock = manager.getCommandBlock(id);
 					if (commandBlock == null) {
-						throw new CommandSignsCommandException(Messages.get("error.invalid_command_id"));
+						throw new CommandSignsCommandException(commandMessages.get("error.invalid_command_id"));
 					}
-					conf = new NCommandSignsConfigurationManager(player, manager);
-					conf.setCommandBlock(commandBlock);
+					addNewEditionManager(player, commandBlock);
 				}
 				catch (NumberFormatException ex) {
-					throw new CommandSignsCommandException(Messages.get("error.number_argument"));
+					throw new CommandSignsCommandException(commandMessages.get("error.command.number_requirement"));
 				}
 			}
-			conf.setEditing(true);
-			conf.setCurrentMenu(manager.getMainMenu());
-			if (conf.getCommandBlock() != null) {
-				conf.display();
-			}
 
-			manager.addConfigurationManager(conf);
 			return true;
 		}
 
 		return false;
+	}
+
+	private void addNewEditionManager(Player player, CommandBlock commandBlock) {
+		NCommandSignsConfigurationManager conf = new NCommandSignsConfigurationManager(player, manager);
+		conf.setEditing(true);
+		conf.setCurrentMenu(manager.getMainMenu());
+		if (commandBlock != null) {
+			conf.setCommandBlock(commandBlock);
+			conf.display();
+		}
+		manager.addConfigurationManager(conf);
 	}
 
 	@Override
