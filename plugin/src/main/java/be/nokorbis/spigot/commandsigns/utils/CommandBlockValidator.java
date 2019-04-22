@@ -57,7 +57,7 @@ public final class CommandBlockValidator {
 	private CommandBlockValidator() {
 	}
 
-	//TODO: Add tripwire and trapped chest
+	//TODO: Add tripwire and trapped chest and lever
 
 	static {
 		Material[] plates = {
