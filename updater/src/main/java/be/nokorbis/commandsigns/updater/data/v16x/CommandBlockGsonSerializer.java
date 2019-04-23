@@ -16,26 +16,21 @@ public class CommandBlockGsonSerializer implements JsonSerializer<CommandBlock>,
 
 
     @Override
-    public CommandBlock deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException
-    {
+    public CommandBlock deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
         JsonObject root = jsonElement.getAsJsonObject();
 
-        try
-        {
+        try {
             CommandBlock cmdBlock = new CommandBlock();
             cmdBlock.setId(root.get("id").getAsLong());
             JsonElement name = root.get("name");
-            if (name != null)
-            {
+            if (name != null) {
                 cmdBlock.setName(name.getAsString());
             }
 
             JsonElement loc = root.get("world");
-            if (loc != null)
-            {
+            if (loc != null) {
                 World world = Bukkit.getWorld(loc.getAsString());
-                if (world == null)
-                {
+                if (world == null) {
                     UUID worldUuid = UUID.fromString(loc.getAsString());
                     world = Bukkit.getWorld(worldUuid);
                 }
@@ -47,8 +42,7 @@ public class CommandBlockGsonSerializer implements JsonSerializer<CommandBlock>,
             }
 
             JsonElement disabled = root.get("disabled");
-            if (disabled != null)
-            {
+            if (disabled != null) {
                 cmdBlock.setDisabled(disabled.getAsBoolean());
             }
 
@@ -62,27 +56,23 @@ public class CommandBlockGsonSerializer implements JsonSerializer<CommandBlock>,
             cmdBlock.setTimeBetweenPlayerUsage(root.get("player_time_between_usages").getAsInt());
 
             JsonArray commands = root.get("commands").getAsJsonArray();
-            for (JsonElement command : commands)
-            {
+            for (JsonElement command : commands) {
                 cmdBlock.addCommand(command.getAsString());
             }
 
             JsonArray neededPerms = root.get("needed_permissions").getAsJsonArray();
-            for (JsonElement perm : neededPerms)
-            {
+            for (JsonElement perm : neededPerms) {
                 cmdBlock.addNeededPermission(perm.getAsString());
             }
 
             JsonArray permissions = root.get("temporary_permissions").getAsJsonArray();
-            for (JsonElement permission : permissions)
-            {
+            for (JsonElement permission : permissions) {
                 cmdBlock.addPermission(permission.getAsString());
             }
 
             return cmdBlock;
         }
-        catch (Exception ex)
-        {
+        catch (Exception ex) {
             return null;
         }
     }
@@ -91,14 +81,12 @@ public class CommandBlockGsonSerializer implements JsonSerializer<CommandBlock>,
     public JsonElement serialize(CommandBlock commandBlock, Type type, JsonSerializationContext jsonSerializationContext) {
         JsonObject root = new JsonObject();
         root.addProperty("id", commandBlock.getId());
-        if (commandBlock.getName() != null)
-        {
+        if (commandBlock.getName() != null) {
             root.addProperty("name", commandBlock.getName());
         }
 
         //Save location
-        if (commandBlock.getLocation() != null)
-        {
+        if (commandBlock.getLocation() != null) {
             root.addProperty("world", commandBlock.getLocation().getWorld().getName());
             root.addProperty("x", commandBlock.getLocation().getBlockX());
             root.addProperty("y", commandBlock.getLocation().getBlockY());
@@ -109,24 +97,21 @@ public class CommandBlockGsonSerializer implements JsonSerializer<CommandBlock>,
 
         //Save commands
         JsonArray jsonCmds = new JsonArray();
-        for (String cmd : commandBlock.getCommands())
-        {
+        for (String cmd : commandBlock.getCommands()) {
             jsonCmds.add(new JsonPrimitive(cmd));
         }
         root.add("commands", jsonCmds);
 
         //Save needed requiredpermissions
         JsonArray jsonNeededPerms = new JsonArray();
-        for (String perm : commandBlock.getNeededPermissions())
-        {
+        for (String perm : commandBlock.getNeededPermissions()) {
             jsonNeededPerms.add(new JsonPrimitive(perm));
         }
         root.add("needed_permissions", jsonNeededPerms);
 
         //Save temporary requiredpermissions
         JsonArray jsonTempPerms = new JsonArray();
-        for (String perm : commandBlock.getPermissions())
-        {
+        for (String perm : commandBlock.getPermissions()) {
             jsonTempPerms.add(new JsonPrimitive(perm));
         }
         root.add("temporary_permissions", jsonTempPerms);

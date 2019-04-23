@@ -48,10 +48,6 @@ public class CommandBlock implements MenuEditable
 		this.resetOnMove = false;
 		this.cancelledOnMove = false;
 
-		if (usedIds.contains(id)) {
-			CommandSignsPlugin.getPlugin().getLogger().warning("A strange error occured : It seems that the registered id (" + id + ") is already in used... Getting a new one...");
-			id = getFreeId();
-		}
 		this.setId(id);
 	}
 

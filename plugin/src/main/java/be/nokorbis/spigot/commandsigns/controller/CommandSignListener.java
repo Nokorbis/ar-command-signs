@@ -178,7 +178,7 @@ public class CommandSignListener implements Listener {
 					BukkitScheduler sch = Bukkit.getScheduler();
 					sch.cancelTask(runningExecutor.getTaskId());
 
-					BukkitTask task = sch.runTaskLater(CommandSignsPlugin.getPlugin(), runningExecutor, runningExecutor.getCommandBlock().getTimeBeforeExecution() * 20);
+					BukkitTask task = sch.runTaskLaterAsynchronously(CommandSignsPlugin.getPlugin(), runningExecutor, runningExecutor.getCommandBlock().getTimeBeforeExecution() * 20);
 					runningExecutor.setTaskId(task.getTaskId());
 					runningExecutor.setInitialLocation(player.getLocation().getBlock().getLocation());
 
