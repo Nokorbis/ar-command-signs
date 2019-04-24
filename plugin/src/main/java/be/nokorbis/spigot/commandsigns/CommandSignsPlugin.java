@@ -15,38 +15,43 @@ public class CommandSignsPlugin extends JavaPlugin {
 	private static CommandSignsPlugin plugin;
 
 	private NCommandSignsManager manager;
+	private NCommandSignsAddonRegister addonRegister;
+
 
 	@Override
 	public void onLoad() {
 		plugin = this;
 		Settings.loadSettings(plugin);
 
-		this.manager = new NCommandSignsManager(this);
-		NCommandBlockExecutor.setManager(manager);
-
-		AddonRegister addonRegister = new NCommandSignsAddonRegister(manager);
+		addonRegister = new NCommandSignsAddonRegister();
 		getServer().getServicesManager().register(AddonRegister.class, addonRegister, this, ServicePriority.Normal);
 
 		addonRegister.registerAddon(new RequiredPermissionsAddon(this));
 		addonRegister.registerAddon(new CooldownAddon(this));
 		EconomyAddon economyAddon = new EconomyAddon(this);
-		if (economyAddon.isEconomyLinked()) {
-			addonRegister.registerAddon(economyAddon);
-		}
+		addonRegister.registerAddon(economyAddon);
 	}
 
 	@Override
 	public void onEnable() {
+		this.manager = new NCommandSignsManager(this);
+
+		addonRegister.triggerEnable();
+		addonRegister.registerInManager(manager);
+
 		manager.loadIdsPerLocations();
 		manager.initializeMenus();
 		manager.initializeSerializers();
 
+		NCommandBlockExecutor.setManager(manager);
+
 		CommandSignCommands commandExecutor = new CommandSignCommands(manager);
 
 		PluginCommand mainCommand = this.getCommand("commandsign");
-		mainCommand.setExecutor(commandExecutor);
-		mainCommand.setTabCompleter(commandExecutor);
-
+		if (mainCommand != null) {
+			mainCommand.setExecutor(commandExecutor);
+			mainCommand.setTabCompleter(commandExecutor);
+		}
 
 		this.getServer().getPluginManager().registerEvents(new CommandSignListener(manager), this);
 	}
@@ -56,8 +61,10 @@ public class CommandSignsPlugin extends JavaPlugin {
 		this.manager = null;
 
 		PluginCommand mainCommand = this.getCommand("commandsign");
-		mainCommand.setExecutor(null);
-		mainCommand.setTabCompleter(null);
+		if (mainCommand != null) {
+			mainCommand.setExecutor(null);
+			mainCommand.setTabCompleter(null);
+		}
 	}
 
 	public static CommandSignsPlugin getPlugin() {

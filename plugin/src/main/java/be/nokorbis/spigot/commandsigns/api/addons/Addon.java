@@ -31,6 +31,8 @@ public interface Addon {
 	 */
     AddonExecutionData createExecutionData();
 
+    void onEnable();
+
     Class<? extends AddonExecutionData> getExecutionDataClass();
     JsonSerializer<? extends AddonExecutionData> getExecutionDataSerializer();
     JsonDeserializer<? extends AddonExecutionData> getExecutionDataDeserializer();

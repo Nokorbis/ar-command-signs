@@ -72,16 +72,16 @@ public class CommandSignUtils {
 		hours 	= hours % 24;
 
 		if (days > 0) {
-			builder.append(days).append(commandsMessages.get("info.days")).append(" ");
+			builder.append(days).append(" ").append(commandsMessages.get("info.days")).append(" ");
 		}
 		if (hours > 0) {
-			builder.append(hours).append(commandsMessages.get("info.hours")).append(" ");
+			builder.append(hours).append(" ").append(commandsMessages.get("info.hours")).append(" ");
 		}
 		if (minutes > 0) {
-			builder.append(minutes).append(commandsMessages.get("info.minutes")).append(" ");
+			builder.append(minutes).append(" ").append(commandsMessages.get("info.minutes")).append(" ");
 		}
 		if (seconds > 0) {
-			builder.append(seconds).append(commandsMessages.get("info.seconds"));
+			builder.append(seconds).append(" ").append(commandsMessages.get("info.seconds"));
 		}
 
 		return builder.toString();

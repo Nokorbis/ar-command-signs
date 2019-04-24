@@ -63,7 +63,7 @@ public class CommandBlockGsonSerializer implements JsonSerializer<CommandBlock>,
             JsonObject jsonAddons = root.getAsJsonObject("addons");
             for (Addon addon : addons) {
                 JsonElement addonData = jsonAddons.get(addon.getIdentifier());
-                if (!addonData.isJsonNull()) {
+                if (addonData != null && !addonData.isJsonNull()) {
                     AddonConfigurationData parsedAddonData = jsonContext.deserialize(addonData, addon.getConfigurationDataClass());
                     cmdBlock.setAddonConfigurationData(addon, parsedAddonData);
                 }

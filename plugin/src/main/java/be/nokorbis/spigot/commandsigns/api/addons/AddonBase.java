@@ -21,6 +21,11 @@ public abstract class AddonBase implements Addon {
 	}
 
 	@Override
+	public void onEnable() {
+
+	}
+
+	@Override
 	public final String getIdentifier() {
 		return identifier;
 	}

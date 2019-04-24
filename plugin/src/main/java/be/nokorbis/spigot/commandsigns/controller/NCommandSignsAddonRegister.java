@@ -9,30 +9,47 @@ import be.nokorbis.spigot.commandsigns.model.CoreAddonSubmenusHolder;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 
 public class NCommandSignsAddonRegister implements AddonRegister {
 
-	private final NCommandSignsManager manager;
+	private boolean enabled = false;
+	private final List<Addon> addons = new ArrayList<>(6);
 
-	public NCommandSignsAddonRegister(NCommandSignsManager manager) {
-		this.manager = manager;
+	public NCommandSignsAddonRegister() {
 	}
 
 	public void registerAddon(final Addon addon) {
 		if (addon != null) {
-			this.manager.registerAddon(addon);
-			registerLifecycle(addon);
-			registerSubmenus(addon);
+			addons.add(addon);
 		}
 	}
 
-	private void registerSubmenus(Addon addon) {
+	public void triggerEnable() {
+		if (!enabled) {
+			for (Addon addon : this.addons) {
+				addon.onEnable();
+			}
+			enabled = true;
+		}
+	}
+
+	public void registerInManager(NCommandSignsManager manager) {
+		for (Addon addon : addons) {
+			manager.registerAddon(addon);
+
+			registerLifecycle(manager, addon);
+			registerSubmenus(manager, addon);
+		}
+	}
+
+	private void registerSubmenus(NCommandSignsManager manager, Addon addon) {
 		AddonSubmenuHolder addonSubmenus = addon.getSubmenus();
 		if (addonSubmenus!= null) {
-			CoreAddonSubmenusHolder registeredSubmenus = this.manager.getAddonSubmenus();
+			CoreAddonSubmenusHolder registeredSubmenus = manager.getAddonSubmenus();
 
 			if (!addonSubmenus.requirementSubmenus.isEmpty()) {
 				List<AddonEditionMenu> menus = registeredSubmenus.requirementSubmenus.computeIfAbsent(addon, (a) -> new LinkedList<>());
@@ -51,7 +68,7 @@ public class NCommandSignsAddonRegister implements AddonRegister {
 		}
 	}
 
-	private void registerLifecycle(Addon addon) {
+	private void registerLifecycle(NCommandSignsManager manager, Addon addon) {
 		if (addon.shouldAddonBeHooked()) {
 			final NCommandSignsAddonLifecycleHolder lifecycleHolder = manager.getLifecycleHolder();
 			final AddonLifecycleHooker lifecycleHooker = addon.getLifecycleHooker();

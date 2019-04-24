@@ -17,6 +17,7 @@ import be.nokorbis.spigot.commandsigns.utils.CommandBlockValidator;
 import be.nokorbis.spigot.commandsigns.utils.Settings;
 
 import com.google.common.cache.*;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -56,6 +57,8 @@ public class NCommandSignsManager {
 		this.plugin = plugin;
 		this.logger = plugin.getLogger();
 
+		commandBlockPersister = new JsonCommandBlockConfigurationDataPersister(plugin.getDataFolder());
+
 		this.cache = CacheBuilder.newBuilder()
 								 .maximumSize(Settings.CACHE_MAX_SIZE())
 								 .expireAfterAccess(Settings.CACHE_TIME_TO_IDLE(), TimeUnit.MINUTES)
@@ -66,8 +69,6 @@ public class NCommandSignsManager {
 										 return commandBlockPersister.load(key);
 									 }
 								 });
-
-		commandBlockPersister = new JsonCommandBlockConfigurationDataPersister(plugin.getDataFolder());
 	}
 
 	public void loadIdsPerLocations() {
@@ -144,7 +145,7 @@ public class NCommandSignsManager {
 	}
 
 	public CommandBlock getCommandBlock(final long id) {
-		if (id == -1) {
+		if (id == -1L) {
 			return null;
 		}
 		try {
@@ -240,6 +241,11 @@ public class NCommandSignsManager {
 	public void handlePlayerExit(Player player) {
 		ncsPendingInteractions.remove(player.getUniqueId());
 		ncsConfigurationManagers.remove(player.getUniqueId());
+		ExecuteTask executeTask = ncsRunningExecutors.get(player.getUniqueId());
+		if (executeTask != null) {
+			ncsRunningExecutors.remove(player.getUniqueId());
+			Bukkit.getScheduler().cancelTask(executeTask.getTaskId());
+		}
 	}
 
 	public boolean hasCommandSignsAdjacentToBlock(Block block) {

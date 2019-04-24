@@ -1,8 +1,10 @@
 CommandSigns v2.0.0
     Change base package to be.nokorbis
+    The configuration files are structured differently from the previous versions and thus require a converter
     Rewrite the whole code to make it easier to add feature for other plugin developers
     The menu has changed a bit but brings a new feature : It can now be clicked on !
     The data format has changed. You thus need to use the updater to convert old data to new data format
+    Times are displayed with a more easily readable format (days/hours/minutes/seconds)
 
 CommandSigns v1.6.8
     Support of Spigot v1.13

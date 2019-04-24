@@ -13,7 +13,7 @@ import com.google.gson.JsonSerializer;
 public class EconomyAddon extends AddonBase {
 	private static final String IDENTIFIER = "ncs_economy";
 
-	private final net.milkbowl.vault.economy.Economy economy;
+	private net.milkbowl.vault.economy.Economy economy;
 
 	private EconomyLifecycleHooker lifecycleHooker = null;
 	private MenuEconomy editionMenu;
@@ -22,7 +22,10 @@ public class EconomyAddon extends AddonBase {
 
 	public EconomyAddon(CommandSignsPlugin plugin) {
 		super(plugin, IDENTIFIER, "Economy");
+	}
 
+	@Override
+	public void onEnable() {
 		if (plugin.getServer().getPluginManager().getPlugin("Vault") != null) {
 			plugin.getLogger().info("Plugin vault detected");
 
