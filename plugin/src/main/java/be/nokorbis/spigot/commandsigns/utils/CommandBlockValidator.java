@@ -75,7 +75,7 @@ public final class CommandBlockValidator {
 
 		Material[] signs = {
 			Material.SIGN,
-			Material.WALL_SIGN
+			Material.WALL_SIGN,
 		};
 		SIGNS_MATERIAL = Arrays.asList(signs);
 

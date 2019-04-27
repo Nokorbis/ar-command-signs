@@ -23,12 +23,15 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Predicate;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
@@ -45,7 +48,7 @@ public class NCommandSignsManager {
 
 	private final Map<UUID, NCommandSignsConfigurationManager> ncsConfigurationManagers = new HashMap<>();
 	private final Map<UUID, CommandBlockPendingInteraction>    ncsPendingInteractions   = new HashMap<>();
-	private final Map<UUID, ExecuteTask>                       ncsRunningExecutors      = new HashMap<>();
+	private final Map<UUID, List<ExecuteTask>>                 ncsRunningExecutors      = new HashMap<>();
 
 	private final CoreAddonSubmenusHolder addonSubmenus = new CoreAddonSubmenusHolder();
 	private       MainMenu                mainMenu;
@@ -124,19 +127,46 @@ public class NCommandSignsManager {
 		ncsPendingInteractions.remove(player.getUniqueId());
 	}
 
-	public ExecuteTask getRunningExecutor(Player player) {
-		return ncsRunningExecutors.get(player.getUniqueId());
+	public boolean isPlayerRunningCommandBlock(final Player player, final CommandBlock commandBlock) {
+		if (commandBlock == null) { return false; }
+
+		List<ExecuteTask> tasks = this.ncsRunningExecutors.get(player.getUniqueId());
+		if (tasks == null) { return false; }
+
+		for (ExecuteTask task : tasks) {
+			if (commandBlock.equals(task.getCommandBlock())) {
+				return true;
+			}
+		}
+		return false;
 	}
 
-	public void addRunnnigExecutor(Player player, ExecuteTask task) {
+	public void forEachRunningExecutor(final Player player, final Predicate<ExecuteTask> taskPredicate) {
+		List<ExecuteTask> runningExecutors;
 		synchronized (ncsRunningExecutors) {
-			ncsRunningExecutors.put(player.getUniqueId(), task);
+			runningExecutors = ncsRunningExecutors.computeIfAbsent(player.getUniqueId(), (k) -> new LinkedList<>());
+		}
+		synchronized (runningExecutors) {
+			runningExecutors.removeIf(executor -> !taskPredicate.test(executor));
 		}
 	}
 
-	public void removeRunningExecutor(Player player) {
+	public void addRunningExecutor(Player player, ExecuteTask task) {
+		List<ExecuteTask> runningExecutors;
 		synchronized (ncsRunningExecutors) {
-			ncsRunningExecutors.remove(player.getUniqueId());
+			runningExecutors = ncsRunningExecutors.computeIfAbsent(player.getUniqueId(), (k) -> new LinkedList<>());
+		}
+		synchronized (runningExecutors) {
+			runningExecutors.add(task);
+		}
+	}
+
+	public void removeRunningExecutor(Player player, ExecuteTask task) {
+		List<ExecuteTask> runningExecutors = ncsRunningExecutors.get(player.getUniqueId());
+		if (runningExecutors != null && !runningExecutors.isEmpty()) {
+			synchronized (runningExecutors) {
+				runningExecutors.remove(task);
+			}
 		}
 	}
 
@@ -241,10 +271,14 @@ public class NCommandSignsManager {
 	public void handlePlayerExit(Player player) {
 		ncsPendingInteractions.remove(player.getUniqueId());
 		ncsConfigurationManagers.remove(player.getUniqueId());
-		ExecuteTask executeTask = ncsRunningExecutors.get(player.getUniqueId());
-		if (executeTask != null) {
-			ncsRunningExecutors.remove(player.getUniqueId());
-			Bukkit.getScheduler().cancelTask(executeTask.getTaskId());
+		List<ExecuteTask> removedExecutors;
+		synchronized (ncsRunningExecutors) {
+			removedExecutors = ncsRunningExecutors.remove(player.getUniqueId());
+		}
+		if (removedExecutors != null) {
+			for (ExecuteTask executor : removedExecutors) {
+				Bukkit.getScheduler().cancelTask(executor.getTaskId());
+			}
 		}
 	}
 
@@ -270,6 +304,33 @@ public class NCommandSignsManager {
 		Material material = blockData.getMaterial();
 		CommandBlockPositionChecker checker = PositionCheckerFactory.createChecker(material);
 		return checker.isCommandBlockPosedOnBlock(blockData, block, face);
+	}
+
+	public void debug (CommandSender sender) {
+		if (sender != null) {
+			String addons = registeredAddons.stream().map(Addon::getName).collect(Collectors.joining(", ", "Addons: ", ""));
+			sender.sendMessage(addons);
+
+			String cfgs = ncsConfigurationManagers.values().stream().map(NCommandSignsConfigurationManager::debug).collect(Collectors.joining(", ", "ConfigMgrs: ", ""));
+			sender.sendMessage(cfgs);
+
+			String inters = ncsPendingInteractions.values().stream().map(CommandBlockPendingInteraction::debug).collect(Collectors.joining(", ", "Interactions: ", ""));
+			sender.sendMessage(inters);
+
+			StringBuilder b = new StringBuilder("RunningExec: ");
+			for (List<ExecuteTask> tasks : ncsRunningExecutors.values()) {
+				if (tasks != null && !tasks.isEmpty()) {
+					b.append(tasks.get(0).getPlayer().getName()).append("[");
+					for (ExecuteTask task : tasks) {
+						b.append(task.getCommandBlock().getId()).append(",");
+					}
+					b.setCharAt(b.length()-1, ']');
+					b.append(",");
+				}
+			}
+			b.deleteCharAt(b.length()-1);
+			sender.sendMessage(b.toString());
+		}
 	}
 
 	public MainMenu getMainMenu() {

@@ -5,12 +5,8 @@ import java.util.*;
 import be.nokorbis.spigot.commandsigns.api.addons.Addon;
 import be.nokorbis.spigot.commandsigns.api.addons.AddonConfigurationData;
 import be.nokorbis.spigot.commandsigns.api.addons.AddonExecutionData;
-import be.nokorbis.spigot.commandsigns.api.exceptions.CommandSignsException;
 import be.nokorbis.spigot.commandsigns.api.menu.MenuEditable;
-import be.nokorbis.spigot.commandsigns.utils.CommandBlockValidator;
 import org.bukkit.Location;
-
-import be.nokorbis.spigot.commandsigns.CommandSignsPlugin;
 
 
 public class CommandBlock implements MenuEditable
@@ -237,6 +233,19 @@ public class CommandBlock implements MenuEditable
 		}
 
 		return newBlock;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) { return true; }
+		if (o == null || getClass() != o.getClass()) { return false; }
+		CommandBlock that = (CommandBlock) o;
+		return id == that.id;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
 	}
 
 	public static void deleteUsedID(long id) {

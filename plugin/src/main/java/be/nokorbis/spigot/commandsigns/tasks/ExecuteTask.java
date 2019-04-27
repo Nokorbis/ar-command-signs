@@ -33,6 +33,9 @@ public class ExecuteTask implements Runnable {
 					player.sendMessage(e.getMessage());
 				});
 			}
+			finally {
+				this.executor.stopPlayerTask(this);
+			}
 		}
 	}
 
@@ -59,4 +62,5 @@ public class ExecuteTask implements Runnable {
 	public Player getPlayer() {
 		return this.executor.getPlayer();
 	}
+
 }

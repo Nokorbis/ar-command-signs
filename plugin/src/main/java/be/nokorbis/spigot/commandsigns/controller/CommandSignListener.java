@@ -4,7 +4,6 @@ import be.nokorbis.spigot.commandsigns.CommandSignsPlugin;
 import be.nokorbis.spigot.commandsigns.api.DisplayMessages;
 import be.nokorbis.spigot.commandsigns.model.CommandBlock;
 import be.nokorbis.spigot.commandsigns.model.CommandBlockPendingInteraction;
-import be.nokorbis.spigot.commandsigns.tasks.ExecuteTask;
 import be.nokorbis.spigot.commandsigns.utils.CommandBlockValidator;
 import be.nokorbis.spigot.commandsigns.utils.CommandSignUtils;
 import org.bukkit.Bukkit;
@@ -147,12 +146,17 @@ public class CommandSignListener implements Listener {
 				player.sendMessage(messages.get("usage.disabled"));
 			}
 			else {
-				try {
-					NCommandBlockExecutor nExecutor = new NCommandBlockExecutor(player, commandBlock);
-					nExecutor.run();
+				if (!manager.isPlayerRunningCommandBlock(player, commandBlock)){
+					try {
+						NCommandBlockExecutor nExecutor = new NCommandBlockExecutor(player, commandBlock);
+						nExecutor.run();
+					}
+					catch (Exception ex) {
+						player.sendMessage(messages.get("error.requirements_check"));
+					}
 				}
-				catch (Exception ex) {
-					player.sendMessage(messages.get("error.requirements_check"));
+				else {
+					player.sendMessage(messages.get("error.already_running_task"));
 				}
 			}
 		}
@@ -165,27 +169,28 @@ public class CommandSignListener implements Listener {
 			return;
 		}
 
-		ExecuteTask runningExecutor = manager.getRunningExecutor(player);
-		if (runningExecutor != null) {
-			if (!runningExecutor.getInitialLocation().equals(player.getLocation().getBlock().getLocation())) {
+		final BukkitScheduler sch = Bukkit.getScheduler();
+		final Location playerLocation = player.getLocation().getBlock().getLocation();
+		manager.forEachRunningExecutor(player, (runningExecutor) -> {
+			if (!runningExecutor.getInitialLocation().equals(playerLocation)) {
 				CommandBlock commandBlock = runningExecutor.getCommandBlock();
 				if (commandBlock.isCancelledOnMove()) {
-					Bukkit.getScheduler().cancelTask(runningExecutor.getTaskId());
-					manager.removeRunningExecutor(player);
+					sch.cancelTask(runningExecutor.getTaskId());
 					player.sendMessage(messages.get("usage.execution_cancelled"));
+					return false;
 				}
 				else if (commandBlock.isResetOnMove()) {
-					BukkitScheduler sch = Bukkit.getScheduler();
 					sch.cancelTask(runningExecutor.getTaskId());
 
 					BukkitTask task = sch.runTaskLaterAsynchronously(CommandSignsPlugin.getPlugin(), runningExecutor, runningExecutor.getCommandBlock().getTimeBeforeExecution() * 20);
 					runningExecutor.setTaskId(task.getTaskId());
-					runningExecutor.setInitialLocation(player.getLocation().getBlock().getLocation());
+					runningExecutor.setInitialLocation(playerLocation);
 
 					player.sendMessage(messages.get("usage.execution_timer_reset"));
 				}
 			}
-		}
+			return true;
+		});
 	}
 
 	private void info(Player player, Block block) {

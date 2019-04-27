@@ -88,4 +88,10 @@ public class NCommandSignsConfigurationManager {
 		}
 		return false;
 	}
+
+	public String debug() {
+		Long id = commandBlock == null ? null : commandBlock.getId();
+		String mode = isEditing() ? "Editing" : "Creating";
+		return editor.getName() + "[" + mode + ":" + id + "]";
+	}
 }

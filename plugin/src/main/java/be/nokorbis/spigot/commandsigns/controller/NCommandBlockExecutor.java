@@ -19,6 +19,7 @@ import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -56,7 +57,7 @@ public class NCommandBlockExecutor {
 
 		ExecuteTask exe = new ExecuteTask(this);
 		exe.setInitialLocation(player.getLocation().getBlock().getLocation());
-		manager.addRunnnigExecutor(player, exe);
+		manager.addRunningExecutor(player, exe);
 
 		BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
 
@@ -77,7 +78,12 @@ public class NCommandBlockExecutor {
 		}
 		finally {
 			processComplete(lifecycleHolder);
-			manager.removeRunningExecutor(player);
+		}
+	}
+
+	public void stopPlayerTask(ExecuteTask task) {
+		if (task.getCommandBlock() == this.commandBlock) {
+			manager.removeRunningExecutor(player, task);
 		}
 	}
 
@@ -182,6 +188,18 @@ public class NCommandBlockExecutor {
 		}
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) { return true; }
+		if (o == null || getClass() != o.getClass()) { return false; }
+		NCommandBlockExecutor that = (NCommandBlockExecutor) o;
+		return player.equals(that.player) && commandBlock.equals(that.commandBlock);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(player, commandBlock);
+	}
 
 	public static void setManager(final NCommandSignsManager manager) {
 		NCommandBlockExecutor.manager = manager;

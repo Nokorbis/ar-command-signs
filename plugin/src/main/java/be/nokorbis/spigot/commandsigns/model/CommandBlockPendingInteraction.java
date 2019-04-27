@@ -13,4 +13,8 @@ public class CommandBlockPendingInteraction {
 	public Type   type;
 	public Player player;
 	public CommandBlock commandBlock;
+
+	public String debug() {
+		return player.getName() + "[" + type.name() + ":" + (commandBlock == null ? null : commandBlock.getId()) + "]";
+	}
 }
