@@ -72,11 +72,13 @@ public abstract class EditionNode <EDITABLE extends MenuEditable> extends Editio
 		ListIterator<EditionMenu<EDITABLE>> menuIterator = menus.listIterator(startingIndex);
 		for (int i = 1 ; i <= entriesToDisplay && menuIterator.hasNext() ; i++) {
 			final EditionMenu<EDITABLE> menu = menuIterator.next();
-			final String index = String.valueOf(i);
+			if (menu.shouldBeDisplayed(data)) {
+				final String index = String.valueOf(i);
 
-			final String message = menu.getDisplayString(data).replace("{INDEX}", index);
-			ClickableMessage display = new ClickableMessage(message, index);
-			display.sendToPlayer(editor);
+				final String message = menu.getDisplayString(data).replace("{INDEX}", index);
+				ClickableMessage display = new ClickableMessage(message, index);
+				display.sendToPlayer(editor);
+			}
 		}
 	}
 

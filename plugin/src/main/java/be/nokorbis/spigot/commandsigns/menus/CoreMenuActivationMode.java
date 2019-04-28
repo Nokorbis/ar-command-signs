@@ -6,6 +6,8 @@ import be.nokorbis.spigot.commandsigns.api.menu.EditionMenu;
 import be.nokorbis.spigot.commandsigns.api.menu.MenuNavigationContext;
 import be.nokorbis.spigot.commandsigns.model.BlockActivationMode;
 import be.nokorbis.spigot.commandsigns.model.CommandBlock;
+import be.nokorbis.spigot.commandsigns.utils.CommandBlockValidator;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 
@@ -13,6 +15,17 @@ public class CoreMenuActivationMode extends EditionLeaf<CommandBlock> {
 
 	public CoreMenuActivationMode(EditionMenu<CommandBlock> parent) {
 		super(messages.get("menu.activation_mode.title"), parent);
+	}
+
+	@Override
+	public boolean shouldBeDisplayed(CommandBlock data) {
+		Location location = data.getLocation();
+		if (location != null) {
+			if (CommandBlockValidator.isLever(location.getBlock())){
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override

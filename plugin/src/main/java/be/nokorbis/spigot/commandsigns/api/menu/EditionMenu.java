@@ -64,6 +64,10 @@ public abstract class EditionMenu<EDITABLE extends MenuEditable> {
         return messages.get("menu.entry.display_name_only").replace("{NAME}", name);
     }
 
+    public boolean shouldBeDisplayed(EDITABLE data) {
+        return true;
+    }
+
     protected final  void displayBreadcrumb(final Player editor) {
         final String divider = messages.get("breadcrumb.divider");
         final String nameColor = messages.get("breadcrumb.name_color");
