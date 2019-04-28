@@ -10,6 +10,8 @@ public class CooldownConfigurationData extends AddonConfigurationData {
 
 	private long globalCooldown = -1;
 	private long playerCooldown = -1;
+	private boolean isGlobalOnlyOnce = false;
+	private boolean isPlayerOnlyOnce = false;
 
 	public CooldownConfigurationData(Addon addon) {
 		super(addon);
@@ -39,11 +41,29 @@ public class CooldownConfigurationData extends AddonConfigurationData {
 		this.playerCooldown = playerCooldown;
 	}
 
+	public boolean isGlobalOnlyOnce() {
+		return isGlobalOnlyOnce;
+	}
+
+	public void setGlobalOnlyOnce(boolean globalOnlyOnce) {
+		isGlobalOnlyOnce = globalOnlyOnce;
+	}
+
+	public boolean isPlayerOnlyOnce() {
+		return isPlayerOnlyOnce;
+	}
+
+	public void setPlayerOnlyOnce(boolean playerOnlyOnce) {
+		isPlayerOnlyOnce = playerOnlyOnce;
+	}
+
 	@Override
 	public AddonConfigurationData copy() {
 		CooldownConfigurationData data = new CooldownConfigurationData(addon);
 		data.globalCooldown = this.globalCooldown;
 		data.playerCooldown = this.playerCooldown;
+		data.isGlobalOnlyOnce = this.isGlobalOnlyOnce;
+		data.isPlayerOnlyOnce = this.isPlayerOnlyOnce;
 		return data;
 	}
 
@@ -54,6 +74,12 @@ public class CooldownConfigurationData extends AddonConfigurationData {
 		}
 		if (hasPlayerCooldown()) {
 			player.sendMessage(addonMessages.get("info.player_cooldown").replace("{TIME}", CommandSignUtils.formatTime(playerCooldown)));
+		}
+		if (isGlobalOnlyOnce()) {
+			player.sendMessage(addonMessages.get("info.is_player_only_once"));
+		}
+		if (isPlayerOnlyOnce()) {
+			player.sendMessage(addonMessages.get("info.is_global_only_once"));
 		}
 	}
 }

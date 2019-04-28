@@ -222,7 +222,7 @@ public class CommandBlock implements MenuEditable
 			}
 		}
 
-		for (Map.Entry<Addon, AddonExecutionData> dataEntry : this.addonExecutions.entrySet()) {
+		/*for (Map.Entry<Addon, AddonExecutionData> dataEntry : this.addonExecutions.entrySet()) {
 			AddonExecutionData data = dataEntry.getValue();
 			if (data != null) {
 				AddonExecutionData copiedData = data.copy();
@@ -230,7 +230,7 @@ public class CommandBlock implements MenuEditable
 					newBlock.addonExecutions.put(dataEntry.getKey(), copiedData);
 				}
 			}
-		}
+		}*/
 
 		return newBlock;
 	}

@@ -27,14 +27,32 @@ public class CooldownLifecycleHooker extends AddonLifecycleHookerBase {
 		if (player != null && !player.hasPermission("commandsign.timer.bypass")) {
 			final CooldownConfigurationData conf = (CooldownConfigurationData) configurationData;
 
-			if (conf.hasGlobalCooldown() || conf.hasPlayerCooldown()) {
+			if (conf.hasGlobalCooldown() || conf.hasPlayerCooldown() || conf.isGlobalOnlyOnce() || conf.isPlayerOnlyOnce()) {
 
 				final CooldownExecutionData data = (CooldownExecutionData) executionData;
 				final Long lastTimeSomeoneUsed = data.getLastTimeUsed();
 				final Long lastTimePlayerUsed = data.getLastPlayerUsage(player);
 
+				checkIsGlobalOnlyOnce(lastTimeSomeoneUsed, conf.isGlobalOnlyOnce());
+				checkIsPlayerOnlyOnce(lastTimePlayerUsed, conf.isPlayerOnlyOnce());
 				checkPlayerCooldown(lastTimePlayerUsed, conf.getPlayerCooldown() * 1000);
 				checkGlobalCooldown(lastTimeSomeoneUsed, conf.getGlobalCooldown() * 1000);
+			}
+		}
+	}
+
+	private void checkIsGlobalOnlyOnce(final Long lastTimeSomeoneUsed, final boolean isGlobalOnlyOnce) throws CommandSignsRequirementException {
+		if (isGlobalOnlyOnce) {
+			if (lastTimeSomeoneUsed != null) {
+				throw new CommandSignsRequirementException(messages.get("usage.global_once_already_used"));
+			}
+		}
+	}
+
+	private void checkIsPlayerOnlyOnce(final Long lastTimePlayerUsed, final boolean isPlayerOnlyOnce) throws CommandSignsRequirementException {
+		if (isPlayerOnlyOnce) {
+			if (lastTimePlayerUsed != null) {
+				throw new CommandSignsRequirementException(messages.get("usage.player_once_already_used"));
 			}
 		}
 	}

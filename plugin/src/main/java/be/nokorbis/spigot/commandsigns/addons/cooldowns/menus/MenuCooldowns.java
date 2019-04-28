@@ -14,5 +14,7 @@ public class MenuCooldowns extends AddonEditionNode {
 	protected void initializeSubMenus() {
 		addMenu(new MenuCooldownGlobal(addon, this));
 		addMenu(new MenuCooldownPlayer(addon, this));
+		addMenu(new MenuCooldownGlobalOnce(addon, this));
+		addMenu(new MenuCooldownPlayerOnce(addon, this));
 	}
 }

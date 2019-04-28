@@ -1,10 +1,14 @@
 info.costs_format              = §bCosts: §e{PRICE}
 info.global_cooldown           = §bGlobal cooldown: §e{TIME}
+info.is_global_only_once       = §bCan only be used once
+info.is_player_only_once       = §bCan only be used once per player
 info.permission_format         = §7---{NUMBER}. {PERMISSION}
 info.player_cooldown           = §bPer player cooldown: §e{TIME} 
 info.required_permissions      = §bRequired permissions:
 usage.general_cooldown         = §cThis command block has been used {TIME} seconds ago. You must wait {REMAINING} more seconds.
+usage.global_once_already_used = §cSomeone has already used that command block.
 usage.miss_required_permission = §cYou do not have the needed permission : {NEEDED_PERM} .
 usage.not_enough_money         = §cYou do NOT have enough money (§d{PRICE}§c) to use this command block.
 usage.player_cooldown          = §cYou have already used this command block {TIME} seconds ago. You must wait {REMAINING} more seconds.
+usage.player_once_already_used = §cYou have already used that command block.
 usage.you_paied                = §eYou have payed §d{PRICE} §eto use this command block.
