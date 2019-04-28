@@ -7,6 +7,7 @@ import be.nokorbis.spigot.commandsigns.api.addons.AddonExecutionData;
 import be.nokorbis.spigot.commandsigns.api.addons.AddonLifecycleHookerBase;
 import be.nokorbis.spigot.commandsigns.api.addons.NCSLifecycleHook;
 import be.nokorbis.spigot.commandsigns.api.exceptions.CommandSignsRequirementException;
+import be.nokorbis.spigot.commandsigns.utils.CommandSignUtils;
 import org.bukkit.entity.Player;
 
 import java.text.DecimalFormat;
@@ -15,13 +16,6 @@ import java.text.DecimalFormatSymbols;
 
 public class CooldownLifecycleHooker extends AddonLifecycleHookerBase {
 
-	private static final DecimalFormat decimalFormat = new DecimalFormat();
-	static {
-		DecimalFormatSymbols symbols = decimalFormat.getDecimalFormatSymbols();
-		symbols.setGroupingSeparator(' ');
-		decimalFormat.setDecimalFormatSymbols(symbols);
-		decimalFormat.setMaximumFractionDigits(2);
-	}
 
 	public CooldownLifecycleHooker(CooldownAddon addon) {
 		super(addon);
@@ -39,8 +33,8 @@ public class CooldownLifecycleHooker extends AddonLifecycleHookerBase {
 				final Long lastTimeSomeoneUsed = data.getLastTimeUsed();
 				final Long lastTimePlayerUsed = data.getLastPlayerUsage(player);
 
-				checkPlayerCooldown(lastTimePlayerUsed, conf.getPlayerCooldown());
-				checkGlobalCooldown(lastTimeSomeoneUsed, conf.getGlobalCooldown());
+				checkPlayerCooldown(lastTimePlayerUsed, conf.getPlayerCooldown() * 1000);
+				checkGlobalCooldown(lastTimeSomeoneUsed, conf.getGlobalCooldown() * 1000);
 			}
 		}
 	}
@@ -51,8 +45,10 @@ public class CooldownLifecycleHooker extends AddonLifecycleHookerBase {
 			long timeToWait = lastTimeSomeoneUsed + globalCooldown - now;
 			if (timeToWait > 0) {
 				String msg = messages.get("usage.general_cooldown");
-				msg = msg.replace("{TIME}", decimalFormat.format((globalCooldown- timeToWait) / 1000.0));
-				msg = msg.replace("{REMAINING}", decimalFormat.format(timeToWait / 1000.0));
+				String time = CommandSignUtils.formatTime((globalCooldown-timeToWait)/1000.0);
+				String remaining = CommandSignUtils.formatTime((timeToWait)/1000.0);
+				msg = msg.replace("{TIME}", time);
+				msg = msg.replace("{REMAINING}", remaining);
 				throw new CommandSignsRequirementException(msg);
 			}
 		}
@@ -64,8 +60,10 @@ public class CooldownLifecycleHooker extends AddonLifecycleHookerBase {
 			long timeToWait = lastTimePlayerUsed + playerCooldown - now;
 			if (timeToWait > 0) {
 				String msg = messages.get("usage.player_cooldown");
-				msg = msg.replace("{TIME}", decimalFormat.format((now - lastTimePlayerUsed) / 1000.0));
-				msg = msg.replace("{REMAINING}", decimalFormat.format(timeToWait / 1000.0));
+				String time = CommandSignUtils.formatTime((now - lastTimePlayerUsed)/1000.0);
+				String remaining = CommandSignUtils.formatTime((timeToWait)/1000.0);
+				msg = msg.replace("{TIME}", time);
+				msg = msg.replace("{REMAINING}", remaining);
 				throw new CommandSignsRequirementException(msg);
 			}
 		}

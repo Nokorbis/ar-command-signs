@@ -54,4 +54,14 @@ public class CooldownExecutionData extends AddonExecutionData  {
 	Map<UUID, Long> getPlayerUsages() {
 		return this.playerUsages;
 	}
+
+	@Override
+	public AddonExecutionData copy() {
+		CooldownExecutionData executionData = new CooldownExecutionData(addon);
+
+		executionData.lastTimeUsed = this.lastTimeUsed;
+		executionData.playerUsages = new HashMap<>(this.playerUsages);
+
+		return executionData;
+	}
 }

@@ -1,5 +1,7 @@
 package be.nokorbis.spigot.commandsigns.utils;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -17,6 +19,13 @@ import org.bukkit.entity.Player;
 public class CommandSignUtils {
 
 	private static final DisplayMessages commandsMessages = DisplayMessages.getDisplayMessages("messages/commands");
+	private static final DecimalFormat   decimalFormat    = new DecimalFormat();
+	static {
+		DecimalFormatSymbols symbols = decimalFormat.getDecimalFormatSymbols();
+		symbols.setGroupingSeparator(' ');
+		decimalFormat.setDecimalFormatSymbols(symbols);
+		decimalFormat.setMaximumFractionDigits(2);
+	}
 
 	public static List<Location> getLocationsAroundPoint(Location location, int radius) {
 		List<Location> locations = new LinkedList<>();
@@ -59,6 +68,33 @@ public class CommandSignUtils {
 			return commandsMessages.get("info.no_name");
 		}
 		return name;
+	}
+
+	public static String formatTime(double seconds) {
+		StringBuilder builder = new StringBuilder();
+		long totalSeconds = (long) seconds;
+		long minutes = totalSeconds / 60;
+		long hours = minutes / 60;
+		long days = hours / 24;
+
+		seconds = seconds % 60;
+		minutes = minutes % 60;
+		hours 	= hours % 24;
+
+		if (days > 0) {
+			builder.append(days).append(" ").append(commandsMessages.get("info.days")).append(" ");
+		}
+		if (hours > 0) {
+			builder.append(hours).append(" ").append(commandsMessages.get("info.hours")).append(" ");
+		}
+		if (minutes > 0) {
+			builder.append(minutes).append(" ").append(commandsMessages.get("info.minutes")).append(" ");
+		}
+		if (seconds > 0) {
+			builder.append(decimalFormat.format(seconds)).append(" ").append(commandsMessages.get("info.seconds"));
+		}
+
+		return builder.toString();
 	}
 
 	public static String formatTime(long seconds) {

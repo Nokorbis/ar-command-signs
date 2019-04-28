@@ -77,6 +77,7 @@ public class NCommandBlockExecutor {
 			processPostExecution(lifecycleHolder);
 		}
 		finally {
+			manager.saveExecutionData(this.commandBlock);
 			processComplete(lifecycleHolder);
 		}
 	}

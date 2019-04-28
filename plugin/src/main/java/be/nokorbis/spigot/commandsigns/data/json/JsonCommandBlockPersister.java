@@ -37,7 +37,9 @@ public class JsonCommandBlockPersister {
 	}
 
 	public void registerPersister(Class<?> klass, Object persister) {
-		builder.registerTypeAdapter(klass, persister);
+		if (klass != null && persister != null) {
+			builder.registerTypeAdapter(klass, persister);
+		}
 	}
 
 	public void registerPersister(Type type, Object persister) {

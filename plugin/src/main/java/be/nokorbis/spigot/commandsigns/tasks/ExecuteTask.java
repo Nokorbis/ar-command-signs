@@ -29,9 +29,7 @@ public class ExecuteTask implements Runnable {
 				}
 			}
 			catch (CommandSignsException e) {
-				Bukkit.getScheduler().runTask(CommandSignsPlugin.getPlugin(), () -> {
-					player.sendMessage(e.getMessage());
-				});
+				Bukkit.getScheduler().runTask(CommandSignsPlugin.getPlugin(), () -> player.sendMessage(e.getMessage()));
 			}
 			finally {
 				this.executor.stopPlayerTask(this);

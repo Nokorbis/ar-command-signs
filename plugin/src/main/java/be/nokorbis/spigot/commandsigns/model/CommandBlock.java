@@ -235,6 +235,24 @@ public class CommandBlock implements MenuEditable
 		return newBlock;
 	}
 
+	public AddonExecutionDataObject exportExecutionData() {
+		AddonExecutionDataObject object = new AddonExecutionDataObject();
+		object.id = this.id;
+		for (Map.Entry<Addon, AddonExecutionData> entry : addonExecutions.entrySet()) {
+			object.addonExecutions.put(entry.getKey(), entry.getValue().copy());
+		}
+
+		return object;
+	}
+
+	public void importExecutionData(AddonExecutionDataObject object) {
+		if (object.id == this.id) {
+			for (Map.Entry<Addon, AddonExecutionData> entry : object.addonExecutions.entrySet()) {
+				this.addonExecutions.put(entry.getKey(), entry.getValue().copy());
+			}
+		}
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) { return true; }

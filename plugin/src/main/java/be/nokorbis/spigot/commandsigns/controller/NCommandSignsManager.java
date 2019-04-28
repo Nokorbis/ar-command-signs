@@ -5,8 +5,10 @@ import be.nokorbis.spigot.commandsigns.api.addons.Addon;
 import be.nokorbis.spigot.commandsigns.controller.positionchecker.CommandBlockPositionChecker;
 import be.nokorbis.spigot.commandsigns.controller.positionchecker.PositionCheckerFactory;
 import be.nokorbis.spigot.commandsigns.data.CommandBlockConfigurationDataPersister;
+import be.nokorbis.spigot.commandsigns.data.CommandBlockExecutionDataPersistor;
 import be.nokorbis.spigot.commandsigns.data.CommandBlockIDLoader;
 import be.nokorbis.spigot.commandsigns.data.json.JsonCommandBlockConfigurationDataPersister;
+import be.nokorbis.spigot.commandsigns.data.json.JsonCommandBlockExecutionDataPersister;
 import be.nokorbis.spigot.commandsigns.data.json.JsonCommandBlockIDLoader;
 import be.nokorbis.spigot.commandsigns.menus.MainMenu;
 import be.nokorbis.spigot.commandsigns.model.CommandBlock;
@@ -53,14 +55,16 @@ public class NCommandSignsManager {
 	private final CoreAddonSubmenusHolder addonSubmenus = new CoreAddonSubmenusHolder();
 	private       MainMenu                mainMenu;
 
-	private CommandBlockConfigurationDataPersister commandBlockPersister;
+	private CommandBlockConfigurationDataPersister configurationPersistor;
+	private CommandBlockExecutionDataPersistor     executionPersistor;
 
 
 	public NCommandSignsManager(CommandSignsPlugin plugin) {
 		this.plugin = plugin;
 		this.logger = plugin.getLogger();
 
-		commandBlockPersister = new JsonCommandBlockConfigurationDataPersister(plugin.getDataFolder());
+		configurationPersistor = new JsonCommandBlockConfigurationDataPersister(plugin.getDataFolder());
+		executionPersistor = new JsonCommandBlockExecutionDataPersister(plugin.getDataFolder());
 
 		this.cache = CacheBuilder.newBuilder()
 								 .maximumSize(Settings.CACHE_MAX_SIZE())
@@ -69,7 +73,9 @@ public class NCommandSignsManager {
 								 .build(new CacheLoader<Long, CommandBlock>() {
 									 @Override
 									 public CommandBlock load(Long key) {
-										 return commandBlockPersister.load(key);
+										 CommandBlock co = configurationPersistor.load(key);
+										 executionPersistor.loadExecutionData(co);
+										 return co;
 									 }
 								 });
 	}
@@ -104,7 +110,8 @@ public class NCommandSignsManager {
 	}
 
 	public void initializeSerializers() {
-		commandBlockPersister.setAddons(accessibleAddons);
+		configurationPersistor.setAddons(accessibleAddons);
+		executionPersistor.setAddons(accessibleAddons);
 	}
 
 	CoreAddonSubmenusHolder getAddonSubmenus() {
@@ -200,14 +207,14 @@ public class NCommandSignsManager {
 			locationsToIds.remove(location);
 		}
 
-		commandBlockPersister.saveConfiguration(commandBlock);
+		configurationPersistor.saveConfiguration(commandBlock);
 		locationsToIds.put(commandBlock.getLocation(), commandBlock.getId());
 
 		cache.put(commandBlock.getId(), commandBlock);
 	}
 
 	public void deleteCommandBlock(CommandBlock commandBlock) {
-		this.commandBlockPersister.delete(commandBlock.getId());
+		this.configurationPersistor.delete(commandBlock.getId());
 		this.locationsToIds.remove(commandBlock.getLocation());
 		CommandBlock.deleteUsedID(commandBlock.getId());
 		this.cache.invalidate(commandBlock.getId());
@@ -216,7 +223,7 @@ public class NCommandSignsManager {
 	public int purgeCommandBlocks() {
 		int cpt = 0;
 
-		List<CommandBlock> commandBlocks = commandBlockPersister.loadAllConfigurations();
+		List<CommandBlock> commandBlocks = configurationPersistor.loadAllConfigurations();
 		for (CommandBlock commandBlock : commandBlocks) {
 			if (!CommandBlockValidator.isValidBlock(commandBlock.getLocation().getBlock())) {
 				cpt++;
@@ -252,8 +259,8 @@ public class NCommandSignsManager {
 		return null;
 	}
 
-	public boolean doesPlayerHaveAConfigurationManagerRunning(Player player) {
-		return this.ncsConfigurationManagers.containsKey(player.getUniqueId());
+	public void saveExecutionData(CommandBlock commandBlock) {
+		this.executionPersistor.saveExecutionData(commandBlock);
 	}
 
 	public NCommandSignsConfigurationManager getPlayerConfigurationManager(Player player) {
