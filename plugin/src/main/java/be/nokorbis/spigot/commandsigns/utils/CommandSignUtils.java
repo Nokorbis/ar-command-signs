@@ -11,8 +11,10 @@ import be.nokorbis.spigot.commandsigns.api.addons.Addon;
 import be.nokorbis.spigot.commandsigns.api.addons.AddonConfigurationData;
 import be.nokorbis.spigot.commandsigns.model.CommandBlock;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 
 
@@ -68,6 +70,18 @@ public class CommandSignUtils {
 			return commandsMessages.get("info.no_name");
 		}
 		return name;
+	}
+
+	public static Block findTripwireHookInDirection(Block startingBlock, BlockFace direction) {
+		Block block = startingBlock;
+		while (block.getType() == Material.TRIPWIRE) {
+			block = block.getRelative(direction);
+		}
+		if (block.getType() == Material.TRIPWIRE_HOOK) {
+			return block;
+		}
+
+		return null;
 	}
 
 	public static String formatTime(double seconds) {

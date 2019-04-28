@@ -14,7 +14,7 @@ public final class CommandBlockValidator {
 
 
 	public static boolean isValidBlock (Block block) {
-		return isPlate(block) || isButton(block) || isSign(block);
+		return isPlate(block) || isButton(block) || isSign(block) || isTrappedChest(block) || isTripwire(block) || isLever(block);
 	}
 
 	public static boolean isPlate(Block block) {
@@ -53,11 +53,45 @@ public final class CommandBlockValidator {
 		return SIGNS_MATERIAL.contains(material);
 	}
 
+	public static boolean isTripwire(Block block) {
+		if (block == null) {
+			return false;
+		}
+
+		return isTripwire(block.getType());
+	}
+
+	public static boolean isTripwire(Material material) {
+		return Material.TRIPWIRE_HOOK == material;
+	}
+
+	public static boolean isTrappedChest(Block block) {
+		if (block == null) {
+			return false;
+		}
+
+		return isTrappedChest(block.getType());
+	}
+
+	public static boolean isTrappedChest(Material material) {
+		return Material.TRAPPED_CHEST == material;
+	}
+
+	public static boolean isLever(Block block) {
+		if (block == null) {
+			return false;
+		}
+
+		return isLever(block.getType());
+	}
+
+	public static boolean isLever(Material material) {
+		return Material.LEVER == material;
+	}
+
 
 	private CommandBlockValidator() {
 	}
-
-	//TODO: Add tripwire and trapped chest and lever
 
 	static {
 		Material[] plates = {

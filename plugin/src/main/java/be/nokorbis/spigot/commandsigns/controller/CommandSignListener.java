@@ -8,7 +8,11 @@ import be.nokorbis.spigot.commandsigns.utils.CommandBlockValidator;
 import be.nokorbis.spigot.commandsigns.utils.CommandSignUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.type.Tripwire;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -26,7 +30,8 @@ import org.bukkit.scheduler.BukkitTask;
 
 public class CommandSignListener implements Listener {
 
-	private static final DisplayMessages messages = DisplayMessages.getDisplayMessages("messages/events");
+	private static final BlockFace[]     TRIPWIRE_DIRECTIONS = new BlockFace[] {BlockFace.WEST, BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH};
+	private static final DisplayMessages messages            = DisplayMessages.getDisplayMessages("messages/events");
 
 	private NCommandSignsManager manager;
 
@@ -71,6 +76,7 @@ public class CommandSignListener implements Listener {
 			event.setCancelled(true);
 		}
 	}
+
 
 	@EventHandler( ignoreCancelled = true )
 	public void onInteractEvent(PlayerInteractEvent event) {
@@ -134,9 +140,30 @@ public class CommandSignListener implements Listener {
 			return;
 		}
 
-		if (!CommandBlockValidator.isPlate(touchedBlock) || event.getAction().equals(Action.PHYSICAL)) {
-			CommandBlock commandBlock = manager.getCommandBlock(touchedBlock.getLocation());
-			executeCommandBlock(player, commandBlock);
+		if (Action.PHYSICAL == event.getAction()) {
+			if (CommandBlockValidator.isPlate(touchedBlock)) {
+				CommandBlock commandBlock = manager.getCommandBlock(touchedBlock.getLocation());
+				executeCommandBlock(player, commandBlock);
+			}
+			else if (Material.TRIPWIRE == touchedBlock.getType()) {
+				BlockData blockData = touchedBlock.getBlockData();
+				Tripwire data = (Tripwire) blockData;
+				if (!data.isDisarmed()) {
+					for (BlockFace direction : TRIPWIRE_DIRECTIONS) {
+						Block hook = CommandSignUtils.findTripwireHookInDirection(touchedBlock, direction);
+						if (hook != null) {
+							CommandBlock commandBlock = manager.getCommandBlock(hook.getLocation());
+							executeCommandBlock(player, commandBlock);
+						}
+					}
+				}
+			}
+		}
+		else {
+			if (!CommandBlockValidator.isPlate(touchedBlock) && !CommandBlockValidator.isTripwire(touchedBlock)) {
+				CommandBlock commandBlock = manager.getCommandBlock(touchedBlock.getLocation());
+				executeCommandBlock(player, commandBlock);
+			}
 		}
 	}
 
