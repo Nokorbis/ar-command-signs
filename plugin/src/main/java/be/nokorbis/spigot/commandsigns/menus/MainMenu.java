@@ -30,6 +30,7 @@ public class MainMenu extends EditionNodeCore {
         this.executionsMenu = new CoreMenuExecutions(this);
 
         addMenu(new CoreMenuDisable(this));
+        addMenu(new CoreMenuActivationMode(this));
         addMenu(new CoreMenuName(this));
         addMenu(new CoreMenuTimer(this));
         addMenu(this.requirementsMenu);

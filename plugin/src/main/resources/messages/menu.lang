@@ -1,5 +1,7 @@
 breadcrumb.divider                      = §e > §r
 breadcrumb.name_color                   = §9
+menu.activation_mode.edit               = §eEnter the redstone activation mode of that command block (ACTIVATED/DEACTIVATED/BOTH):
+menu.activation_mode.title              = Activation mode
 menu.block.no_block                     = §r[§6Set on right click§r]
 menu.block_format                       = {X}/{Z}({Y})
 menu.block_selection                    = §b  Block: §6{VALUE}§r

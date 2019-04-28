@@ -18,6 +18,7 @@ public class CommandBlock implements MenuEditable
 	private String name;
 
 	private Location location;
+	private BlockActivationMode activationMode = BlockActivationMode.BOTH;
 
 	private boolean disabled;
 
@@ -125,6 +126,13 @@ public class CommandBlock implements MenuEditable
 		this.location = loc;
 	}
 
+	public BlockActivationMode getActivationMode() {
+		return activationMode;
+	}
+
+	public void setActivationMode(BlockActivationMode activationMode) {
+		this.activationMode = activationMode;
+	}
 
 	/* Timers */
 

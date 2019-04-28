@@ -2,6 +2,7 @@ package be.nokorbis.spigot.commandsigns.data.json;
 
 import be.nokorbis.spigot.commandsigns.api.addons.Addon;
 import be.nokorbis.spigot.commandsigns.api.addons.AddonConfigurationData;
+import be.nokorbis.spigot.commandsigns.model.BlockActivationMode;
 import be.nokorbis.spigot.commandsigns.model.CommandBlock;
 import com.google.gson.*;
 import org.bukkit.Location;
@@ -35,6 +36,12 @@ public class CommandBlockGsonSerializer implements JsonSerializer<CommandBlock>,
             JsonElement disabled = root.get("disabled");
             if (disabled != null) {
                 cmdBlock.setDisabled(disabled.getAsBoolean());
+            }
+
+            JsonElement activationMode = root.get("activation_mode");
+            if (activationMode != null) {
+                String mode = activationMode.getAsString();
+                cmdBlock.setActivationMode(BlockActivationMode.fromName(mode));
             }
 
             Location loc = jsonContext.deserialize(root.get("location"), Location.class);
@@ -85,6 +92,7 @@ public class CommandBlockGsonSerializer implements JsonSerializer<CommandBlock>,
             root.addProperty("name", commandBlock.getName());
         }
         root.addProperty("disabled", commandBlock.isDisabled());
+        root.addProperty("activation_mode", commandBlock.getActivationMode().name());
 
         Location location = commandBlock.getLocation();
         if (location != null) {

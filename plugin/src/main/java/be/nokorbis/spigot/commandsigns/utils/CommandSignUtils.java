@@ -9,6 +9,7 @@ import java.util.Set;
 import be.nokorbis.spigot.commandsigns.api.DisplayMessages;
 import be.nokorbis.spigot.commandsigns.api.addons.Addon;
 import be.nokorbis.spigot.commandsigns.api.addons.AddonConfigurationData;
+import be.nokorbis.spigot.commandsigns.model.BlockActivationMode;
 import be.nokorbis.spigot.commandsigns.model.CommandBlock;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -141,6 +142,22 @@ public class CommandSignUtils {
 
 		player.sendMessage(formatName(commandsMessages.get("info.identifier_format"), cmdB.getName()).replace("{ID}", String.valueOf(cmdB.getId())));
         player.sendMessage(formatLocation(commandsMessages.get("info.block_format"), cmdB.getLocation()));
+
+		BlockActivationMode mode = cmdB.getActivationMode();
+		if (mode != BlockActivationMode.BOTH) {
+			String msg = commandsMessages.get("info.activation_mode");
+			if (mode == BlockActivationMode.ACTIVATED) {
+				msg = msg.replace("{MODE}", commandsMessages.get("info.activation_mode.activated"));
+			}
+			else {
+				msg = msg.replace("{MODE}", commandsMessages.get("info.activated_mode.deactivated"));
+			}
+			player.sendMessage(msg);
+		}
+
+        if (cmdB.isDisabled()) {
+        	player.sendMessage(commandsMessages.get("info.disabled"));
+		}
 
 		if ((cmdB.hasTimer())) {
 			String timer = commandsMessages.get("info.timer")

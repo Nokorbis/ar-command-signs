@@ -2,6 +2,7 @@ package be.nokorbis.spigot.commandsigns.controller;
 
 import be.nokorbis.spigot.commandsigns.CommandSignsPlugin;
 import be.nokorbis.spigot.commandsigns.api.DisplayMessages;
+import be.nokorbis.spigot.commandsigns.model.BlockActivationMode;
 import be.nokorbis.spigot.commandsigns.model.CommandBlock;
 import be.nokorbis.spigot.commandsigns.model.CommandBlockPendingInteraction;
 import be.nokorbis.spigot.commandsigns.utils.CommandBlockValidator;
@@ -12,6 +13,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Powerable;
 import org.bukkit.block.data.type.Tripwire;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -160,7 +162,19 @@ public class CommandSignListener implements Listener {
 			}
 		}
 		else {
-			if (!CommandBlockValidator.isPlate(touchedBlock) && !CommandBlockValidator.isTripwire(touchedBlock)) {
+			if (CommandBlockValidator.isLever(touchedBlock)) {
+				CommandBlock commandBlock = manager.getCommandBlock(touchedBlock.getLocation());
+				if (commandBlock != null) {
+					BlockActivationMode mode = commandBlock.getActivationMode();
+					Powerable lever = (Powerable) touchedBlock.getBlockData();
+					if (mode == BlockActivationMode.BOTH
+							|| (mode == BlockActivationMode.ACTIVATED && !lever.isPowered())
+							|| (mode == BlockActivationMode.DEACTIVATED && lever.isPowered())) {
+						executeCommandBlock(player, commandBlock);
+					}
+				}
+			}
+			else if (!CommandBlockValidator.isPlate(touchedBlock) && !CommandBlockValidator.isTripwire(touchedBlock)) {
 				CommandBlock commandBlock = manager.getCommandBlock(touchedBlock.getLocation());
 				executeCommandBlock(player, commandBlock);
 			}
