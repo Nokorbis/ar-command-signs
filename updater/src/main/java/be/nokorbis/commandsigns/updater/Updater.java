@@ -68,6 +68,8 @@ public class Updater {
 				}
 				file.delete();
 			}
+
+			System.out.println("+ All files have been converted");
 		}
 		catch (IOException e) {
 			e.printStackTrace();
