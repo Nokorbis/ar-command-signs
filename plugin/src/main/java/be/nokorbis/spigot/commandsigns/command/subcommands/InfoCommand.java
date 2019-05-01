@@ -40,7 +40,7 @@ public class InfoCommand extends CommandRequiringManager {
 		}
 		else {
 			try {
-				long id = Long.parseLong(args.get(1));
+				long id = Long.parseLong(args.get(0));
 				CommandBlock cmd = manager.getCommandBlock(id);
 				if (cmd == null) {
 					throw new CommandSignsCommandException(commandMessages.get("error.invalid_command_id"));

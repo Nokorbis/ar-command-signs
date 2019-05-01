@@ -35,7 +35,7 @@ public class EditCommand extends CommandRequiringManager {
 			}
 			else {
 				try {
-					long id = Long.parseLong(args.get(1));
+					long id = Long.parseLong(args.get(0));
 					CommandBlock commandBlock = manager.getCommandBlock(id);
 					if (commandBlock == null) {
 						throw new CommandSignsCommandException(commandMessages.get("error.invalid_command_id"));

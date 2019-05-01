@@ -33,6 +33,14 @@ public class CommandBlockGsonSerializer implements JsonSerializer<CommandBlock>,
                 cmdBlock.setName(name.getAsString());
             }
 
+            Location loc = jsonContext.deserialize(root.get("location"), Location.class);
+            if (loc != null) {
+                cmdBlock.setLocation(loc);
+            }
+            else {
+                return null;
+            }
+
             JsonElement disabled = root.get("disabled");
             if (disabled != null) {
                 cmdBlock.setDisabled(disabled.getAsBoolean());
@@ -44,10 +52,7 @@ public class CommandBlockGsonSerializer implements JsonSerializer<CommandBlock>,
                 cmdBlock.setActivationMode(BlockActivationMode.fromName(mode));
             }
 
-            Location loc = jsonContext.deserialize(root.get("location"), Location.class);
-            if (loc != null) {
-                cmdBlock.setLocation(loc);
-            }
+
 
             JsonObject timer = root.getAsJsonObject("timer");
             int duration = timer.getAsJsonPrimitive("duration").getAsInt();

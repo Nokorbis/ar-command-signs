@@ -74,7 +74,9 @@ public class NCommandSignsManager {
 									 @Override
 									 public CommandBlock load(Long key) {
 										 CommandBlock co = configurationPersistor.load(key);
-										 executionPersistor.loadExecutionData(co);
+										 if (co != null) {
+											 executionPersistor.loadExecutionData(co);
+										 }
 										 return co;
 									 }
 								 });
@@ -188,7 +190,7 @@ public class NCommandSignsManager {
 		try {
 			return this.cache.get(id);
 		}
-		catch (ExecutionException e) {
+		catch (Exception e) {
 			return null;
 		}
 	}
