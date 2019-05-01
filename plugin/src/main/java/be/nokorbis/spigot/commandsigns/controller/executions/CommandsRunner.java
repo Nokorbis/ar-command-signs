@@ -4,13 +4,20 @@ import be.nokorbis.spigot.commandsigns.utils.Settings;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.Callable;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class CommandsRunner implements Callable<CommandsRunner.Result> {
+
+	private static final Pattern ALL_PATTERN    = Pattern.compile("%ALL%", Pattern.CASE_INSENSITIVE);
+	private static final Pattern RADIUS_PATTERN = Pattern.compile("%RADIUS=(\\d+)%", Pattern.CASE_INSENSITIVE);
+	private static final Pattern PLAYER_PATTERN = Pattern.compile("%PLAYER%", Pattern.CASE_INSENSITIVE);
 
 	private final Player        player;
 	private final Queue<String> commands;
@@ -58,11 +65,17 @@ public class CommandsRunner implements Callable<CommandsRunner.Result> {
 	}
 
 	private void interpretChat(String command) {
-		this.player.chat(command);
+		List<String> cmds = fillPlaceholders(command);
+		for (String cmd : cmds) {
+			this.player.chat(cmd);
+		}
 	}
 
 	private void interpretNormalCommand(String command) {
-		this.player.performCommand(command);
+		List<String> cmds = fillPlaceholders(command);
+		for (String cmd : cmds) {
+			this.player.performCommand(cmd);
+		}
 	}
 
 	private void interpretOpCommand(String command) {
@@ -78,7 +91,10 @@ public class CommandsRunner implements Callable<CommandsRunner.Result> {
 	}
 
 	private void interpretServerCommand(String command) {
-		Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command.substring(1));
+		List<String> cmds = fillPlaceholders(command.substring(1));
+		for (String cmd : cmds) {
+			Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), cmd);
+		}
 	}
 
 	private long interpretDelay(String command) {
@@ -89,6 +105,42 @@ public class CommandsRunner implements Callable<CommandsRunner.Result> {
 		catch (NumberFormatException ex) {
 		}
 		return -1L;
+	}
+
+	private List<String> fillPlaceholders(String command) {
+		List<String> cmds = new ArrayList<>();
+		Matcher m = PLAYER_PATTERN.matcher(command);
+		if (m.find()) {
+			command = m.replaceAll(player.getName());
+		}
+		m = ALL_PATTERN.matcher(command);
+		if (m.find()) {
+			for (Player p : Bukkit.getOnlinePlayers()) {
+				cmds.add(m.replaceAll(p.getName()));
+			}
+		}
+		else {
+			m = RADIUS_PATTERN.matcher(command);
+			if (m.find()) {
+				try {
+					String str = m.group(1);
+					int radius = Integer.parseInt(str);
+					if (radius > 0) {
+						for (Player p : Bukkit.getOnlinePlayers()) {
+							if (p.getWorld().equals(player.getWorld()) && p.getLocation().distance(player.getLocation()) <= radius) {
+								cmds.add(m.replaceAll(p.getName()));
+							}
+						}
+					}
+				}
+				catch (Exception ignored) {
+				}
+			}
+			else {
+				cmds.add(command);
+			}
+		}
+		return cmds;
 	}
 
 	public static class Result {
