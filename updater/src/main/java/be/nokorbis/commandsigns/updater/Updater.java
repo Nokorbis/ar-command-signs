@@ -66,7 +66,7 @@ public class Updater {
 					String json = gson2.toJson(commandBlock);
 					writer.write(json);
 				}
-				//file.delete();
+				file.delete();
 			}
 		}
 		catch (IOException e) {
