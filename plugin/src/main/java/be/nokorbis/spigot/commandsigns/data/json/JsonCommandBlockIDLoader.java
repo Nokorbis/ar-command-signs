@@ -45,7 +45,12 @@ public class JsonCommandBlockIDLoader extends JsonCommandBlockPersister implemen
 					 InputStreamReader reader = new InputStreamReader(fis, UTF_8)){
 
 					Pair<Location, Long> pair = gson.fromJson(reader, MAPPING_TYPE);
-					idsPerLocations.put(pair.getFirst(), pair.getSecond());
+					if (pair == null) {
+						System.out.printf("Was not able to extract command block location from %s", file.getPath());
+					}
+					else {
+						idsPerLocations.put(pair.getFirst(), pair.getSecond());
+					}
 				}
 				catch (IOException e) {
 					e.printStackTrace();
