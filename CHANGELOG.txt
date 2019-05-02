@@ -5,6 +5,7 @@ CommandSigns v2.0.0
     The menu has changed a bit but brings a new feature : It can now be clicked on !
     The data format has changed. You thus need to use the updater to convert old data to new data format
     Times are displayed with a more easily readable format (days/hours/minutes/seconds)
+    Add levers, tripwires and trapped chest
 
 CommandSigns v1.6.8
     Support of Spigot v1.13
