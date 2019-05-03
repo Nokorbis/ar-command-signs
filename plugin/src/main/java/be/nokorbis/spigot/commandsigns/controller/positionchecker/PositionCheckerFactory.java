@@ -5,8 +5,7 @@ import be.nokorbis.spigot.commandsigns.utils.CommandBlockValidator;
 import org.bukkit.Material;
 
 
-public final class PositionCheckerFactory
-{
+public final class PositionCheckerFactory {
 
 	//keep them cached to avoid too many instantiation
 	private static final CommandBlockPositionChecker WALL_SIGN_CHECKER  = new WallSignPositionChecker();
@@ -16,18 +15,17 @@ public final class PositionCheckerFactory
 
 	private static final CommandBlockPositionChecker DEFAULT_CHECKER = new DefaultPositionChecker();
 
-	public static CommandBlockPositionChecker createChecker(Material material)
-	{
-		if (Material.WALL_SIGN == material)             { return WALL_SIGN_CHECKER; }
-		if (Material.SIGN == material)                  { return POST_SIGN_CHECKER; }
+	public static CommandBlockPositionChecker createChecker(Material material) {
+
+		if (CommandBlockValidator.isWallSign(material)) { return WALL_SIGN_CHECKER; }
+		if (CommandBlockValidator.isPostSign(material)) { return POST_SIGN_CHECKER; }
 		if (CommandBlockValidator.isButton(material))   { return BUTTON_CHECKER; }
 		if (CommandBlockValidator.isPlate(material))    { return PLATE_CHECKER; }
 
 		return DEFAULT_CHECKER;
 	}
 
-	private PositionCheckerFactory()
-	{
+	private PositionCheckerFactory() {
 	}
 
 }

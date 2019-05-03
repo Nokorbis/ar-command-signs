@@ -26,25 +26,7 @@
         </repository>
     </repositories>
 
-    <dependencies>
-        <!--Spigot API-->
-        <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-api</artifactId>
-            <version>1.14-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-        <!--Vault API-->
-        <dependency>
-            <groupId>net.milkbowl.vault</groupId>
-            <artifactId>VaultAPI</artifactId>
-            <version>1.6</version>
-            <scope>provided</scope>
-        </dependency>
-    </dependencies>
-
     <build>
-        <finalName>Spigot-CommandSigns</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

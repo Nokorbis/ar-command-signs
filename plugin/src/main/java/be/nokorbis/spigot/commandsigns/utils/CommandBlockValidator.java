@@ -9,7 +9,8 @@ import java.util.Collection;
 
 public final class CommandBlockValidator {
 	private static final Collection<Material> PLATES_MATERIAL;
-	private static final Collection<Material> SIGNS_MATERIAL;
+	private static final Collection<Material> POST_SIGNS_MATERIAL;
+	private static final Collection<Material> WALL_SIGNS_MATERIAL;
 	private static final Collection<Material> BUTTONS_MATERIAL;
 
 
@@ -50,7 +51,15 @@ public final class CommandBlockValidator {
 	}
 
 	public static boolean isSign(Material material) {
-		return SIGNS_MATERIAL.contains(material);
+		return isWallSign(material) || isPostSign(material);
+	}
+
+	public static boolean isWallSign(Material material) {
+		return WALL_SIGNS_MATERIAL.contains(material);
+	}
+
+	public static boolean isPostSign(Material material) {
+		return POST_SIGNS_MATERIAL.contains(material);
 	}
 
 	public static boolean isTripwire(Block block) {
@@ -108,10 +117,24 @@ public final class CommandBlockValidator {
 		PLATES_MATERIAL = Arrays.asList(plates);
 
 		Material[] signs = {
-			Material.SIGN,
-			Material.WALL_SIGN,
+			Material.OAK_SIGN,
+			Material.ACACIA_SIGN,
+			Material.BIRCH_SIGN,
+			Material.JUNGLE_SIGN,
+			Material.SPRUCE_SIGN,
+			Material.DARK_OAK_SIGN,
 		};
-		SIGNS_MATERIAL = Arrays.asList(signs);
+		POST_SIGNS_MATERIAL = Arrays.asList(signs);
+
+		signs = new Material[]{
+				Material.OAK_WALL_SIGN,
+				Material.ACACIA_WALL_SIGN,
+				Material.BIRCH_WALL_SIGN,
+				Material.JUNGLE_WALL_SIGN,
+				Material.SPRUCE_WALL_SIGN,
+				Material.DARK_OAK_WALL_SIGN,
+		};
+		WALL_SIGNS_MATERIAL = Arrays.asList(signs);
 
 		Material[] buttons = {
 			Material.ACACIA_BUTTON,
