@@ -29,6 +29,7 @@ permissions:
          commandsign.admin.teleport: true
          commandsign.admin.version: true
          commandsign.admin.help: true
+         commandsign.admin.debug: true
    commandsign.timer.bypass:
       default: false
       description: Allows to bypass timers on command signs
@@ -71,3 +72,6 @@ permissions:
    commandsign.admin.help:
       default: true
       description: Gives access to the help command
+   commandsign.admin.debug:
+      default: false
+      description: Gives access to the debug command
