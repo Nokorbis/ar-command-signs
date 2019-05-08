@@ -62,6 +62,7 @@ public class MainMenu extends EditionNodeCore {
         String format = messages.get("menu.block_format");
         return format.replace("{X}", String.valueOf(loc.getBlockX()))
                      .replace("{Y}", String.valueOf(loc.getBlockY()))
-                     .replace("{Z}", String.valueOf(loc.getBlockZ()));
+                     .replace("{Z}", String.valueOf(loc.getBlockZ()))
+                     .replace("{BLOCK_TYPE}", loc.getBlock().getType().name());
     }
 }
