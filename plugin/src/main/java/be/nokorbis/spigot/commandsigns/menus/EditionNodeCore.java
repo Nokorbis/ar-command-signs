@@ -5,7 +5,8 @@ import be.nokorbis.spigot.commandsigns.api.menu.EditionMenu;
 import be.nokorbis.spigot.commandsigns.api.menu.EditionNode;
 import be.nokorbis.spigot.commandsigns.api.menu.MenuNavigationContext;
 import be.nokorbis.spigot.commandsigns.model.CommandBlock;
-import org.bukkit.ChatColor;
+import be.nokorbis.spigot.commandsigns.utils.CommandBlockValidator;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 
@@ -31,8 +32,7 @@ public abstract class EditionNodeCore extends EditionNode<CommandBlock> {
 				navigationResult.setCoreMenu(menus.get((page-1) * numberEntriesToDisplay + (choice-1)));
 			}
 			else if (choice == DONE) {
-				navigationResult.setPage(1);
-				navigationResult.setCoreMenu(getParent());
+				moveToParent(player, data, navigationResult);
 			}
 			else if (shouldDisplayNavigation()) {
 				if (choice == NEXT && menus.size() > ((page) * numberEntriesToDisplay)) {
@@ -45,6 +45,25 @@ public abstract class EditionNodeCore extends EditionNode<CommandBlock> {
 		}
 		catch(NumberFormatException e) {
 			player.sendMessage(messages.get("menu.entry.number_required"));
+		}
+	}
+
+	private void moveToParent(Player player, CommandBlock data, MenuNavigationContext navigationResult) {
+		boolean canMoveToParent = true;
+		EditionMenu<CommandBlock> parent = getParent();
+		if (parent == null) {
+			Location lca = data.getLocation();
+			if (lca == null || !CommandBlockValidator.isValidBlock(lca.getBlock())) {
+				canMoveToParent = false;
+			}
+		}
+
+		if (canMoveToParent) {
+			navigationResult.setPage(1);
+			navigationResult.setCoreMenu(parent);
+		}
+		else {
+			player.sendMessage(messages.get("menu.block.required"));
 		}
 	}
 }
