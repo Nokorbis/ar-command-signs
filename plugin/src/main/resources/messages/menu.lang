@@ -3,6 +3,7 @@ breadcrumb.name_color                   = §9
 menu.activation_mode.edit               = §eEnter the redstone activation mode of that command block (ACTIVATED/DEACTIVATED/BOTH):
 menu.activation_mode.title              = Activation mode
 menu.block.no_block                     = §r[§6Set on right click§r]
+menu.block.required                     = §4You need to register a block to save a new command block.
 menu.block_format                       = {X}/{Z}({Y}) #{BLOCK_TYPE}
 menu.block_selection                    = §b  Block: §6{VALUE}§r
 menu.commands.add.edit                  = §eEnter the command string:

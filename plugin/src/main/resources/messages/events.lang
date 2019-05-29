@@ -1,10 +1,10 @@
 creation.already_configured  = §cThis block already has a configuration.
 creation.already_positioned  = §cThis command block already has a position.
 creation.block_set           = §aBlock set to command block configuration.
+error.already_running_task   = §4You are already running that command block.
 error.break_attempt_failed   = §4This block is a command block. You must remove the commands before deleting it.
 error.invalid_block_abort    = §4The selected block is NOT valid, aborting...
 error.requirements_check     = §4An error occurred while checking requirements.
-error.already_running_task   = §4You are already running that command block.
 howto.click_confirm_deletion = §6Block selected. Click on it again to confirm deletion.
 howto.click_to_paste         = §6Block copied. Click on another block to paste the configuration.
 success.block_copied         = §aBlock properly copied.
