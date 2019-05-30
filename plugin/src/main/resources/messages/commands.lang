@@ -1,4 +1,5 @@
 commands.near.format                   = §6{NAME}§7[§5{ID}§7] at {BLOCK_TYPE} #{X}:{Z}({Y})
+error.command.help.invalid             = §4There is no command with this name.
 error.command.number_requirement       = §4The argument has to be a number.
 error.command.player_requirement       = §4You have to be a player to execute this command.
 error.command.radius_requirement       = §4You have to specify the radius to use this command.

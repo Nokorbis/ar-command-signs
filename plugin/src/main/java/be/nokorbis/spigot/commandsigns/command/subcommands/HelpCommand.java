@@ -35,8 +35,15 @@ public class HelpCommand extends Command {
 			}
 		}
 		else {
-			String subCmd = args.get(1).toLowerCase();
-			this.commands.stream().filter((cmd) -> cmd.isCommand(subCmd)).forEach((cmd) -> cmd.printUsage(sender));
+			Counter count = new Counter();
+			String subCmd = args.get(0).toLowerCase();
+			this.commands.stream().filter((cmd) -> cmd.isCommand(subCmd)).forEach((cmd) -> {
+				cmd.printUsage(sender);
+				count.increment();
+			});
+			if (count.value == 0) {
+				sender.sendMessage(commandMessages.get("error.command.help.invalid"));
+			}
 		}
 		return true;
 	}
@@ -55,5 +62,13 @@ public class HelpCommand extends Command {
 			commandStream = commandStream.filter(value -> value.startsWith(start));
 		}
 		return commandStream.collect(Collectors.toList());
+	}
+
+	private static class Counter {
+		int value = 0;
+
+		void increment() {
+			value += 1;
+		}
 	}
 }
