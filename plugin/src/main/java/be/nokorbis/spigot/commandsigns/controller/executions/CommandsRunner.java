@@ -57,11 +57,22 @@ public class CommandsRunner implements Callable<CommandsRunner.Result> {
 			else if (Settings.COMMAND_CHAR() == prefix) {
 				interpretNormalCommand(command.substring(1));
 			}
+			else if (Settings.MESSAGE_CHAR() == prefix) {
+				interpretMessage(command.substring(1));
+			}
 			else {
 				interpretChat(command);
 			}
 		}
 		return 0L;
+	}
+
+	private void interpretMessage(String command) {
+		String message = command.replace("&", "§");
+		List<String> cmds = fillPlaceholders(message);
+		for (String cmd : cmds) {
+			this.player.sendMessage(cmd);
+		}
 	}
 
 	private void interpretChat(String command) {
