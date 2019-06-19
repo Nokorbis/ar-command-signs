@@ -17,6 +17,9 @@ public final class Settings {
 	private static char DELAY_CHAR;
 	public static char DELAY_CHAR() { return DELAY_CHAR; }
 
+	private static char MESSAGE_CHAR = '~';
+	public static char MESSAGE_CHAR() { return MESSAGE_CHAR; }
+
 	private static long CACHE_TIME_TO_IDLE; //minutes
 	public static long CACHE_TIME_TO_IDLE() { return CACHE_TIME_TO_IDLE; }
 
