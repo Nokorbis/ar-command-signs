@@ -27,6 +27,7 @@ public class CommandSignCommands implements CommandExecutor, TabCompleter {
 		commands.add(new NearCommand(manager));
 		commands.add(new PurgeCommand(manager));
 		commands.add(new TeleportCommand(manager));
+		//commands.add(new SetCommand(manager));
 		commands.add(new VersionCommand());
 		commands.add(new LoadCommand(manager));
 		commands.add(new DebugCommand(manager));

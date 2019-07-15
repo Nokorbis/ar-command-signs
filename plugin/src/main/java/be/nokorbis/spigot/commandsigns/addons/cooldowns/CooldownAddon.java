@@ -47,7 +47,7 @@ public class CooldownAddon extends AddonBase {
 	}
 
 	@Override
-	public Class<? extends AddonExecutionData> getExecutionDataClass() {
+	public Class<CooldownExecutionData> getExecutionDataClass() {
 		return CooldownExecutionData.class;
 	}
 
@@ -62,7 +62,7 @@ public class CooldownAddon extends AddonBase {
 	}
 
 	@Override
-	public Class<? extends AddonConfigurationData> getConfigurationDataClass() {
+	public Class<CooldownConfigurationData> getConfigurationDataClass() {
 		return CooldownConfigurationData.class;
 	}
 

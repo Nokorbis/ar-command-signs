@@ -69,7 +69,7 @@ public class NCommandSignsManager {
 		this.cache = CacheBuilder.newBuilder()
 								 .maximumSize(Settings.CACHE_MAX_SIZE())
 								 .expireAfterAccess(Settings.CACHE_TIME_TO_IDLE(), TimeUnit.MINUTES)
-								 .removalListener(this::onCacheRemove)
+								 //.removalListener(this::onCacheRemove)
 								 .build(new CacheLoader<Long, CommandBlock>() {
 									 @Override
 									 public CommandBlock load(Long key) {
