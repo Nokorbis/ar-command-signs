@@ -10,9 +10,6 @@ import be.nokorbis.spigot.commandsigns.api.exceptions.CommandSignsRequirementExc
 import be.nokorbis.spigot.commandsigns.utils.CommandSignUtils;
 import org.bukkit.entity.Player;
 
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-
 
 public class CooldownLifecycleHooker extends AddonLifecycleHookerBase {
 
@@ -24,7 +21,7 @@ public class CooldownLifecycleHooker extends AddonLifecycleHookerBase {
 	@Override
 	@NCSLifecycleHook
 	public final void onRequirementCheck(final Player player, final AddonConfigurationData configurationData, final AddonExecutionData executionData) throws CommandSignsRequirementException {
-		if (player != null && !player.hasPermission("commandsign.timer.bypass")) {
+		if (player != null) {
 			final CooldownConfigurationData conf = (CooldownConfigurationData) configurationData;
 
 			if (conf.hasGlobalCooldown() || conf.hasPlayerCooldown() || conf.isGlobalOnlyOnce() || conf.isPlayerOnlyOnce()) {
@@ -33,10 +30,14 @@ public class CooldownLifecycleHooker extends AddonLifecycleHookerBase {
 				final Long lastTimeSomeoneUsed = data.getLastTimeUsed();
 				final Long lastTimePlayerUsed = data.getLastPlayerUsage(player);
 
-				checkIsGlobalOnlyOnce(lastTimeSomeoneUsed, conf.isGlobalOnlyOnce());
-				checkIsPlayerOnlyOnce(lastTimePlayerUsed, conf.isPlayerOnlyOnce());
-				checkPlayerCooldown(lastTimePlayerUsed, conf.getPlayerCooldown() * 1000);
-				checkGlobalCooldown(lastTimeSomeoneUsed, conf.getGlobalCooldown() * 1000);
+				if (!player.hasPermission("commandsign.onetime_limit.bypass")) {
+					checkIsGlobalOnlyOnce(lastTimeSomeoneUsed, conf.isGlobalOnlyOnce());
+					checkIsPlayerOnlyOnce(lastTimePlayerUsed, conf.isPlayerOnlyOnce());
+				}
+				if (!player.hasPermission("commandsign.timer.bypass")) {
+					checkPlayerCooldown(lastTimePlayerUsed, conf.getPlayerCooldown() * 1000);
+					checkGlobalCooldown(lastTimeSomeoneUsed, conf.getGlobalCooldown() * 1000);
+				}
 			}
 		}
 	}
@@ -91,8 +92,6 @@ public class CooldownLifecycleHooker extends AddonLifecycleHookerBase {
 	@NCSLifecycleHook
 	public final void onPostExecution(final Player player, final AddonConfigurationData configurationData, final AddonExecutionData executionData) {
 		final CooldownExecutionData data = (CooldownExecutionData) executionData;
-
-		data.refresh((CooldownConfigurationData) configurationData);
 		data.addPlayerUsage(player);
 	}
 }

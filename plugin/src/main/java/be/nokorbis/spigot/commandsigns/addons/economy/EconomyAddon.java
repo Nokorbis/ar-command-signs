@@ -34,7 +34,7 @@ public class EconomyAddon extends AddonBase {
 			if (this.economy != null) {
 				this.lifecycleHooker = new EconomyLifecycleHooker(this, economy);
 				this.editionMenu = new MenuEconomy(this, economy);
-				plugin.getLogger().info("Vault economy linked with command signs ! ");
+				plugin.getLogger().info(String.format("Vault economy [%s] linked with command signs !", economy.getName()));
 			}
 			else {
 				plugin.getLogger().info("No vault economy hooked.");

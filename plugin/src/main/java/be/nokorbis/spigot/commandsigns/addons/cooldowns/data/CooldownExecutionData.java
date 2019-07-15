@@ -22,16 +22,6 @@ public class CooldownExecutionData extends AddonExecutionData  {
 		return lastTimeUsed;
 	}
 
-	public void refresh(final CooldownConfigurationData configuration) {
-		removeUneccessaryUsages(configuration);
-	}
-
-	private void removeUneccessaryUsages(final CooldownConfigurationData configuration) {
-		final long now = System.currentTimeMillis();
-		final long playerCooldown = configuration.getPlayerCooldown();
-		playerUsages.entrySet().removeIf(entry -> entry.getValue() + playerCooldown < now);
-	}
-
 	public Long getLastPlayerUsage(final Player player) {
 		return playerUsages.get(player.getUniqueId());
 	}

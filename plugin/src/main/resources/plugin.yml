@@ -33,6 +33,9 @@ permissions:
    commandsign.timer.bypass:
       default: false
       description: Allows to bypass timers on command signs
+   commandsign.onetime_limit.bypass:
+      default: false
+      description: Allows to bypass onetime limits on command signs
    commandsign.costs.bypass:
       default: false
       description: Allows to bypass costs on command signs
