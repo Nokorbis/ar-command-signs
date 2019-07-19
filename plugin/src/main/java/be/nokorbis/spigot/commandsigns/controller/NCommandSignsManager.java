@@ -217,6 +217,7 @@ public class NCommandSignsManager {
 
 	public void deleteCommandBlock(CommandBlock commandBlock) {
 		this.configurationPersistor.delete(commandBlock.getId());
+		this.executionPersistor.deleteExecutionData(commandBlock);
 		this.locationsToIds.remove(commandBlock.getLocation());
 		CommandBlock.deleteUsedID(commandBlock.getId());
 		this.cache.invalidate(commandBlock.getId());

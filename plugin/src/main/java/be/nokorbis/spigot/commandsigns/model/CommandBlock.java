@@ -247,7 +247,8 @@ public class CommandBlock implements MenuEditable
 		AddonExecutionDataObject object = new AddonExecutionDataObject();
 		object.id = this.id;
 		for (Map.Entry<Addon, AddonExecutionData> entry : addonExecutions.entrySet()) {
-			object.addonExecutions.put(entry.getKey(), entry.getValue().copy());
+			Addon addon = entry.getKey();
+			object.addonExecutions.put(addon, entry.getValue().copy());
 		}
 
 		return object;

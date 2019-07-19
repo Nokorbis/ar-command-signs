@@ -21,4 +21,8 @@ public class ConfirmationExecutionData extends AddonExecutionData {
         data.warnedPlayers = new HashMap<>(warnedPlayers);
         return data;
     }
+
+    public Map<UUID, Long> getWarnedPlayers() {
+        return warnedPlayers;
+    }
 }

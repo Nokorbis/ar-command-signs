@@ -3,10 +3,11 @@ package be.nokorbis.spigot.commandsigns.addons.confirmation;
 import be.nokorbis.spigot.commandsigns.addons.confirmation.data.ConfirmationConfigurationData;
 import be.nokorbis.spigot.commandsigns.addons.confirmation.data.ConfirmationConfigurationDataPersister;
 import be.nokorbis.spigot.commandsigns.addons.confirmation.data.ConfirmationExecutionData;
+import be.nokorbis.spigot.commandsigns.addons.confirmation.menus.MenuConfirmation;
 import be.nokorbis.spigot.commandsigns.api.addons.AddonBase;
 import be.nokorbis.spigot.commandsigns.api.addons.AddonConfigurationData;
-import be.nokorbis.spigot.commandsigns.api.addons.AddonExecutionData;
 import be.nokorbis.spigot.commandsigns.api.addons.AddonLifecycleHooker;
+import be.nokorbis.spigot.commandsigns.api.menu.AddonSubmenuHolder;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonSerializer;
 import org.bukkit.plugin.Plugin;
@@ -18,8 +19,17 @@ public class ConfirmationAddon extends AddonBase {
     private final ConfirmationLifecycleHooker lifecycleHooker = new ConfirmationLifecycleHooker(this);
     private final ConfirmationConfigurationDataPersister persister = new ConfirmationConfigurationDataPersister(this);
 
+    private final MenuConfirmation menu = new MenuConfirmation(this);
+
     public ConfirmationAddon(Plugin plugin) {
         super(plugin, IDENTIFIER, "Confirmation");
+    }
+
+    @Override
+    public AddonSubmenuHolder getSubmenus() {
+        AddonSubmenuHolder holder = new AddonSubmenuHolder();
+        holder.requirementSubmenus.add(menu);
+        return holder;
     }
 
     @Override

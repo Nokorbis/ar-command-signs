@@ -76,4 +76,13 @@ public class JsonCommandBlockExecutionDataPersister extends JsonCommandBlockPers
 		}
 
 	}
+
+	@Override
+	public boolean deleteExecutionData(CommandBlock commandBlock) {
+		final File configFile = new File(dataFolder, commandBlock.getId() + EXTENSION);
+		if (!configFile.exists()) {
+			return false;
+		}
+		return configFile.delete();
+	}
 }
