@@ -14,3 +14,4 @@ usage.player_cooldown          = §cYou have already used this command block {TI
 usage.player_once_already_used = §cYou have already used that command block.
 usage.you_paied                = §eYou have payed §d{PRICE} §eto use this command block.
 usage.economy.bypassed         = §eYou have bypassed the cost of this command block.
+usage.confirmation.required    = §cThis command block requires a confirmation. Please click again within 15 seconds.

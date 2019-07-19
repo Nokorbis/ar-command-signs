@@ -70,6 +70,8 @@ menu.timer.reset.title                  = Reset on move
 menu.timer.time_to_wait.edit            = §eEnter the amount of time (in seconds) that the player must wait before the execution of the command:
 menu.timer.time_to_wait.title           = Time
 menu.timer.title                        = Timer
+menu.confirmation.title                 = Require confirmation
+menu.confirmation.edit                  = §eShould the command block require a confirmation ? §d(Yes/No)
 menu.value.no                           = No
 menu.value.yes                          = Yes
 

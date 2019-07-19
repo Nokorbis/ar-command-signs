@@ -47,7 +47,10 @@ public class JsonExecutionDataObjectSerializer implements JsonSerializer<AddonEx
 		JsonObject addonsArray = new JsonObject();
 
 		for (Map.Entry<Addon, AddonExecutionData> entry : src.addonExecutions.entrySet()) {
-			addonsArray.add(entry.getKey().getIdentifier(), context.serialize(entry.getValue()));
+			Addon addon = entry.getKey();
+			if (addon.getExecutionDataSerializer() != null) {
+				addonsArray.add(addon.getIdentifier(), context.serialize(entry.getValue()));
+			}
 		}
 
 		root.add("addons", addonsArray);

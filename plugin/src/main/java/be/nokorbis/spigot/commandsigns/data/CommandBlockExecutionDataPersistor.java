@@ -7,8 +7,9 @@ import java.util.Set;
 
 
 public interface CommandBlockExecutionDataPersistor {
-	public void setAddons(Set<Addon> addons);
+	void setAddons(Set<Addon> addons);
 
-	public void loadExecutionData(CommandBlock commandBlock);
-	public void saveExecutionData(CommandBlock commandBlock);
+	void loadExecutionData(CommandBlock commandBlock);
+	void saveExecutionData(CommandBlock commandBlock);
+	boolean deleteExecutionData(CommandBlock commandBlock);
 }

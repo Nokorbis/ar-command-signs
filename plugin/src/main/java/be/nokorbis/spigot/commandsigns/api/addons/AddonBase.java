@@ -22,7 +22,6 @@ public abstract class AddonBase implements Addon {
 
 	@Override
 	public void onEnable() {
-
 	}
 
 	@Override
@@ -36,7 +35,7 @@ public abstract class AddonBase implements Addon {
 	}
 
 	@Override
-	public Plugin getPlugin() {
+	public final Plugin getPlugin() {
 		return plugin;
 	}
 
