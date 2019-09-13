@@ -1,7 +1,9 @@
 package be.nokorbis.spigot.commandsigns.data.json;
 
+import be.nokorbis.spigot.commandsigns.CommandSignsPlugin;
 import be.nokorbis.spigot.commandsigns.data.CommandBlockIDLoader;
 import be.nokorbis.spigot.commandsigns.data.Pair;
+import be.nokorbis.spigot.commandsigns.utils.CommandBlockValidator;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.bukkit.Location;
@@ -10,6 +12,7 @@ import java.io.*;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
@@ -17,11 +20,14 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 public class JsonCommandBlockIDLoader extends JsonCommandBlockPersister implements CommandBlockIDLoader {
 
 	private static final Type MAPPING_TYPE = new TypeToken<Pair<Location, Long>>(){}.getType();
-
 	private static final String DATA_FOLDER_NAME = "configurations";
 
-	public JsonCommandBlockIDLoader(File pluginFolder) {
-		super(pluginFolder, DATA_FOLDER_NAME);
+	private final Logger logger;
+
+	public JsonCommandBlockIDLoader(CommandSignsPlugin plugin) {
+		super(plugin.getDataFolder(), DATA_FOLDER_NAME);
+
+		logger = plugin.getLogger();
 
 		registerPersister(Location.class, new JsonLocationPersister());
 		registerPersister(MAPPING_TYPE, new JsonCommandBlockLocationExtractor());
@@ -45,8 +51,8 @@ public class JsonCommandBlockIDLoader extends JsonCommandBlockPersister implemen
 					 InputStreamReader reader = new InputStreamReader(fis, UTF_8)){
 
 					Pair<Location, Long> pair = gson.fromJson(reader, MAPPING_TYPE);
-					if (pair == null) {
-						System.out.printf("Was not able to extract command block location from %s", file.getPath());
+					if (pair == null || !CommandBlockValidator.isValidBlock(pair.getFirst().getBlock())) {
+						logger.warning(String.format("Invalid command block location in %s", file.getPath()));
 					}
 					else {
 						idsPerLocations.put(pair.getFirst(), pair.getSecond());
