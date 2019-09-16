@@ -6,5 +6,7 @@ import java.util.Map;
 
 public interface CommandBlockIDLoader {
 
+    long getLastID();
+
     Map<Location, Long> loadAllIdsPerLocations();
 }

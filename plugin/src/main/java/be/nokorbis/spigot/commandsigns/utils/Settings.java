@@ -33,9 +33,10 @@ public final class Settings {
 		plugin.saveDefaultConfig();
 		FileConfiguration config = plugin.getConfig();
 
-		OP_CHAR 	= config.getString("prefix_char.op", "^").charAt(0);
-		SERVER_CHAR = config.getString("prefix_char.server", "#").charAt(0);
-		DELAY_CHAR 	= config.getString("prefix_char.delay", "`").charAt(0);
+		OP_CHAR 		= config.getString("prefix_char.op", "^").charAt(0);
+		SERVER_CHAR 	= config.getString("prefix_char.server", "#").charAt(0);
+		DELAY_CHAR 		= config.getString("prefix_char.delay", "`").charAt(0);
+		MESSAGE_CHAR	= config.getString("prefix_char.message", "~").charAt(0);
 
 		CACHE_TIME_TO_IDLE  = config.getLong("cache.time_to_idle", 30L);
 		CACHE_MAX_SIZE 	    = config.getLong("cache.max_size", 100L);

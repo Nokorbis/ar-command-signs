@@ -53,11 +53,6 @@ public class CommandBlock implements MenuEditable
 	}
 
 	private static long getFreeId() {
-		for (long i = 0; i <= biggerUsedId; i++) {
-			if (!usedIds.contains(i)) {
-				return i;
-			}
-		}
 		return ++biggerUsedId;
 	}
 
@@ -230,16 +225,6 @@ public class CommandBlock implements MenuEditable
 			}
 		}
 
-		/*for (Map.Entry<Addon, AddonExecutionData> dataEntry : this.addonExecutions.entrySet()) {
-			AddonExecutionData data = dataEntry.getValue();
-			if (data != null) {
-				AddonExecutionData copiedData = data.copy();
-				if (copiedData != null) {
-					newBlock.addonExecutions.put(dataEntry.getKey(), copiedData);
-				}
-			}
-		}*/
-
 		return newBlock;
 	}
 
@@ -282,5 +267,15 @@ public class CommandBlock implements MenuEditable
 	public static void reloadUsedIDs() {
 		usedIds = new HashSet<>();
 		biggerUsedId = 0L;
+	}
+
+	public static void setMaxIdIfBigger(long id) {
+		if (id > biggerUsedId) {
+			biggerUsedId = id;
+		}
+	}
+
+	public static long getBiggerUsedID() {
+		return biggerUsedId;
 	}
 }

@@ -2,6 +2,7 @@ prefix_char:
   op: ^
   server: #
   delay: '`'
+  message: ~
 cache:
   time_to_idle: 30 #minutes
   max_size: 100 #max number of signs loaded at one time
