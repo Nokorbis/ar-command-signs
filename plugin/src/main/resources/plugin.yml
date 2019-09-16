@@ -3,7 +3,7 @@ main: be.nokorbis.spigot.commandsigns.CommandSignsPlugin
 author: Nokorbis
 description: Allows admins to create Command Blocks (signs, buttons, plates, tripwire, trapped chest and levers) that can be executed on action.
 api-version: 1.13
-version: 2.0.2
+version: ${project.version}
 website: https://www.spigotmc.org/resources/command-signs.10512/
 softdepend: [Multiverse-Core,Vault,My_Worlds]
 load: POSTWORLD
