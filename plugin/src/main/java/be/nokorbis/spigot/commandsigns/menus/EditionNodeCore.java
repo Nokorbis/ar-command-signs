@@ -28,8 +28,11 @@ public abstract class EditionNodeCore extends EditionNode<CommandBlock> {
 			final int numberEntriesToDisplay = getNumberEntriesToDisplay();
 
 			if(0 < choice && choice <= numberEntriesToDisplay) {
-				navigationResult.setPage(1);
-				navigationResult.setCoreMenu(menus.get((page-1) * numberEntriesToDisplay + (choice-1)));
+				EditionMenu<CommandBlock> menu = menus.get((page - 1) * numberEntriesToDisplay + (choice - 1));
+				if (menu.shouldBeDisplayed(data)) {
+					navigationResult.setPage(1);
+					navigationResult.setCoreMenu(menu);
+				}
 			}
 			else if (choice == DONE) {
 				moveToParent(player, data, navigationResult);

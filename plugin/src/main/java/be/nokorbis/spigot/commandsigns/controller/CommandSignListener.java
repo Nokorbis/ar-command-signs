@@ -26,8 +26,11 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
+
+import java.util.logging.Logger;
 
 
 public class CommandSignListener implements Listener {
@@ -39,6 +42,14 @@ public class CommandSignListener implements Listener {
 
 	public CommandSignListener(NCommandSignsManager manager) {
 		this.manager = manager;
+	}
+
+	@EventHandler(ignoreCancelled = true)
+	public void onWorldLoad(WorldLoadEvent event) {
+		final Logger logger = this.manager.getPlugin().getLogger();
+		logger.info("New world loaded. Reloading command signs configurations.");
+
+		this.manager.reloadConfigurations();
 	}
 
 	@EventHandler( priority = EventPriority.LOWEST )

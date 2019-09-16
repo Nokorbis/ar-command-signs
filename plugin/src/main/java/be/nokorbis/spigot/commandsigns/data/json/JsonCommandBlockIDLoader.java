@@ -33,6 +33,28 @@ public class JsonCommandBlockIDLoader extends JsonCommandBlockPersister implemen
 		registerPersister(MAPPING_TYPE, new JsonCommandBlockLocationExtractor());
 	}
 
+	public long getLastID() {
+		long maxID = 0L;
+		if (!dataFolder.exists()) {
+			dataFolder.mkdirs();
+			return maxID;
+		}
+
+		File[] files = dataFolder.listFiles(filter);
+		if (files != null && files.length > 0) {
+			for (File file : files) {
+				String fileName = file.getName();
+				String name = fileName.substring(0, fileName.indexOf('.'));
+				long id = Long.parseLong(name);
+				if (id > maxID) {
+					maxID = id;
+				}
+			}
+		}
+
+		return maxID;
+	}
+
 	@Override
 	public Map<Location, Long> loadAllIdsPerLocations() {
 		Map<Location, Long> idsPerLocations = new HashMap<>();
@@ -51,8 +73,11 @@ public class JsonCommandBlockIDLoader extends JsonCommandBlockPersister implemen
 					 InputStreamReader reader = new InputStreamReader(fis, UTF_8)){
 
 					Pair<Location, Long> pair = gson.fromJson(reader, MAPPING_TYPE);
-					if (pair == null || !CommandBlockValidator.isValidBlock(pair.getFirst().getBlock())) {
-						logger.warning(String.format("Invalid command block location in %s", file.getPath()));
+					if (pair == null) {
+						logger.warning(String.format("Command block location could not be found in: %s (might be from another not-yet-loaded world)", file.getPath()));
+					}
+					else if (!CommandBlockValidator.isValidBlock(pair.getFirst().getBlock())) {
+						logger.warning(String.format("Invalid command block location in: %s", file.getPath()));
 					}
 					else {
 						idsPerLocations.put(pair.getFirst(), pair.getSecond());

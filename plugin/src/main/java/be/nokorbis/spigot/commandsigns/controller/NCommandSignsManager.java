@@ -29,7 +29,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.*;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
@@ -86,6 +85,7 @@ public class NCommandSignsManager {
 		CommandBlockIDLoader loader = new JsonCommandBlockIDLoader(this.plugin);
 		locationsToIds.putAll(loader.loadAllIdsPerLocations());
 		CommandBlock.addUsedIDS(this.locationsToIds.values());
+		CommandBlock.setMaxIdIfBigger(loader.getLastID());
 	}
 
 	public void reloadConfigurations() {
@@ -318,6 +318,7 @@ public class NCommandSignsManager {
 
 	public void debug (CommandSender sender) {
 		if (sender != null) {
+
 			String addons = registeredAddons.stream().map(Addon::getName).collect(Collectors.joining(", ", "Addons: ", ""));
 			sender.sendMessage(addons);
 

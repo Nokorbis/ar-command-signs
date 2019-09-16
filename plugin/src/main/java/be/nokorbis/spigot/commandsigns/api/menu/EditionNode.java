@@ -11,8 +11,10 @@ public abstract class EditionNode <EDITABLE extends MenuEditable> extends Editio
 
 	protected final List<EditionMenu<EDITABLE>> menus;
 
+	private static final int NAVIGATION_SIZE = 2;
+	protected int maxElementDisplayedPerPage = 6;
 	private boolean displayPageNavigation = false;
-	private int     entriesToDisplay      = 6;
+	private int     entriesToDisplay      = maxElementDisplayedPerPage;
 
 	public EditionNode(String name, EditionMenu<EDITABLE> parent) {
 		super(name, parent);
@@ -32,9 +34,9 @@ public abstract class EditionNode <EDITABLE extends MenuEditable> extends Editio
 	protected abstract void initializeSubMenus();
 
 	private void initializeNavigation() {
-		if (menus.size() > 8) {
+		if (menus.size() > maxElementDisplayedPerPage + NAVIGATION_SIZE) {
 			displayPageNavigation = true;
-			entriesToDisplay = 6;
+			entriesToDisplay = maxElementDisplayedPerPage;
 		}
 		else {
 			displayPageNavigation = false;
