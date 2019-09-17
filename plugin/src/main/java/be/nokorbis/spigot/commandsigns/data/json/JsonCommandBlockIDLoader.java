@@ -2,16 +2,13 @@ package be.nokorbis.spigot.commandsigns.data.json;
 
 import be.nokorbis.spigot.commandsigns.CommandSignsPlugin;
 import be.nokorbis.spigot.commandsigns.data.CommandBlockIDLoader;
-import be.nokorbis.spigot.commandsigns.data.Pair;
 import be.nokorbis.spigot.commandsigns.utils.CommandBlockValidator;
 import com.google.gson.*;
-import com.google.gson.reflect.TypeToken;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 
 import java.io.*;
-import java.lang.reflect.Type;
 import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
