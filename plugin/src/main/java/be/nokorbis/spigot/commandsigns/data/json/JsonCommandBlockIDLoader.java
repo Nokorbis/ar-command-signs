@@ -143,7 +143,8 @@ public class JsonCommandBlockIDLoader extends JsonCommandBlockPersister implemen
 
 	private void displayConfigurationsWarning(String warningMessage, List<Long> ids) {
 		if (ids != null && !ids.isEmpty()) {
-			String parameter = ids.stream().map(id -> Long.toString(id)).collect(Collectors.joining(","));
+			String parameter = ids.stream().sorted().map(id -> Long.toString(id))
+					.collect(Collectors.joining(","));
 			logger.warning(String.format(warningMessage, parameter));
 		}
 	}
