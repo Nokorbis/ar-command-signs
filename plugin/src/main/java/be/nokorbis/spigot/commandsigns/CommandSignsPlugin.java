@@ -56,6 +56,7 @@ public class CommandSignsPlugin extends JavaPlugin {
 		}
 
 		this.getServer().getPluginManager().registerEvents(new CommandSignListener(manager), this);
+		this.getLogger().info("If this plugin is useful to you, you can make a donation at: https://www.paypal.me/nokorbis");
 	}
 
 	@Override
