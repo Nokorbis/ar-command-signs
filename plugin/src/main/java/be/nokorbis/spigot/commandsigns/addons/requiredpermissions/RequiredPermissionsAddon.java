@@ -5,10 +5,11 @@ import be.nokorbis.spigot.commandsigns.addons.requiredpermissions.data.RequiredP
 import be.nokorbis.spigot.commandsigns.addons.requiredpermissions.data.RequiredPermissionsConfigurationDataPersister;
 import be.nokorbis.spigot.commandsigns.addons.requiredpermissions.data.RequiredPermissionsDataEditor;
 import be.nokorbis.spigot.commandsigns.addons.requiredpermissions.menus.MenuRequiredPermissions;
-import be.nokorbis.spigot.commandsigns.api.addons.*;
+import be.nokorbis.spigot.commandsigns.api.addons.AddonBase;
+import be.nokorbis.spigot.commandsigns.api.addons.AddonConfigurationData;
+import be.nokorbis.spigot.commandsigns.api.addons.AddonConfigurationDataEditor;
+import be.nokorbis.spigot.commandsigns.api.addons.AddonLifecycleHooker;
 import be.nokorbis.spigot.commandsigns.api.menu.AddonSubmenuHolder;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonSerializer;
 
 import java.util.HashMap;
 import java.util.Map;
