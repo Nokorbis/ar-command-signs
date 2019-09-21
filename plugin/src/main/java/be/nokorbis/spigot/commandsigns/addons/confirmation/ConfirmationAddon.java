@@ -1,16 +1,21 @@
 package be.nokorbis.spigot.commandsigns.addons.confirmation;
 
+import be.nokorbis.spigot.commandsigns.addons.confirmation.data.ConfimationDataEditor;
 import be.nokorbis.spigot.commandsigns.addons.confirmation.data.ConfirmationConfigurationData;
 import be.nokorbis.spigot.commandsigns.addons.confirmation.data.ConfirmationConfigurationDataPersister;
 import be.nokorbis.spigot.commandsigns.addons.confirmation.data.ConfirmationExecutionData;
 import be.nokorbis.spigot.commandsigns.addons.confirmation.menus.MenuConfirmation;
 import be.nokorbis.spigot.commandsigns.api.addons.AddonBase;
 import be.nokorbis.spigot.commandsigns.api.addons.AddonConfigurationData;
+import be.nokorbis.spigot.commandsigns.api.addons.AddonConfigurationDataEditor;
 import be.nokorbis.spigot.commandsigns.api.addons.AddonLifecycleHooker;
 import be.nokorbis.spigot.commandsigns.api.menu.AddonSubmenuHolder;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonSerializer;
 import org.bukkit.plugin.Plugin;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class ConfirmationAddon extends AddonBase {
 
@@ -65,5 +70,12 @@ public class ConfirmationAddon extends AddonBase {
     @Override
     public Class<ConfirmationExecutionData> getExecutionDataClass() {
         return ConfirmationExecutionData.class;
+    }
+
+    @Override
+    public Map<String, AddonConfigurationDataEditor> getDataEditors() {
+        HashMap<String, AddonConfigurationDataEditor> editors = new HashMap<>(1);
+        editors.put("ncs.confirmation", new ConfimationDataEditor(this));
+        return editors;
     }
 }

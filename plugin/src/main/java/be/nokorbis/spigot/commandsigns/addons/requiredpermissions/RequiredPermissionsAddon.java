@@ -3,11 +3,15 @@ package be.nokorbis.spigot.commandsigns.addons.requiredpermissions;
 import be.nokorbis.spigot.commandsigns.CommandSignsPlugin;
 import be.nokorbis.spigot.commandsigns.addons.requiredpermissions.data.RequiredPermissionsConfigurationData;
 import be.nokorbis.spigot.commandsigns.addons.requiredpermissions.data.RequiredPermissionsConfigurationDataPersister;
+import be.nokorbis.spigot.commandsigns.addons.requiredpermissions.data.RequiredPermissionsDataEditor;
 import be.nokorbis.spigot.commandsigns.addons.requiredpermissions.menus.MenuRequiredPermissions;
 import be.nokorbis.spigot.commandsigns.api.addons.*;
 import be.nokorbis.spigot.commandsigns.api.menu.AddonSubmenuHolder;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonSerializer;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class RequiredPermissionsAddon extends AddonBase {
@@ -53,5 +57,12 @@ public class RequiredPermissionsAddon extends AddonBase {
 	@Override
 	public RequiredPermissionsConfigurationDataPersister getConfigurationDataDeserializer() {
 		return configurationDataTransformer;
+	}
+
+	@Override
+	public Map<String, AddonConfigurationDataEditor> getDataEditors() {
+		Map<String, AddonConfigurationDataEditor> editors = new HashMap<>(1);
+		editors.put("ncs.required_permissions", new RequiredPermissionsDataEditor(this));
+		return editors;
 	}
 }

@@ -6,6 +6,8 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonSerializer;
 import org.bukkit.plugin.Plugin;
 
+import java.util.Map;
+
 
 public interface Addon {
 	String getIdentifier();
@@ -40,4 +42,6 @@ public interface Addon {
     Class<? extends AddonConfigurationData> getConfigurationDataClass();
 	JsonSerializer<? extends AddonConfigurationData> getConfigurationDataSerializer();
 	JsonDeserializer<? extends AddonConfigurationData> getConfigurationDataDeserializer();
+
+	Map<String, AddonConfigurationDataEditor> getDataEditors();
 }

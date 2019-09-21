@@ -1,13 +1,13 @@
 package be.nokorbis.spigot.commandsigns.addons.cooldowns;
 
 import be.nokorbis.spigot.commandsigns.CommandSignsPlugin;
-import be.nokorbis.spigot.commandsigns.addons.cooldowns.data.CooldownConfigurationData;
-import be.nokorbis.spigot.commandsigns.addons.cooldowns.data.CooldownConfigurationDataPersister;
-import be.nokorbis.spigot.commandsigns.addons.cooldowns.data.CooldownExecutionData;
-import be.nokorbis.spigot.commandsigns.addons.cooldowns.data.CooldownExecutionDataPersister;
+import be.nokorbis.spigot.commandsigns.addons.cooldowns.data.*;
 import be.nokorbis.spigot.commandsigns.addons.cooldowns.menus.MenuCooldowns;
 import be.nokorbis.spigot.commandsigns.api.addons.*;
 import be.nokorbis.spigot.commandsigns.api.menu.AddonSubmenuHolder;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class CooldownAddon extends AddonBase {
@@ -76,4 +76,15 @@ public class CooldownAddon extends AddonBase {
 		return configurationDataTransformer;
 	}
 
+	@Override
+	public Map<String, AddonConfigurationDataEditor> getDataEditors() {
+		HashMap<String, AddonConfigurationDataEditor> editors = new HashMap<>(4);
+
+		editors.put("ncs.global_cooldown", new GlobalCooldownDataEditor(this));
+		editors.put("ncs.player_cooldown", new PlayerCooldownDataEditor(this));
+		editors.put("ncs.global_once", new GlobalOnceDataEditor(this));
+		editors.put("ncs_player_once", new PlayerOnceDataEditor(this));
+
+		return editors;
+	}
 }

@@ -15,3 +15,6 @@ usage.player_once_already_used = §cYou have already used that command block.
 usage.you_paied                = §eYou have payed §d{PRICE} §eto use this command block.
 usage.economy.bypassed         = §eYou have bypassed the cost of this command block.
 usage.confirmation.required    = §cThis command block requires a confirmation. Please click again within 15 seconds.
+error.command.require_args     = §4This command requires more args.
+error.command.require_number   = §4This command requires a number.
+error.command.index_too_large  = §4The index you entered is too large.
