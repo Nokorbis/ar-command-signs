@@ -37,13 +37,8 @@ public class MenuConfirmation extends AddonEditionLeaf {
             if (!CANCEL_STRING.equals(message)) {
                 ConfirmationConfigurationData configurationData = (ConfirmationConfigurationData) data;
                 String[] args = message.split(" ", 2);
-                String val = args[0].toUpperCase();
-                if ("Y".equals(val) || "YES".equals(val) || "TRUE".equals(val)) {
-                    configurationData.setRequireConfirmation(true);
-                }
-                else {
-                    configurationData.setRequireConfirmation(false);
-                }
+                String val = args[0];
+                configurationData.parseRequireConfirmation(val);
             }
         }
         catch (Exception ignored) {

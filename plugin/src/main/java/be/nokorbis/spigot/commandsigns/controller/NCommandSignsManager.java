@@ -2,6 +2,7 @@ package be.nokorbis.spigot.commandsigns.controller;
 
 import be.nokorbis.spigot.commandsigns.CommandSignsPlugin;
 import be.nokorbis.spigot.commandsigns.api.addons.Addon;
+import be.nokorbis.spigot.commandsigns.controller.editor.CommandBlockDataEditor;
 import be.nokorbis.spigot.commandsigns.controller.positionchecker.CommandBlockPositionChecker;
 import be.nokorbis.spigot.commandsigns.controller.positionchecker.PositionCheckerFactory;
 import be.nokorbis.spigot.commandsigns.data.CommandBlockConfigurationDataPersister;
@@ -56,6 +57,8 @@ public class NCommandSignsManager {
 
 	private CommandBlockConfigurationDataPersister configurationPersistor;
 	private CommandBlockExecutionDataPersistor     executionPersistor;
+
+	private Map<String, CommandBlockDataEditor> coreDataEditors = new HashMap<>();
 
 
 	public NCommandSignsManager(CommandSignsPlugin plugin) {
@@ -177,6 +180,12 @@ public class NCommandSignsManager {
 				runningExecutors.remove(task);
 			}
 		}
+	}
+
+	public boolean callDataEditor(String editorName, CommandBlock commandBlock, List<String> args) {
+
+
+		return false;
 	}
 
 	public Stream<Long> getCommandBlockIDs() {

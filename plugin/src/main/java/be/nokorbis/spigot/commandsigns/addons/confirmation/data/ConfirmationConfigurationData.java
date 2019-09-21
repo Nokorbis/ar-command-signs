@@ -20,6 +20,16 @@ public class ConfirmationConfigurationData extends AddonConfigurationData {
         this.requireConfirmation = requireConfirmation;
     }
 
+    public void parseRequireConfirmation(String value) {
+        value = value.toUpperCase();
+        if ("Y".equals(value) || "YES".equals(value) || "TRUE".equals(value)) {
+            this.setRequireConfirmation(true);
+        }
+        else {
+            this.setRequireConfirmation(false);
+        }
+    }
+
     @Override
     public AddonConfigurationData copy() {
         ConfirmationConfigurationData copy = new ConfirmationConfigurationData(addon);

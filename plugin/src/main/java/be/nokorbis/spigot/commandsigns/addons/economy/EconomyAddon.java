@@ -3,11 +3,15 @@ package be.nokorbis.spigot.commandsigns.addons.economy;
 import be.nokorbis.spigot.commandsigns.CommandSignsPlugin;
 import be.nokorbis.spigot.commandsigns.addons.economy.data.EconomyConfigurationData;
 import be.nokorbis.spigot.commandsigns.addons.economy.data.EconomyConfigurationDataPersister;
+import be.nokorbis.spigot.commandsigns.addons.economy.data.EconomyDataEditor;
 import be.nokorbis.spigot.commandsigns.addons.economy.menus.MenuEconomy;
 import be.nokorbis.spigot.commandsigns.api.addons.*;
 import be.nokorbis.spigot.commandsigns.api.menu.AddonSubmenuHolder;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonSerializer;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class EconomyAddon extends AddonBase {
@@ -89,4 +93,13 @@ public class EconomyAddon extends AddonBase {
 		return this.economy != null;
 	}
 
+	@Override
+	public Map<String, AddonConfigurationDataEditor> getDataEditors() {
+		if (isEconomyLinked()) {
+			HashMap<String, AddonConfigurationDataEditor> editors = new HashMap<>();
+			editors.put("ncs.economy", new EconomyDataEditor(this));
+			return editors;
+		}
+		return null;
+	}
 }

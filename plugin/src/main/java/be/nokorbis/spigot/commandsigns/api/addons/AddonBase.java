@@ -5,6 +5,7 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonSerializer;
 import org.bukkit.plugin.Plugin;
 
+import java.util.Map;
 import java.util.Objects;
 
 
@@ -104,6 +105,11 @@ public abstract class AddonBase implements Addon {
 
 	@Override
 	public Class<? extends AddonConfigurationData> getConfigurationDataClass() {
+		return null;
+	}
+
+	@Override
+	public Map<String, AddonConfigurationDataEditor> getDataEditors() {
 		return null;
 	}
 }
