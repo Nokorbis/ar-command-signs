@@ -5,21 +5,26 @@ import be.nokorbis.spigot.commandsigns.api.addons.AddonConfigurationData;
 import be.nokorbis.spigot.commandsigns.api.addons.AddonConfigurationDataEditor;
 import be.nokorbis.spigot.commandsigns.command.CommandRequiringManager;
 import be.nokorbis.spigot.commandsigns.controller.NCommandSignsManager;
+import be.nokorbis.spigot.commandsigns.controller.editor.CommandBlockDataEditor;
+import be.nokorbis.spigot.commandsigns.controller.editor.CoreNameEditor;
 import be.nokorbis.spigot.commandsigns.model.CommandBlock;
 import be.nokorbis.spigot.commandsigns.model.CommandSignsCommandException;
 import org.bukkit.command.CommandSender;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class SetCommand extends CommandRequiringManager {
 
     private final Map<String, AddonConfigurationDataEditor> addonDataEditors;
+    private final Map<String, CommandBlockDataEditor> coreDataEditors;
 
     public SetCommand(NCommandSignsManager manager) {
         super(manager, "set", new String[0]);
         this.basePermission = "commandsign.admin.set";
-        this.addonDataEditors = getAddonsDataEditor(manager);
+        this.addonDataEditors = getAddonsDataEditors(manager);
+        this.coreDataEditors = getCoreDataEditors();
     }
 
     @Override
@@ -43,13 +48,20 @@ public class SetCommand extends CommandRequiringManager {
         }
 
         String key = args.remove(0);
-        AddonConfigurationDataEditor addonDataEditor = addonDataEditors.get(key);
-        if (addonDataEditor == null) {
+        CommandBlockDataEditor coreEditor = coreDataEditors.get(key);
+        AddonConfigurationDataEditor addonEditor = addonDataEditors.get(key);
+        if (coreEditor == null && addonEditor == null) {
             throw new CommandSignsCommandException(commandMessages.get("error.command.set.key_invalid"));
         }
 
-        AddonConfigurationData addonConfigurationData = commandBlock.getAddonConfigurationData(addonDataEditor.getAddon());
-        addonDataEditor.editValue(addonConfigurationData, args);
+        if (coreEditor != null) {
+            coreEditor.editValue(commandBlock, args);
+        }
+        else {
+            AddonConfigurationData addonConfigurationData = commandBlock.getAddonConfigurationData(addonEditor.getAddon());
+            addonEditor.editValue(addonConfigurationData, args);
+        }
+
         manager.saveCommandBlock(commandBlock);
         sender.sendMessage(commandMessages.get("success.block_edited"));
         return true;
@@ -86,31 +98,32 @@ public class SetCommand extends CommandRequiringManager {
             return Collections.singletonList(idArg);
         }
         String key = args.remove(0);
+        CommandBlockDataEditor coreEditor = coreDataEditors.get(key);
         AddonConfigurationDataEditor addonEditor = addonDataEditors.get(key);
-        if (args.isEmpty()) {
-            if (addonEditor == null) {
-                return addonDataEditors.keySet().stream().filter(registeredKey -> registeredKey.contains(key)).collect(Collectors.toList());
+        if (coreEditor == null && addonEditor == null) {
+            if (args.isEmpty()) {
+                return Stream.concat(addonDataEditors.keySet().stream(), coreDataEditors.keySet().stream())
+                        .filter(registeredKey -> registeredKey.contains(key))
+                        .collect(Collectors.toList());
             }
-            else {
-                return Collections.singletonList(key);
-            }
+            return Collections.emptyList();
         }
 
-        if (addonEditor != null) {
-            return addonEditor.onTabComplete(sender,
-                    commandBlock == null ? null : commandBlock.getAddonConfigurationData(addonEditor.getAddon()),
-                    args);
+        if (coreEditor != null) {
+            return coreEditor.onTabComplete(commandBlock, args);
         }
 
 
-        return Collections.emptyList();
+        return addonEditor.onTabComplete(sender,
+                commandBlock == null ? null : commandBlock.getAddonConfigurationData(addonEditor.getAddon()),
+                args);
     }
 
     private List<String> getDefaultIDs() {
         return Arrays.asList("1", "2", "3");
     }
 
-    private Map<String, AddonConfigurationDataEditor> getAddonsDataEditor(NCommandSignsManager manager) {
+    private Map<String, AddonConfigurationDataEditor> getAddonsDataEditors(NCommandSignsManager manager) {
         Map<String, AddonConfigurationDataEditor> addonEditors = new HashMap<>();
 
         for (Addon addon : manager.getAddons()) {
@@ -123,6 +136,14 @@ public class SetCommand extends CommandRequiringManager {
         }
 
         return addonEditors;
+    }
+
+    private Map<String, CommandBlockDataEditor> getCoreDataEditors() {
+        Map<String, CommandBlockDataEditor> coreEditors = new HashMap<>();
+
+        coreEditors.put("core.name", new CoreNameEditor());
+
+        return coreEditors;
     }
 
 }
