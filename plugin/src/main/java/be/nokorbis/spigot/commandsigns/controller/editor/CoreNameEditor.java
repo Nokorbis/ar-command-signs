@@ -5,7 +5,7 @@ import be.nokorbis.spigot.commandsigns.model.CommandSignsCommandException;
 
 import java.util.List;
 
-public class CoreNameEditor extends CommandBlockDataEditorBase {
+public final class CoreNameEditor extends CommandBlockDataEditorBase {
 
     @Override
     public void editValue(CommandBlock commandBlock, List<String> args) throws CommandSignsCommandException {

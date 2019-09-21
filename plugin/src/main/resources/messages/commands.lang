@@ -7,6 +7,7 @@ error.command.set.key_requirement      = §4You have to specify the key to edit 
 error.command.set.key_invalid          = §4The key you specified does not match any data editor.
 error.command.set.name.invalid         = §4The name is invalid.
 error.command_needs_arguments          = §4You must specify at least one argument to use this command.
+error.command.more_args                = §4This command requires more arguments.
 error.invalid_command_id               = §4No command block was found with for this ID.
 error.no_permission                    = §4You do NOT have the permission to use this command.
 howto.click_for_info                   = §6Click on command block whose you want information
