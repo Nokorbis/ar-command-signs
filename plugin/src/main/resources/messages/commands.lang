@@ -5,6 +5,7 @@ error.command.player_requirement       = §4You have to be a player to execute t
 error.command.radius_requirement       = §4You have to specify the radius to use this command.
 error.command.set.key_requirement      = §4You have to specify the key to edit the configuration.
 error.command.set.key_invalid          = §4The key you specified does not match any data editor.
+error.command.set.name.invalid         = §4The name is invalid.
 error.command_needs_arguments          = §4You must specify at least one argument to use this command.
 error.invalid_command_id               = §4No command block was found with for this ID.
 error.no_permission                    = §4You do NOT have the permission to use this command.
