@@ -10,8 +10,6 @@ import be.nokorbis.spigot.commandsigns.api.addons.AddonConfigurationData;
 import be.nokorbis.spigot.commandsigns.api.addons.AddonConfigurationDataEditor;
 import be.nokorbis.spigot.commandsigns.api.addons.AddonLifecycleHooker;
 import be.nokorbis.spigot.commandsigns.api.menu.AddonSubmenuHolder;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonSerializer;
 import org.bukkit.plugin.Plugin;
 
 import java.util.HashMap;
@@ -53,12 +51,12 @@ public class ConfirmationAddon extends AddonBase {
     }
 
     @Override
-    public JsonSerializer<? extends AddonConfigurationData> getConfigurationDataSerializer() {
+    public ConfirmationConfigurationDataPersister getConfigurationDataSerializer() {
         return persister;
     }
 
     @Override
-    public JsonDeserializer<? extends AddonConfigurationData> getConfigurationDataDeserializer() {
+    public ConfirmationConfigurationDataPersister getConfigurationDataDeserializer() {
         return persister;
     }
 
