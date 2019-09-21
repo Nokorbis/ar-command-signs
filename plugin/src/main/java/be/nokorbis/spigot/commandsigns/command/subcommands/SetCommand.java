@@ -5,8 +5,7 @@ import be.nokorbis.spigot.commandsigns.api.addons.AddonConfigurationData;
 import be.nokorbis.spigot.commandsigns.api.addons.AddonConfigurationDataEditor;
 import be.nokorbis.spigot.commandsigns.command.CommandRequiringManager;
 import be.nokorbis.spigot.commandsigns.controller.NCommandSignsManager;
-import be.nokorbis.spigot.commandsigns.controller.editor.CommandBlockDataEditor;
-import be.nokorbis.spigot.commandsigns.controller.editor.CoreNameEditor;
+import be.nokorbis.spigot.commandsigns.controller.editor.*;
 import be.nokorbis.spigot.commandsigns.model.CommandBlock;
 import be.nokorbis.spigot.commandsigns.model.CommandSignsCommandException;
 import org.bukkit.command.CommandSender;
@@ -83,7 +82,10 @@ public class SetCommand extends CommandRequiringManager {
 
     @Override
     public List<String> autoComplete(CommandSender sender, List<String> args) {
-        System.out.println("args = " + args);
+        if (!sender.hasPermission(this.basePermission)) {
+            return Collections.emptyList();
+        }
+
         if (args.isEmpty()) {
             return getDefaultIDs();
         }
@@ -142,6 +144,13 @@ public class SetCommand extends CommandRequiringManager {
         Map<String, CommandBlockDataEditor> coreEditors = new HashMap<>();
 
         coreEditors.put("core.name", new CoreNameEditor());
+        coreEditors.put("core.disabled", new CoreDisabledEditor());
+        coreEditors.put("core.activation_mode", new CoreActivationModeEditor());
+        coreEditors.put("core.commands", new CoreCommandsEditor());
+        coreEditors.put("core.temporary_permissions", new CoreTemporaryPermissionsEditor());
+        coreEditors.put("core.timer.duration" ,new CoreTimerDurationEditor());
+        coreEditors.put("core.timer.reset", new CoreTimerResetEditor());
+        coreEditors.put("core.timer.cancel", new CoreTimerCancelEditor());
 
         return coreEditors;
     }

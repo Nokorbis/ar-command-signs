@@ -10,6 +10,14 @@ public abstract class CommandBlockDataEditorBase implements CommandBlockDataEdit
 
     protected final static DisplayMessages messages = DisplayMessages.getDisplayMessages("messages/commands");
 
+    protected final boolean parseBooleanValue(String value) {
+        value = value.toUpperCase();
+        if ("Y".equals(value) || "YES".equals(value) || "TRUE".equals(value)) {
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public List<String> onTabComplete(CommandBlock data, List<String> args) {
         return Collections.emptyList();
