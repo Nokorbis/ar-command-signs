@@ -5,10 +5,10 @@ import be.nokorbis.spigot.commandsigns.api.DisplayMessages;
 import be.nokorbis.spigot.commandsigns.api.addons.AddonConfigurationData;
 import be.nokorbis.spigot.commandsigns.api.addons.AddonConfigurationDataEditorBase;
 import be.nokorbis.spigot.commandsigns.model.CommandSignsCommandException;
-import com.google.gson.internal.$Gson$Preconditions;
 import org.bukkit.command.CommandSender;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -63,24 +63,26 @@ public class RequiredPermissionsDataEditor extends AddonConfigurationDataEditorB
 
     @Override
     public List<String> onTabComplete(CommandSender sender, AddonConfigurationData configurationData, List<String> args) {
-        if (args.isEmpty()) {
+        if (args.size() <= 1) {
             return SUB_COMMANDS;
         }
-        if (args.size() > 1) {
-            return null;
-        }
-        if (configurationData == null) {
-            return getDefaultIndexes();
-        }
 
-        RequiredPermissionsConfigurationData data = (RequiredPermissionsConfigurationData) configurationData;
-        int limit = data.getRequiredPermissions().size();
-
-        if (limit == 0) {
-            return getDefaultIndexes();
+        String subCommand = args.remove(0);
+        if ("add".equals(subCommand)) {
+            return Collections.emptyList();
         }
 
-        return IntStream.range(1, limit).mapToObj(Integer::toString).collect(Collectors.toList());
+        if (args.size() == 1) {
+            RequiredPermissionsConfigurationData data = (RequiredPermissionsConfigurationData) configurationData;
+            int limit = data.getRequiredPermissions().size();
+            if (limit == 0) {
+                return Collections.emptyList();
+            }
+
+            return IntStream.range(1, limit+1).mapToObj(Integer::toString).collect(Collectors.toList());
+        }
+
+        return Collections.emptyList();
     }
 
     private List<String> getDefaultIndexes() {

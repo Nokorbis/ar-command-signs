@@ -8,6 +8,7 @@ import be.nokorbis.spigot.commandsigns.model.CommandSignsCommandException;
 import org.bukkit.command.CommandSender;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class EconomyDataEditor extends AddonConfigurationDataEditorBase {
@@ -36,6 +37,9 @@ public class EconomyDataEditor extends AddonConfigurationDataEditorBase {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, AddonConfigurationData configurationData, List<String> args) {
-        return Arrays.asList("0", "10", "50", "100", "500", "1000");
+        if (args.isEmpty() || (args.size() == 1 && "".equals(args.get(0).trim()))) {
+            return Arrays.asList("0", "10", "50", "100", "500", "1000");
+        }
+        return Collections.emptyList();
     }
 }

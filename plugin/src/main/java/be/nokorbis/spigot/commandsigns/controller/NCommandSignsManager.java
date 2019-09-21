@@ -182,12 +182,6 @@ public class NCommandSignsManager {
 		}
 	}
 
-	public boolean callDataEditor(String editorName, CommandBlock commandBlock, List<String> args) {
-
-
-		return false;
-	}
-
 	public Stream<Long> getCommandBlockIDs() {
 		return this.locationsToIds.values().stream();
 	}
