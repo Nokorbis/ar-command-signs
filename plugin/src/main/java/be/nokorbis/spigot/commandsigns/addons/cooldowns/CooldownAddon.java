@@ -83,7 +83,7 @@ public class CooldownAddon extends AddonBase {
 		editors.put("ncs.global_cooldown", new GlobalCooldownDataEditor(this));
 		editors.put("ncs.player_cooldown", new PlayerCooldownDataEditor(this));
 		editors.put("ncs.global_once", new GlobalOnceDataEditor(this));
-		editors.put("ncs_player_once", new PlayerOnceDataEditor(this));
+		editors.put("ncs.player_once", new PlayerOnceDataEditor(this));
 
 		return editors;
 	}

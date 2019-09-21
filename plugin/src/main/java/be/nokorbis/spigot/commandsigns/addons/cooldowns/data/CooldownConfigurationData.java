@@ -76,10 +76,10 @@ public class CooldownConfigurationData extends AddonConfigurationData {
 			player.sendMessage(addonMessages.get("info.player_cooldown").replace("{TIME}", CommandSignUtils.formatTime(playerCooldown)));
 		}
 		if (isGlobalOnlyOnce()) {
-			player.sendMessage(addonMessages.get("info.is_player_only_once"));
+			player.sendMessage(addonMessages.get("info.is_global_only_once"));
 		}
 		if (isPlayerOnlyOnce()) {
-			player.sendMessage(addonMessages.get("info.is_global_only_once"));
+			player.sendMessage(addonMessages.get("info.is_player_only_once"));
 		}
 	}
 }

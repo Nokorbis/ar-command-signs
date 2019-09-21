@@ -8,6 +8,7 @@ import be.nokorbis.spigot.commandsigns.model.CommandSignsCommandException;
 import org.bukkit.command.CommandSender;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class PlayerCooldownDataEditor extends AddonConfigurationDataEditorBase {
@@ -37,6 +38,21 @@ public class PlayerCooldownDataEditor extends AddonConfigurationDataEditorBase {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, AddonConfigurationData configurationData, List<String> args) {
+        if (args.isEmpty()) {
+            return getDefaultTimes();
+        }
+        if (args.size() == 1) {
+            String arg = args.remove(0).trim();
+            if ("".equals(arg)) {
+                return getDefaultTimes();
+            }
+            return Collections.singletonList(arg);
+        }
+
+        return Collections.emptyList();
+    }
+
+    private List<String> getDefaultTimes() {
         return Arrays.asList("60", "300", "600", "3600", "86400");
     }
 }

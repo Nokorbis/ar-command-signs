@@ -8,6 +8,7 @@ import be.nokorbis.spigot.commandsigns.model.CommandSignsCommandException;
 import org.bukkit.command.CommandSender;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class PlayerOnceDataEditor extends AddonConfigurationDataEditorBase {
@@ -32,6 +33,9 @@ public class PlayerOnceDataEditor extends AddonConfigurationDataEditorBase {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, AddonConfigurationData configurationData, List<String> args) {
-        return Arrays.asList("Yes", "No");
+        if (args.size() < 2) {
+            return Arrays.asList("Yes", "No");
+        }
+        return Collections.emptyList();
     }
 }

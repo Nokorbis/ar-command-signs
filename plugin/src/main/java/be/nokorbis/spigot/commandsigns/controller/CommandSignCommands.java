@@ -4,6 +4,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import be.nokorbis.spigot.commandsigns.api.DisplayMessages;
+import be.nokorbis.spigot.commandsigns.api.addons.Addon;
+import be.nokorbis.spigot.commandsigns.api.addons.AddonConfigurationDataEditor;
 import be.nokorbis.spigot.commandsigns.command.ICommand;
 import be.nokorbis.spigot.commandsigns.command.subcommands.*;
 import be.nokorbis.spigot.commandsigns.model.CommandSignsCommandException;
@@ -27,7 +29,7 @@ public class CommandSignCommands implements CommandExecutor, TabCompleter {
 		commands.add(new NearCommand(manager));
 		commands.add(new PurgeCommand(manager));
 		commands.add(new TeleportCommand(manager));
-		//commands.add(new SetCommand(manager));
+		commands.add(new SetCommand(manager));
 		commands.add(new VersionCommand());
 		commands.add(new LoadCommand(manager));
 		commands.add(new DebugCommand(manager));
