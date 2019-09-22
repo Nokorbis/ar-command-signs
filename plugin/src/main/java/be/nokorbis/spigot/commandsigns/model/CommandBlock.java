@@ -251,14 +251,9 @@ public class CommandBlock implements MenuEditable, Cloneable {
 		clone.temporarilyGrantedPermissions = new ArrayList<>(this.temporarilyGrantedPermissions);
 
 		clone.addonConfigurations = new HashMap<>();
-		clone.addonExecutions = new HashMap<>();
 
 		for (Map.Entry<Addon, AddonConfigurationData> entry : this.addonConfigurations.entrySet()) {
 			clone.addonConfigurations.put(entry.getKey(), entry.getValue().copy());
-		}
-
-		for (Map.Entry<Addon, AddonExecutionData> entry : this.addonExecutions.entrySet()) {
-			clone.addonExecutions.put(entry.getKey(), entry.getValue().copy());
 		}
 
 		return clone;
