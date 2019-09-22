@@ -128,8 +128,13 @@ public class CommandSignListener implements Listener {
 							manager.removeConfigurationManager(player);
 						}
 						else {
-							configurationManager.setCommandBlock(commandBlock);
-							configurationManager.display();
+							try {
+								configurationManager.setCommandBlock(commandBlock.clone());
+								configurationManager.display();
+							}
+							catch (CloneNotSupportedException e) {
+								manager.getPlugin().getLogger().severe(e.getMessage());
+							}
 						}
 					}
 				}

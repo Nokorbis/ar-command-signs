@@ -37,6 +37,9 @@ public abstract class EditionNodeCore extends EditionNode<CommandBlock> {
 			else if (choice == DONE) {
 				moveToParent(player, data, navigationResult);
 			}
+			else if (choice == CANCEL) {
+				cancel(player, navigationResult);
+			}
 			else if (shouldDisplayNavigation()) {
 				if (choice == NEXT && menus.size() > ((page) * numberEntriesToDisplay)) {
 					navigationResult.setPage(page+1);
@@ -49,6 +52,12 @@ public abstract class EditionNodeCore extends EditionNode<CommandBlock> {
 		catch(NumberFormatException e) {
 			player.sendMessage(messages.get("menu.entry.number_required"));
 		}
+	}
+
+	private void cancel(Player player, MenuNavigationContext navigationResult) {
+		navigationResult.setCancelled(true);
+		navigationResult.setPage(1);
+		navigationResult.setCoreMenu(getParent());
 	}
 
 	private void moveToParent(Player player, CommandBlock data, MenuNavigationContext navigationResult) {

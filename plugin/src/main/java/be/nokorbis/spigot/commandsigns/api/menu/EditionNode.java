@@ -34,9 +34,13 @@ public abstract class EditionNode <EDITABLE extends MenuEditable> extends Editio
 	protected abstract void initializeSubMenus();
 
 	private void initializeNavigation() {
-		if (menus.size() > maxElementDisplayedPerPage + NAVIGATION_SIZE) {
+		int max = maxElementDisplayedPerPage + NAVIGATION_SIZE;
+		if (shouldDisplayCancel()) {
+			max -= 1;
+		}
+		if (menus.size() > max) {
 			displayPageNavigation = true;
-			entriesToDisplay = maxElementDisplayedPerPage;
+			entriesToDisplay = max - NAVIGATION_SIZE;
 		}
 		else {
 			displayPageNavigation = false;
@@ -63,6 +67,7 @@ public abstract class EditionNode <EDITABLE extends MenuEditable> extends Editio
 
 		displaySubmenus(editor, data, navigationContext);
 		displayPageNavigation(editor, navigationContext.getPage());
+		displayCancel(editor);
 
 		clickableMessageDone.sendToPlayer(editor);
 	}
@@ -84,13 +89,19 @@ public abstract class EditionNode <EDITABLE extends MenuEditable> extends Editio
 		}
 	}
 
+	protected void displayCancel(final Player player) {
+		if (shouldDisplayCancel()) {
+			clickableMessageCancel.sendToPlayer(player);
+		}
+	}
+
 	protected void displayPageNavigation(final Player editor, final int page) {
 		if (displayPageNavigation) {
 			if (page > 1) {
-				clickableMessagePrevious.sendToPlayer(editor);
+				getClickableMessagePrevious().sendToPlayer(editor);
 			}
 			if ((page * entriesToDisplay) < menus.size()) {
-				clickableMessageNext.sendToPlayer(editor);
+				getClickableMessageNext().sendToPlayer(editor);
 			}
 		}
 	}

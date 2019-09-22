@@ -7,6 +7,7 @@ public class MenuNavigationContext implements Cloneable {
 
 	private EditionMenu<CommandBlock> coreMenu;
 	private AddonEditionMenu addonMenu;
+	private boolean cancelled = false;
 
 	private int page = 1;
 
@@ -42,6 +43,13 @@ public class MenuNavigationContext implements Cloneable {
 		this.page = page;
 	}
 
+	public void setCancelled(boolean cancelled) {
+		this.cancelled = cancelled;
+	}
+
+	public boolean isCancelled() {
+		return cancelled;
+	}
 
 	@Override
 	protected Object clone() throws CloneNotSupportedException {

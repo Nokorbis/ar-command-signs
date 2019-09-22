@@ -60,13 +60,20 @@ public class NCommandSignsConfigurationManager {
 			coreMenu.display(editor, commandBlock, this.navigationContext);
 		}
 		else {
-			this.manager.saveCommandBlock(commandBlock);
-			if (this.isCreating) {
-				this.editor.sendMessage(messages.get("menu.creation_completed"));
+			if (!this.navigationContext.isCancelled()) {
+				//might be a synchro problem here because the clone() happened earlier
+				this.manager.saveCommandBlock(commandBlock);
+				if (this.isCreating) {
+					this.editor.sendMessage(messages.get("menu.creation_completed"));
+				}
+				else {
+					this.editor.sendMessage(messages.get("menu.edition_completed"));
+				}
 			}
 			else {
-				this.editor.sendMessage(messages.get("menu.edition_completed"));
+				this.editor.sendMessage(messages.get("menu.configuration_cancelled"));
 			}
+
 			this.manager.removeConfigurationManager(this.editor);
 		}
 	}

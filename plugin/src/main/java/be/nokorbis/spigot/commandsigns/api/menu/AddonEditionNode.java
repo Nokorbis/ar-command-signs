@@ -84,10 +84,10 @@ public abstract class AddonEditionNode extends AddonEditionMenu {
 	protected void displayPageNavigation(final Player editor, final int page) {
 		if (displayPageNavigation) {
 			if (page > 1) {
-				clickableMessagePrevious.sendToPlayer(editor);
+				getClickableMessagePrevious().sendToPlayer(editor);
 			}
 			if ((page * entriesToDisplay) < menus.size()) {
-				clickableMessageNext.sendToPlayer(editor);
+				getClickableMessageNext().sendToPlayer(editor);
 			}
 		}
 	}

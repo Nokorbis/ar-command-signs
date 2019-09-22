@@ -54,14 +54,23 @@ public class EditCommand extends CommandRequiringManager {
 	}
 
 	private void addNewEditionManager(Player player, CommandBlock commandBlock) {
-		NCommandSignsConfigurationManager conf = new NCommandSignsConfigurationManager(player, manager);
-		conf.setEditing(true);
-		conf.setCurrentMenu(manager.getMainMenu());
-		if (commandBlock != null) {
-			conf.setCommandBlock(commandBlock);
-			conf.display();
+
+		try {
+			NCommandSignsConfigurationManager conf = new NCommandSignsConfigurationManager(player, manager);
+
+			conf.setEditing(true);
+			conf.setCurrentMenu(manager.getMainMenu());
+
+			if (commandBlock != null) {
+				conf.setCommandBlock(commandBlock.clone());
+				conf.display();
+			}
+
+			manager.addConfigurationManager(conf);
 		}
-		manager.addConfigurationManager(conf);
+		catch (CloneNotSupportedException e) {
+			manager.getPlugin().getLogger().severe(e.getMessage());
+		}
 	}
 
 	@Override

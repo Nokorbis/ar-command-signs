@@ -9,8 +9,8 @@ import be.nokorbis.spigot.commandsigns.api.menu.MenuEditable;
 import org.bukkit.Location;
 
 
-public class CommandBlock implements MenuEditable
-{
+public class CommandBlock implements MenuEditable, Cloneable {
+
 	private transient static Set<Long> usedIds = new HashSet<>();
 	private transient static Long biggerUsedId = 0L;
 
@@ -28,24 +28,16 @@ public class CommandBlock implements MenuEditable
 	private ArrayList<String> commands = new ArrayList<>();
 	private ArrayList<String> temporarilyGrantedPermissions = new ArrayList<>();
 
-	private Integer timeBeforeExecution; // Value in seconds
-	private Boolean resetOnMove;
-	private Boolean cancelledOnMove;
+	private Timer timer = new Timer();
 
 	public CommandBlock() {
-		this.setTimeBeforeExecution(0);
-		this.resetOnMove = false;
-		this.cancelledOnMove = false;
-
 		this.setId(getFreeId());
+		timer.setDuration(0);
 	}
 
 	public CommandBlock(Long id) {
-		this.setTimeBeforeExecution(0);
-		this.resetOnMove = false;
-		this.cancelledOnMove = false;
-
 		this.setId(id);
+		this.timer.setDuration(0);
 	}
 
 	public static long getBiggerUsedId() {
@@ -61,7 +53,7 @@ public class CommandBlock implements MenuEditable
 		biggerUsedId = usedIds.stream().max(Long::compareTo).orElse(0L);
 	}
 
-	/* Getters and setters */
+	//region Getters and Setters
 
 	/* Id */
 
@@ -132,40 +124,40 @@ public class CommandBlock implements MenuEditable
 	/* Timers */
 
 	public Integer getTimeBeforeExecution() {
-		return this.timeBeforeExecution;
+		return this.timer.getDuration();
 	}
 
 	public void setTimeBeforeExecution(Integer timer) {
 		if ((timer == null) || (timer < 0)) {
 			timer = 0;
 		}
-		this.timeBeforeExecution = timer;
+		this.timer.setDuration(timer);
 	}
 
 	public Boolean isCancelledOnMove() {
-		return this.cancelledOnMove;
+		return this.timer.isCancel();
 	}
 
 	public void setCancelledOnMove(Boolean cancel) {
 		if (cancel == null) {
 			cancel = false;
 		}
-		this.cancelledOnMove = cancel;
+		this.timer.setCancel(cancel);
 	}
 
 	public Boolean isResetOnMove() {
-		return this.resetOnMove;
+		return this.timer.isReset();
 	}
 
 	public void setResetOnMove(Boolean reset) {
 		if (reset == null) {
 			reset = false;
 		}
-		this.resetOnMove = reset;
+		this.timer.setReset(reset);
 	}
 
 	public boolean hasTimer() {
-		return this.timeBeforeExecution >= 1;
+		return this.timer.getDuration() >= 1;
 	}
 
 
@@ -189,6 +181,8 @@ public class CommandBlock implements MenuEditable
 		return temporarilyGrantedPermissions;
 	}
 
+	//endregion Getters and Setters
+
 	/* Business */
 
 	public CommandBlock copy() {
@@ -202,18 +196,7 @@ public class CommandBlock implements MenuEditable
 
 		newBlock.commands.addAll(this.commands);
 		newBlock.temporarilyGrantedPermissions.addAll(this.temporarilyGrantedPermissions);
-
-		if (this.hasTimer()) {
-			newBlock.setTimeBeforeExecution(this.timeBeforeExecution);
-		}
-
-		if (this.cancelledOnMove != null && this.cancelledOnMove) {
-			newBlock.setCancelledOnMove(true);
-		}
-
-		if (this.resetOnMove != null && this.resetOnMove) {
-			newBlock.setResetOnMove(true);
-		}
+		newBlock.timer = this.timer.copy();
 
 		for (Map.Entry<Addon, AddonConfigurationData> dataEntry : this.addonConfigurations.entrySet()) {
 			AddonConfigurationData data = dataEntry.getValue();
@@ -258,6 +241,22 @@ public class CommandBlock implements MenuEditable
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
+	}
+
+	@Override
+	public CommandBlock clone() throws CloneNotSupportedException {
+		CommandBlock clone = (CommandBlock) super.clone();
+		clone.timer = this.timer.clone();
+		clone.commands = new ArrayList<>(this.commands);
+		clone.temporarilyGrantedPermissions = new ArrayList<>(this.temporarilyGrantedPermissions);
+
+		clone.addonConfigurations = new HashMap<>();
+
+		for (Map.Entry<Addon, AddonConfigurationData> entry : this.addonConfigurations.entrySet()) {
+			clone.addonConfigurations.put(entry.getKey(), entry.getValue().copy());
+		}
+
+		return clone;
 	}
 
 	public static void deleteUsedID(long id) {
