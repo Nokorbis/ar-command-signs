@@ -61,7 +61,6 @@ public class NCommandSignsConfigurationManager {
 		}
 		else {
 			if (!this.navigationContext.isCancelled()) {
-				//might be a synchro problem here because the clone() happened earlier
 				this.manager.saveCommandBlock(commandBlock);
 				if (this.isCreating) {
 					this.editor.sendMessage(messages.get("menu.creation_completed"));
