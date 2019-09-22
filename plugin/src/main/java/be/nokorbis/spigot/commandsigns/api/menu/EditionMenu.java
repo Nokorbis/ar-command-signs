@@ -11,12 +11,12 @@ public abstract class EditionMenu<EDITABLE extends MenuEditable> {
     protected static final int REFRESH = 0;
     protected static final int PREVIOUS = 7;
     protected static final int NEXT = 8;
+    protected static final int CANCEL = 8;
     protected static final int DONE = 9;
 
-    protected static final ClickableMessage clickableMessageRefresh  = new ClickableMessage(messages.get("menu.entry.refresh"), String.valueOf(REFRESH));
-    protected static final ClickableMessage clickableMessageDone     = new ClickableMessage(messages.get("menu.entry.done"), String.valueOf(DONE));
-    protected static final ClickableMessage clickableMessagePrevious = new ClickableMessage(messages.get("menu.entry.previous"), String.valueOf(PREVIOUS));
-    protected static final ClickableMessage clickableMessageNext     = new ClickableMessage(messages.get("menu.entry.next"), String.valueOf(NEXT));
+    protected static final ClickableMessage clickableMessageRefresh  = new ClickableMessage(messages.get("menu.entry.refresh"), Integer.toString(REFRESH));
+    protected static final ClickableMessage clickableMessageDone     = new ClickableMessage(messages.get("menu.entry.done"), Integer.toString(DONE));
+    protected static final ClickableMessage clickableMessageCancel   = new ClickableMessage(messages.get("menu.entry.configuration_cancel"), Integer.toString(CANCEL));
 
     protected final String name;
     private EditionMenu<EDITABLE> parent;
@@ -91,6 +91,22 @@ public abstract class EditionMenu<EDITABLE extends MenuEditable> {
         }
 
         editor.sendMessage(sb.toString());
+    }
+
+    protected boolean shouldDisplayCancel() {
+        return false;
+    }
+
+    protected ClickableMessage getClickableMessagePrevious() {
+        final int i= (shouldDisplayCancel()) ? PREVIOUS - 1 : PREVIOUS;
+        final String index = Integer.toString(i);
+        return new ClickableMessage(messages.get("menu.entry.previous").replace("{INDEX}", index), index);
+    }
+
+    protected ClickableMessage getClickableMessageNext() {
+        final int i= (shouldDisplayCancel()) ? NEXT - 1 : NEXT;
+        final String index = Integer.toString(i);
+        return new ClickableMessage(messages.get("menu.entry.next").replace("{INDEX}", index), index);
     }
 
     public abstract void display(final Player editor, final EDITABLE data, final MenuNavigationContext navigationContext);

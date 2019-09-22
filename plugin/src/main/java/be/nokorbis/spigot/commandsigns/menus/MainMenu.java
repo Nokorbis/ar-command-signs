@@ -49,8 +49,14 @@ public class MainMenu extends EditionNodeCore {
 
         displaySubmenus(editor, data, navigationContext);
         displayPageNavigation(editor, navigationContext.getPage());
+        displayCancel(editor);
 
         clickableMessageDone.sendToPlayer(editor);
+    }
+
+    @Override
+    protected boolean shouldDisplayCancel() {
+        return true;
     }
 
     public String getCommandBlockLocation(CommandBlock data) {
