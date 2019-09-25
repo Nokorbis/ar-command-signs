@@ -3,15 +3,16 @@ package be.nokorbis.spigot.commandsigns.utils;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 
 
 public final class CommandBlockValidator {
-	private static final Collection<Material> PLATES_MATERIAL;
-	private static final Collection<Material> POST_SIGNS_MATERIAL;
-	private static final Collection<Material> WALL_SIGNS_MATERIAL;
-	private static final Collection<Material> BUTTONS_MATERIAL;
+	public static final Collection<Material> PLATES_MATERIAL;
+	public static final Collection<Material> POST_SIGNS_MATERIAL;
+	public static final Collection<Material> WALL_SIGNS_MATERIAL;
+	public static final Collection<Material> BUTTONS_MATERIAL;
 
 
 	public static boolean isValidBlock (Block block) {
@@ -103,48 +104,40 @@ public final class CommandBlockValidator {
 	}
 
 	static {
-		Material[] plates = {
-			Material.STONE_PRESSURE_PLATE,
-			Material.ACACIA_PRESSURE_PLATE,
-			Material.BIRCH_PRESSURE_PLATE,
-			Material.DARK_OAK_PRESSURE_PLATE,
-			Material.JUNGLE_PRESSURE_PLATE,
-			Material.OAK_PRESSURE_PLATE,
-			Material.SPRUCE_PRESSURE_PLATE,
-			Material.HEAVY_WEIGHTED_PRESSURE_PLATE,
-			Material.LIGHT_WEIGHTED_PRESSURE_PLATE,
-		};
-		PLATES_MATERIAL = Arrays.asList(plates);
+		/*
+		 * This method is used to load supported materials.
+		 * There is a change in the API between API 1.13 and 1.14 for signs names.
+		 * To avoid maintaining 2 versions of the code, we check the name to see if the matches.
+		 * But this might break if new blocks are added.
+		 */
+		ArrayList<Material> plates = new ArrayList<>();
+		ArrayList<Material> postSigns = new ArrayList<>(6);
+		ArrayList<Material> wallSigns = new ArrayList<>(6);
+		ArrayList<Material> buttons = new ArrayList<>(7);
 
-		Material[] signs = {
-			Material.OAK_SIGN,
-			Material.ACACIA_SIGN,
-			Material.BIRCH_SIGN,
-			Material.JUNGLE_SIGN,
-			Material.SPRUCE_SIGN,
-			Material.DARK_OAK_SIGN,
-		};
-		POST_SIGNS_MATERIAL = Arrays.asList(signs);
+		for (Material material : Material.values()) {
+			String name = material.name();
+			if (name.endsWith("_PRESSURE_PLATE")) {
+				plates.add(material);
+			}
+			else if (name.endsWith("_SIGN")) {
+				if (name.contains("WALL_")) {
+					wallSigns.add(material);
+				}
+				else {
+					postSigns.add(material);
+				}
+			}
+			else if (name.endsWith("_BUTTON")) {
+				buttons.add(material);
+			}
+		}
 
-		signs = new Material[]{
-				Material.OAK_WALL_SIGN,
-				Material.ACACIA_WALL_SIGN,
-				Material.BIRCH_WALL_SIGN,
-				Material.JUNGLE_WALL_SIGN,
-				Material.SPRUCE_WALL_SIGN,
-				Material.DARK_OAK_WALL_SIGN,
-		};
-		WALL_SIGNS_MATERIAL = Arrays.asList(signs);
+		//they are re-instantiated to avoid having empty extra capacity
+		PLATES_MATERIAL = Collections.unmodifiableList(new ArrayList<>(plates));
+		POST_SIGNS_MATERIAL = Collections.unmodifiableList(new ArrayList<>(postSigns));
+		WALL_SIGNS_MATERIAL = Collections.unmodifiableList(new ArrayList<>(wallSigns));
+		BUTTONS_MATERIAL = Collections.unmodifiableList(new ArrayList<>(buttons));
 
-		Material[] buttons = {
-			Material.ACACIA_BUTTON,
-			Material.BIRCH_BUTTON,
-			Material.DARK_OAK_BUTTON,
-			Material.JUNGLE_BUTTON,
-			Material.OAK_BUTTON,
-			Material.SPRUCE_BUTTON,
-			Material.STONE_BUTTON,
-		};
-		BUTTONS_MATERIAL = Arrays.asList(buttons);
 	}
 }
