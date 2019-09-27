@@ -120,7 +120,7 @@ public final class CommandBlockValidator {
 			if (name.endsWith("_PRESSURE_PLATE")) {
 				plates.add(material);
 			}
-			else if (name.endsWith("_SIGN")) {
+			else if (name.endsWith("SIGN")) {
 				if (name.contains("WALL_")) {
 					wallSigns.add(material);
 				}
