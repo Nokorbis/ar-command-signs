@@ -3,6 +3,7 @@ package be.nokorbis.spigot.commandsigns;
 import be.nokorbis.spigot.commandsigns.addons.confirmation.ConfirmationAddon;
 import be.nokorbis.spigot.commandsigns.addons.cooldowns.CooldownAddon;
 import be.nokorbis.spigot.commandsigns.addons.economy.EconomyAddon;
+import be.nokorbis.spigot.commandsigns.addons.items.ItemsAddon;
 import be.nokorbis.spigot.commandsigns.addons.requiredpermissions.RequiredPermissionsAddon;
 import be.nokorbis.spigot.commandsigns.api.AddonRegister;
 import be.nokorbis.spigot.commandsigns.controller.*;
@@ -28,6 +29,7 @@ public class CommandSignsPlugin extends JavaPlugin {
 		getServer().getServicesManager().register(AddonRegister.class, addonRegister, this, ServicePriority.Normal);
 
 		addonRegister.registerAddon(new RequiredPermissionsAddon(this));
+		addonRegister.registerAddon(new ItemsAddon(this));
 		addonRegister.registerAddon(new ConfirmationAddon(this));
 		addonRegister.registerAddon(new CooldownAddon(this));
 		EconomyAddon economyAddon = new EconomyAddon(this);
