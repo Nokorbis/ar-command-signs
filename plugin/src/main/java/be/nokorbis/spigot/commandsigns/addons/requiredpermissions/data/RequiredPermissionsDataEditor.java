@@ -28,10 +28,15 @@ public class RequiredPermissionsDataEditor extends AddonConfigurationDataEditorB
             throw new CommandSignsCommandException(messages.get("error.command.require_args"));
         }
 
+        String command = args.remove(0).toLowerCase();
+        if(!SUB_COMMANDS.contains(command)) {
+            throw new CommandSignsCommandException(messages.get("error.command.require_list_action"));
+        }
+
         try {
             RequiredPermissionsConfigurationData data = (RequiredPermissionsConfigurationData) configurationData;
             List<String> permissions = data.getRequiredPermissions();
-            String command = args.remove(0);
+
             if ("add".equals(command)) {
                 String toAdd = String.join(" ", args);
                 permissions.add(toAdd);

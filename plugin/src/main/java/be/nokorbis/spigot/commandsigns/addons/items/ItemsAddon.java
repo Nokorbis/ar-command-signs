@@ -5,7 +5,6 @@ import be.nokorbis.spigot.commandsigns.addons.items.data.ItemsConfigurationDataP
 import be.nokorbis.spigot.commandsigns.addons.items.data.ItemsCostsDataEditor;
 import be.nokorbis.spigot.commandsigns.addons.items.data.ItemsRequirementDataEditor;
 import be.nokorbis.spigot.commandsigns.api.addons.AddonBase;
-import be.nokorbis.spigot.commandsigns.api.addons.AddonConfigurationData;
 import be.nokorbis.spigot.commandsigns.api.addons.AddonConfigurationDataEditor;
 import be.nokorbis.spigot.commandsigns.api.menu.AddonSubmenuHolder;
 import org.bukkit.plugin.Plugin;
@@ -15,10 +14,10 @@ import java.util.Map;
 
 public class ItemsAddon extends AddonBase {
 
-    private static final String IDENTIFIER = "ncs_economy";
+    private static final String IDENTIFIER = "ncs_items";
 
     private final ItemsLifecycleHooker lifecycleHooker = new ItemsLifecycleHooker(this);
-    private final ItemsConfigurationDataPersister persister = new ItemsConfigurationDataPersister();
+    private final ItemsConfigurationDataPersister persister = new ItemsConfigurationDataPersister(this);
 
     public ItemsAddon(Plugin plugin) {
         super(plugin, IDENTIFIER, "Items");
@@ -37,6 +36,11 @@ public class ItemsAddon extends AddonBase {
     }
 
     @Override
+    public Class<ItemsConfigurationData> getConfigurationDataClass() {
+        return ItemsConfigurationData.class;
+    }
+
+    @Override
     public ItemsConfigurationDataPersister getConfigurationDataSerializer() {
         return persister;
     }
@@ -49,11 +53,6 @@ public class ItemsAddon extends AddonBase {
     @Override
     public ItemsLifecycleHooker getLifecycleHooker() {
         return lifecycleHooker;
-    }
-
-    @Override
-    public Class<? extends AddonConfigurationData> getConfigurationDataClass() {
-        return ItemsConfigurationData.class;
     }
 
     @Override
