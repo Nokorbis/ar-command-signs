@@ -10,7 +10,9 @@ import be.nokorbis.spigot.commandsigns.api.exceptions.CommandSignsRequirementExc
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class ItemsLifecycleHooker extends AddonLifecycleHookerBase {
@@ -43,15 +45,84 @@ public class ItemsLifecycleHooker extends AddonLifecycleHookerBase {
 
     private boolean isPlayerMeetingItemRequirement(Player player, NCSItem item) {
         PlayerInventory inventory = player.getInventory();
-        ItemStack[] contents = inventory.getContents();
-        System.out.println(contents);
+        ItemStack itemInHand = inventory.getItemInMainHand();
+        if (areItemsMatching(item, itemInHand)) {
+            return true;
+        }
+
+        itemInHand = inventory.getItemInOffHand();
+        if (areItemsMatching(item, itemInHand)) {
+            return true;
+        }
+
+        if (!item.isHandOnly()) {
+            ItemStack[] contents = inventory.getContents();
+
+            for (ItemStack content : contents) {
+                if (areItemsMatching(item, content)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private boolean areItemsMatching(NCSItem requiredItem, ItemStack item) {
+        if (item.getType() == requiredItem.getType()) {
+            if (item.getAmount() >= requiredItem.getQuantity()) {
+                if (requiredItem.getName() == null && requiredItem.getLore().isEmpty()) {
+                    return true;
+                }
+
+                ItemMeta itemMeta = item.getItemMeta();
+                if (itemMeta == null) {
+                    return false;
+                }
+
+                if (requiredItem.getName() != null) {
+                    String displayName = itemMeta.getDisplayName();
+                    if (!displayName.contains(requiredItem.getName())) {
+                        return false;
+                    }
+                }
+
+                if (!requiredItem.getLore().isEmpty()) {
+                    List<String> lores = itemMeta.getLore();
+                    if (lores == null) {
+                        return false;
+                    }
+
+                    for (String requiredLore : requiredItem.getLore()) {
+                        if (!hasRequiredLore(lores, requiredLore)) {
+                            return false;
+                        }
+                    }
+                }
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean hasRequiredLore(List<String> lores, String requiredLore) {
+        for (String lore : lores) {
+            if (lore.contains(requiredLore)) {
+                return true;
+            }
+        }
         return false;
     }
 
     @Override
     @NCSLifecycleHook
     public void onCostWithdraw(Player player, AddonConfigurationData configurationData, AddonExecutionData executionData) {
-        super.onCostWithdraw(player, configurationData, executionData);
+        ItemsConfigurationData data = (ItemsConfigurationData) configurationData;
+        if (!data.getCostsNCSItems().isEmpty()) {
+
+        }
     }
 
     private String getMessage(NCSItem item) {
