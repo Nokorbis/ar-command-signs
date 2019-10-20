@@ -97,66 +97,9 @@ public class CommandSignListener implements Listener {
 		Block touchedBlock = event.getClickedBlock();
 		Player player = event.getPlayer();
 
-		if (touchedBlock == null) {
-			return;
-		}
-
-		CommandBlockPendingInteraction pendingInteraction = manager.getPendingInteraction(player);
-		if (pendingInteraction != null) {
-			if (Action.RIGHT_CLICK_BLOCK.equals(event.getAction())) {
-				if (pendingInteraction.type == CommandBlockPendingInteraction.Type.DELETE) {
-					deleteCommandBlock(player, pendingInteraction, touchedBlock);
-				}
-				else if (pendingInteraction.type == CommandBlockPendingInteraction.Type.COPY) {
-					copyCommandBlock(player, pendingInteraction, touchedBlock);
-				}
-				else if (pendingInteraction.type == CommandBlockPendingInteraction.Type.INFO) {
-					info(player, touchedBlock);
-				}
-			}
-			return;
-		}
-
-		NCommandSignsConfigurationManager configurationManager = manager.getPlayerConfigurationManager(player);
-		if (configurationManager != null) {
-			if (CommandBlockValidator.isValidBlock(touchedBlock)) {
-				if (configurationManager.isEditing()) {
-					if (configurationManager.getCommandBlock() == null) {
-						CommandBlock commandBlock = manager.getCommandBlock(touchedBlock.getLocation());
-						if (commandBlock == null) {
-							player.sendMessage(messages.get("error.invalid_block_abort"));
-							manager.removeConfigurationManager(player);
-						}
-						else {
-							try {
-								configurationManager.setCommandBlock(commandBlock.clone());
-								configurationManager.display();
-							}
-							catch (CloneNotSupportedException e) {
-								manager.getPlugin().getLogger().severe(e.getMessage());
-							}
-						}
-					}
-				}
-				else {
-					CommandBlock commandBlock = configurationManager.getCommandBlock();
-					Location location = commandBlock.getLocation();
-					if (location == null) {
-						if (manager.isCommandBlock(touchedBlock)) {
-							player.sendMessage(messages.get("creation.already_configured"));
-						}
-						else {
-							commandBlock.setLocation(touchedBlock.getLocation());
-							player.sendMessage(messages.get("creation.block_set"));
-						}
-					}
-					else {
-						player.sendMessage(messages.get("creation.already_positioned"));
-					}
-				}
-			}
-			return;
-		}
+		if (touchedBlock == null) { return; }
+		if (handlePendingInteractions(event, touchedBlock, player)) { return; }
+		if (handleConfigurationManagers(touchedBlock, player)) { return; }
 
 		if (Action.PHYSICAL == event.getAction()) {
 			if (CommandBlockValidator.isPlate(touchedBlock)) {
@@ -195,6 +138,69 @@ public class CommandSignListener implements Listener {
 				executeCommandBlock(player, commandBlock);
 			}
 		}
+	}
+
+	private boolean handleConfigurationManagers (Block touchedBlock, Player player) {
+		NCommandSignsConfigurationManager configurationManager = manager.getPlayerConfigurationManager(player);
+		if (configurationManager != null) {
+			if (CommandBlockValidator.isValidBlock(touchedBlock)) {
+				if (configurationManager.isEditing()) {
+					if (configurationManager.getCommandBlock() == null) {
+						CommandBlock commandBlock = manager.getCommandBlock(touchedBlock.getLocation());
+						if (commandBlock == null) {
+							player.sendMessage(messages.get("error.invalid_block_abort"));
+							manager.removeConfigurationManager(player);
+						}
+						else {
+							try {
+								configurationManager.setCommandBlock(commandBlock.clone());
+								configurationManager.display();
+							}
+							catch (CloneNotSupportedException e) {
+								manager.getPlugin().getLogger().severe(e.getMessage());
+							}
+						}
+					}
+				}
+				else {
+					CommandBlock commandBlock = configurationManager.getCommandBlock();
+					Location location = commandBlock.getLocation();
+					if (location == null) {
+						if (manager.isCommandBlock(touchedBlock)) {
+							player.sendMessage(messages.get("creation.already_configured"));
+						}
+						else {
+							commandBlock.setLocation(touchedBlock.getLocation());
+							player.sendMessage(messages.get("creation.block_set"));
+						}
+					}
+					else {
+						player.sendMessage(messages.get("creation.already_positioned"));
+					}
+				}
+			}
+			return true;
+		}
+		return false;
+	}
+
+	private boolean handlePendingInteractions (PlayerInteractEvent event, Block touchedBlock, Player player) {
+		CommandBlockPendingInteraction pendingInteraction = manager.getPendingInteraction(player);
+		if (pendingInteraction != null) {
+			if (Action.RIGHT_CLICK_BLOCK.equals(event.getAction())) {
+				if (pendingInteraction.type == CommandBlockPendingInteraction.Type.DELETE) {
+					deleteCommandBlock(player, pendingInteraction, touchedBlock);
+				}
+				else if (pendingInteraction.type == CommandBlockPendingInteraction.Type.COPY) {
+					copyCommandBlock(player, pendingInteraction, touchedBlock);
+				}
+				else if (pendingInteraction.type == CommandBlockPendingInteraction.Type.INFO) {
+					info(player, touchedBlock);
+				}
+			}
+			return true;
+		}
+		return false;
 	}
 
 	private void executeCommandBlock(Player player, CommandBlock commandBlock) {

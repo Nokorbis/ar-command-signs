@@ -50,61 +50,89 @@ public class JsonCommandBlockIDLoader extends JsonCommandBlockPersister implemen
 		return maxID;
 	}
 
+	private static class UnusedIDs {
+		private final Logger logger;
+
+		private final List<Long> idsForWorldsNotFound = new ArrayList<>();
+		private final List<Long> idsForWorldNotLoaded = new ArrayList<>();
+		private final List<Long> idsForNotValidLocation = new ArrayList<>();
+
+		UnusedIDs(Logger logger) {
+			this.logger = logger;
+		}
+
+		void displayWarnings() {
+			displayConfigurationsWarning("Some command signs were not loaded because their location is not valid: %s", idsForNotValidLocation);
+			displayConfigurationsWarning("Some command signs were not loaded because their world is not loaded: %s", idsForWorldNotLoaded);
+			displayConfigurationsWarning("Some command signs were not loaded because their world could not be found: %s", idsForWorldsNotFound);
+		}
+
+		private void displayConfigurationsWarning(String warningMessage, List<Long> ids) {
+			if (!ids.isEmpty()) {
+				String parameter = ids.stream().sorted().map(id -> Long.toString(id))
+				                      .collect(Collectors.joining(","));
+				logger.warning(String.format(warningMessage, parameter));
+			}
+		}
+	}
+
 	@Override
 	public Map<Location, Long> loadAllIdsPerLocations() {
-		Map<Location, Long> idsPerLocations = new HashMap<>();
-
 		if (!dataFolder.exists()) {
 			dataFolder.mkdirs();
-			return idsPerLocations;
+			return Collections.emptyMap();
 		}
 
 		File[] files = dataFolder.listFiles(filter);
-		if (files != null && files.length > 0) {
-			List<Long> IDsForWorldsNotFound = new ArrayList<>();
-			List<Long> IDsForWorldNotLoaded = new ArrayList<>();
-			List<Long> IDsForNotValidLocation = new ArrayList<>();
-
-			JsonParser parser = new JsonParser();
-			for (File file : files) {
-				try (InputStream fis = new FileInputStream(file);
-					 InputStreamReader reader = new InputStreamReader(fis, UTF_8)){
-					JsonElement tree = parser.parse(reader);
-					JsonObject root = tree.getAsJsonObject();
-
-					JsonPrimitive jsonID = root.getAsJsonPrimitive("id");
-					final long id = jsonID.getAsLong();
-
-					JsonObject jsonLocation = root.getAsJsonObject("location");
-					String worldName = jsonLocation.getAsJsonPrimitive("world").getAsString();
-					final World world = getWorldFromString(worldName);
-					if (world == null) {
-						if (isNameOfUnloadedWorld(worldName)) {
-							IDsForWorldNotLoaded.add(id);
-						}
-						else {
-							IDsForWorldsNotFound.add(id);
-						}
-						continue;
-					}
-
-					Location location = extractLocation(world, jsonLocation);
-					if (!CommandBlockValidator.isValidBlock(location.getBlock())) {
-					 	IDsForNotValidLocation.add(id);
-					 	continue;
-					}
-
-					idsPerLocations.put(location, id);
-				}
-				catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-
-			displayConfigurationsWarning("Some command signs were not loaded because their location is not valid: %s", IDsForNotValidLocation);
-			displayConfigurationsWarning("Some command signs were not loaded because their world is not loaded: %s", IDsForWorldNotLoaded);
-			displayConfigurationsWarning("Some command signs were not loaded because their world could not be found: %s", IDsForWorldsNotFound);
+		if (files == null || files.length < 1) {
+			return Collections.emptyMap();
 		}
+
+		return parseFilesForLocations(files);
+	}
+
+	private Map<Location, Long> parseFilesForLocations (File[] files) {
+		Map<Location, Long> idsPerLocations = new HashMap<>();
+
+		UnusedIDs unusedIDs = new UnusedIDs(logger);
+
+		JsonParser parser = new JsonParser();
+		for (File file : files) {
+			try (InputStream fis = new FileInputStream(file) ;
+			     InputStreamReader reader = new InputStreamReader(fis, UTF_8)){
+				JsonElement tree = parser.parse(reader);
+				JsonObject root = tree.getAsJsonObject();
+
+				JsonPrimitive jsonID = root.getAsJsonPrimitive("id");
+				final long id = jsonID.getAsLong();
+
+				JsonObject jsonLocation = root.getAsJsonObject("location");
+				String worldName = jsonLocation.getAsJsonPrimitive("world").getAsString();
+				final World world = getWorldFromString(worldName);
+				if (world == null) {
+					if (isNameOfUnloadedWorld(worldName)) {
+						unusedIDs.idsForWorldNotLoaded.add(id);
+					}
+					else {
+						unusedIDs.idsForWorldsNotFound.add(id);
+					}
+					continue;
+				}
+
+				Location location = extractLocation(world, jsonLocation);
+				if (!CommandBlockValidator.isValidBlock(location.getBlock())) {
+				    unusedIDs.idsForNotValidLocation.add(id);
+				    continue;
+				}
+
+				idsPerLocations.put(location, id);
+			}
+			catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
+		unusedIDs.displayWarnings();
 
 		return idsPerLocations;
 	}
@@ -141,13 +169,7 @@ public class JsonCommandBlockIDLoader extends JsonCommandBlockPersister implemen
 		return cachedFolders;
 	}
 
-	private void displayConfigurationsWarning(String warningMessage, List<Long> ids) {
-		if (ids != null && !ids.isEmpty()) {
-			String parameter = ids.stream().sorted().map(id -> Long.toString(id))
-					.collect(Collectors.joining(","));
-			logger.warning(String.format(warningMessage, parameter));
-		}
-	}
+
 
 	private World getWorldFromString(final String worldName) {
 		try {

@@ -1,9 +1,18 @@
 package be.nokorbis.spigot.commandsigns.addons.cooldowns;
 
 import be.nokorbis.spigot.commandsigns.CommandSignsPlugin;
-import be.nokorbis.spigot.commandsigns.addons.cooldowns.data.*;
+import be.nokorbis.spigot.commandsigns.addons.cooldowns.data.CooldownConfigurationData;
+import be.nokorbis.spigot.commandsigns.addons.cooldowns.data.CooldownConfigurationDataPersister;
+import be.nokorbis.spigot.commandsigns.addons.cooldowns.data.CooldownExecutionData;
+import be.nokorbis.spigot.commandsigns.addons.cooldowns.data.CooldownExecutionDataPersister;
+import be.nokorbis.spigot.commandsigns.addons.cooldowns.data.GlobalCooldownDataEditor;
+import be.nokorbis.spigot.commandsigns.addons.cooldowns.data.GlobalOnceDataEditor;
+import be.nokorbis.spigot.commandsigns.addons.cooldowns.data.PlayerCooldownDataEditor;
+import be.nokorbis.spigot.commandsigns.addons.cooldowns.data.PlayerOnceDataEditor;
 import be.nokorbis.spigot.commandsigns.addons.cooldowns.menus.MenuCooldowns;
-import be.nokorbis.spigot.commandsigns.api.addons.*;
+import be.nokorbis.spigot.commandsigns.api.addons.AddonBase;
+import be.nokorbis.spigot.commandsigns.api.addons.AddonConfigurationDataEditor;
+import be.nokorbis.spigot.commandsigns.api.addons.AddonLifecycleHooker;
 import be.nokorbis.spigot.commandsigns.api.menu.AddonSubmenuHolder;
 
 import java.util.HashMap;

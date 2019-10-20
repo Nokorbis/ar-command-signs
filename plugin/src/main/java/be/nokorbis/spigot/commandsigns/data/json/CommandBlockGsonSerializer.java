@@ -8,6 +8,7 @@ import com.google.gson.*;
 import org.bukkit.Location;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Set;
 
 /**
@@ -52,25 +53,9 @@ public class CommandBlockGsonSerializer implements JsonSerializer<CommandBlock>,
                 cmdBlock.setActivationMode(BlockActivationMode.fromName(mode));
             }
 
-
-
-            JsonObject timer = root.getAsJsonObject("timer");
-            int duration = timer.getAsJsonPrimitive("duration").getAsInt();
-            boolean cancelled = timer.getAsJsonPrimitive("cancelled_on_move").getAsBoolean();
-            boolean reset = timer.getAsJsonPrimitive("reset_on_move").getAsBoolean();
-            cmdBlock.setTimeBeforeExecution(duration);
-            cmdBlock.setCancelledOnMove(cancelled);
-            cmdBlock.setResetOnMove(reset);
-
-            JsonArray commands = root.getAsJsonArray("commands");
-            for (JsonElement element : commands) {
-                cmdBlock.getCommands().add(element.getAsString());
-            }
-
-            JsonArray permissions = root.getAsJsonArray("temporarily_granted_permissions");
-            for (JsonElement permission : permissions) {
-                cmdBlock.getTemporarilyGrantedPermissions().add(permission.getAsString());
-            }
+            deserializeTimer(cmdBlock, root);
+            deserializeStringArray(cmdBlock.getCommands(), root, "commands");
+            deserializeStringArray(cmdBlock.getTemporarilyGrantedPermissions(), root, "temporarily_granted_permissions");
 
             JsonObject jsonAddons = root.getAsJsonObject("addons");
             for (Addon addon : addons) {
@@ -86,6 +71,23 @@ public class CommandBlockGsonSerializer implements JsonSerializer<CommandBlock>,
         catch (Exception ex) {
             return null;
         }
+    }
+
+    private void deserializeStringArray (ArrayList<String> stringArray, JsonObject root, String jsonKey) {
+        JsonArray commands = root.getAsJsonArray(jsonKey);
+        for (JsonElement element : commands) {
+            stringArray.add(element.getAsString());
+        }
+    }
+
+    private void deserializeTimer (CommandBlock cmdBlock, JsonObject root) {
+        JsonObject timer = root.getAsJsonObject("timer");
+        int duration = timer.getAsJsonPrimitive("duration").getAsInt();
+        boolean cancelled = timer.getAsJsonPrimitive("cancelled_on_move").getAsBoolean();
+        boolean reset = timer.getAsJsonPrimitive("reset_on_move").getAsBoolean();
+        cmdBlock.setTimeBeforeExecution(duration);
+        cmdBlock.setCancelledOnMove(cancelled);
+        cmdBlock.setResetOnMove(reset);
     }
 
     @Override
@@ -104,23 +106,9 @@ public class CommandBlockGsonSerializer implements JsonSerializer<CommandBlock>,
             root.add("location", jsonContext.serialize(location));
         }
 
-        JsonObject timer = new JsonObject();
-        timer.addProperty("duration", commandBlock.getTimeBeforeExecution());
-        timer.addProperty("cancelled_on_move", commandBlock.isCancelledOnMove());
-        timer.addProperty("reset_on_move", commandBlock.isResetOnMove());
-        root.add("timer", timer);
-
-        JsonArray commands = new JsonArray();
-        for (String command : commandBlock.getCommands()) {
-            commands.add(command);
-        }
-        root.add("commands", commands);
-
-        JsonArray permissions = new JsonArray();
-        for (String permission : commandBlock.getTemporarilyGrantedPermissions()) {
-            permissions.add(permission);
-        }
-        root.add("temporarily_granted_permissions", permissions);
+        root.add("timer", serializeTimer(commandBlock));
+        root.add("commands", serializeStringArray(commandBlock.getCommands()));
+        root.add("temporarily_granted_permissions", serializeStringArray(commandBlock.getTemporarilyGrantedPermissions()));
 
         final JsonObject addonData = new JsonObject();
         for (Addon addon : addons) {
@@ -133,5 +121,21 @@ public class CommandBlockGsonSerializer implements JsonSerializer<CommandBlock>,
         root.add("addons", addonData);
 
         return root;
+    }
+
+    private JsonArray serializeStringArray (ArrayList<String> temporarilyGrantedPermissions) {
+        JsonArray permissions = new JsonArray();
+        for (String permission : temporarilyGrantedPermissions) {
+            permissions.add(permission);
+        }
+        return permissions;
+    }
+
+    private JsonObject serializeTimer (CommandBlock commandBlock) {
+        JsonObject timer = new JsonObject();
+        timer.addProperty("duration", commandBlock.getTimeBeforeExecution());
+        timer.addProperty("cancelled_on_move", commandBlock.isCancelledOnMove());
+        timer.addProperty("reset_on_move", commandBlock.isResetOnMove());
+        return timer;
     }
 }

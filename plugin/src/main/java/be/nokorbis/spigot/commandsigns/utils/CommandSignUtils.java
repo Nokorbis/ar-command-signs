@@ -143,6 +143,57 @@ public class CommandSignUtils {
 		player.sendMessage(formatName(commandsMessages.get("info.identifier_format"), cmdB.getName()).replace("{ID}", String.valueOf(cmdB.getId())));
         player.sendMessage(formatLocation(commandsMessages.get("info.block_format"), cmdB.getLocation()));
 
+		sendActivationModeInfo(player, cmdB);
+
+		if (cmdB.isDisabled()) {
+        	player.sendMessage(commandsMessages.get("info.disabled"));
+		}
+
+		sendTimerInfo(player, cmdB);
+		sendPermissionsInfo(player, cmdB);
+		sendCommandsInfo(player, cmdB);
+
+		for (Addon addon : addons) {
+			AddonConfigurationData data = cmdB.getAddonConfigurationData(addon);
+			if (data != null) {
+				data.info(player);
+			}
+		}
+    }
+
+	private static void sendCommandsInfo (Player player, CommandBlock cmdB) {
+		if (!cmdB.getCommands().isEmpty()) {
+			String format = commandsMessages.get("info.command_format");
+			player.sendMessage(commandsMessages.get("info.commands"));
+			int i = 1;
+			for (String command : cmdB.getCommands()) {
+				player.sendMessage(format.replace("{NUMBER}", String.valueOf(i++)).replace("{COMMAND}", command));
+			}
+		}
+	}
+
+	private static void sendPermissionsInfo (Player player, CommandBlock cmdB) {
+		if (!cmdB.getTemporarilyGrantedPermissions().isEmpty()) {
+			String format = commandsMessages.get("info.permission_format");
+			player.sendMessage(commandsMessages.get("info.granted_permissions"));
+			int i = 1;
+			for (String permission : cmdB.getTemporarilyGrantedPermissions()) {
+				player.sendMessage(format.replace("{NUMBER}", String.valueOf(i++)).replace("{PERMISSION}", permission));
+			}
+		}
+	}
+
+	private static void sendTimerInfo (Player player, CommandBlock cmdB) {
+		if ((cmdB.hasTimer())) {
+			String timer = commandsMessages.get("info.timer")
+										   .replace("{TIME}", formatTime(cmdB.getTimeBeforeExecution()))
+										   .replace("{|CANCELLED|}",cmdB.isCancelledOnMove() ? commandsMessages.get("info.cancelled_on_move"): "")
+										   .replace("{|RESET|}", cmdB.isResetOnMove() ? commandsMessages.get("info.reset_on_move") : "");
+			player.sendMessage(timer);
+		}
+	}
+
+	private static void sendActivationModeInfo (Player player, CommandBlock cmdB) {
 		BlockActivationMode mode = cmdB.getActivationMode();
 		if (mode != BlockActivationMode.BOTH) {
 			String msg = commandsMessages.get("info.activation_mode");
@@ -154,42 +205,5 @@ public class CommandSignUtils {
 			}
 			player.sendMessage(msg);
 		}
-
-        if (cmdB.isDisabled()) {
-        	player.sendMessage(commandsMessages.get("info.disabled"));
-		}
-
-		if ((cmdB.hasTimer())) {
-			String timer = commandsMessages.get("info.timer")
-										   .replace("{TIME}", formatTime(cmdB.getTimeBeforeExecution()))
-										   .replace("{|CANCELLED|}",cmdB.isCancelledOnMove() ? commandsMessages.get("info.cancelled_on_move"): "")
-										   .replace("{|RESET|}", cmdB.isResetOnMove() ? commandsMessages.get("info.reset_on_move") : "");
-			player.sendMessage(timer);
-		}
-
-		if (!cmdB.getTemporarilyGrantedPermissions().isEmpty()) {
-			String format = commandsMessages.get("info.permission_format");
-			player.sendMessage(commandsMessages.get("info.granted_permissions"));
-			int i = 1;
-			for (String permission : cmdB.getTemporarilyGrantedPermissions()) {
-				player.sendMessage(format.replace("{NUMBER}", String.valueOf(i++)).replace("{PERMISSION}", permission));
-			}
-		}
-
-		if (!cmdB.getCommands().isEmpty()) {
-			String format = commandsMessages.get("info.command_format");
-			player.sendMessage(commandsMessages.get("info.commands"));
-			int i = 1;
-			for (String command : cmdB.getCommands()) {
-				player.sendMessage(format.replace("{NUMBER}", String.valueOf(i++)).replace("{COMMAND}", command));
-			}
-		}
-
-		for (Addon addon : addons) {
-			AddonConfigurationData data = cmdB.getAddonConfigurationData(addon);
-			if (data != null) {
-				data.info(player);
-			}
-		}
-    }
+	}
 }
