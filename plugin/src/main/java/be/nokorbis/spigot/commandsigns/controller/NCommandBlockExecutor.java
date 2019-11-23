@@ -144,7 +144,7 @@ public class NCommandBlockExecutor {
 		}
 
 		try {
-			CommandsRunner runner = new CommandsRunner(this.player, commandBlock.getCommands());
+			CommandsRunner runner = new CommandsRunner(this.player, commandBlock.getLocation(), commandBlock.getCommands());
 			Future<CommandsRunner.Result> future = scheduler.callSyncMethod(plugin, runner);
 			CommandsRunner.Result result = future.get();
 			while(result.isToRunAgain) {
