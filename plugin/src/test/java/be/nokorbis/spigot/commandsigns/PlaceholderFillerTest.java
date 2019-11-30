@@ -92,6 +92,36 @@ public class PlaceholderFillerTest {
 	}
 
 	@Test
+	public void testPlayerZ() {
+		Map<String, String> expectedResults = new HashMap<>();
+		expectedResults.put("/tppos 7 8 %Player_Loc_Z%", "/tppos 7 8 3");
+		expectedResults.put("/tppos 7 8 %Player_Loc_Z+9%", "/tppos 7 8 12");
+		expectedResults.put("/tppos 7 8 %Player_Loc_Z-9%", "/tppos 7 8 -6");
+		expectedResults.put("/tppos 7 8 %Player_Loc_Z*9%", "/tppos 7 8 27");
+		expectedResults.put("/tppos 7 8 %Player_Loc_Z/9%", "/tppos 7 8 0");
+		expectedResults.put("/tppos 7 8 %Player_Loc_Z/0%", "/tppos 7 8 3");
+
+		World abcWorld = mockWorldWithName("aBc");
+		World defWorld = mockWorldWithName("DeF");
+
+		Location playerLocation = mockLocation(abcWorld, 1, 2, 3);
+		Location signLocation = mockLocation(defWorld, 4, 5, 6);
+
+		Player player = mockPlayerWithNameAndLocation("Nokorbis", playerLocation);
+
+		PlaceholderFiller filler = new PlaceholderFiller(player, signLocation);
+		for (Map.Entry<String, String> entry : expectedResults.entrySet()) {
+			String expected = entry.getValue();
+			List<String> actual = filler.fillPlaceholders(entry.getKey());
+
+			assertEquals(1, actual.size());
+			String cmd = actual.get(0);
+
+			assertEquals(expected, cmd);
+		}
+	}
+
+	@Test
 	public void testPlayerName() {
 		final String command = "/warp %PlAyEr% somewhere";
 
