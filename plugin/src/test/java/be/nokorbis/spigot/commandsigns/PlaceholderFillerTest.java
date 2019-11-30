@@ -273,11 +273,11 @@ public class PlaceholderFillerTest {
 		onlinePlayers.add(mockPlayerWithNameAndLocation("Noko", mockLocation(abcWorld, 7, 8, 9)));
 		onlinePlayers.add(mockPlayerWithNameAndLocation("Test", mockLocation(defWorld, 10, 11, 12)));
 
-		PowerMockito.mockStatic(Bukkit.class);
+		//PowerMockito.mockStatic(Bukkit.class);
 		Server server = mock(Server.class);
 		Answer<?> answer = invocationOnMock -> onlinePlayers;
 		when(server.getOnlinePlayers()).then(answer);
-		Bukkit.setServer(server);
+		//Bukkit.setServer(server);
 
 		PlaceholderFiller filler = new PlaceholderFiller(nokorbis, signLocation);
 		//List<String> commands = filler.fillPlaceholders("/textraw %aLl%");
