@@ -1,30 +1,25 @@
 package be.nokorbis.spigot.commandsigns;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import be.nokorbis.spigot.commandsigns.controller.executions.PlaceholderFiller;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
+import org.mockito.stubbing.Answer;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
-
+@RunWith(PowerMockRunner.class)
 public class PlaceholderFillerTest {
-
-	/*
-	To test:
-	- Radius
-	- All
-	- Sign world
-	- Sign X
-	- Sign Y
-	- Sign Z
-	 */
 
 	@Test
 	public void testPlayerX() {
@@ -261,6 +256,31 @@ public class PlaceholderFillerTest {
 
 		String cmd = commands.get(0);
 		assertEquals("/warp Noko somewhere", cmd);
+	}
+
+	@Test
+	@PrepareForTest(Bukkit.class)
+	public void testAll() {
+		//does not work. Need to find a workaround
+		World abcWorld = mockWorldWithName("aBc");
+		World defWorld = mockWorldWithName("DeF");
+
+		Location signLocation = mockLocation(abcWorld, 1, 2, 3);
+
+		Collection<Player> onlinePlayers = new ArrayList<>();
+		Player nokorbis = mockPlayerWithNameAndLocation("Nokorbis", mockLocation(defWorld, 4, 5, 6));
+		onlinePlayers.add(nokorbis);
+		onlinePlayers.add(mockPlayerWithNameAndLocation("Noko", mockLocation(abcWorld, 7, 8, 9)));
+		onlinePlayers.add(mockPlayerWithNameAndLocation("Test", mockLocation(defWorld, 10, 11, 12)));
+
+		PowerMockito.mockStatic(Bukkit.class);
+		Server server = mock(Server.class);
+		Answer<?> answer = invocationOnMock -> onlinePlayers;
+		when(server.getOnlinePlayers()).then(answer);
+		Bukkit.setServer(server);
+
+		PlaceholderFiller filler = new PlaceholderFiller(nokorbis, signLocation);
+		List<String> commands = filler.fillPlaceholders("/textraw %aLl%");
 	}
 
 	private World mockWorldWithName(final String name) {
