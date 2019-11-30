@@ -1,6 +1,8 @@
 package be.nokorbis.spigot.commandsigns;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import be.nokorbis.spigot.commandsigns.controller.executions.PlaceholderFiller;
 import org.bukkit.Location;
@@ -9,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 
@@ -30,8 +33,38 @@ public class PlaceholderFillerTest {
 	 */
 
 	@Test
+	public void testPlayerX() {
+		Map<String, String> expectedResults = new HashMap<>();
+		expectedResults.put("/tppos %Player_Loc_X% 7 8", "/tppos 1 7 8");
+		expectedResults.put("/tppos %Player_Loc_X+9% 7 8", "/tppos 10 7 8");
+		expectedResults.put("/tppos %Player_Loc_X-9% 7 8", "/tppos -8 7 8");
+		expectedResults.put("/tppos %Player_Loc_X*9% 7 8", "/tppos 9 7 8");
+		expectedResults.put("/tppos %Player_Loc_X/9% 7 8", "/tppos 0 7 8");
+		expectedResults.put("/tppos %Player_Loc_X/0% 7 8", "/tppos 1 7 8");
+
+		World abcWorld = mockWorldWithName("aBc");
+		World defWorld = mockWorldWithName("DeF");
+
+		Location playerLocation = mockLocation(abcWorld, 1, 2, 3);
+		Location signLocation = mockLocation(defWorld, 4, 5, 6);
+
+		Player player = mockPlayerWithNameAndLocation("Nokorbis", playerLocation);
+
+		PlaceholderFiller filler = new PlaceholderFiller(player, signLocation);
+		for (Map.Entry<String, String> entry : expectedResults.entrySet()) {
+			String expected = entry.getValue();
+			List<String> actual = filler.fillPlaceholders(entry.getKey());
+
+			assertEquals(1, actual.size());
+			String cmd = actual.get(0);
+
+			assertEquals(expected, cmd);
+		}
+	}
+
+	@Test
 	public void testPlayerName() {
-		String command = "/warp %PlAyEr% somewhere";
+		final String command = "/warp %PlAyEr% somewhere";
 
 		World mockedWorld = mockWorldWithName("ZZZ");
 		Location playerLocation = mockLocation(mockedWorld, 0, 0, 0);
@@ -42,10 +75,10 @@ public class PlaceholderFillerTest {
 		PlaceholderFiller filler = new PlaceholderFiller(mockedPlayer, signLocation);
 
 		List<String> commands = filler.fillPlaceholders(command);
-		Assert.assertEquals(1, commands.size());
+		assertEquals(1, commands.size());
 
 		String cmd = commands.get(0);
-		Assert.assertEquals("/warp Noko somewhere", cmd);
+		assertEquals("/warp Noko somewhere", cmd);
 	}
 
 	private World mockWorldWithName(final String name) {

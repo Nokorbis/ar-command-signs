@@ -155,7 +155,7 @@ public class PlaceholderFiller {
 					initialValue /= difference;
 				}
 				else if ("*".equals(operator)) {
-						initialValue += difference;
+						initialValue *= difference;
 					}
 		}
 		catch (Exception ignored) {
