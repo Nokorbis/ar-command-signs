@@ -280,7 +280,7 @@ public class PlaceholderFillerTest {
 		Bukkit.setServer(server);
 
 		PlaceholderFiller filler = new PlaceholderFiller(nokorbis, signLocation);
-		List<String> commands = filler.fillPlaceholders("/textraw %aLl%");
+		//List<String> commands = filler.fillPlaceholders("/textraw %aLl%");
 	}
 
 	private World mockWorldWithName(final String name) {
