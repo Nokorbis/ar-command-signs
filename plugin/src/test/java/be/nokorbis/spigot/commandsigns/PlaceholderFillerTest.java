@@ -8,7 +8,6 @@ import be.nokorbis.spigot.commandsigns.controller.executions.PlaceholderFiller;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.*;
@@ -41,6 +40,36 @@ public class PlaceholderFillerTest {
 		expectedResults.put("/tppos %Player_Loc_X*9% 7 8", "/tppos 9 7 8");
 		expectedResults.put("/tppos %Player_Loc_X/9% 7 8", "/tppos 0 7 8");
 		expectedResults.put("/tppos %Player_Loc_X/0% 7 8", "/tppos 1 7 8");
+
+		World abcWorld = mockWorldWithName("aBc");
+		World defWorld = mockWorldWithName("DeF");
+
+		Location playerLocation = mockLocation(abcWorld, 1, 2, 3);
+		Location signLocation = mockLocation(defWorld, 4, 5, 6);
+
+		Player player = mockPlayerWithNameAndLocation("Nokorbis", playerLocation);
+
+		PlaceholderFiller filler = new PlaceholderFiller(player, signLocation);
+		for (Map.Entry<String, String> entry : expectedResults.entrySet()) {
+			String expected = entry.getValue();
+			List<String> actual = filler.fillPlaceholders(entry.getKey());
+
+			assertEquals(1, actual.size());
+			String cmd = actual.get(0);
+
+			assertEquals(expected, cmd);
+		}
+	}
+
+	@Test
+	public void testPlayerY() {
+		Map<String, String> expectedResults = new HashMap<>();
+		expectedResults.put("/tppos 7 %Player_Loc_Y% 8", "/tppos 7 2 8");
+		expectedResults.put("/tppos 7 %Player_Loc_Y+9% 8", "/tppos 7 11 8");
+		expectedResults.put("/tppos 7 %Player_Loc_Y-9% 8", "/tppos 7 -7 8");
+		expectedResults.put("/tppos 7 %Player_Loc_Y*9% 8", "/tppos 7 18 8");
+		expectedResults.put("/tppos 7 %Player_Loc_Y/9% 8", "/tppos 7 0 8");
+		expectedResults.put("/tppos 7 %Player_Loc_Y/0% 8", "/tppos 7 2 8");
 
 		World abcWorld = mockWorldWithName("aBc");
 		World defWorld = mockWorldWithName("DeF");
