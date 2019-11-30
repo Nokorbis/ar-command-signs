@@ -20,7 +20,6 @@ public class PlaceholderFillerTest {
 	To test:
 	- Radius
 	- All
-	- Player world
 	- Sign world
 	- Sign X
 	- Sign Y
@@ -134,6 +133,115 @@ public class PlaceholderFillerTest {
 
 		String cmd = commands.get(0);
 		assertEquals("/warp aBc", cmd);
+	}
+
+	@Test
+	public void testSignX() {
+		Map<String, String> expectedResults = new HashMap<>();
+		expectedResults.put("/tppos %Sign_Loc_X% 7 8", "/tppos 4 7 8");
+		expectedResults.put("/tppos %Sign_Loc_X+9% 7 8", "/tppos 13 7 8");
+		expectedResults.put("/tppos %Sign_Loc_X-9% 7 8", "/tppos -5 7 8");
+		expectedResults.put("/tppos %Sign_Loc_X*9% 7 8", "/tppos 36 7 8");
+		expectedResults.put("/tppos %Sign_Loc_X/9% 7 8", "/tppos 0 7 8");
+		expectedResults.put("/tppos %Sign_Loc_X/0% 7 8", "/tppos 4 7 8");
+
+		World abcWorld = mockWorldWithName("aBc");
+		World defWorld = mockWorldWithName("DeF");
+
+		Location playerLocation = mockLocation(abcWorld, 1, 2, 3);
+		Location signLocation = mockLocation(defWorld, 4, 5, 6);
+
+		Player player = mockPlayerWithNameAndLocation("Nokorbis", playerLocation);
+
+		PlaceholderFiller filler = new PlaceholderFiller(player, signLocation);
+		for (Map.Entry<String, String> entry : expectedResults.entrySet()) {
+			String expected = entry.getValue();
+			List<String> actual = filler.fillPlaceholders(entry.getKey());
+
+			assertEquals(1, actual.size());
+			String cmd = actual.get(0);
+
+			assertEquals(expected, cmd);
+		}
+	}
+
+	@Test
+	public void testSignY() {
+		Map<String, String> expectedResults = new HashMap<>();
+		expectedResults.put("/tppos 7 %Sign_Loc_Y% 8", "/tppos 7 5 8");
+		expectedResults.put("/tppos 7 %Sign_Loc_Y+9% 8", "/tppos 7 14 8");
+		expectedResults.put("/tppos 7 %Sign_Loc_Y-9% 8", "/tppos 7 -4 8");
+		expectedResults.put("/tppos 7 %Sign_Loc_Y*9% 8", "/tppos 7 45 8");
+		expectedResults.put("/tppos 7 %Sign_Loc_Y/9% 8", "/tppos 7 0 8");
+		expectedResults.put("/tppos 7 %Sign_Loc_Y/0% 8", "/tppos 7 5 8");
+
+		World abcWorld = mockWorldWithName("aBc");
+		World defWorld = mockWorldWithName("DeF");
+
+		Location playerLocation = mockLocation(abcWorld, 1, 2, 3);
+		Location signLocation = mockLocation(defWorld, 4, 5, 6);
+
+		Player player = mockPlayerWithNameAndLocation("Nokorbis", playerLocation);
+
+		PlaceholderFiller filler = new PlaceholderFiller(player, signLocation);
+		for (Map.Entry<String, String> entry : expectedResults.entrySet()) {
+			String expected = entry.getValue();
+			List<String> actual = filler.fillPlaceholders(entry.getKey());
+
+			assertEquals(1, actual.size());
+			String cmd = actual.get(0);
+
+			assertEquals(expected, cmd);
+		}
+	}
+
+	@Test
+	public void testSignZ() {
+		Map<String, String> expectedResults = new HashMap<>();
+		expectedResults.put("/tppos 7 8 %Sign_Loc_Z%", "/tppos 7 8 6");
+		expectedResults.put("/tppos 7 8 %Sign_Loc_Z+9%", "/tppos 7 8 15");
+		expectedResults.put("/tppos 7 8 %Sign_Loc_Z-9%", "/tppos 7 8 -3");
+		expectedResults.put("/tppos 7 8 %Sign_Loc_Z*9%", "/tppos 7 8 54");
+		expectedResults.put("/tppos 7 8 %Sign_Loc_Z/9%", "/tppos 7 8 0");
+		expectedResults.put("/tppos 7 8 %Sign_Loc_Z/0%", "/tppos 7 8 6");
+
+		World abcWorld = mockWorldWithName("aBc");
+		World defWorld = mockWorldWithName("DeF");
+
+		Location playerLocation = mockLocation(abcWorld, 1, 2, 3);
+		Location signLocation = mockLocation(defWorld, 4, 5, 6);
+
+		Player player = mockPlayerWithNameAndLocation("Nokorbis", playerLocation);
+
+		PlaceholderFiller filler = new PlaceholderFiller(player, signLocation);
+		for (Map.Entry<String, String> entry : expectedResults.entrySet()) {
+			String expected = entry.getValue();
+			List<String> actual = filler.fillPlaceholders(entry.getKey());
+
+			assertEquals(1, actual.size());
+			String cmd = actual.get(0);
+
+			assertEquals(expected, cmd);
+		}
+	}
+
+	@Test
+	public void testSignWorld() {
+		World abcWorld = mockWorldWithName("aBc");
+		World defWorld = mockWorldWithName("DeF");
+
+		Location playerLocation = mockLocation(abcWorld, 1, 2, 3);
+		Location signLocation = mockLocation(defWorld, 4, 5, 6);
+
+		Player player = mockPlayerWithNameAndLocation("Nokorbis", playerLocation);
+
+		PlaceholderFiller filler = new PlaceholderFiller(player, signLocation);
+		List<String> commands = filler.fillPlaceholders("/warp %sIgN_loc_WORLD%");
+
+		assertEquals(1, commands.size());
+
+		String cmd = commands.get(0);
+		assertEquals("/warp DeF", cmd);
 	}
 
 	@Test
