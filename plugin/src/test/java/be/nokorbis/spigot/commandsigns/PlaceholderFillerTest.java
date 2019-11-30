@@ -20,11 +20,7 @@ public class PlaceholderFillerTest {
 	To test:
 	- Radius
 	- All
-	- Player
 	- Player world
-	- Player X
-	- Player Y
-	- Player Z
 	- Sign world
 	- Sign X
 	- Sign Y
@@ -119,6 +115,25 @@ public class PlaceholderFillerTest {
 
 			assertEquals(expected, cmd);
 		}
+	}
+
+	@Test
+	public void testPlayerWorld() {
+		World abcWorld = mockWorldWithName("aBc");
+		World defWorld = mockWorldWithName("DeF");
+
+		Location playerLocation = mockLocation(abcWorld, 1, 2, 3);
+		Location signLocation = mockLocation(defWorld, 4, 5, 6);
+
+		Player player = mockPlayerWithNameAndLocation("Nokorbis", playerLocation);
+
+		PlaceholderFiller filler = new PlaceholderFiller(player, signLocation);
+		List<String> commands = filler.fillPlaceholders("/warp %pLaYeR_loc_WORLD%");
+
+		assertEquals(1, commands.size());
+
+		String cmd = commands.get(0);
+		assertEquals("/warp aBc", cmd);
 	}
 
 	@Test
