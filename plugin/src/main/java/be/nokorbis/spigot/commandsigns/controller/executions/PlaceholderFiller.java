@@ -1,11 +1,11 @@
 package be.nokorbis.spigot.commandsigns.controller.executions;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -27,10 +27,12 @@ public class PlaceholderFiller {
 	private static final Pattern SIGN_LOC_Y_PATTERN = Pattern.compile("%SIGN_LOC_Y(?:([-+*/])(\\d+))?%", Pattern.CASE_INSENSITIVE);
 	private static final Pattern SIGN_LOC_Z_PATTERN = Pattern.compile("%SIGN_LOC_Z(?:([-+*/])(\\d+))?%", Pattern.CASE_INSENSITIVE);
 
+	private final Collection<? extends Player> onlinePlayers;
 	private final Player   player;
 	private final Location signLocation;
 
-	public PlaceholderFiller (Player player, Location signLocation) {
+	public PlaceholderFiller (Collection<? extends Player> onlinePlayers, Player player, Location signLocation) {
+		this.onlinePlayers = onlinePlayers;
 		this.player = player;
 		this.signLocation = signLocation;
 	}
@@ -45,7 +47,7 @@ public class PlaceholderFiller {
 
 		Matcher m = ALL_PATTERN.matcher(command);
 		if (m.find()) {
-			for (Player p : Bukkit.getOnlinePlayers()) {
+			for (Player p : onlinePlayers) {
 				cmds.add(m.replaceAll(p.getName()));
 			}
 		}
@@ -56,7 +58,7 @@ public class PlaceholderFiller {
 					String str = m.group(1);
 					int radius = Integer.parseInt(str);
 					if (radius > 0) {
-						for (Player p : Bukkit.getOnlinePlayers()) {
+						for (Player p : onlinePlayers) {
 							if (p.getWorld().equals(player.getWorld()) && p.getLocation().distance(player.getLocation()) <= radius) {
 								cmds.add(m.replaceAll(p.getName()));
 							}

@@ -21,7 +21,7 @@ public class CommandsRunner implements Callable<CommandsRunner.Result> {
 
 	public CommandsRunner(Player player, Location signLocation, List<String> commands) {
 		this.player = player;
-		this.placeholderFiller = new PlaceholderFiller(player, signLocation);
+		this.placeholderFiller = new PlaceholderFiller(Bukkit.getOnlinePlayers(), player, signLocation);
 		this.commands = new LinkedList<>(commands);
 	}
 
