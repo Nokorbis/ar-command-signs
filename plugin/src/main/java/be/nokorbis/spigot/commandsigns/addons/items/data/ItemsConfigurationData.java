@@ -26,23 +26,13 @@ public class ItemsConfigurationData extends AddonConfigurationData {
     }
 
     @Override
-    protected ItemsConfigurationData clone() {
-        ItemsConfigurationData clone = null;
-        try {
-            clone = (ItemsConfigurationData) super.clone();
-
-            clone.requirementNCSItems = new ArrayList<>(this.requirementNCSItems);
-            clone.costsNCSItems = new ArrayList<>(this.costsNCSItems);
-        }
-        catch (CloneNotSupportedException e) {
-            e.printStackTrace();
-        }
-        return clone;
-    }
-
-    @Override
     public AddonConfigurationData copy() {
-        return clone();
+        ItemsConfigurationData clone = new ItemsConfigurationData((ItemsAddon) this.addon);
+
+        clone.requirementNCSItems = new ArrayList<>(this.requirementNCSItems);
+        clone.costsNCSItems = new ArrayList<>(this.costsNCSItems);
+
+        return clone;
     }
 
     private String formatLine(String format, int index, NCSItem item) {
