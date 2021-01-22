@@ -89,8 +89,15 @@ public class CommandsRunner implements Callable<CommandsRunner.Result> {
 		String cmd = command.substring(1);
 		if (!this.player.isOp()) {
 			this.player.setOp(true);
-			interpretNormalCommand(cmd);
-			this.player.setOp(false);
+			
+			try {
+				interpretNormalCommand(cmd);			
+			} catch(Exception ex) {
+				ex.printStackTrace();
+			} finally {
+				// IF ANYTHING GOES WRONG WE WANT THE PLAYER TO STOP BEING AN OP.
+				this.player.setOp(false);				
+			}
 		}
 		else {
 			interpretNormalCommand(cmd);
