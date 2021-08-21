@@ -19,9 +19,11 @@ import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.util.Collection;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import java.util.function.Function;
 
 
 public class NCommandBlockExecutor {
@@ -88,44 +90,23 @@ public class NCommandBlockExecutor {
 		}
 	}
 
-	private void processStart(final NCommandSignsAddonLifecycleHolder lifecycleHolder) {
-		for (final Addon addon : lifecycleHolder.onStartHandlers) {
-			final AddonLifecycleHooker hook = addon.getLifecycleHooker();
-			final AddonConfigurationData configuration = commandBlock.getAddonConfigurationData(addon);
-			final AddonExecutionData data = commandBlock.getAddonExecutionData(addon);
-
-			hook.onStarted(player, configuration, data);
-		}
+	private void processStart(final NCommandSignsAddonLifecycleHolder lifecycleHolder)
+			throws CommandSignsRequirementException {
+		processLifecycleStep(lifecycleHolder.onStartHandlers, hook -> hook::onStarted);
 	}
 
 	private void processRequirementsCheck(final NCommandSignsAddonLifecycleHolder lifecycleHolder) throws CommandSignsRequirementException {
-		for (final Addon addon : lifecycleHolder.onRequirementCheckHandlers) {
-			final AddonLifecycleHooker hook = addon.getLifecycleHooker();
-			final AddonConfigurationData configuration = commandBlock.getAddonConfigurationData(addon);
-			final AddonExecutionData data = commandBlock.getAddonExecutionData(addon);
-
-			hook.onRequirementCheck(player, configuration, data);
-		}
+		processLifecycleStep(lifecycleHolder.onRequirementCheckHandlers, hook -> hook::onRequirementCheck);
 	}
 
-	private void processCostsWithdrawn(final NCommandSignsAddonLifecycleHolder lifecycleHolder) {
-		for (final Addon addon : lifecycleHolder.onCostWithdrawHandlers) {
-			final AddonLifecycleHooker hook = addon.getLifecycleHooker();
-			final AddonConfigurationData configuration = commandBlock.getAddonConfigurationData(addon);
-			final AddonExecutionData data = commandBlock.getAddonExecutionData(addon);
-
-			hook.onCostWithdraw(player, configuration, data);
-		}
+	private void processCostsWithdrawn(final NCommandSignsAddonLifecycleHolder lifecycleHolder)
+			throws CommandSignsRequirementException {
+		processLifecycleStep(lifecycleHolder.onCostWithdrawHandlers, hook -> hook::onCostWithdraw);
 	}
 
-	private void processPreExecution(final NCommandSignsAddonLifecycleHolder lifecycleHolder) {
-		for (final Addon addon : lifecycleHolder.onPreExecutionHandlers) {
-			final AddonLifecycleHooker hook = addon.getLifecycleHooker();
-			final AddonConfigurationData configuration = commandBlock.getAddonConfigurationData(addon);
-			final AddonExecutionData data = commandBlock.getAddonExecutionData(addon);
-
-			hook.onPreExecution(player, configuration, data);
-		}
+	private void processPreExecution(final NCommandSignsAddonLifecycleHolder lifecycleHolder)
+			throws CommandSignsRequirementException {
+		processLifecycleStep(lifecycleHolder.onPreExecutionHandlers, hook -> hook::onPreExecution);
 	}
 
 	private void processExecution() {
@@ -169,23 +150,30 @@ public class NCommandBlockExecutor {
 		}
 	}
 
-	private void processPostExecution(final NCommandSignsAddonLifecycleHolder lifecycleHolder) {
-		for (final Addon addon : lifecycleHolder.onPostExecutionHandlers) {
-			final AddonLifecycleHooker hook = addon.getLifecycleHooker();
-			final AddonConfigurationData configuration = commandBlock.getAddonConfigurationData(addon);
-			final AddonExecutionData data = commandBlock.getAddonExecutionData(addon);
-
-			hook.onPostExecution(player, configuration, data);
-		}
+	private void processPostExecution(final NCommandSignsAddonLifecycleHolder lifecycleHolder)
+			throws CommandSignsRequirementException {
+		processLifecycleStep(lifecycleHolder.onPostExecutionHandlers, hook -> hook::onPostExecution);
 	}
 
-	private void processComplete(final NCommandSignsAddonLifecycleHolder lifecycleHolder) {
-		for (final Addon addon : lifecycleHolder.onCompletedHandlers) {
+	private void processComplete(final NCommandSignsAddonLifecycleHolder lifecycleHolder)
+			throws CommandSignsRequirementException {
+		processLifecycleStep(lifecycleHolder.onCompletedHandlers, hook -> hook::onCompleted);
+	}
+
+	@FunctionalInterface
+	private interface StepProcessor {
+		void process(Player player, AddonConfigurationData configurationData, AddonExecutionData executionData) throws CommandSignsRequirementException;
+	}
+
+	private void processLifecycleStep(Collection<Addon> addons, Function<AddonLifecycleHooker, StepProcessor> stepProcessorMapper)
+			throws CommandSignsRequirementException {
+		for (Addon addon : addons) {
 			final AddonLifecycleHooker hook = addon.getLifecycleHooker();
 			final AddonConfigurationData configuration = commandBlock.getAddonConfigurationData(addon);
-			final AddonExecutionData data = commandBlock.getAddonExecutionData(addon);
+			final AddonExecutionData executionData = commandBlock.getAddonExecutionData(addon);
 
-			hook.onCompleted(player, configuration, data);
+			StepProcessor stepProcessor = stepProcessorMapper.apply(hook);
+			stepProcessor.process(player, configuration, executionData);
 		}
 	}
 
