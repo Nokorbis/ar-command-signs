@@ -26,8 +26,8 @@ public class CoreMenuCommands extends EditionNodeCore {
 
 		final String format = messages.get("menu.commands.format");
 		int cpt = 1;
-		for (String perm : data.getCommands()) {
-			String msg = format.replace("{NUMBER}", String.valueOf(cpt++)).replace("{COMMAND}", perm);
+		for (String command : data.getCommands()) {
+			String msg = format.replace("{NUMBER}", String.valueOf(cpt++)).replace("{COMMAND}", command);
 			editor.sendMessage(msg);
 		}
 

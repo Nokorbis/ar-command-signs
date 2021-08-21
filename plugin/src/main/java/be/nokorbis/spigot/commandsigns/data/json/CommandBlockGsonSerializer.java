@@ -16,7 +16,7 @@ import java.util.Set;
  */
 public class CommandBlockGsonSerializer implements JsonSerializer<CommandBlock>, JsonDeserializer<CommandBlock> {
 
-    private Set<Addon> addons;
+    private final Set<Addon> addons;
 
     public CommandBlockGsonSerializer(Set<Addon> addons) {
         this.addons = addons;

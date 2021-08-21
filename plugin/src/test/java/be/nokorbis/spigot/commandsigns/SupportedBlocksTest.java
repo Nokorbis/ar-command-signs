@@ -2,10 +2,14 @@ package be.nokorbis.spigot.commandsigns;
 
 import be.nokorbis.spigot.commandsigns.utils.CommandBlockValidator;
 import org.bukkit.Material;
-import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 
 /**
  * This isn't really accurate.
@@ -18,9 +22,9 @@ public class SupportedBlocksTest {
     @Test
     void checkSupportedPlates() {
         Collection<Material> materials = CommandBlockValidator.PLATES_MATERIAL;
-        Assert.assertFalse("Not enough plates!", materials.isEmpty());
-        /*
-        Material[] plates = {
+        assertFalse(materials.isEmpty(), "Not enough plates!");
+
+        /*Material[] plates = {
 			Material.STONE_PRESSURE_PLATE,
 			Material.ACACIA_PRESSURE_PLATE,
 			Material.BIRCH_PRESSURE_PLATE,
@@ -30,19 +34,22 @@ public class SupportedBlocksTest {
 			Material.SPRUCE_PRESSURE_PLATE,
 			Material.HEAVY_WEIGHTED_PRESSURE_PLATE,
 			Material.LIGHT_WEIGHTED_PRESSURE_PLATE,
-		};
-         */
-        final int maxSupportedPlates = 9;
+            Material.CRIMSON_PRESSURE_PLATE,
+            Material.WARPED_PRESSURE_PLATE,
+            Material.POLISHED_BLACKSTONE_PRESSURE_PLATE,
+		};*/
+
+        final int maxSupportedPlates = 12;
         if (materials.size() > maxSupportedPlates) {
             System.out.println(materials);
         }
-        Assert.assertTrue("/!\\Too many pressure plates!", materials.size() == maxSupportedPlates);
+        assertEquals(maxSupportedPlates, materials.size(), "/!\\Too many pressure plates!");
     }
 
     @Test
     void checkSupportedButtons() {
         Collection<Material> materials = CommandBlockValidator.BUTTONS_MATERIAL;
-        Assert.assertFalse("Not enough buttons!", materials.isEmpty());
+        assertFalse(materials.isEmpty(), "Not enough buttons!");
         /*Material[] buttons = {
 			Material.ACACIA_BUTTON,
 			Material.BIRCH_BUTTON,
@@ -51,20 +58,23 @@ public class SupportedBlocksTest {
 			Material.OAK_BUTTON,
 			Material.SPRUCE_BUTTON,
 			Material.STONE_BUTTON,
-			--Material.LEGACY_STONE_BUTTON
-			--Material.LEGACY_WOOD_BUTTON
+            Material.CRIMSON_BUTTON,
+            Material.WARPED_BUTTON,
+            Material.POLISHED_BLACKSTONE_BUTTON,
+			--Material.LEGACY_STONE_BUTTON,
+			--Material.LEGACY_WOOD_BUTTON,
 		};*/
-        final int maxSupportedButtons = 9;
+        final int maxSupportedButtons = 12;
         if (materials.size() > maxSupportedButtons) {
             System.err.println(materials);
         }
-        Assert.assertTrue("/!\\Too many buttons!",materials.size() == maxSupportedButtons);
+        assertEquals(maxSupportedButtons, materials.size(), "/!\\Too many buttons!");
     }
 
     @Test
     void checkSupportedSigns() {
         Collection<Material> materials = CommandBlockValidator.POST_SIGNS_MATERIAL;
-        Assert.assertFalse("Not enough post signs", materials.isEmpty());
+        assertFalse(materials.isEmpty(), "Not enough post signs");
         /*
         Material[] signs = {
 			Material.OAK_SIGN,
@@ -76,14 +86,14 @@ public class SupportedBlocksTest {
 			--Material.LEGACY_SIGN
 		};
          */
-        final int maxSupportedPostSigns = 7;
+        final int maxSupportedPostSigns = 9;
         if (materials.size() > maxSupportedPostSigns) {
             System.err.println(materials);
         }
-        Assert.assertTrue("/!\\Too many post signs!",materials.size() <= maxSupportedPostSigns);
+        assertTrue(materials.size() <= maxSupportedPostSigns, "/!\\Too many post signs!");
 
         materials = CommandBlockValidator.WALL_SIGNS_MATERIAL;
-        Assert.assertFalse("Not enough wall signs", materials.isEmpty());
+        assertFalse(materials.isEmpty(), "Not enough wall signs");
         /*
         signs = new Material[]{
             Material.OAK_WALL_SIGN,
@@ -94,10 +104,10 @@ public class SupportedBlocksTest {
             Material.DARK_OAK_WALL_SIGN,
             --Material.LEGACY_WALL_SIGN
 		};*/
-        final int maxSupportedWallSigns = 7;
+        final int maxSupportedWallSigns = 9;
         if (materials.size() > maxSupportedWallSigns) {
             System.err.println(materials);
         }
-        Assert.assertTrue("/!\\Too many wall signs!",materials.size() <= maxSupportedWallSigns);
+        assertTrue(materials.size() <= maxSupportedWallSigns, "/!\\Too many wall signs!");
     }
 }

@@ -11,8 +11,8 @@ import org.bukkit.entity.Player;
 
 public class ExecuteTask implements Runnable {
 
-	private NCommandBlockExecutor executor;
-	private int taskId;
+	private final NCommandBlockExecutor executor;
+	private       int                   taskId;
 	private Location initialLocation;
 
 	public ExecuteTask(NCommandBlockExecutor cmd) {
